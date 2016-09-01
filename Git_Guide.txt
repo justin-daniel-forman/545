@@ -23,9 +23,8 @@ Git Tutorial
   is that locally tested code would be "pushed" to github's test branch, where
   it would be reviewed by all team members before being "promoted" to the
   production branch (our final handin code). Locally, this will make no difference
-  to your workflow, except for the fact that you will need to "pull" from a specific
-  branch.
-
+  to your workflow, except for the fact that you will need to push to a specific
+  branch and you will need to develop in a certain branch.
 
 3) Setting up github on your machine
 
@@ -150,40 +149,56 @@ Git Tutorial
                 the most recent commit. Don't do this unless you know what you're doing and
                 you're good at resolving merge conflicts.
 
-8) Pushing and Pulling
+8) Branches
 
-  Pushing is the act of sending your code to a remote. You can only push to the remote if you 
+  We have two separate branches 'test' and 'master'. We will do all of our development in
+  the test branch and promote stable releases into master.
+
+  - To see which branch you are on, run:
+  'git branch'
+
+  - To change branches, run:
+  'git checkout [branch name]'
+
+
+9) Pushing and Pulling
+
+  Pushing is the act of sending your code to a remote. You can only push to the remote if you
   have all of the commits on the remote and then some new commits on your local branch. If the
   remote has more commits than you, you must first pull those commits down and fix merge conflicts
-  before you can push. 
+  before you can push.
 
-  - To push to github, run the following: 
-  'git push' 
+  - To push to github, run the following:
+  'git push origin test'
 
-  - To pull from github, run the following: 
-  'git pull' 
+  - To pull from github, run the following:
+  'git pull origin test'
 
-  Everything should be autoconfigured by default to work with github.  
+  Everything should be autoconfigured by default to work with github.
 
 
-9) Merge Conflicts
+10) Merge Conflicts
 
-  When you pull down and someone has changed the same file in the same place as a local change in 
-  your workspace, there will be a merge conflict. Just edit the file to pick out which changes 
+  When you pull down and someone has changed the same file in the same place as a local change in
+  your workspace, there will be a merge conflict. Just edit the file to pick out which changes
   should be there, and then recommit the file. You may want to consult me or google for a more
-  detailed explanation. I don't anticipate this to happen often, so I'm not really mentioning it. 
+  detailed explanation. I don't anticipate this to happen often, so I'm not really mentioning it.
 
-10) Style Guidelines (I will hunt you down if you don't follow these)
+11) Style Guidelines (I will hunt you down if you don't follow these)
 
   WHITESPACE CHANGES
-  - ABSOLUTELY DO NOT COMMIT TRAILING WHITESPACE AT THE END OF EVERY LINE. This will mess up 
-    every git diff and prevent us from being able to accurately see what was changed, since 
-    whitespace changes are considered changes. 
+  - ABSOLUTELY DO NOT COMMIT TRAILING WHITESPACE AT THE END OF EVERY LINE. This will mess up
+    every git diff and prevent us from being able to accurately see what was changed, since
+    whitespace changes are considered changes.
 
   - In vim, if you run ':set hlsearch', then ':\s\+$', you will be able to see all trailing
-    whitespace. Remove all of them before committing, then run :noh to stop highlighting. 
+    whitespace. Remove all of them before committing, then run :noh to stop highlighting.
 
   COMMIT MESSAGES
-  - Keep commit messages under 80 chars unless you skip 2 lines and write a more detailed 
-    description there. 
+  - Keep commit messages under 80 chars unless you skip 2 lines and write a more detailed
+    description there.
+
+12) Promotions (Mostly for Justin)
+
+  git push origin origin/test:master
 
