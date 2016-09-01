@@ -1,0 +1,189 @@
+Git Tutorial
+
+1) What is git and why is it good?
+
+  Git is a distributed version control software package that comes bundled in
+  most unix/linux distributions. The fact that it is distributed gives it a
+  great deal more flexibility and utility than traditional version control
+  systems. Being "distributed" means that any contributor to a project owns
+  all of the code in the project on their local machine. That means that they
+  can make any changes they want at any time, and then send over pieces of
+  their codebase to the project that they are contributing to. If any one
+  contributor loses their data, it can be restored from any other contributor
+  to the project.
+
+2) Our Primary Git Workflow
+
+  We are going to use github as our mainline codebase. Essentially that means
+  that all of our locally tested code will be pushed to github, which will
+  hold the most recent copy of our codebase.
+
+  We can have multiple "branches" on github for code under test, and production
+  code, if that is deemed to be a better organizational paradigm. All that means
+  is that locally tested code would be "pushed" to github's test branch, where
+  it would be reviewed by all team members before being "promoted" to the
+  production branch (our final handin code). Locally, this will make no difference
+  to your workflow, except for the fact that you will need to "pull" from a specific
+  branch.
+
+
+3) Setting up github on your machine
+
+  - To fork the repository onto your local machine, run the following:
+    'git clone https://github.com/justin-daniel-forman/545.git'
+
+  Github is automatically configured as the default remote for this repository,
+  so no action is required to setup any remotes. If we decide to host our code
+  elsewhere, I will post a section on remotes.
+
+
+4) Making your first commit
+
+  "Commits" in git are sections of work that are stored as a diff between the new
+  versions of the files and the previous versions of the changed files. Git only
+  stores the first copy of any file, and then any subsequent changes are stored
+  as a series of diffs.
+
+  Commits are very important in that they let other developers know what was changed
+  in any specific revision. A well-scoped commit with a descriptive message is
+  super important.
+
+  To understand commits, you must first understand how git interprets your work
+  environment. There are 2 different spheres that git puts files into. The first
+  is your active workspace, which contains all files that have been modified since
+  the previous commit that have not yet been staged. The second is the staging area,
+  which contains all changes that have been specified to go into the next commit.
+
+  - To see the status of files (and which area they lie in), run the following:
+  'git status'
+
+  - To see what has changed since the last commit, run the following:
+  'git diff --color'
+
+  - To see changes in a specific file, run the following:
+  'git diff --color [filename]'
+
+  - If you have staged a file, then made changes to it, run the following
+    to see what changes have been made since the stage:
+  'git diff --color --staged [filename]'
+
+  - You can also run any of the following commands with a specific commit
+    hash to see specific revisions between your workspace and earlier commits.
+
+  But how exactly do I stage/unstage a file?
+
+  - Run the following command to stage a file:
+  'git add [filename]'
+
+  - Run the following command to unstage a file (does not delete changes):
+  'git reset [filename]'
+
+  - Run the following command to stage a part of a file (and follow the
+    interactive prompt):
+  'git add -p [filename]'
+
+  Once you have all of the appropriate files staged, you can then commit them
+  so that git will store a copy of your revisions.
+
+  - To commit your changes, run the following, then type an informative commit
+    message:
+  'git commit'
+
+  When you commit, keep the first line of the commit message under 80 characters,
+  then if you want to include subsequent detail, skip 2 lines and then type
+  out the rest of your description (this will make the git history appear nicely).
+
+5) Checking your git log
+
+  Now that you've made your first commit, you can see that git stores a history
+  of the changes that have been made in the repository.
+
+  - To see the git history, run the following command:
+  'git log'
+
+  This will display a list of commits made along with their "short hashes" which
+  can be used to identify commits and make comparisons between them.
+
+  - You can also see the changes made in a specific commit by running the following:
+  'git show --color [commit hash]'
+
+6) Reverting and otherwise Undoing
+
+  Let's say you've horribly mangled one of the files in your workspace or you've deleted
+  it accidentally. No problem, you can get a previous version of that file.
+
+  - To checkout a file, run the following command:
+  'git checkout [commit hash] [filename]'
+
+  - To checkout an entire commit, run the following command:
+  'git checkout [commit hash]
+
+  Let's say you made a horrible mistake after committing. You can "undo" any commit
+  without losing anything (if you want to undo the undo later) by reverting a specific
+  commit.
+
+  - To change a committed file back to a previous version, run the following:
+  'git revert [commit hash] [filename]'
+
+7) Rebasing
+
+  Rebasing is a powerful tool that will allow you to reorganize and edit your commits
+  after the fact. Generally, you will only be rebasing to rename your commits or
+  to combine them into super commits.
+
+  I'll walk you through the process, but you probably won't be using this feature.
+
+  Follow these steps:
+
+  - run: 'git rebase -i' and a window will pop up with the commits that you have made
+    locally that have not yet been pushed to the remote. You will not be able to
+    (easily) rebase commits on the mainline
+  - Now that there's a bunch of commits listed with their hashes. Next to them will be
+    'pick'. In order to make a change, you will change that word (in vim) to one of the
+    following options in order of most commonly used
+
+    1) rename - allows you the opportunity to edit the commit message
+    2) fixup  - melds this commit into the previous commit and discards the commit message
+                This is used primarily for typos and whitespace changes
+    3) squash - melds this commit into the previous commit but keeps the commit message
+    4) edit   - Gives you the opportunity to edit that commit, but gets messy if this isn't
+                the most recent commit. Don't do this unless you know what you're doing and
+                you're good at resolving merge conflicts.
+
+8) Pushing and Pulling
+
+  Pushing is the act of sending your code to a remote. You can only push to the remote if you 
+  have all of the commits on the remote and then some new commits on your local branch. If the
+  remote has more commits than you, you must first pull those commits down and fix merge conflicts
+  before you can push. 
+
+  - To push to github, run the following: 
+  'git push' 
+
+  - To pull from github, run the following: 
+  'git pull' 
+
+  Everything should be autoconfigured by default to work with github.  
+
+
+9) Merge Conflicts
+
+  When you pull down and someone has changed the same file in the same place as a local change in 
+  your workspace, there will be a merge conflict. Just edit the file to pick out which changes 
+  should be there, and then recommit the file. You may want to consult me or google for a more
+  detailed explanation. I don't anticipate this to happen often, so I'm not really mentioning it. 
+
+10) Style Guidelines (I will hunt you down if you don't follow these)
+
+  WHITESPACE CHANGES
+  - ABSOLUTELY DO NOT COMMIT TRAILING WHITESPACE AT THE END OF EVERY LINE. This will mess up 
+    every git diff and prevent us from being able to accurately see what was changed, since 
+    whitespace changes are considered changes. 
+
+  - In vim, if you run ':set hlsearch', then ':\s\+$', you will be able to see all trailing
+    whitespace. Remove all of them before committing, then run :noh to stop highlighting. 
+
+  COMMIT MESSAGES
+  - Keep commit messages under 80 chars unless you skip 2 lines and write a more detailed 
+    description there. 
+
