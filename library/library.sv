@@ -8,6 +8,8 @@ module register #(parameter w = 8) (
 
   logic [w] value;
 
+  assign Q = value;
+
   always @(posedge clk) begin
     if(~rst_L) begin
       value <= 0;

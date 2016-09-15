@@ -45,7 +45,7 @@ module vdp_top (
     .MODE(MODE)
   );
 
-  logic [15:0] cmd_port_out;
+  logic [7:0] cmd_port_out;
   logic [7:0] data_port_out;
 
   vdp_ports PORTS(
@@ -60,8 +60,8 @@ module vdp_top (
   );
 
   //assign the data bus if we are reading from it
-  assign data_bus = (MODE & ~CSR_L) ?
-    ((~MODE & ~CSR_L) ? data_port_out : 8'bz) : cmd_port_out;
+  assign data_bus =
+    (MODE & ~CSR_L) ? cmd_port_out : ((~MODE & ~CSR_L) ? data_port_out : 8'bz );
 
 
 endmodule: vdp_top
@@ -181,21 +181,18 @@ module vdp_ports(
 
   input   logic [7:0]  data_in,
   output  logic [7:0]  data_port_out,
-  output  logic [15:0] cmd_port_out
+  output  logic [7:0] cmd_port_out
 );
 
   logic [7:0] cmd_port_in;
   logic [7:0] data_port_in;
-  logic       flag_in, flag_out;
-  logic [7:0] vdp_data_out;     // Muxed with data_in as input for cmd_port
-  logic [7:0] vdp_cmd_out;  
 
   register #(8) cmd_port(
     .clk(clk),
     .rst_L(reset_L),
     .D(cmd_port_in),
     .Q(cmd_port_out),
-    .en(MODE) // Should only ever be written to on MODE == 1 
+    .en(MODE) // Should only ever be written to on MODE == 1
   );
 
   register #(8) data_port(
@@ -206,62 +203,8 @@ module vdp_ports(
     .en(~MODE) // Should only ever be written to on MODE == 0
   );
 
-/*
-  register #(1) cmd_flag(
-    .clk(clk),
-    .rst_L(reset_L),
-    .D(flag_in),
-    .Q(flag_out),
-    .en(1'b1)
-  );
-*/
-
-  assign data_port_in = (~CSR_L) ? vdp_data_out : data_in;
-  assign cmd_port_in = (~CSR_L) ? vdp_cmd_out : data_in;  
-
-/*
-  always_comb begin
-    //CPU write to the command port
-    if(MODE == 1 && CSW_L == 0) begin
-
-      //determine whether or not this is the first byte written
-      if(flag_out == 0) begin
-        cmd_port_in = cmd_port_in & 16'h00ff;       //wipe top byte
-        cmd_port_in = cmd_port_in + (data_in << 8); //write top byte
-        flag_in     = 1;
-      end
-
-      else begin
-        cmd_port_in = cmd_port_in & 16'hff00;   //wipe bottom byte
-        cmd_port_in = cmd_port_in + (data_in);  //write bottom byte
-        flag_in     = 0;
-      end
-
-    end
-
-    //CPU write to the data port
-    else if(MODE == 0 && CSW_L == 0) begin
-      data_port_in = data_in;
-    end
-
-    //CPU read from the command port
-    else if(MODE == 1 && CSR_L == 0) begin
-      //clear the status flag on read
-      flag_in = 0;
-    end
-
-    //CPU read from data
-    else if(MODE == 0 && CSR_L == 0) begin
-    end
-
-    else begin
-      flag_in       = flag_out;
-      data_port_in  = data_port_out;
-      cmd_port_in   = cmd_port_out;
-    end
-
-  end
-*/
+  assign data_port_in = (~CSW_L) ? data_in : data_port_out;
+  assign cmd_port_in = (~CSW_L) ? data_in : cmd_port_out;
 
 endmodule: vdp_ports
 

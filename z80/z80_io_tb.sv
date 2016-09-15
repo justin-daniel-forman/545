@@ -8,7 +8,7 @@ module io_tb();
   //The VDP puts values out on data_bus and addr_bus based on the
   //signals provided. We need to be careful to match that interface
   //in order not to drive the wire in multiple places
-  /*vdp_top VDP(
+  vdp_top VDP(
     .clk(clk),
     .reset_L(reset_L),
     .data_bus(data_bus),
@@ -16,7 +16,7 @@ module io_tb();
     .IORQ_L(IORQ_L),
     .RD_L(RD_L),
     .WR_L(WR_L)
-  );*/
+  );
 
   logic [7:0] read_data;
   logic write_in_prog, read_in_prog;
