@@ -184,16 +184,18 @@ module vdp_ports(
   output  logic [15:0] cmd_port_out
 );
 
-  logic [15:0]  cmd_port_in;
-  logic [7:0]   data_port_in;
-  logic         flag_in, flag_out;
+  logic [7:0] cmd_port_in;
+  logic [7:0] data_port_in;
+  logic       flag_in, flag_out;
+  logic [7:0] vdp_data_out;     // Muxed with data_in as input for cmd_port
+  logic [7:0] vdp_cmd_out;  
 
-  register #(16) cmd_port(
+  register #(8) cmd_port(
     .clk(clk),
     .rst_L(reset_L),
     .D(cmd_port_in),
     .Q(cmd_port_out),
-    .en(1'b1)
+    .en(MODE) // Should only ever be written to on MODE == 1 
   );
 
   register #(8) data_port(
@@ -201,9 +203,10 @@ module vdp_ports(
     .rst_L(reset_L),
     .D(data_port_in),
     .Q(data_port_out),
-    .en(1'b1)
+    .en(~MODE) // Should only ever be written to on MODE == 0
   );
 
+/*
   register #(1) cmd_flag(
     .clk(clk),
     .rst_L(reset_L),
@@ -211,7 +214,12 @@ module vdp_ports(
     .Q(flag_out),
     .en(1'b1)
   );
+*/
 
+  assign data_port_in = (~CSR_L) ? vdp_data_out : data_in;
+  assign cmd_port_in = (~CSR_L) ? vdp_cmd_out : data_in;  
+
+/*
   always_comb begin
     //CPU write to the command port
     if(MODE == 1 && CSW_L == 0) begin
@@ -253,6 +261,7 @@ module vdp_ports(
     end
 
   end
+*/
 
 endmodule: vdp_ports
 
