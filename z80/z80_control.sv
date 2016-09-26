@@ -1,7 +1,7 @@
 module control_logic (
 
-  input   logic       clk, 
-  input   logic       rst_L, 
+  input   logic       clk,
+  input   logic       rst_L,
 
   //---------------------------------------------------------------------------
   //Bus Signals
@@ -10,14 +10,14 @@ module control_logic (
   //              line.
   //---------------------------------------------------------------------------
   input   logic [7:0] data_in,
-  output  logic       addr_out, 
+  output  logic       addr_out,
 
   //---------------------------------------------------------------------------
   //Top Level Signals
-  //  These signals are detailed in z80_top. The control logic is directly 
-  //  responsible for generating these signals based on the state of the 
+  //  These signals are detailed in z80_top. The control logic is directly
+  //  responsible for generating these signals based on the state of the
   //  processor. They are top level inputs and outputs to the system.
-  //--------------------------------------------------------------------------- 
+  //---------------------------------------------------------------------------
   input   logic         M1_L,
   input   logic         INT_L,
   input   logic         NMI_L,
@@ -27,12 +27,12 @@ module control_logic (
   output  logic         IORQ_L,
   output  logic         RD_L,
   output  logic         WR_L,
- 
+
   output  logic         RFSH_L,
   output  logic         BUSACK_L,
   input   logic         BUSREQ_L,
   output  logic         HALT_L
-); 
+);
 
   //TODO: Tie together PC register and control FSM
 
@@ -44,9 +44,9 @@ endmodule: control_logic
 //  This module is repsonsible for stepping through the various machine cycles
 //  as the processor progresses from Instruction Fetch to Decode, to Execute.
 //  This module generates the relevant datapath controls based on the state
-//  that the processor is in. 
+//  that the processor is in.
 //-----------------------------------------------------------------------------
-module control_fsm (); 
+module control_fsm ();
 
   //Enumerate the possible machine cycles which are macro states
   //for our processor. Each macro state is made up of up to 6 micro
@@ -59,7 +59,7 @@ module control_fsm ();
     MW  = 10'd4, //memory write
     MWH = 10'd5, //memory write of high byte
     MWL = 10'd6, //memory write of low byte
-    OCF = 10'd7, //op code fetch 
+    OCF = 10'd7, //op code fetch
     ODH = 10'd8, //operand data read of high byte
     ODL = 10'd9, //operand data read of low byte
     PR  = 10'd10,//port read
@@ -68,13 +68,13 @@ module control_fsm ();
     SRL = 10'd13,//stack read of low byte
     SWH = 10'd14,//stack write of high byte
     SWL = 10'd15 //stack write of low byte
-  } state, next_state; 
+  } state, next_state;
 
   //state register
   always @(posedge clk) begin
     if(~rst_L) begin
       //default to op code fetch to grab an instruction
-      state <= OCF; 
+      state <= OCF;
     end
     else begin
       state <= next_state;
@@ -102,8 +102,8 @@ endmodule: control_fsm
 
 
 module OCF_fsm(
-  input   logic clk, 
-  input   logic rst_L, 
+  input   logic clk,
+  input   logic rst_L,
 
   //---------------------------------------------------------------------------
   //Internal control signals
@@ -111,10 +111,10 @@ module OCF_fsm(
   //---------------------------------------------------------------------------
   input   logic OCF_start,
   output  logic OCF_done,
- 
+
   //---------------------------------------------------------------------------
   //Top level signals
-  //  This FSM is the only one generating these signals, so they 
+  //  This FSM is the only one generating these signals, so they
   //  get the same names as the top level signals
   //---------------------------------------------------------------------------
   input   logic         M1_L,
@@ -128,7 +128,7 @@ module OCF_fsm(
   //  This FSM isn't the only one that uses these signals, so they are
   //  prefaced with the name of the fsm
   //---------------------------------------------------------------------------
-  output  logic         OCF_MEMR_L, 
+  output  logic         OCF_MEMR_L,
   output  logic         OCF_RD_L,
   output  logic         OCF_WR_L
 );
@@ -140,7 +140,7 @@ module OCF_fsm(
     T2   = 3'd2,
     T3   = 3'd3,
     T4   = 3'd4
-  } state, next_state; 
+  } state, next_state;
 
   always(@posedge clk) begin
     if(~rst_L) begin
@@ -154,7 +154,22 @@ module OCF_fsm(
   //next state logic
   always_comb begin
     case (state)
-        //TODO: enumerate out these states 
+        //TODO: enumerate out these states
+
+    endcase
+  end
+
+  //output logic
+  always_comb begin
+    case(state)
+
+      IDLE: begin
+        if(OCF_start) begin
+
+        end
+
+      end
+
 
     endcase
   end
