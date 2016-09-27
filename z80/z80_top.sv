@@ -69,6 +69,7 @@ module z80(
   output  logic         HALT_L
 );
 
+  //TODO instantiate control path (drives addr bus when enabled by itself)
+  //TODO instantiate datapath     (drives data bus when enabled by control_logic)
+
 endmodule: z80
-
-
