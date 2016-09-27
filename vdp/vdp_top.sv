@@ -30,8 +30,8 @@ module vdp_top (
   //---------------------------------------------------------------------------
 );
 
-  logic CSW_L, CSR_L, MODE;
-
+  logic CSW_L, CSR_L, MODE, vdp_go;
+   
   vdp_port_decoder DECODER(
     .clk(clk),
     .reset_L(reset_L),
@@ -42,10 +42,11 @@ module vdp_top (
     .WR_L(WR_L),
     .CSW_L(CSW_L),
     .CSR_L(CSR_L),
-    .MODE(MODE)
+    .MODE(MODE),
+    .vdp_go(vdp_go)
   );
 
-  logic [7:0] cmd_port_out;
+  logic [7:0] stat_reg_out;
   logic [7:0] data_port_out;
 
   vdp_ports PORTS(
@@ -54,15 +55,17 @@ module vdp_top (
     .MODE(MODE),
     .CSR_L(CSR_L),
     .CSW_L(CSW_L),
+    .vdp_go(vdp_go),
     .data_in(data_bus),
-    .data_port_out(data_port_out),
-    .cmd_port_out(cmd_port_out)
+    .data_out(data_port_out),
+    .stat_reg_out(stat_reg_out)
   );
 
   //assign the data bus if we are reading from it
-  assign data_bus =
-    (MODE & ~CSR_L) ? cmd_port_out : ((~MODE & ~CSR_L) ? data_port_out : 8'bz );
-
+  assign data_bus = (MODE & ~CSR_L) ? 
+                    (stat_reg_out) : (
+                    (~MODE & ~CSR_L) ? data_port_out : 8'bz 
+                    );
 
 endmodule: vdp_top
 
@@ -98,7 +101,8 @@ module vdp_port_decoder(
   input   logic WR_L,
   output  logic CSW_L,
   output  logic CSR_L,
-  output  logic MODE
+  output  logic MODE,
+  output  logic vdp_go
 );
 
   enum logic [2:0] {
@@ -120,7 +124,9 @@ module vdp_port_decoder(
   end
 
   always_comb begin
-
+    // intialization
+    vdp_go = 0;
+     
     // next state logic
     case (state)
 
@@ -147,22 +153,24 @@ module vdp_port_decoder(
 
     // output logic
     case (state)
-      WAIT, RD0, WR0: begin
+      WAIT: begin
         MODE     = 0;
         CSR_L    = 1;
         CSW_L    = 1;
       end
 
-      RD1: begin
+      RD0, RD1: begin
         MODE  = (addr_in[7:0] == 8'hBF); //Command port -> 1, data port -> 0
         CSR_L = 0;
         CSW_L = 1;
+        vdp_go = 1;
       end
 
-      WR1: begin
+      WR0, WR1: begin
         MODE  = (addr_in[7:0] == 8'hBF); //Command port -> 1, data port -> 0
         CSR_L = 1;
-        CSW_L = 0;
+        CSW_L = 0; 
+	vdp_go = 1; 
       end
 
     endcase
@@ -178,21 +186,130 @@ module vdp_ports(
   input   logic MODE,
   input   logic CSR_L,
   input   logic CSW_L,
+  input   logic vdp_go,
 
-  input   logic [7:0]  data_in,
-  output  logic [7:0]  data_port_out,
-  output  logic [7:0] cmd_port_out
+  input   logic [7:0] data_in,
+  output  logic [7:0] data_out,
+  output  logic [7:0] stat_reg_out
 );
 
-  logic [7:0] cmd_port_in;
-  logic [7:0] data_port_in;
+  logic [7:0] cmd_port_in_1, cmd_port_out_1, cmd_port_in_2, cmd_port_out_2;
+  logic [7:0] data_port_in, data_port_out;
+  logic       cmd_wr_1, cmd_wr_2, data_in_sel; // Set in FSM
+  
+  logic [7:0] rf_data_in, rf_data_out;
+  logic [3:0] rf_addr;
+  logic       rf_en; // Set in FSM
+  
+  logic [13:0] write_addr_in, write_addr_out;
+  logic        write_addr_en, write_addr_sel; // Set in FSM
+  
+  logic [7:0]  VRAM_data_out, VRAM_data_in;
+  logic [13:0] VRAM_addr;
+  logic        VRAM_re, VRAM_we; // Set in FSM
+	 
+  logic [5:0] CRAM_data_out, CRAM_data_in;
+  logic [4:0] CRAM_addr;
+  logic       CRAM_re, CRAM_we; // Set in FSM
 
-  register #(8) cmd_port(
+
+  /******* Register File *******/ 
+
+  assign rf_data_in = cmd_port_out_1;
+  assign rf_addr = cmd_port_out_2[3:0];
+	 
+  regFile rf(
     .clk(clk),
     .rst_L(reset_L),
-    .D(cmd_port_in),
-    .Q(cmd_port_out),
-    .en(MODE) // Should only ever be written to on MODE == 1
+    .data_in(rf_data_in),
+    .addr(rf_addr),
+    .en(rf_en),
+    .data_out(rf_data_out)
+  );
+
+  /******* Address Register Logic *******/ 
+
+  // Mux between incrementing the address or writing in a new one
+  assign write_addr_in = 
+	(write_addr_sel) ? 
+	{cmd_port_out_2[5:0], cmd_port_out_1[7:0]} : 
+	(write_addr_out + 1);
+
+  register #(14) write_addr_reg(
+    .clk(clk),
+    .rst_L(reset_L),
+    .D(write_addr_in),
+    .Q(write_addr_out),
+    .en(write_addr_en)
+  );	 
+
+  /******** VRAM & CRAM ********/  
+  
+  mem #(8, 14) VRAM(
+    .clk(clk),
+    .rst_L(reset_L),
+    .data_in(VRAM_data_in),
+    .addr(VRAM_addr),
+    .we(VRAM_we),
+    .re(VRAM_re),
+    .data_out(VRAM_data_out)
+  );
+
+  mem #(6, 5) CRAM(
+    .clk(clk),
+    .rst_L(reset_L),
+    .data_in(CRAM_data_in),
+    .addr(CRAM_addr),
+    .we(CRAM_we),
+    .re(CRAM_re),
+    .data_out(CRAM_data_out)
+  );
+
+  assign VRAM_data_in = data_port_out;
+  assign VRAM_addr = write_addr_out;
+  assign CRAM_data_in = data_port_out;
+  assign CRAM_addr = write_addr_out;
+ 
+  /******* FSM *******/
+
+  vdp_fsm state_machine(
+    .clk(clk),
+    .rst_L(reset_L),
+    .MODE(MODE),
+    .CSR_L(CSR_L),
+    .CSW_L(CSW_L),
+    .op(cmd_port_out_2[7:6]),
+    .go(vdp_go),
+    .wr_cmd_1(cmd_wr_1),
+    .wr_cmd_2(cmd_wr_2),
+    .rf_en(rf_en),
+    .wr_addr_sel(write_addr_sel),
+    .wr_addr_en(write_addr_en),
+    .stat_en(),
+    .data_in_sel(data_in_sel),
+    .VRAM_re(VRAM_re), // ****TODO: This won't work. Dictated not only by the 
+    .VRAM_we(VRAM_we), // Z80, but also need to reference for building the 
+    .CRAM_re(CRAM_re), // frame buffer. Only relevant to reads though.
+    .CRAM_we(CRAM_we)
+  );
+
+  /******** Data Bus Interfacing ********/ 
+  
+  register #(8) cmd_port_1(
+    .clk(clk),
+    .rst_L(reset_L),
+    .D(cmd_port_in_1),
+    .Q(cmd_port_out_1),
+    .en(MODE & cmd_wr_1) // Should only ever be written to on MODE == 1
+  );
+
+  register #(8) cmd_port_2(
+    .clk(clk), 
+    .rst_L(reset_L),
+    .D(cmd_port_in_2),
+    .Q(cmd_port_out_2),
+    .en(MODE & cmd_wr_2) // Should be written to only when cmd_port is written to  
+              // data valid when flag = 1
   );
 
   register #(8) data_port(
@@ -203,10 +320,150 @@ module vdp_ports(
     .en(~MODE) // Should only ever be written to on MODE == 0
   );
 
-  assign data_port_in = (~CSW_L) ? data_in : data_port_out;
-  assign cmd_port_in = (~CSW_L) ? data_in : cmd_port_out;
+  assign data_out = data_port_out;
+  assign data_port_in = (~CSW_L) ?           
+    (data_in_sel ? VRAM_data_out : data_in)
+    : data_port_out;
+  assign cmd_port_in_1 = data_in;
+  assign cmd_port_in_2 = data_in;
 
 endmodule: vdp_ports
+
+module vdp_fsm(
+  input  logic       clk, rst_L,
+  input  logic       MODE, CSR_L, CSW_L, go,
+  input  logic [1:0] op,  
+  output logic       wr_cmd_1, wr_cmd_2, rf_en,
+  output logic       wr_addr_sel, wr_addr_en, stat_en,
+  output logic       data_in_sel, VRAM_re, VRAM_we, 
+  output logic       CRAM_re, CRAM_we
+);
+
+  enum logic [3:0] {Load_addr_1,
+                    Load_addr_1_wait,
+                    Load_addr_2,
+                    Load_addr_2_wait,
+                    Decode,
+                    VRAM_read_addr,
+                    VRAM_read_wait,
+                    VRAM_read_data,
+                    VRAM_write_addr,
+                    VRAM_write_wait,
+                    VRAM_write_data,
+                    RF_write,
+                    CRAM_write_addr,
+                    CRAM_write_wait,
+                    CRAM_write_data
+                   } cs, ns;
+
+  // NS logic
+  always_comb begin
+    case(cs) 
+      Load_addr_1: ns = (go) ? Load_addr_1_wait : Load_addr_1;
+      Load_addr_1_wait: ns = (~go) ? Load_addr_2 : Load_addr_1_wait;
+      Load_addr_2: ns = (go) ? Load_addr_2_wait : Load_addr_2;
+      Load_addr_2_wait: ns = (~go) ? Decode : Load_addr_2_wait;
+      Decode:
+        case (op) 
+          2'd0: ns = VRAM_read_addr;
+          2'd1: ns = VRAM_write_addr;
+          2'd2: ns = RF_write;
+          2'd3: ns = CRAM_write_addr;
+        endcase
+      VRAM_read_addr: ns = VRAM_read_wait;
+      VRAM_read_wait:  // If read, read out another byte, otherwise 
+                       // reconfigure the command register
+        ns = (go) ? (     
+             (MODE) ? Load_addr_1 : VRAM_read_data
+             ) : VRAM_read_wait;
+      VRAM_read_data: ns = VRAM_read_wait; // Prepare for sequential reads
+      VRAM_write_addr: ns = VRAM_write_wait;
+      VRAM_write_wait: begin
+        ns = (go) ? (     
+             (MODE) ? Load_addr_1 : VRAM_write_data
+             ) : VRAM_write_wait;
+      end
+      VRAM_write_data: ns = VRAM_write_wait;
+      RF_write: ns = Load_addr_1;
+      CRAM_write_addr: ns = CRAM_write_wait;
+      CRAM_write_wait: begin
+        ns = (go) ? (     
+             (MODE) ? Load_addr_1 : CRAM_write_data
+             ) : CRAM_write_wait;
+      end
+      CRAM_write_data: ns = CRAM_write_wait;
+    endcase
+  end
+
+  // Output logic
+  always_comb begin
+    wr_cmd_1 = 0;
+    wr_cmd_2 = 0;
+    rf_en = 0;
+    wr_addr_sel = 0;
+    wr_addr_en = 0;
+    stat_en = 0;
+    data_in_sel = 0;
+    VRAM_re = 0;
+    VRAM_we = 0;
+    CRAM_re = 0;
+    CRAM_we = 0;
+    case(cs) 
+      Load_addr_1: begin
+        wr_cmd_1 = 1;
+      end
+      Load_addr_1_wait: begin end
+      Load_addr_2: begin
+        wr_cmd_2 = 1;
+      end
+      Load_addr_2_wait: begin end
+      Decode: begin end
+      VRAM_read_addr: begin
+        wr_addr_sel = 1;
+        wr_addr_en = 1;
+      end
+      VRAM_read_wait: begin
+        VRAM_re = 1;
+        data_in_sel = 1;
+      end
+      VRAM_read_data: begin
+        wr_addr_en = 1; // Autoincrement address in case of sequential read
+      end
+      VRAM_write_addr: begin
+        wr_addr_sel = 1;
+        wr_addr_en = 1;
+      end
+      VRAM_write_wait: begin
+        
+      end
+      VRAM_write_data: begin
+        VRAM_we = 1;
+        wr_addr_en = 1; // Autoincrement address in case of sequential write
+      end
+      RF_write: begin
+        rf_en = 1;
+      end
+      CRAM_write_addr: begin
+        wr_addr_sel = 1;
+        wr_addr_en = 1;
+      end
+      CRAM_write_wait: begin
+        
+      end
+      CRAM_write_data: begin
+        CRAM_we = 1;
+        wr_addr_en = 1; // Autoincrement address in case of sequential write
+      end
+    endcase
+  end
+
+  // State register
+  always_ff @(posedge clk, negedge rst_L) begin
+    if (~rst_L) cs <= Load_addr_1;
+    else cs <= ns;
+  end 
+
+endmodule: vdp_fsm
 
 /* command_decoder
  * Description: Interprets the two byte command written to the command port
@@ -218,3 +475,32 @@ module command_decoder (
 
 
 endmodule: command_decoder
+
+module regFile (
+  input  logic clk,
+  input  logic rst_L,
+  input  logic [7:0] data_in,
+  input  logic [3:0] addr,
+  input  logic en,
+  output logic [7:0] data_out);
+
+  logic [15:0][7:0] reg_out;
+  logic [15:0]      reg_en;
+
+  // Output mux - 10 registers, addr 11-15 has no effect
+  assign data_out = reg_out[addr]; 
+
+  genvar i; 
+  generate 
+    for (i = 0; i < 10; i++) begin 
+      register #(8) regi(
+        .clk(clk),
+        .rst_L(rst_L),
+        .D(data_in),
+        .en(en & (addr == i)),
+        .Q(reg_out[i])
+      );
+    end
+  endgenerate
+
+endmodule
