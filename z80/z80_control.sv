@@ -1,3 +1,5 @@
+`include "../z80_defines.vh"
+
 module control_logic (
 
   input   logic       clk,
@@ -9,8 +11,8 @@ module control_logic (
   //  - addr_out: The control segment is responsible for generating the address
   //              line.
   //---------------------------------------------------------------------------
-  input   logic [7:0] data_in,
-  output  logic       addr_out,
+  input   logic [7:0]   data_in,
+  output  logic [15:0]  addr_out,
 
   //---------------------------------------------------------------------------
   //Top Level Signals
@@ -18,7 +20,7 @@ module control_logic (
   //  responsible for generating these signals based on the state of the
   //  processor. They are top level inputs and outputs to the system.
   //---------------------------------------------------------------------------
-  input   logic         M1_L,
+  output  logic         M1_L,
   input   logic         INT_L,
   input   logic         NMI_L,
 
@@ -34,75 +36,100 @@ module control_logic (
   output  logic         HALT_L
 );
 
-  //TODO: Tie together PC register and control FSM
+  //---------------------------------------------------------------------------
+  //PROGRAM COUNTER
+  //TODO: Include support for branching
+  //---------------------------------------------------------------------------
+  logic [15:0] next_PC;
+  logic [15:0] curr_PC;
+  logic        inc_PC;
+  register #(16) PC_reg(clk, rst_L, next_PC, inc_PC, curr_PC);
+  assign next_PC = curr_PC + 1;
+
+  //---------------------------------------------------------------------------
+  //DATA REGISTER
+  //  Latch in values that come off of the data bus so that we know what
+  //  to do with them
+  //---------------------------------------------------------------------------
+  logic       data_valid;
+  logic [7:0] bus_data;
+  register #(8) DATA_reg(clk, rst_L, data_in, data_valid, bus_data);
+
+  //---------------------------------------------------------------------------
+  //DECODER
+  //  Determines which instruction we are currently executing and who gets
+  //  control of the bus.
+  //---------------------------------------------------------------------------
+  logic OCF_start;
+  logic OCF_bus;
+  logic OCF_done;
+
+  decoder DECODE(
+    .clk(clk),
+    .rst_L(rst_L),
+    .prev_done(OCF_done),
+    .opcode(bus_data),
+    .WAIT_L(WAIT_L),
+
+    //outputs
+    .OCF_start(OCF_start),
+    .OCF_bus(OCF_bus),
+    .inc_PC(inc_PC)
+  );
+
+  //---------------------------------------------------------------------------
+  //BUS LINES
+  //  Arbitrate who gets to drive the actual bus lines between all of the
+  //  sub-fsms.
+  //---------------------------------------------------------------------------
+  logic         OCF_M1_L;
+  logic         OCF_MREQ_L;
+  logic         OCF_RD_L;
+  logic         OCF_RFSH_L;
+  logic [15:0]  OCF_addr_out;
+
+  always_comb begin
+    //default signals
+    M1_L    = 1'b1;
+    MREQ_L  = 1'b1;
+    IORQ_L  = 1'b1;
+    RD_L    = 1'b1;
+    WR_L    = 1'b1;
+    RFSH_L  = 1'b1;
+    HALT_L  = 1'b1;
+    BUSACK_L = 1'b1;
+    addr_out = 8'bz;
+
+    if(OCF_bus) begin
+      M1_L   = OCF_M1_L;
+      MREQ_L = OCF_MREQ_L;
+      RD_L   = OCF_RD_L;
+      RFSH_L = OCF_RFSH_L;
+      addr_out = OCF_addr_out;
+    end
+
+  end
+
+  //---------------------------------------------------------------------------
+  //SUB FSM DECLARATIONS
+  //---------------------------------------------------------------------------
+  OCF_fsm machine_fetch(
+    .clk(clk),
+    .rst_L(rst_L),
+    .PC(curr_PC),
+    .OCF_start(OCF_start),
+    .OCF_done(OCF_done),
+    .OCF_opcode_valid(data_valid),
+    .WAIT_L(WAIT_L),
+
+    .OCF_M1_L(OCF_M1_L),
+    .OCF_MREQ_L(OCF_MREQ_L),
+    .OCF_RD_L(OCF_RD_L),
+    .OCF_addr_out(OCF_addr_out),
+    .OCF_RFSH_L(OCF_RFSH_L)
+  );
 
 endmodule: control_logic
-
-
-//-----------------------------------------------------------------------------
-//control_fsm
-//  This module is repsonsible for stepping through the various machine cycles
-//  as the processor progresses from Instruction Fetch to Decode, to Execute.
-//  This module generates the relevant datapath controls based on the state
-//  that the processor is in.
-//-----------------------------------------------------------------------------
-module control_fsm (
-  input logic   clk,
-  input logic   rst_L
-);
-
-  //Enumerate the possible machine cycles which are macro states
-  //for our processor. Each macro state is made up of up to 6 micro
-  //states to actually carry out the operations on the datapath.
-  enum logic [9:0] {
-    IO  = 10'd0, //internal cpu operation
-    MR  = 10'd1, //memory read
-    MRH = 10'd2, //memory read of high byte
-    MRL = 10'd3, //memory read of low byte
-    MW  = 10'd4, //memory write
-    MWH = 10'd5, //memory write of high byte
-    MWL = 10'd6, //memory write of low byte
-    OCF = 10'd7, //op code fetch
-    ODH = 10'd8, //operand data read of high byte
-    ODL = 10'd9, //operand data read of low byte
-    PR  = 10'd10,//port read
-    PW  = 10'd11,//port write
-    SRH = 10'd12,//stack read of high byte
-    SRL = 10'd13,//stack read of low byte
-    SWH = 10'd14,//stack write of high byte
-    SWL = 10'd15 //stack write of low byte
-  } state, next_state;
-
-  //state register
-  always @(posedge clk) begin
-    if(~rst_L) begin
-      //default to op code fetch to grab an instruction
-      state <= OCF;
-    end
-    else begin
-      state <= next_state;
-    end
-  end
-
-  //next state logic
-  always_comb begin
-    //TODO: assign the next state to be whatever the decode module says it is
-    //TODO: only update when one of the done signals is asserted
-  end
-
-  //output logic
-  always_comb begin
-    //TODO: assign the output based on which sub-fsm is in charge
-  end
-
-  //TODO: Instantiate a decode module that determines the next macro
-  //      state based on the output of the OCF
-
-
-  //TODO: Instantiate a sub-fsm foreach of the above machine cycles
-  //      one by one in order to generate an instruction
-
-endmodule: control_fsm
 
 
 //-----------------------------------------------------------------------------
@@ -116,29 +143,39 @@ module decoder (
   input logic rst_L,
 
   //---------------------------------------------------------------------------
+  // - WAIT_L: This signal tells us if we need to stall our instruction fetch
+  //           if the memory technology is not ready. Probably not needed.
+  //---------------------------------------------------------------------------
+  input logic WAIT_L,
+
+  //---------------------------------------------------------------------------
   // - prev_done: Has the previous macro_state finished running?
   // - opcode:    What instruction we should run, is defined in z80_defines.h
   //---------------------------------------------------------------------------
   input logic       prev_done,
   input logic [7:0] opcode,
-  input logic       opcode_valid
 
   //---------------------------------------------------------------------------
-  // - next_state: Which macro state runs next encoded as an [9:0] in the .h
+  // - OCF_start: Kicks off the OCF_fsm which starts an opcode fetch
   //---------------------------------------------------------------------------
-  output logic [9:0] next_state
+  output logic      OCF_start,
+  output logic      OCF_bus,
+  output logic      inc_PC
 );
 
-  //TODO: Change fetch to be 2 cycles and put in a rfsh/execute fsm
-  enum logic [10:0] {
-    FETCH,
-    EX_RFSH,
-    INC_0
-  } state, next_state, encoded_state;
+  enum logic [7:0] {
+    FETCH_0,
+    FETCH_1,
+    FETCH_2,
+    INC_0,
+    INC_1,
+    INC_2,
+    NOP_0
+  } state, next_state;
 
   always_ff @(posedge clk) begin
     if(~rst_L) begin
-      state <= IDLE;
+      state <= FETCH_0;
     end
 
     else begin
@@ -149,12 +186,53 @@ module decoder (
   //next state logic
   always_comb begin
     case(state)
-      FETCH: begin
-        next_state = (prev_done) ? encoded_state : FETCH;
+
+      //An OCF takes 4 cycles in total, but only 2 of those cycles are needed
+      //to retreive the opcode (which comes in on T2/T3). The other two
+      //cycles are spent refreshing the DRAM.
+      FETCH_0: next_state = FETCH_1;
+      FETCH_1: next_state = FETCH_2;
+
+      //This cycle is spent decoding the instruction, and the 4th cycle
+      //is spent potentially dispatching part of the instruction
+      FETCH_2: begin
+        //TODO: might need to acknowledge a WAIT cycle
+        case(opcode)
+          `INC: next_state = INC_0;
+          default: next_state = NOP_0;
+        endcase
       end
 
-      INC_0: begin
-        next_state =
+      //The instruction processed did nothing, so loop back and restart
+      //the instruction fetch
+      NOP_0: next_state = FETCH_0;
+
+      //TODO: include support for INC
+      INC_0: next_state = FETCH_0;
+
+    endcase
+  end
+
+  //output logic
+  always_comb begin
+    //set defaults
+    OCF_start = 0;
+    OCF_bus   = 0;
+    inc_PC    = 0;
+
+    case(state)
+      FETCH_0: begin
+        OCF_start = 1;
+        OCF_bus   = 1;
+      end
+
+      FETCH_1: begin
+        OCF_bus = 1;
+      end
+
+      FETCH_2: begin
+        inc_PC  = 1;
+        OCF_bus = 1;
       end
 
     endcase
@@ -162,59 +240,6 @@ module decoder (
 
 
 endmodule: decoder
-
-//TODO: NOP not needed since its just an IF that ends
-//-----------------------------------------------------------------------------
-//NOP_fsm
-//  This module generates the relevant bus signals for a no operation macro
-//  state.
-//-----------------------------------------------------------------------------
-module NOP_fsm(
-  input   logic clk,
-  input   logic rst_L,
-  input   logic NOP_start,
-  output  logic NOP_done
-);
-
-  enum logic [2:0] {
-    T1,
-    T2,
-    T3,
-    T4
-  } state, next_state;
-
-  always_ff @(posedge clk) begin
-    if(~rst_L) begin
-      state <= T1;
-    end
-
-    else begin
-      state <= next_state;
-    end
-  end
-
-  always_comb begin
-    NOP_done = 0;
-
-    case(state)
-      T1: begin
-        next_state = (NOP_start) ? T2 : T1;
-      end
-
-      T2: begin next_state = T3; end
-
-      T3: begin next_state = T4; end
-
-      T4: begin
-        next_state = T1;
-        NOP_done    = 1;
-      end
-
-    endcase
-  end
-
-endmodule NOP_fsm
-
 
 //-----------------------------------------------------------------------------
 //OCF_fsm
@@ -232,7 +257,6 @@ module OCF_fsm(
   input   logic [15:0]  PC,
   input   logic         OCF_start,
   output  logic         OCF_done,
-  output  logic [7:0]   OCF_opcode_out,
   output  logic         OCF_opcode_valid,
 
   //---------------------------------------------------------------------------
@@ -240,9 +264,6 @@ module OCF_fsm(
   //  This FSM is the only one generating these signals, so they
   //  get the same names as the top level signals
   //---------------------------------------------------------------------------
-  input   logic [7:0]   OCF_data_in,
-  input   logic         INT_L,
-  input   logic         NMI_L,
   input   logic         WAIT_L,
 
   //---------------------------------------------------------------------------
@@ -266,9 +287,6 @@ module OCF_fsm(
     T4   = 3'd3
   } state, next_state;
 
-  //This value will be set on the T2/T3 edge
-  logic [7:0] opcode_fetched;
-
   always @(posedge clk) begin
     if(~rst_L) begin
       state <= T1;
@@ -276,9 +294,6 @@ module OCF_fsm(
     else begin
       state <= next_state;
     end
-
-    //always read the data bus line
-    opcode_fetched <= OCF_data_in;
   end
 
   //next state logic
@@ -318,7 +333,6 @@ module OCF_fsm(
     OCF_M1_L        = 1;
     OCF_RFSH_L      = 1;
     OCF_done        = 0;
-    OCF_opcode_out  = 0;
     OCF_opcode_valid = 0;
 
     case(state)
@@ -344,6 +358,7 @@ module OCF_fsm(
         OCF_MREQ_L   = 0;
         OCF_RD_L     = 0;
         OCF_M1_L     = 0;
+        OCF_opcode_valid = 1;
       end
 
       //It is in this state and T4 that the refresh address is sent
@@ -356,8 +371,6 @@ module OCF_fsm(
       //in, and now it is safe for us to output the value from
       //the module.
       T3: begin
-        OCF_opcode_out   = opcode_fetched;
-        OCF_opcode_valid = 1;
       end
 
       T4: begin

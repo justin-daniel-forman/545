@@ -4,5 +4,7 @@ simv
 ucli.key
 inter.vpd
 simv.daidir
+z80_sim
+z80_tb
 .__*
 
