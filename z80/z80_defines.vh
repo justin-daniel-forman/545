@@ -1,2 +1,2 @@
 `define NOP 8'h00
-`define INC 8'b00xxx100
+`define INC 8'b00???100

@@ -68,7 +68,10 @@ module control_logic (
     .clk(clk),
     .rst_L(rst_L),
     .prev_done(OCF_done),
-    .opcode(bus_data),
+    //give the raw data_in to the decoder because it is time sensitive
+    //and needs to know when the data appears on the bus, not after
+    //we have saved it.
+    .opcode(data_in),
     .WAIT_L(WAIT_L),
 
     //outputs
@@ -197,7 +200,8 @@ module decoder (
       //is spent potentially dispatching part of the instruction
       FETCH_2: begin
         //TODO: might need to acknowledge a WAIT cycle
-        case(opcode)
+        $display ("op: %h, inc: %b", opcode, `INC);
+        casex(opcode)
           `INC: next_state = INC_0;
           default: next_state = NOP_0;
         endcase
@@ -358,7 +362,6 @@ module OCF_fsm(
         OCF_MREQ_L   = 0;
         OCF_RD_L     = 0;
         OCF_M1_L     = 0;
-        OCF_opcode_valid = 1;
       end
 
       //It is in this state and T4 that the refresh address is sent
@@ -371,6 +374,7 @@ module OCF_fsm(
       //in, and now it is safe for us to output the value from
       //the module.
       T3: begin
+        OCF_opcode_valid = 1;
       end
 
       T4: begin
