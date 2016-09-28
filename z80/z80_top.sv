@@ -10,8 +10,8 @@ module z80(
   //          fully reset. Starts fetching instructions from location 0x0000
   //          on reset.
   //---------------------------------------------------------------------------
-  input   logic         CLK,
-  input   logic         RESET_L,
+  input   logic         clk,
+  input   logic         rst_L,
 
   //---------------------------------------------------------------------------
   //Bus Interface
@@ -23,11 +23,11 @@ module z80(
 
   //---------------------------------------------------------------------------
   //Interrupt Interface
-  //  - M1_L:   Sets the mode for interrupt acknowledge
+  //  - M1_L:
   //  - INT_L:  Maskable interrupt
   //  - NMI_L:  Non-Maskable Interrupt
   //---------------------------------------------------------------------------
-  input   logic         M1_L,
+  output  logic         M1_L,
   input   logic         INT_L,
   input   logic         NMI_L,
 
@@ -71,5 +71,63 @@ module z80(
 
   //TODO instantiate control path (drives addr bus when enabled by itself)
   //TODO instantiate datapath     (drives data bus when enabled by control_logic)
+
+  logic [7:0]   datapath_data_out;
+  logic [15:0]  datapath_addr_out;
+  logic [3:0]   alu_op;
+  logic         switch_context;
+  logic         ld_a;
+
+  logic [15:0]  control_addr_out;
+  logic         control_drive_addr;
+  logic         datapath_drive_addr;
+  logic         datapath_drive_data;
+
+  datapath DP (
+    .clk(clk),
+    .rst_L(rst_L),
+    .data_in(data_bus),
+    .ld_a(ld_a),
+    .alu_op(alu_op),
+    .switch_context(switch_context),
+    .data_out(datapath_data_out),
+    .addr_out(datapath_addr_out)
+  );
+
+  control_logic CTRL(
+    .clk(clk),
+    .rst_L(rst_L),
+    .data_in(data_bus),
+    .addr_out(control_addr_out),
+
+    .control_drive_addr(control_drive_addr),
+    .datapath_drive_addr(datapath_drive_addr),
+    .datapath_drive_data(datapath_drive_data),
+
+    .ld_a(ld_a),
+    .alu_op(alu_op),
+    .switch_context(switch_context),
+
+    .M1_L(M1_L),
+    .INT_L(INT_L),
+    .NMI_L(NMI_L),
+    .WAIT_L(WAIT_L),
+    .MREQ_L(MREQ_L),
+    .IORQ_L(IORQ_L),
+    .RD_L(RD_L),
+    .WR_L(WR_L),
+    .RFSH_L(RFSH_L),
+    .BUSACK_L(BUSACK_L),
+    .BUSREQ_L(BUSREQ_L),
+    .HALT_L(HALT_L)
+
+  );
+
+  assign data_bus = 8'bz;
+  assign addr_bus = control_addr_out;
+
+  //assign data_bus = (datapath_drive_data) ? datapath_data_out : 8'bz;
+  //assign addr_bus = (datapath_drive_addr) ? datapath_addr_out : (
+  //                      (control_drive_addr) ? control_addr_out : 15'bz);
 
 endmodule: z80

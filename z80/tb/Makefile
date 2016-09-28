@@ -6,3 +6,6 @@ decoder:
 
 control:
 	vcs -sverilog -debug ../z80_control.sv control_tb.sv ../../library/library.sv
+
+top:
+	vcs -sverilog -debug ../z80_control.sv ../z80_datapath.sv ../z80_top.sv ../../library/library.sv top_tb.sv

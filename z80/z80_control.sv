@@ -10,9 +10,27 @@ module control_logic (
   //  - data_in: The control segment only receives data from the bus
   //  - addr_out: The control segment is responsible for generating the address
   //              line.
+  //  - control_drive_addr: does the control module put out an addr on the bus?
+  //  - datapath_drive_addr: does the dp put out an addr on the bus?
+  //  - datapath_drive_data: does the dp put out some data on the bus?
   //---------------------------------------------------------------------------
   input   logic [7:0]   data_in,
   output  logic [15:0]  addr_out,
+  output  logic         control_drive_addr,
+  output  logic         datapath_drive_addr,
+  output  logic         datapath_drive_data,
+
+  //---------------------------------------------------------------------------
+  //Control Signals
+  //  - ld_a: Load the A register
+  //  - alu_op: Specify what the ALU should do
+  //  - switch_context: Switch all of the registers with their context
+  //                    swappable counterparts. Makes main regs backup and
+  //                    vice versa.
+  //---------------------------------------------------------------------------
+  output  logic         ld_a,
+  output  logic [3:0]   alu_op,
+  output  logic         switch_context,
 
   //---------------------------------------------------------------------------
   //Top Level Signals
@@ -73,6 +91,10 @@ module control_logic (
     //we have saved it.
     .opcode(data_in),
     .WAIT_L(WAIT_L),
+
+    .ld_a(ld_a),
+    .alu_op(alu_op),
+    .switch_context(switch_context),
 
     //outputs
     .OCF_start(OCF_start),
@@ -158,6 +180,15 @@ module decoder (
   input logic       prev_done,
   input logic [7:0] opcode,
 
+  //--------------------------------------------------------------------------
+  // - ld_a
+  // - switch_context
+  // - alu_op
+  //---------------------------------------------------------------------------
+  output logic        ld_a,
+  output logic        switch_context,
+  output logic [3:0]  alu_op,
+
   //---------------------------------------------------------------------------
   // - OCF_start: Kicks off the OCF_fsm which starts an opcode fetch
   //---------------------------------------------------------------------------
@@ -223,6 +254,9 @@ module decoder (
     OCF_start = 0;
     OCF_bus   = 0;
     inc_PC    = 0;
+    ld_a      = 0;
+    alu_op    = 0;
+    switch_context = 0;
 
     case(state)
       FETCH_0: begin
@@ -237,6 +271,11 @@ module decoder (
       FETCH_2: begin
         inc_PC  = 1;
         OCF_bus = 1;
+      end
+
+      INC_0: begin
+        ld_a   = 1;
+        alu_op = `INCR_A;
       end
 
     endcase
