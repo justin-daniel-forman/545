@@ -1,6 +1,6 @@
 module vdp_top (
 
-  input logic       clk,
+  input logic       clk_4, clk_100, // Need both clocks
   input logic       reset_L,
 
   //---------------------------------------------------------------------------
@@ -33,7 +33,7 @@ module vdp_top (
   logic CSW_L, CSR_L, MODE, vdp_go;
    
   vdp_port_decoder DECODER(
-    .clk(clk),
+    .clk(clk_4),
     .reset_L(reset_L),
     .addr_in(addr_bus),
     .data_in(data_bus),
@@ -50,7 +50,8 @@ module vdp_top (
   logic [7:0] data_port_out;
 
   vdp_ports PORTS(
-    .clk(clk),
+    .clk(clk_4),
+    .clk_100(clk_100),
     .reset_L(reset_L),
     .MODE(MODE),
     .CSR_L(CSR_L),
@@ -180,7 +181,7 @@ module vdp_port_decoder(
 endmodule: vdp_port_decoder
 
 module vdp_ports(
-  input   logic clk,
+  input   logic clk, clk_100,
   input   logic reset_L,
 
   input   logic MODE,
@@ -204,13 +205,21 @@ module vdp_ports(
   logic [13:0] write_addr_in, write_addr_out;
   logic        write_addr_en, write_addr_sel; // Set in FSM
   
-  logic [7:0]  VRAM_data_out, VRAM_data_in;
-  logic [13:0] VRAM_addr;
-  logic        VRAM_re, VRAM_we; // Set in FSM
+  logic [7:0][7:0]  VRAM_VGA_data_out; // 8 VGA read ports 
+  logic [7:0]       VRAM_io_data_in,  // 1 io write port
+                    VRAM_io_data_out; // 1 io read port
+  logic [7:0][13:0] VRAM_VGA_addr; // 8 VGA addr's
+  logic [13:0]      VRAM_io_addr; // 1 io address
+  logic [7:0]       VRAM_VGA_re; // 8 read enables
+  logic             VRAM_io_re, VRAM_io_we; // 1 write enable - Set in io_FSM
 	 
-  logic [5:0] CRAM_data_out, CRAM_data_in;
-  logic [4:0] CRAM_addr;
-  logic       CRAM_re, CRAM_we; // Set in FSM
+  logic [7:0][5:0] CRAM_VGA_data_out;
+  logic [5:0]      CRAM_io_data_in, 
+                   CRAM_io_data_out;
+  logic [7:0][4:0] CRAM_VGA_addr;
+  logic [4:0]      CRAM_io_addr;
+  logic [7:0]      CRAM_VGA_re;
+  logic            CRAM_io_we; // Set in io_FSM
 
 
   /******* Register File *******/ 
@@ -244,35 +253,62 @@ module vdp_ports(
   );	 
 
   /******** VRAM & CRAM ********/  
-  
-  mem #(8, 14) VRAM(
-    .clk(clk),
+
+  // #ScrollingBackAndForthIsForScrubs  
+  // logic [7:0][7:0]  VRAM_VGA_data_out; // 8 VGA read ports 
+  // logic [7:0]       VRAM_io_data_in,  // 1 io write port
+  //                   VRAM_io_data_out; // 1 io read port
+  // logic [7:0][13:0] VRAM_VGA_addr; // 8 VGA addr's
+  // logic [13:0]      VRAM_io_addr; // 1 io address
+  // logic [7:0]       VRAM_VGA_re; // 8 read enables
+  // logic             VRAM_io_re, VRAM_io_we; // 1 write enable - Set in io_FSM
+  // 	 
+  // logic [7:0][5:0] CRAM_VGA_data_out;
+  // logic [5:0]      CRAM_io_data_in, 
+  //                  CRAM_io_data_out;
+  // logic [7:0][4:0] CRAM_VGA_addr;
+  // logic [4:0]      CRAM_io_addr;
+  // logic [7:0]      CRAM_VGA_re;
+  // logic            CRAM_io_we; // Set in io_FSM
+
+  mem #(8, 14, 8) VRAM(
+    .a_clk(clk),
+    .b_clk(clk_100),
     .rst_L(reset_L),
-    .data_in(VRAM_data_in),
-    .addr(VRAM_addr),
-    .we(VRAM_we),
-    .re(VRAM_re),
-    .data_out(VRAM_data_out)
+    .data_in(VRAM_io_data_in),
+    .a_addr(VRAM_io_addr),
+    .b_addr(VRAM_VGA_addr),
+    .a_we(VRAM_io_we),
+    .a_re(VRAM_io_re),
+    .b_re(VRAM_VGA_re),
+    .a_data_out(VRAM_io_data_out),
+    .b_data_out(VRAM_VGA_data_out)
   );
 
-  mem #(6, 5) CRAM(
-    .clk(clk),
+  mem #(6, 5, 8) CRAM(
+    .a_clk(clk),
+    .b_clk(clk_100),
     .rst_L(reset_L),
-    .data_in(CRAM_data_in),
-    .addr(CRAM_addr),
-    .we(CRAM_we),
-    .re(CRAM_re),
-    .data_out(CRAM_data_out)
+    .data_in(CRAM_io_data_in),
+    .a_addr(CRAM_io_addr),
+    .b_addr(CRAM_VGA_addr),
+    .a_we(CRAM_io_we),
+    .a_re(CRAM_io_re),
+    .b_re(CRAM_VGA_re),
+    .a_data_out(CRAM_io_data_out),
+    .b_data_out(CRAM_VGA_data_out)
   );
 
-  assign VRAM_data_in = data_port_out;
-  assign VRAM_addr = write_addr_out;
-  assign CRAM_data_in = data_port_out;
-  assign CRAM_addr = write_addr_out;
- 
+  assign VRAM_io_data_in = data_port_out;
+  assign VRAM_io_addr = write_addr_out;
+  assign VRAM_VGA_addr = 0; // FIX
+  assign CRAM_io_data_in = data_port_out;
+  assign CRAM_io_addr = write_addr_out;
+  assign CRAM_VGA_addr = 0; // FIX 
+
   /******* FSM *******/
 
-  vdp_fsm state_machine(
+  vdp_io_fsm io_fsm(
     .clk(clk),
     .rst_L(reset_L),
     .MODE(MODE),
@@ -285,12 +321,12 @@ module vdp_ports(
     .rf_en(rf_en),
     .wr_addr_sel(write_addr_sel),
     .wr_addr_en(write_addr_en),
-    .stat_en(),
+    .stat_en(),                    // Probably just remove this
     .data_in_sel(data_in_sel),
-    .VRAM_re(VRAM_re), // ****TODO: This won't work. Dictated not only by the 
-    .VRAM_we(VRAM_we), // Z80, but also need to reference for building the 
-    .CRAM_re(CRAM_re), // frame buffer. Only relevant to reads though.
-    .CRAM_we(CRAM_we)
+    .VRAM_re(VRAM_io_re), 
+    .VRAM_we(VRAM_io_we),
+    .CRAM_re(CRAM_io_re),
+    .CRAM_we(CRAM_io_we)
   );
 
   /******** Data Bus Interfacing ********/ 
@@ -322,14 +358,14 @@ module vdp_ports(
 
   assign data_out = data_port_out;
   assign data_port_in = (~CSW_L) ?           
-    (data_in_sel ? VRAM_data_out : data_in)
+    (data_in_sel ? VRAM_io_data_out : data_in)
     : data_port_out;
   assign cmd_port_in_1 = data_in;
   assign cmd_port_in_2 = data_in;
 
 endmodule: vdp_ports
 
-module vdp_fsm(
+module vdp_io_fsm(
   input  logic       clk, rst_L,
   input  logic       MODE, CSR_L, CSW_L, go,
   input  logic [1:0] op,  
@@ -463,7 +499,7 @@ module vdp_fsm(
     else cs <= ns;
   end 
 
-endmodule: vdp_fsm
+endmodule
 
 /* command_decoder
  * Description: Interprets the two byte command written to the command port
