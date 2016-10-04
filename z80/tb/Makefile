@@ -9,3 +9,9 @@ control:
 
 top:
 	vcs -sverilog -debug ../z80_control.sv ../z80_datapath.sv ../z80_top.sv ../../library/library.sv top_tb.sv
+
+regfile:
+	vcs -sverilog -debug ../z80_datapath.sv ../../library/library.sv regfile_tb.sv
+
+datapath:
+	vcs -sverilog -debug ../z80_datapath.sv ../../library/library.sv datapath_tb.sv
