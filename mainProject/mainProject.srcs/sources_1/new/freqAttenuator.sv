@@ -41,12 +41,12 @@ module freqAttenuatorSingle(
     logic count_en;
     logic sent;
     
-    enum {new_val,mult,io_wait} state;
+    typedef enum {new_val,mult,io_wait} state;
     state cs,ns; 
     
     baseReg waveformStorage(.*);
     multLookup lookup(.*);
-    mult_gen_0 waveMult(.CLK(clk),.A(waveform_base),.B(atten_mag_stored),.CE(mult_clk_en),.P(product));
+    mult_gen_0 waveMult(.CLK(clk),.A(waveform_base),.B(multVal),.CE(mult_clk_en),.P(product));
     shifter shift_mc_shiftface(.*);
     
     always_ff @(posedge clk, posedge reset) begin
@@ -127,12 +127,12 @@ module freqAttenuator(
     logic count_en;
     logic sent;
     
-    enum {new_val,mult,io_wait} state;
+    typedef enum {new_val,mult,io_wait} state;
     state cs,ns; 
     
     baseReg waveformStorage[2:0] (.*);
     multLookup lookup[2:0] (.*);
-    mult_gen_0 waveMult [2:0] (.CLK(clk),.A(waveform_base),.B(atten_mag_stored),.CE(mult_clk_en),.P(product));
+    mult_gen_0 waveMult [2:0] (.CLK(clk),.A(waveform_base),.B(multVal),.CE(mult_clk_en),.P(product));
     shifter shifty_mc_shiftface [2:0] (.*);
     c_add_0 add1(.A(shifted_val[0]),.B(shifted_val[1]),.S(add1_result));
     c_add_0 add2(.A(add1_result),.B(shifted_val[2]),.S(add2_result));
