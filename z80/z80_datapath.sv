@@ -25,6 +25,8 @@ module datapath (
   input  logic         ld_IYL,
   input  logic         ld_SPH,
   input  logic         ld_SPL,
+  input  logic         ld_PCH,
+  input  logic         ld_PCL,
 
   //Regfile Drives
   //Specifying two of these will cause a 16 bit drive onto the
@@ -44,6 +46,8 @@ module datapath (
   input  logic         drive_IYL,
   input  logic         drive_SPH,
   input  logic         drive_SPL,
+  input  logic         drive_PCH,
+  input  logic         drive_PCL,
 
   //Accumulator and Flag loads
   //We can load the flags from either the 16-bit ALU or the
@@ -216,6 +220,8 @@ module datapath (
     .drive_IYL(drive_IYL),
     .drive_SPH(drive_SPH),
     .drive_SPL(drive_SPL),
+    .drive_PCH(drive_PCH),
+    .drive_PCL(drive_PCL),
 
     .ld_B(ld_B),
     .ld_C(ld_C),
@@ -229,6 +235,8 @@ module datapath (
     .ld_IYL(ld_IYL),
     .ld_SPH(ld_SPH),
     .ld_SPL(ld_SPL),
+    .ld_PCH(ld_PCH),
+    .ld_PCL(ld_PCL),
 
     .drive_single(drive_reg_data),
     .drive_double(drive_reg_addr),
@@ -265,8 +273,8 @@ module datapath (
   );
 
   alu #(16) sixteenBit(
-    .A({8'b0, TEMP_out}),
-    .B(reg_addr_out),
+    .A(reg_addr_out),
+    .B({8'b0, TEMP_out}),
     .op(alu_op),
     .C(alu_out_addr)
   );
@@ -414,6 +422,8 @@ module regfile(
   input   logic drive_IXH,
   input   logic drive_IYL,
   input   logic drive_IYH,
+  input   logic drive_PCH,
+  input   logic drive_PCL,
 
   input   logic ld_B,
   input   logic ld_C,
@@ -427,6 +437,8 @@ module regfile(
   input   logic ld_IXH,
   input   logic ld_IYL,
   input   logic ld_IYH,
+  input   logic ld_PCH,
+  input   logic ld_PCL,
 
   input   logic drive_single,
   input   logic drive_double,
@@ -523,6 +535,14 @@ module regfile(
   logic [7:0] SPL_out;
   logic       SPL_en;
 
+  logic [7:0] PCH_in;
+  logic [7:0] PCH_out;
+  logic       PCH_en;
+
+  logic [7:0] PCL_in;
+  logic [7:0] PCL_out;
+  logic       PCL_en;
+
   //---------------------------------------------------------------------------
   //Register Output logic
   //---------------------------------------------------------------------------
@@ -542,6 +562,8 @@ module regfile(
       else if(drive_IYL)out_single = IYL_out;
       else if(drive_SPH)out_single = SPH_out;
       else if(drive_SPL)out_single = SPL_out;
+      else if(drive_PCH)out_single = PCH_out;
+      else if(drive_PCL)out_single = PCL_out;
       else              out_single = 8'bz; //shouldn't ever go on the bus
     end
 
@@ -554,6 +576,7 @@ module regfile(
       else if(drive_IXH & drive_IXL)  out_double = {IXH_out, IXL_out};
       else if(drive_IYH & drive_IYL)  out_double = {IYH_out, IYL_out};
       else if(drive_SPH & drive_SPL)  out_double = {SPH_out, SPL_out};
+      else if(drive_PCH & drive_PCL)  out_double = {PCH_out, PCL_out};
       else                            out_double = 8'bz;
     end
 
@@ -593,6 +616,8 @@ module regfile(
     IYL_in = 0;
     SPH_in = 0;
     SPL_in = 0;
+    PCH_in = 0;
+    PCL_in = 0;
 
     B_en = 0;
     C_en = 0;
@@ -606,6 +631,8 @@ module regfile(
     IYL_en = 0;
     SPH_en = 0;
     SPL_en = 0;
+    PCH_en = 0;
+    PCL_en = 0;
 
     //context swap the specified register
     if(switch_context) begin
@@ -683,36 +710,25 @@ module regfile(
       IYL_en = ld_IYL;
       SPH_en = ld_SPH;
       SPL_en = ld_SPL;
+      PCH_en = ld_PCH;
+      PCL_en = ld_PCL;
 
       //addr bus cases
-      if(ld_B & ld_C) begin
-        B_in = A_BUS[15:8];
-        C_in = A_BUS[7:0];
-      end
-
-      else if(ld_D & ld_E) begin
-        D_in = A_BUS[15:8];
-        E_in = A_BUS[7:0];
-      end
-
-      else if(ld_H & ld_L) begin
-        H_in = A_BUS[15:8];
-        L_in = A_BUS[7:0];
-      end
-
-      else if(ld_IXH & ld_IXL) begin
-        IXH_in = A_BUS[15:8];
-        IXL_in = A_BUS[7:0];
-      end
-
-      else if(ld_IYH & ld_IYL) begin
-        IYH_in = A_BUS[15:8];
-        IYL_in = A_BUS[7:0];
-      end
-
-      else if(ld_SPH & ld_SPL) begin
-        SPH_in = A_BUS[15:0];
-        SPL_in = A_BUS[7:0];
+      if( (ld_B & ld_C)
+         |(ld_D & ld_D)
+         |(ld_H & ld_L)
+         |(ld_IXH & ld_IXL)
+         |(ld_IYH & ld_IYL)
+         |(ld_SPH & ld_SPL)
+         |(ld_PCH & ld_PCL)
+        ) begin
+        {B_in, C_in} = A_BUS;
+        {D_in, E_in} = A_BUS;
+        {H_in, L_in} = A_BUS;
+        {IXH_in, IXL_in} = A_BUS;
+        {IYH_in, IYL_in} = A_BUS;
+        {SPH_in, SPL_in} = A_BUS;
+        {PCH_in, PCL_in} = A_BUS;
       end
 
       //data bus cases
@@ -729,6 +745,8 @@ module regfile(
         IYL_in = D_BUS;
         SPH_in = D_BUS;
         SPL_in = D_BUS;
+        PCH_in = D_BUS;
+        PCL_in = D_BUS;
       end
 
     end
@@ -855,12 +873,28 @@ module regfile(
     .Q(SPH_out)
   );
 
- register #(8) SPL(
+  register #(8) SPL(
     .clk(clk),
     .rst_L(rst_L),
     .D(SPL_in),
     .en(SPL_en),
     .Q(SPL_out)
+  );
+
+  register #(8) PCH(
+    .clk(clk),
+    .rst_L(rst_L),
+    .D(PCH_in),
+    .en(PCH_en),
+    .Q(PCH_out)
+  );
+
+  register #(8) PCL(
+    .clk(clk),
+    .rst_L(rst_L),
+    .D(PCL_in),
+    .en(PCL_en),
+    .Q(PCL_out)
   );
 
 endmodule: regfile

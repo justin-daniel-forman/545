@@ -18,6 +18,8 @@ module tb ();
   logic         ld_IYL;
   logic         ld_SPH;
   logic         ld_SPL;
+  logic         ld_PCH;
+  logic         ld_PCL;
 
   //Regfile Drives
   //Specifying two of these will cause a 16 bit drive onto the
@@ -37,6 +39,8 @@ module tb ();
   logic         drive_IYL;
   logic         drive_SPH;
   logic         drive_SPL;
+  logic         drive_PCH;
+  logic         drive_PCL;
 
   //Accumulator and Flag loads
   //We can load the flags from either the 16-bit ALU or the
@@ -102,6 +106,8 @@ module tb ();
     ld_IYL = 0;
     ld_SPH = 0;
     ld_SPL = 0;
+    ld_PCH = 0;
+    ld_PCL = 0;
 
     //Regfile Drives
     //Specifying two of these will cause a 16 bit drive onto the
@@ -121,6 +127,8 @@ module tb ();
     drive_IYL = 0;
     drive_SPH = 0;
     drive_SPL = 0;
+    drive_PCH = 0;
+    drive_PCL = 0;
 
     //Accumulator and Flag loads
     //We can load the flags from either the 16-bit ALU or the
@@ -181,10 +189,28 @@ module tb ();
 
     //LDI Instruction (DE) <- (HL), DE <- DE + 1, HL <- HL + 1, BC <- BC - 1
     //OCF M1
+
+    //A_BUS <- PC + 1
+    ld_PCH = 1;
+    ld_PCL = 1;
+    drive_PCH = 1;
+    drive_PCL = 1;
+    drive_reg_addr = 1;
+    drive_alu_addr = 1;
+    alu_op = `INCR_A;
     @(posedge clk); //end T1
+
+    ld_PCH = 0;
+    ld_PCL = 0;
+    alu_op = `NOP;
     data_in <= 8'hed; //fake instruction
     @(posedge clk); //end T2
+
     data_in <= 8'bz;
+    drive_PCH = 0;
+    drive_PCL = 0;
+    drive_reg_addr = 0;
+    drive_alu_addr = 0;
     @(posedge clk); //end T3
     @(posedge clk); //end T4
 
