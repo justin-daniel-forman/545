@@ -8,29 +8,103 @@ module control_logic (
   //---------------------------------------------------------------------------
   //Bus Signals
   //  - data_in: The control segment only receives data from the bus
-  //  - addr_out: The control segment is responsible for generating the address
-  //              line.
-  //  - control_drive_addr: does the control module put out an addr on the bus?
-  //  - datapath_drive_addr: does the dp put out an addr on the bus?
-  //  - datapath_drive_data: does the dp put out some data on the bus?
   //---------------------------------------------------------------------------
-  input   logic [7:0]   data_in,
-  output  logic [15:0]  addr_out,
-  output  logic         control_drive_addr,
-  output  logic         datapath_drive_addr,
-  output  logic         datapath_drive_data,
+   input   logic [7:0]   data_in,
 
   //---------------------------------------------------------------------------
   //Control Signals
-  //  - ld_a: Load the A register
-  //  - alu_op: Specify what the ALU should do
-  //  - switch_context: Switch all of the registers with their context
-  //                    swappable counterparts. Makes main regs backup and
-  //                    vice versa.
+  //  See subsections for details on these signals.
   //---------------------------------------------------------------------------
-  output  logic         ld_a,
+
+  //-----------------------------------
+  //Regfile loads
+  //  Specifying 2 of these signals at once will indicate a 16-bit load
+  //  from the addr bus. Specifying only one will indicate an 8-bit load
+  //  from the databus. We cannot do both simultaneously.
+  //-----------------------------------
+  output  logic         ld_B,
+  output  logic         ld_C,
+  output  logic         ld_D,
+  output  logic         ld_E,
+  output  logic         ld_H,
+  output  logic         ld_L,
+  output  logic         ld_IXH,
+  output  logic         ld_IXL,
+  output  logic         ld_IYH,
+  output  logic         ld_IYL,
+  output  logic         ld_SPH,
+  output  logic         ld_SPL,
+  output  logic         ld_PCH,
+  output  logic         ld_PCL,
+
+  //-----------------------------------
+  //Regfile Drives
+  //  Specifying 2 of these signals will cause a 16 bit drive onto the addr
+  //  bus and specifying two of these signals will cause an 8-bit drive onto
+  //  the data bus. We cannot do both simultaneously.
+  //------------------------------------
+  output  logic         drive_reg_data,
+  output  logic         drive_reg_addr,
+  output  logic         drive_B,
+  output  logic         drive_C,
+  output  logic         drive_D,
+  output  logic         drive_E,
+  output  logic         drive_H,
+  output  logic         drive_L,
+  output  logic         drive_IXH,
+  output  logic         drive_IXL,
+  output  logic         drive_IYH,
+  output  logic         drive_IYL,
+  output  logic         drive_SPH,
+  output  logic         drive_SPL,
+  output  logic         drive_PCH,
+  output  logic         drive_PCL,
+
+  //-----------------------------------
+  //Accumulator and Flag loads
+  //  The original system only had a single 8-bit ALU. As an optimization,
+  //  we have put in a second 16-bit alu to make the control simpler. As
+  //  A result, we must conditionally load from the ALU that performs
+  //  arithmetic on the A register.
+  //-----------------------------------
+  output  logic         ld_A,
+  output  logic         ld_F_data,      //8bit load
+  output  logic         ld_F_addr,      //16bit load
+  output  logic         drive_A,
+  output  logic         drive_F,
   output  logic [3:0]   alu_op,
+  output  logic         drive_alu_data, //8bit drive
+  output  logic         drive_alu_addr, //16bit drive
+
+  //-----------------------------------
+  //Miscellaneous register controls
+  // - switch_context: tells the registers to switch with their "not"
+  //      counterparts. The ld signals determine which registers
+  //      will switch contexts.
+  // - swap_reg: tells the registers to swap contents in a single cycle
+  //      The ld signals determine which registers will swap
+  //-----------------------------------
   output  logic         switch_context,
+  output  logic         swap_reg,
+
+  //-----------------------------------
+  //temporary data_bus registers
+  //  These registers sit on the databus.
+  //-----------------------------------
+  output  logic         ld_MDR1,
+  output  logic         ld_MDR2,
+  output  logic         ld_TEMP,
+  output  logic         drive_MDR1,
+  output  logic         drive_MDR2,
+  output  logic         drive_TEMP,
+
+  //-----------------------------------
+  //temporary addr_bus registers
+  //  These registers sit on the addr bus
+  //-----------------------------------
+  output  logic         ld_MARH, //load upper byte of MAR
+  output  logic         ld_MARL, //load lower byte of MAR
+  output  logic         drive_MAR,
 
   //---------------------------------------------------------------------------
   //Top Level Signals
@@ -55,51 +129,127 @@ module control_logic (
 );
 
   //---------------------------------------------------------------------------
-  //PROGRAM COUNTER
-  //TODO: Include support for branching
-  //---------------------------------------------------------------------------
-  logic [15:0] next_PC;
-  logic [15:0] curr_PC;
-  logic        inc_PC;
-  register #(16) PC_reg(clk, rst_L, next_PC, inc_PC, curr_PC);
-  assign next_PC = curr_PC + 1;
-
-  //---------------------------------------------------------------------------
-  //DATA REGISTER
+  //OPCODE REGISTERS
   //  Latch in values that come off of the data bus so that we know what
   //  to do with them
   //---------------------------------------------------------------------------
-  logic       data_valid;
-  logic [7:0] bus_data;
-  register #(8) DATA_reg(clk, rst_L, data_in, data_valid, bus_data);
+  logic       ld_op0, ld_op1, ld_op2;
+  logic [7:0] op0, op1, op2;
+  register #(8) op0_reg(clk, rst_L, data_in, ld_op0, op0);
+  register #(8) op1_reg(clk, rst_L, data_in, ld_op1, op1);
+  register #(8) op2_reg(clk, rst_L, data_in, ld_op2, op2);
+
+  //---------------------------------------------------------------------------
+  //SUB FSM DECLARATIONS
+  //---------------------------------------------------------------------------
+  logic OCF_start;
+  logic OCF_bus;
+  logic OCF_done;
+
+  logic MRD_start;
+  logic MRD_bus;
+  logic MRD_done;
+
+  logic MWR_start;
+  logic MWR_bus;
+  logic MWR_done;
+
+  OCF_fsm machine_fetch(
+    .clk(clk),
+    .rst_L(rst_L),
+    .OCF_start(OCF_start),
+    .OCF_done(OCF_done),
+    .WAIT_L(WAIT_L),
+
+    .OCF_M1_L(OCF_M1_L),
+    .OCF_MREQ_L(OCF_MREQ_L),
+    .OCF_RD_L(OCF_RD_L),
+    .OCF_RFSH_L(OCF_RFSH_L)
+  );
+
+  //TODO: MEM RD and WR instructions for buslines
+
 
   //---------------------------------------------------------------------------
   //DECODER
   //  Determines which instruction we are currently executing and who gets
   //  control of the bus.
   //---------------------------------------------------------------------------
-  logic OCF_start;
-  logic OCF_bus;
-  logic OCF_done;
-
   decoder DECODE(
     .clk(clk),
     .rst_L(rst_L),
-    .prev_done(OCF_done),
-    //give the raw data_in to the decoder because it is time sensitive
-    //and needs to know when the data appears on the bus, not after
-    //we have saved it.
-    .opcode(data_in),
-    .WAIT_L(WAIT_L),
 
-    .ld_a(ld_a),
-    .alu_op(alu_op),
-    .switch_context(switch_context),
+    .WAIT_L,
+    .data_in,
 
-    //outputs
-    .OCF_start(OCF_start),
-    .OCF_bus(OCF_bus),
-    .inc_PC(inc_PC)
+    //regfile loads
+    .ld_B,
+    .ld_C,
+    .ld_D,
+    .ld_E,
+    .ld_H,
+    .ld_L,
+    .ld_IXH,
+    .ld_IXL,
+    .ld_IYH,
+    .ld_IYL,
+    .ld_SPH,
+    .ld_SPL,
+    .ld_PCH,
+    .ld_PCL,
+
+    //regfile drives
+    .drive_reg_data,
+    .drive_reg_addr,
+    .drive_B,
+    .drive_C,
+    .drive_D,
+    .drive_E,
+    .drive_H,
+    .drive_L,
+    .drive_IXH,
+    .drive_IXL,
+    .drive_IYH,
+    .drive_IYL,
+    .drive_SPH,
+    .drive_SPL,
+    .drive_PCH,
+    .drive_PCL,
+
+    //accumulator flags and loads
+    .ld_A,
+    .ld_F_data,
+    .ld_F_addr,
+    .drive_A,
+    .drive_F,
+    .alu_op,
+    .drive_alu_data,
+    .drive_alu_addr,
+
+    //misc register controls
+    .switch_context,
+    .swap_reg,
+
+    //temp data bus regs
+    .ld_MDR1,
+    .ld_MDR2,
+    .ld_TEMP,
+    .drive_MDR1,
+    .drive_MDR2,
+    .drive_TEMP,
+
+    //temp addr bus regs
+    .ld_MARH,
+    .ld_MARL,
+    .drive_MAR,
+
+    //Bus controls
+    .OCF_start,
+    .OCF_bus,
+    .MWR_start,
+    .MWR_bus,
+    .MRD_start,
+    .MRD_bus
   );
 
   //---------------------------------------------------------------------------
@@ -107,12 +257,6 @@ module control_logic (
   //  Arbitrate who gets to drive the actual bus lines between all of the
   //  sub-fsms.
   //---------------------------------------------------------------------------
-  logic         OCF_M1_L;
-  logic         OCF_MREQ_L;
-  logic         OCF_RD_L;
-  logic         OCF_RFSH_L;
-  logic [15:0]  OCF_addr_out;
-
   always_comb begin
     //default signals
     M1_L    = 1'b1;
@@ -123,36 +267,15 @@ module control_logic (
     RFSH_L  = 1'b1;
     HALT_L  = 1'b1;
     BUSACK_L = 1'b1;
-    addr_out = 8'bz;
 
     if(OCF_bus) begin
       M1_L   = OCF_M1_L;
       MREQ_L = OCF_MREQ_L;
       RD_L   = OCF_RD_L;
       RFSH_L = OCF_RFSH_L;
-      addr_out = OCF_addr_out;
     end
 
   end
-
-  //---------------------------------------------------------------------------
-  //SUB FSM DECLARATIONS
-  //---------------------------------------------------------------------------
-  OCF_fsm machine_fetch(
-    .clk(clk),
-    .rst_L(rst_L),
-    .PC(curr_PC),
-    .OCF_start(OCF_start),
-    .OCF_done(OCF_done),
-    .OCF_opcode_valid(data_valid),
-    .WAIT_L(WAIT_L),
-
-    .OCF_M1_L(OCF_M1_L),
-    .OCF_MREQ_L(OCF_MREQ_L),
-    .OCF_RD_L(OCF_RD_L),
-    .OCF_addr_out(OCF_addr_out),
-    .OCF_RFSH_L(OCF_RFSH_L)
-  );
 
 endmodule: control_logic
 
@@ -174,27 +297,124 @@ module decoder (
   input logic WAIT_L,
 
   //---------------------------------------------------------------------------
-  // - prev_done: Has the previous macro_state finished running?
+  //
   // - opcode:    What instruction we should run, is defined in z80_defines.h
   //---------------------------------------------------------------------------
-  input logic       prev_done,
-  input logic [7:0] opcode,
+  input logic [7:0] data_in,
+  //input logic [7:0] op0,
+  //input logic [7:0] op1,
+  //input logic [7:0] op2,
 
-  //--------------------------------------------------------------------------
-  // - ld_a
-  // - switch_context
-  // - alu_op
+  //output logic      ld_op0,
+  //output logic      ld_op1,
+  //output logic      ld_op2,
+
   //---------------------------------------------------------------------------
-  output logic        ld_a,
-  output logic        switch_context,
-  output logic [3:0]  alu_op,
+  //Control Signals
+  //  See subsections for details on these signals.
+  //---------------------------------------------------------------------------
+
+  //-----------------------------------
+  //Regfile loads
+  //  Specifying 2 of these signals at once will indicate a 16-bit load
+  //  from the addr bus. Specifying only one will indicate an 8-bit load
+  //  from the databus. We cannot do both simultaneously.
+  //-----------------------------------
+  output  logic         ld_B,
+  output  logic         ld_C,
+  output  logic         ld_D,
+  output  logic         ld_E,
+  output  logic         ld_H,
+  output  logic         ld_L,
+  output  logic         ld_IXH,
+  output  logic         ld_IXL,
+  output  logic         ld_IYH,
+  output  logic         ld_IYL,
+  output  logic         ld_SPH,
+  output  logic         ld_SPL,
+  output  logic         ld_PCH,
+  output  logic         ld_PCL,
+
+  //-----------------------------------
+  //Regfile Drives
+  //  Specifying 2 of these signals will cause a 16 bit drive onto the addr
+  //  bus and specifying two of these signals will cause an 8-bit drive onto
+  //  the data bus. We cannot do both simultaneously.
+  //------------------------------------
+  output  logic         drive_reg_data,
+  output  logic         drive_reg_addr,
+  output  logic         drive_B,
+  output  logic         drive_C,
+  output  logic         drive_D,
+  output  logic         drive_E,
+  output  logic         drive_H,
+  output  logic         drive_L,
+  output  logic         drive_IXH,
+  output  logic         drive_IXL,
+  output  logic         drive_IYH,
+  output  logic         drive_IYL,
+  output  logic         drive_SPH,
+  output  logic         drive_SPL,
+  output  logic         drive_PCH,
+  output  logic         drive_PCL,
+
+  //-----------------------------------
+  //Accumulator and Flag loads
+  //  The original system only had a single 8-bit ALU. As an optimization,
+  //  we have put in a second 16-bit alu to make the control simpler. As
+  //  A result, we must conditionally load from the ALU that performs
+  //  arithmetic on the A register.
+  //-----------------------------------
+  output  logic         ld_A,
+  output  logic         ld_F_data,      //8bit load
+  output  logic         ld_F_addr,      //16bit load
+  output  logic         drive_A,
+  output  logic         drive_F,
+  output  logic [3:0]   alu_op,
+  output  logic         drive_alu_data, //8bit drive
+  output  logic         drive_alu_addr, //16bit drive
+
+  //-----------------------------------
+  //Miscellaneous register controls
+  // - switch_context: tells the registers to switch with their "not"
+  //      counterparts. The ld signals determine which registers
+  //      will switch contexts.
+  // - swap_reg: tells the registers to swap contents in a single cycle
+  //      The ld signals determine which registers will swap
+  //-----------------------------------
+  output  logic         switch_context,
+  output  logic         swap_reg,
+
+  //-----------------------------------
+  //temporary data_bus registers
+  //  These registers sit on the databus.
+  //-----------------------------------
+  output  logic         ld_MDR1,
+  output  logic         ld_MDR2,
+  output  logic         ld_TEMP,
+  output  logic         drive_MDR1,
+  output  logic         drive_MDR2,
+  output  logic         drive_TEMP,
+
+  //-----------------------------------
+  //temporary addr_bus registers
+  //  These registers sit on the addr bus
+  //-----------------------------------
+  output  logic         ld_MARH, //load upper byte of MAR
+  output  logic         ld_MARL, //load lower byte of MAR
+  output  logic         drive_MAR,
+
+
 
   //---------------------------------------------------------------------------
   // - OCF_start: Kicks off the OCF_fsm which starts an opcode fetch
   //---------------------------------------------------------------------------
   output logic      OCF_start,
   output logic      OCF_bus,
-  output logic      inc_PC
+  output logic      MRD_start,
+  output logic      MRD_bus,
+  output logic      MWR_start,
+  output logic      MWR_bus
 );
 
   enum logic [7:0] {
@@ -207,6 +427,7 @@ module decoder (
     NOP_0
   } state, next_state;
 
+  logic [7:0] stored_opcode;
   always_ff @(posedge clk) begin
     if(~rst_L) begin
       state <= FETCH_0;
@@ -215,6 +436,9 @@ module decoder (
     else begin
       state <= next_state;
     end
+
+    //make sure to keep a copy of the opcode after it is fetched
+    if(state == FETCH_2) begin stored_opcode <= data_in; end
   end
 
   //next state logic
@@ -231,8 +455,8 @@ module decoder (
       //is spent potentially dispatching part of the instruction
       FETCH_2: begin
         //TODO: might need to acknowledge a WAIT cycle
-        $display ("op: %h, inc: %b", opcode, `INC);
-        casex(opcode)
+        $display ("op: %h, inc: %b", stored_opcode, `INC);
+        casex(stored_opcode)
           `INC: next_state = INC_0;
           default: next_state = NOP_0;
         endcase
@@ -250,31 +474,87 @@ module decoder (
 
   //output logic
   always_comb begin
-    //set defaults
-    OCF_start = 0;
-    OCF_bus   = 0;
-    inc_PC    = 0;
-    ld_a      = 0;
-    alu_op    = 0;
+
+    //defaults
+    //Regfile loads
+    ld_B = 0;
+    ld_C = 0;
+    ld_D = 0;
+    ld_E = 0;
+    ld_H = 0;
+    ld_L = 0;
+    ld_IXH = 0;
+    ld_IXL = 0;
+    ld_IYH = 0;
+    ld_IYL = 0;
+    ld_SPH = 0;
+    ld_SPL = 0;
+    ld_PCH = 0;
+    ld_PCL = 0;
+
+    //Regfile Drives
+    //Specifying two of these will cause a 16 bit drive onto the
+    //addr bus and specifying one will cause an 8 bit drive onto
+    //the data bus
+    drive_reg_data = 0;
+    drive_reg_addr = 0;
+    drive_B = 0;
+    drive_C = 0;
+    drive_D = 0;
+    drive_E = 0;
+    drive_H = 0;
+    drive_L = 0;
+    drive_IXH = 0;
+    drive_IXL = 0;
+    drive_IYH = 0;
+    drive_IYL = 0;
+    drive_SPH = 0;
+    drive_SPL = 0;
+    drive_PCH = 0;
+    drive_PCL = 0;
+
+    //Accumulator and Flag loads
+    //We can load the flags from either the 16-bit ALU or the
+    //8-bit ALU
+    ld_A = 0;
+    ld_F_data = 0;
+    ld_F_addr = 0;
+
+    //Accumulator and Flag drives
+    drive_A = 0;
+    drive_F = 0;
+
+    //ALU drives and controls
+    alu_op = `ALU_NOP;
+    drive_alu_data = 0; //8bit drive
+    drive_alu_addr = 0; //16bit drive
+
+    //Miscellaneous register controls
     switch_context = 0;
+    swap_reg = 0;
+
+    //temporary data_bus registers
+    ld_MDR1 = 0;
+    ld_MDR2 = 0;
+    ld_TEMP = 0;
+    drive_MDR1 = 0;
+    drive_MDR2 = 0;
+    drive_TEMP = 0;
+
+    //temporary addr_bus registers
+    ld_MARH = 0; //load upper byte of MAR
+    ld_MARL = 0; //load lower byte of MAR
+    drive_MAR = 0;
 
     case(state)
+
       FETCH_0: begin
-        OCF_start = 1;
-        OCF_bus   = 1;
-      end
-
-      FETCH_1: begin
-        OCF_bus = 1;
-      end
-
-      FETCH_2: begin
-        inc_PC  = 1;
-        OCF_bus = 1;
-      end
-
-      INC_0: begin
-        ld_a   = 1;
+        ld_PCH = 1;
+        ld_PCL = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
         alu_op = `INCR_A;
       end
 
@@ -283,6 +563,98 @@ module decoder (
 
 
 endmodule: decoder
+
+//-----------------------------------------------------------------------------
+//NMI_fsm
+//  This module generates the relevant bus signals for a non-maskable interrupt
+//  subroutine.
+//-----------------------------------------------------------------------------
+module NMI_fsm(
+  input   logic clk,
+  input   logic rst_L,
+
+  input   logic NMI_start,
+  input   logic WAIT_L,
+
+  input   logic [15:0] PC,
+
+  output  logic NMI_M1_L,
+  output  logic NMI_MREQ_L,
+  output  logic NMI_IORQ_L,
+
+  output  logic [15:0] NMI_addr_out
+);
+
+  //TODO: actually understand this portion of the code before trying to
+  //      implement it
+
+  //TODO: the processor automatically stacks the PC -- and it is up to the
+  //      programmer to unstack the PC in the interrupt handler
+
+  enum logic [3:0] {
+    T1  = 4'b0000,
+    T2  = 4'b0001,
+    TW1 = 4'b0010,
+    TW2 = 4'b0011,
+    T3  = 4'b0100,
+    T4  = 4'b0101
+  }state, next_state;
+
+  always_ff @(posedge clk) begin
+    if(~rst_L) begin
+      state <= T1;
+    end
+
+    else begin
+      state <= next_state;
+    end
+  end
+
+  //next state logic
+  always_comb begin
+    case(state)
+      T1:   next_state = (NMI_start) ? T2 : T1;
+      T2:   next_state = TW1;
+
+      //TODO: might need wait state support for input WAIT_L
+      TW1:  next_state = TW2;
+      TW2:  next_state = T3;
+      T3:   next_state = T4;
+      T4:   next_state = T1;
+    endcase
+  end
+
+  //output logic
+  always_comb begin
+    //defaults
+    NMI_M1_L    = 1;
+    NMI_MREQ_L  = 1;
+    NMI_IORQ_L  = 1;
+
+    case(state)
+      T1: begin
+        NMI_M1_L = (NMI_start) ? 0 : 1;
+      end
+
+      T2: begin
+        NMI_M1_L = 0;
+      end
+
+      TW1: begin
+        NMI_M1_L   = 0;
+        NMI_IORQ_L = 0;
+      end
+
+      TW2: begin
+        NMI_M1_L   = 0;
+        NMI_IORQ_L = 0;
+      end
+
+    endcase
+  end
+
+endmodule: NMI_fsm
+
 
 //-----------------------------------------------------------------------------
 //OCF_fsm
@@ -297,10 +669,8 @@ module OCF_fsm(
   //Internal control signals
   //  These signals are used to control this fsm and only this fsm
   //---------------------------------------------------------------------------
-  input   logic [15:0]  PC,
   input   logic         OCF_start,
   output  logic         OCF_done,
-  output  logic         OCF_opcode_valid,
 
   //---------------------------------------------------------------------------
   //Inputs that come from the top level
@@ -317,7 +687,6 @@ module OCF_fsm(
   output  logic         OCF_M1_L,
   output  logic         OCF_MREQ_L,
   output  logic         OCF_RD_L,
-  output  logic [15:0]  OCF_addr_out,
   output  logic         OCF_RFSH_L
 
 );
@@ -370,13 +739,11 @@ module OCF_fsm(
   always_comb begin
 
     //set defaults
-    OCF_addr_out    = 0;
     OCF_MREQ_L      = 1;
     OCF_RD_L        = 1;
     OCF_M1_L        = 1;
     OCF_RFSH_L      = 1;
     OCF_done        = 0;
-    OCF_opcode_valid = 0;
 
     case(state)
 
@@ -384,7 +751,6 @@ module OCF_fsm(
       //so that the output is valid on clock edge T1/T2
       T1: begin
         if(OCF_start) begin
-          OCF_addr_out = PC;
           OCF_MREQ_L   = 0;
           OCF_RD_L     = 0;
           OCF_M1_L     = 0;
@@ -397,7 +763,6 @@ module OCF_fsm(
       //signal has subsided.
       //TODO: Evaulate the necessity of WAIT_L support
       T2: begin
-        OCF_addr_out = PC;
         OCF_MREQ_L   = 0;
         OCF_RD_L     = 0;
         OCF_M1_L     = 0;
@@ -413,7 +778,6 @@ module OCF_fsm(
       //in, and now it is safe for us to output the value from
       //the module.
       T3: begin
-        OCF_opcode_valid = 1;
       end
 
       T4: begin

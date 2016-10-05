@@ -29,7 +29,7 @@ module tb ();
     end
   end
 
-  assign data_bus = 4;
+  assign data_bus = 0;
 
   //test bench
   logic [31:0] i;

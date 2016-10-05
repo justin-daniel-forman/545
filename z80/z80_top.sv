@@ -69,65 +69,108 @@ module z80(
   output  logic         HALT_L
 );
 
-  //TODO instantiate control path (drives addr bus when enabled by itself)
-  //TODO instantiate datapath     (drives data bus when enabled by control_logic)
+  //-----------------------------------
+  //Regfile loads
+  //  Specifying 2 of these signals at once will indicate a 16-bit load
+  //  from the addr bus. Specifying only one will indicate an 8-bit load
+  //  from the databus. We cannot do both simultaneously.
+  //-----------------------------------
+  logic         ld_B;
+  logic         ld_C;
+  logic         ld_D;
+  logic         ld_E;
+  logic         ld_H;
+  logic         ld_L;
+  logic         ld_IXH;
+  logic         ld_IXL;
+  logic         ld_IYH;
+  logic         ld_IYL;
+  logic         ld_SPH;
+  logic         ld_SPL;
+  logic         ld_PCH;
+  logic         ld_PCL;
 
-  logic [7:0]   datapath_data_out;
-  logic [15:0]  datapath_addr_out;
+  //-----------------------------------
+  //Regfile Drives
+  //  Specifying 2 of these signals will cause a 16 bit drive onto the addr
+  //  bus and specifying two of these signals will cause an 8-bit drive onto
+  //  the data bus. We cannot do both simultaneously.
+  //------------------------------------
+  logic         drive_reg_data;
+  logic         drive_reg_addr;
+  logic         drive_B;
+  logic         drive_C;
+  logic         drive_D;
+  logic         drive_E;
+  logic         drive_H;
+  logic         drive_L;
+  logic         drive_IXH;
+  logic         drive_IXL;
+  logic         drive_IYH;
+  logic         drive_IYL;
+  logic         drive_SPH;
+  logic         drive_SPL;
+  logic         drive_PCH;
+  logic         drive_PCL;
+
+  //-----------------------------------
+  //Accumulator and Flag loads
+  //  The original system only had a single 8-bit ALU. As an optimization;
+  //  we have put in a second 16-bit alu to make the control simpler. As
+  //  A result; we must conditionally load from the ALU that performs
+  //  arithmetic on the A register.
+  //-----------------------------------
+  logic         ld_A;
+  logic         ld_F_data;      //8bit load
+  logic         ld_F_addr;      //16bit load
+  logic         drive_A;
+  logic         drive_F;
   logic [3:0]   alu_op;
+  logic         drive_alu_data; //8bit drive
+  logic         drive_alu_addr; //16bit drive
+
+  //-----------------------------------
+  //Miscellaneous register controls
+  // - switch_context: tells the registers to switch with their "not"
+  //      counterparts. The ld signals determine which registers
+  //      will switch contexts.
+  // - swap_reg: tells the registers to swap contents in a single cycle
+  //      The ld signals determine which registers will swap
+  //-----------------------------------
   logic         switch_context;
-  logic         ld_a;
+  logic         swap_reg;
 
-  logic [15:0]  control_addr_out;
-  logic         control_drive_addr;
-  logic         datapath_drive_addr;
-  logic         datapath_drive_data;
+  //-----------------------------------
+  //temporary data_bus registers
+  //  These registers sit on the databus.
+  //-----------------------------------
+  logic         ld_MDR1;
+  logic         ld_MDR2;
+  logic         ld_TEMP;
+  logic         drive_MDR1;
+  logic         drive_MDR2;
+  logic         drive_TEMP;
 
-  datapath DP (
-    .clk(clk),
-    .rst_L(rst_L),
-    .data_in(data_bus),
-    .ld_a(ld_a),
-    .alu_op(alu_op),
-    .switch_context(switch_context),
-    .data_out(datapath_data_out),
-    .addr_out(datapath_addr_out)
-  );
+  //-----------------------------------
+  //temporary addr_bus registers
+  //  These registers sit on the addr bus
+  //-----------------------------------
+  logic         ld_MARH; //load upper byte of MAR
+  logic         ld_MARL; //load lower byte of MAR
+  logic         drive_MAR;
 
-  control_logic CTRL(
-    .clk(clk),
-    .rst_L(rst_L),
-    .data_in(data_bus),
-    .addr_out(control_addr_out),
+  //External bus outputs
+  logic [7:0]   data_in;
+  logic [7:0]   data_out;
+  logic [15:0]  addr_out;
 
-    .control_drive_addr(control_drive_addr),
-    .datapath_drive_addr(datapath_drive_addr),
-    .datapath_drive_data(datapath_drive_data),
+  datapath DP (.*);
 
-    .ld_a(ld_a),
-    .alu_op(alu_op),
-    .switch_context(switch_context),
+  control_logic CTRL(.*);
 
-    .M1_L(M1_L),
-    .INT_L(INT_L),
-    .NMI_L(NMI_L),
-    .WAIT_L(WAIT_L),
-    .MREQ_L(MREQ_L),
-    .IORQ_L(IORQ_L),
-    .RD_L(RD_L),
-    .WR_L(WR_L),
-    .RFSH_L(RFSH_L),
-    .BUSACK_L(BUSACK_L),
-    .BUSREQ_L(BUSREQ_L),
-    .HALT_L(HALT_L)
+  assign data_in  = data_bus;
+  assign data_bus = data_out;
+  assign addr_bus = addr_out;
 
-  );
-
-  assign data_bus = 8'bz;
-  assign addr_bus = control_addr_out;
-
-  //assign data_bus = (datapath_drive_data) ? datapath_data_out : 8'bz;
-  //assign addr_bus = (datapath_drive_addr) ? datapath_addr_out : (
-  //                      (control_drive_addr) ? control_addr_out : 15'bz);
 
 endmodule: z80
