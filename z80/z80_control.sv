@@ -418,32 +418,81 @@ module decoder (
 );
 
   enum logic [7:0] {
+    START,
     FETCH_0,
     FETCH_1,
     FETCH_2,
+    FETCH_3,
+    FETCH_4,
+    FETCH_5,
+    FETCH_6,
+    FETCH_7,
     INC_0,
     INC_1,
     INC_2,
-    NOP_0
+
+    LDI_0,
+    LDI_1,
+    LDI_2,
+    LDI_3,
+    LDI_4,
+    LDI_5,
+    LDI_6,
+    LDI_7,
+
+    //Multi-OCF Instructions
+    //There is a difference between multi-ocf instructions and
+    //instructions that require an operand data fetch. In an
+    //odf, the fetched byte encodes parameters, not the instruction
+    //to be performed. In a multi-ocf, any subsequent ocf fetches
+    //another part of the opcode.
+                //IX instructions Group
+                //IX bit instructions Group
+                //IY instructions Group
+                //IY bit instructions Group
+                //Bit Instructions Group
+    EXT_INST_0  //Extended Instructions Group
   } state, next_state;
 
-  logic [7:0] stored_opcode;
+  //Internal storage of opcode and operand data bytes that are
+  //fetched as part of an execution
+  logic [7:0] op0;
+  logic [7:0] op1;
+  logic [7:0] op2;
+  logic [7:0] odf0;
+  logic [7:0] odf1;
+
   always_ff @(posedge clk) begin
     if(~rst_L) begin
-      state <= FETCH_0;
+      state <= START;
+      op0   <= 0;
+      op1   <= 0;
+      op2   <= 0;
     end
 
     else begin
       state <= next_state;
     end
 
-    //make sure to keep a copy of the opcode after it is fetched
-    if(state == FETCH_2) begin stored_opcode <= data_in; end
+    //Latch values on the clock edge for opcode and operand fetches
+    case(state)
+      FETCH_1: op0 <= data_in;
+      FETCH_5: op1 <= data_in;
+    endcase
   end
 
   //next state logic
   always_comb begin
     case(state)
+
+      //-----------------------------------------------------------------------
+      //BEGIN Opcode Fetch Group
+      //-----------------------------------------------------------------------
+
+      //On processor restart, we want to access address 0, but FETCH0
+      //automagically increments the PC for us, which we do not want
+      //here
+      START: next_state = FETCH_1;
 
       //An OCF takes 4 cycles in total, but only 2 of those cycles are needed
       //to retreive the opcode (which comes in on T2/T3). The other two
@@ -455,19 +504,67 @@ module decoder (
       //is spent potentially dispatching part of the instruction
       FETCH_2: begin
         //TODO: might need to acknowledge a WAIT cycle
-        $display ("op: %h, inc: %b", stored_opcode, `INC);
-        casex(stored_opcode)
-          `INC: next_state = INC_0;
-          default: next_state = NOP_0;
+        casex(op0)
+          `INC:       next_state = INC_0;
+          `EXT_INST:  next_state = EXT_INST_0;
+          default:    next_state = FETCH_3;
         endcase
       end
 
       //The instruction processed did nothing, so loop back and restart
       //the instruction fetch
-      NOP_0: next_state = FETCH_0;
+      FETCH_3: next_state = FETCH_0;
+
+      //These states represent a second OCF. They should operate almost
+      //identically to the first OCF except they go to different states
+      //based on op1
+      FETCH_4: next_state = FETCH_5;
+      FETCH_5: next_state = FETCH_6;
+
+      FETCH_6: begin
+        //TODO: might need to acknowledge a WAIT cycle
+        casex(op1)
+          default:    next_state = FETCH_7;
+        endcase
+      end
+
+      //If we don't need to do anything in the second OCF, then case
+      //in Fetch 7 to start performing logic next cycle
+      FETCH_7: begin
+        casex(op1)
+          `LDI:       next_state = LDI_0;
+          default:    next_state = FETCH_0;
+        endcase
+      end
+
+      //-----------------------------------------------------------------------
+      //END Opcode fetch group
+      //-----------------------------------------------------------------------
 
       //TODO: include support for INC
       INC_0: next_state = FETCH_0;
+
+      //-----------------------------------------------------------------------
+      //BEGIN Extended instructions group
+      //-----------------------------------------------------------------------
+
+      //We need to fetch another byte to figure out which op this is,
+      //so go to the second op code fetch cycle
+      EXT_INST_0: next_state = FETCH_4;
+
+      //LDI
+      LDI_0: next_state = LDI_1;
+      LDI_1: next_state = LDI_2;
+      LDI_2: next_state = LDI_3;
+      LDI_3: next_state = LDI_4;
+      LDI_4: next_state = LDI_5;
+      LDI_5: next_state = LDI_6;
+      LDI_6: next_state = LDI_7;
+      LDI_7: next_state = FETCH_0;
+
+      //-----------------------------------------------------------------------
+      //END Extended instructions group
+      //-----------------------------------------------------------------------
 
     endcase
   end
@@ -548,14 +645,129 @@ module decoder (
 
     case(state)
 
-      FETCH_0: begin
+      START: begin
+        drive_PCH = 1;
+        drive_PCL = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        alu_op    = `ALU_NOP;
+        OCF_start = 1;
+        OCF_bus   = 1;
+      end
+
+      FETCH_0, FETCH_4: begin
         ld_PCH = 1;
         ld_PCL = 1;
         drive_PCH = 1;
         drive_PCL = 1;
         drive_reg_addr = 1;
         drive_alu_addr = 1;
+        alu_op    = `INCR_A;
+        OCF_start = 1;
+        OCF_bus   = 1;
+      end
+
+      FETCH_1, FETCH_5: begin
+        drive_PCH = 1;
+        drive_PCL = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        alu_op    = `ALU_NOP;
+        OCF_bus   = 1;
+      end
+
+      FETCH_2, FETCH_6: begin
+        OCF_bus = 1;
+      end
+
+      FETCH_3, FETCH_7: begin
+        OCF_bus = 1;
+      end
+
+      LDI_0: begin
+        //MAR <- HL
+        drive_H = 1;
+        drive_L = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        ld_MARH = 1;
+        ld_MARL = 1;
+
+        //start a memory read from HL
+        MRD_start = 1;
+        MRD_bus   = 1;
+        drive_MAR = 1;
+      end
+
+      LDI_1: begin
+        //Nothing to do but continue the read
+        MRD_bus  = 1;
+        drive_MAR = 1;
+      end
+
+      LDI_2: begin
+        //MDR1 <- (HL) (put contents of D_BUS into MDR1)
+        ld_MDR1 = 1;
+      end
+
+      LDI_3: begin
+        //MAR <- DE
+        drive_D = 1;
+        drive_E = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        ld_MARH = 1;
+        ld_MARL = 1;
+
+        //D_BUS <- MDR1
+        drive_MDR1 = 1;
+
+        //Start a write
+        MWR_start = 1;
+        MWR_bus   = 1;
+        drive_MAR = 1;
+      end
+
+      LDI_4: begin
+        //continue the write
+        drive_MDR1 = 1;
+        MWR_bus    = 1;
+        drive_MAR  = 1;
+      end
+
+      LDI_5: begin
+        //DE <- DE + 1
+        drive_D = 1;
+        drive_E = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        ld_D = 1;
+        ld_E = 1;
         alu_op = `INCR_A;
+      end
+
+      LDI_6: begin
+        //HL <- HL + 1
+        drive_H = 1;
+        drive_L = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        ld_H = 1;
+        ld_L = 1;
+        alu_op = `INCR_A;
+      end
+
+      LDI_7: begin
+        //BC <- BC - 1
+        drive_B = 1;
+        drive_C = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        ld_B    = 1;
+        ld_C    = 1;
+        alu_op  = `DECR_A;
       end
 
     endcase

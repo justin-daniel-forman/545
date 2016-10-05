@@ -29,15 +29,68 @@ module tb ();
     end
   end
 
-  assign data_bus = 0;
+  logic [7:0] data_val;
+  assign data_bus = data_val;
 
   //test bench
   logic [31:0] i;
   initial begin
+
+    $monitor($stime,, "addr bus: %h, state: %s, DE: %h, HL: %h, BC: %h",
+      addr_bus,
+      DUT.CTRL.DECODE.state.name,
+      {DUT.DP.RFILE.D_out, DUT.DP.RFILE.E_out},
+      {DUT.DP.RFILE.H_out, DUT.DP.RFILE.L_out},
+      {DUT.DP.RFILE.B_out, DUT.DP.RFILE.C_out}
+    );
+
+
     rst_L = 0;
     @(posedge clk);
     rst_L <= 1;
+
+    //START OF T1
+    data_val = 8'bz;
     @(posedge clk);
+
+    //T2
+    #5 data_val = `EXT_INST;
+    @(posedge clk);
+
+    //T3
+    #5 data_val = 8'bz;
+    @(posedge clk);
+
+    //T4
+    @(posedge clk);
+
+    //T5
+    @(posedge clk);
+
+    //T6
+    #5 data_val = `LDI;
+    @(posedge clk);
+
+    //T7
+    #5 data_val = 8'bz;
+    @(posedge clk);
+
+    //T8
+    @(posedge clk);
+
+    //T1
+
+    //T2
+    #5 data_val = 8'hff;
+    @(posedge clk);
+
+    //T3
+    #5 data_val = 8'bz;
+    @(posedge clk);
+
+    //T4
+    @(posedge clk);
+
 
     for(i = 0; i < 100; i++) begin
       @(posedge clk);

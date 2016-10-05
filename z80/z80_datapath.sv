@@ -391,6 +391,10 @@ module alu #(parameter w = 8)(
         C = A + 1;
       end
 
+      `DECR_A: begin
+        C = A - 1;
+      end
+
       default: begin
         C = A;
       end
