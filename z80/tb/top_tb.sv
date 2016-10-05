@@ -20,6 +20,7 @@ module tb ();
   logic HALT_L;
 
   z80 DUT(.*);
+  memory m_DUT(.*);
 
   //generate clock
   initial begin
@@ -30,14 +31,15 @@ module tb ();
   end
 
   logic [7:0] data_val;
-  assign data_bus = data_val;
+  //assign data_bus = data_val;
 
   //test bench
   logic [31:0] i;
   initial begin
 
-    $monitor($stime,, "addr bus: %h, state: %s, DE: %h, HL: %h, BC: %h",
+    $monitor($stime,, "addr bus: %h, data bus: %h, state: %s, DE: %h, HL: %h, BC: %h",
       addr_bus,
+      data_bus,
       DUT.CTRL.DECODE.state.name,
       {DUT.DP.RFILE.D_out, DUT.DP.RFILE.E_out},
       {DUT.DP.RFILE.H_out, DUT.DP.RFILE.L_out},
