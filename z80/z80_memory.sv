@@ -28,11 +28,22 @@ module memory (
 
   always_comb begin
     defs = 0;
-    defs[0] = 8'hED;
-    defs[1] = 8'hA0;
+    defs[0]  = 8'h2A;
+    defs[1]  = 8'hBB;
+    defs[2]  = 8'h00;
+
+    defs[188] = 8'hbe;
+    defs[187] = 8'hef;
+
+    defs[10] = 8'hED;
+    defs[11] = 8'hA0;
   end
 
   always @(posedge clk) begin
+
+    if(~rst_L) begin
+      out_value <= 8'bz;
+    end
 
     if(~RD_L) begin
       out_value <= Qs[addr_bus];

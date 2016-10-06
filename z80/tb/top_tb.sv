@@ -1,6 +1,5 @@
 module tb ();
 
-
   logic clk, rst_L;
 
   wire [7:0]  data_bus;
@@ -37,17 +36,24 @@ module tb ();
   logic [31:0] i;
   initial begin
 
-    $monitor($stime,, "addr bus: %h, data bus: %h, state: %s, DE: %h, HL: %h, BC: %h",
+    $monitor($stime,, "addr bus: %h, data bus: %h, state: %s, DE: %h, HL: %h, BC: %h, m_data:%h, z80_data: %h, RD_L: , state: %b",
       addr_bus,
       data_bus,
       DUT.CTRL.DECODE.state.name,
       {DUT.DP.RFILE.D_out, DUT.DP.RFILE.E_out},
       {DUT.DP.RFILE.H_out, DUT.DP.RFILE.L_out},
-      {DUT.DP.RFILE.B_out, DUT.DP.RFILE.C_out}
+      {DUT.DP.RFILE.B_out, DUT.DP.RFILE.C_out},
+      m_DUT.out_value,
+      DUT.DP.data_out,
+
+      DUT.CTRL.memory_read.MRD_RD_L
+
     );
 
 
     rst_L = 0;
+    @(posedge clk);
+    @(posedge clk);
     @(posedge clk);
     rst_L <= 1;
 
@@ -97,7 +103,6 @@ module tb ();
     for(i = 0; i < 100; i++) begin
       @(posedge clk);
     end
-
 
     $finish;
   end

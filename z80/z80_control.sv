@@ -143,22 +143,26 @@ module control_logic (
   //SUB FSM DECLARATIONS
   //---------------------------------------------------------------------------
   logic OCF_start;
+  logic OCF_M1_L;
+  logic OCF_MREQ_L;
+  logic OCF_RD_L;
+  logic OCF_RFSH_L;
   logic OCF_bus;
-  logic OCF_done;
 
   logic MRD_start;
+  logic MRD_MREQ_L;
+  logic MRD_RD_L;
   logic MRD_bus;
-  logic MRD_done;
 
   logic MWR_start;
+  logic MWR_MREQ_L;
+  logic MWR_WR_L;
   logic MWR_bus;
-  logic MWR_done;
 
   OCF_fsm machine_fetch(
     .clk(clk),
     .rst_L(rst_L),
     .OCF_start(OCF_start),
-    .OCF_done(OCF_done),
     .WAIT_L(WAIT_L),
 
     .OCF_M1_L(OCF_M1_L),
@@ -167,8 +171,25 @@ module control_logic (
     .OCF_RFSH_L(OCF_RFSH_L)
   );
 
-  //TODO: MEM RD and WR instructions for buslines
+  MRD_fsm memory_read(
+    .clk,
+    .rst_L,
+    .MRD_start,
 
+    .WAIT_L,
+    .MRD_MREQ_L,
+    .MRD_RD_L
+  );
+
+  MWR_fsm memory_write(
+    .clk,
+    .rst_L,
+    .MWR_start,
+
+    .WAIT_L,
+    .MWR_MREQ_L,
+    .MWR_WR_L
+  );
 
   //---------------------------------------------------------------------------
   //DECODER
@@ -273,6 +294,16 @@ module control_logic (
       MREQ_L = OCF_MREQ_L;
       RD_L   = OCF_RD_L;
       RFSH_L = OCF_RFSH_L;
+    end
+
+    else if(MRD_bus) begin
+      MREQ_L = MRD_MREQ_L;
+      RD_L   = MRD_RD_L;
+    end
+
+    else if(MWR_bus) begin
+      MREQ_L = MWR_MREQ_L;
+      WR_L   = MWR_WR_L;
     end
 
   end
@@ -417,7 +448,7 @@ module decoder (
   output logic      MWR_bus
 );
 
-  enum logic [7:0] {
+  enum logic [15:0] {
     START,
     FETCH_0,
     FETCH_1,
@@ -439,6 +470,19 @@ module decoder (
     LDI_5,
     LDI_6,
     LDI_7,
+
+    LD_HL_nn_0,
+    LD_HL_nn_1,
+    LD_HL_nn_2,
+    LD_HL_nn_3,
+    LD_HL_nn_4,
+    LD_HL_nn_5,
+    LD_HL_nn_6,
+    LD_HL_nn_7,
+    LD_HL_nn_8,
+    LD_HL_nn_9,
+    LD_HL_nn_A,
+    LD_HL_nn_B,
 
     //Multi-OCF Instructions
     //There is a difference between multi-ocf instructions and
@@ -512,8 +556,14 @@ module decoder (
       end
 
       //The instruction processed did nothing, so loop back and restart
-      //the instruction fetch
-      FETCH_3: next_state = FETCH_0;
+      //unless it is proceeded by an operand data fetch
+      FETCH_3: begin
+        casex(op0)
+          `LD_HL_nn:  next_state = LD_HL_nn_0;
+          default:    next_state = FETCH_0;
+        endcase
+      end
+
 
       //These states represent a second OCF. They should operate almost
       //identically to the first OCF except they go to different states
@@ -544,6 +594,21 @@ module decoder (
       //TODO: include support for INC
       INC_0: next_state = FETCH_0;
 
+      //LD_HL_nn
+      LD_HL_nn_0: next_state = LD_HL_nn_1;
+      LD_HL_nn_1: next_state = LD_HL_nn_2;
+      LD_HL_nn_2: next_state = LD_HL_nn_3;
+      LD_HL_nn_3: next_state = LD_HL_nn_4;
+      LD_HL_nn_4: next_state = LD_HL_nn_5;
+      LD_HL_nn_5: next_state = LD_HL_nn_6;
+      LD_HL_nn_6: next_state = LD_HL_nn_7;
+      LD_HL_nn_7: next_state = LD_HL_nn_8;
+      LD_HL_nn_8: next_state = LD_HL_nn_9;
+      LD_HL_nn_9: next_state = LD_HL_nn_A;
+      LD_HL_nn_A: next_state = LD_HL_nn_B;
+      LD_HL_nn_B: next_state = FETCH_0;
+
+
       //-----------------------------------------------------------------------
       //BEGIN Extended instructions group
       //-----------------------------------------------------------------------
@@ -573,6 +638,13 @@ module decoder (
   always_comb begin
 
     //defaults
+    OCF_start = 0;
+    OCF_bus   = 0;
+    MRD_start = 0;
+    MRD_bus   = 0;
+    MWR_start = 0;
+    MWR_bus   = 0;
+
     //Regfile loads
     ld_B = 0;
     ld_C = 0;
@@ -770,6 +842,95 @@ module decoder (
         alu_op  = `DECR_A;
       end
 
+      //LD_HL_nn
+
+      LD_HL_nn_0, LD_HL_nn_3: begin
+        //start a read
+        MRD_start = 1;
+        MRD_bus   = 1;
+
+        //increment the PC and use that as the address
+        drive_PCH = 1;
+        drive_PCL = 1;
+        ld_PCH = 1;
+        ld_PCL = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        alu_op  = `INCR_A;
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
+      LD_HL_nn_1, LD_HL_nn_4: begin
+        //continue the read
+        MRD_bus   = 1;
+        drive_MAR = 1;
+      end
+
+      LD_HL_nn_2: begin
+        //put the value from the read into L
+        ld_L = 1;
+      end
+
+
+      LD_HL_nn_5: begin
+        //put the value from the read into H
+        ld_H = 1;
+      end
+
+      LD_HL_nn_6: begin
+        //put HL into MAR
+        ld_MARL = 1;
+        ld_MARH = 1;
+        drive_H = 1;
+        drive_L = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        alu_op = `NOP;
+
+        //start the read from (nn)
+        MRD_start = 1;
+        MRD_bus   = 1;
+      end
+
+      LD_HL_nn_7: begin
+        //keep reading
+        MRD_bus     = 1;
+        drive_MAR   = 1;
+      end
+
+      LD_HL_nn_8: begin
+        //load the data into L
+        ld_L = 1;
+
+        //put HL + 1 into MAR as we wipe out L
+        drive_H = 1;
+        drive_L = 1;
+        drive_alu_addr = 1;
+        drive_reg_addr = 1;
+        alu_op = `INCR_A;
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
+      LD_HL_nn_9: begin
+        //start a read at nn+1
+        MRD_start = 1;
+        MRD_bus = 1;
+        drive_MAR = 1;
+      end
+
+      LD_HL_nn_A: begin
+        //continue the read
+        MRD_bus = 1;
+        drive_MAR = 1;
+      end
+
+      LD_HL_nn_B: begin
+        //load the data into H
+        ld_H = 1;
+      end
+
     endcase
   end
 
@@ -788,13 +949,9 @@ module NMI_fsm(
   input   logic NMI_start,
   input   logic WAIT_L,
 
-  input   logic [15:0] PC,
-
   output  logic NMI_M1_L,
   output  logic NMI_MREQ_L,
-  output  logic NMI_IORQ_L,
-
-  output  logic [15:0] NMI_addr_out
+  output  logic NMI_IORQ_L
 );
 
   //TODO: actually understand this portion of the code before trying to
@@ -867,6 +1024,134 @@ module NMI_fsm(
 
 endmodule: NMI_fsm
 
+//-----------------------------------------------------------------------------
+//MRD_fsm
+//  This module generates the relevant bus signals for the memory read
+//  macro state.
+//-----------------------------------------------------------------------------
+module MRD_fsm(
+  input   logic clk,
+  input   logic rst_L,
+
+  input   logic WAIT_L,
+  input   logic MRD_start,
+  output  logic MRD_MREQ_L,
+  output  logic MRD_RD_L
+);
+
+  enum logic [1:0] {
+    T1,
+    T2,
+    T3
+  } state, next_state;
+
+  always @(posedge clk) begin
+    if(~rst_L) begin
+      state <= T1;
+    end
+
+    else begin
+      state <= next_state;
+    end
+  end
+
+  //next state logic
+  always_comb begin
+    case(state)
+      T1: next_state = (MRD_start) ?  T2 : T1;
+      T2: next_state = T3;
+      T3: next_state = T1;
+    endcase
+  end
+
+  //output logic
+  always_comb begin
+    MRD_MREQ_L = 1;
+    MRD_RD_L   = 1;
+
+    case(state)
+      //TODO: Wait_L timing
+
+      T1: begin
+        if(MRD_start) begin
+          MRD_MREQ_L = 0;
+          MRD_RD_L   = 0;
+        end
+      end
+
+      T2: begin
+        MRD_MREQ_L = 0;
+        MRD_RD_L   = 0;
+      end
+    endcase
+  end
+
+endmodule: MRD_fsm
+
+
+//-----------------------------------------------------------------------------
+//MWR_fsm
+//  This module generates the relevant bus signals for the memory write
+//  macro state.
+//-----------------------------------------------------------------------------
+module MWR_fsm(
+  input   logic clk,
+  input   logic rst_L,
+
+  input   logic WAIT_L,
+  input   logic MWR_start,
+  output  logic MWR_MREQ_L,
+  output  logic MWR_WR_L
+);
+
+  enum logic [1:0] {
+    T1,
+    T2,
+    T3
+  } state, next_state;
+
+  always @(posedge clk) begin
+    if(~rst_L) begin
+      state <= T1;
+    end
+
+    else begin
+      state <= next_state;
+    end
+  end
+
+  //next state logic
+  always_comb begin
+    case(state)
+      T1: next_state = (MWR_start) ?  T2 : T1;
+      T2: next_state = T3;
+      T3: next_state = T1;
+    endcase
+  end
+
+  //output logic
+  always_comb begin
+    MWR_MREQ_L = 1;
+    MWR_WR_L   = 1;
+
+    case(state)
+      //TODO: Wait_L timing
+
+      T1: begin
+        if(MWR_start) begin
+          MWR_MREQ_L = 0;
+        end
+      end
+
+      T2: begin
+        MWR_MREQ_L = 0;
+        MWR_WR_L   = 0;
+      end
+    endcase
+  end
+
+endmodule: MWR_fsm
+
 
 //-----------------------------------------------------------------------------
 //OCF_fsm
@@ -882,7 +1167,6 @@ module OCF_fsm(
   //  These signals are used to control this fsm and only this fsm
   //---------------------------------------------------------------------------
   input   logic         OCF_start,
-  output  logic         OCF_done,
 
   //---------------------------------------------------------------------------
   //Inputs that come from the top level
@@ -955,7 +1239,6 @@ module OCF_fsm(
     OCF_RD_L        = 1;
     OCF_M1_L        = 1;
     OCF_RFSH_L      = 1;
-    OCF_done        = 0;
 
     case(state)
 
@@ -993,7 +1276,6 @@ module OCF_fsm(
       end
 
       T4: begin
-        OCF_done = 1;
       end
 
     endcase
