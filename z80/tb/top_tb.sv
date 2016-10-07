@@ -36,18 +36,17 @@ module tb ();
   logic [31:0] i;
   initial begin
 
-    $monitor($stime,, "addr bus: %h, data bus: %h, state: %s, DE: %h, HL: %h, BC: %h, m_data:%h, z80_data: %h, RD_L: , state: %b",
+    $monitor($stime,, "addr bus: %h, data bus: %h, state: %s, A: %h, DE: %h, HL: %h, BC: %h, m_data:%h, z80_data: %h, reg_data_out: %H",
       addr_bus,
       data_bus,
       DUT.CTRL.DECODE.state.name,
+      DUT.DP.A_out,
       {DUT.DP.RFILE.D_out, DUT.DP.RFILE.E_out},
       {DUT.DP.RFILE.H_out, DUT.DP.RFILE.L_out},
       {DUT.DP.RFILE.B_out, DUT.DP.RFILE.C_out},
       m_DUT.out_value,
       DUT.DP.data_out,
-
-      DUT.CTRL.memory_read.MRD_RD_L
-
+      DUT.DP.reg_data_out
     );
 
 
