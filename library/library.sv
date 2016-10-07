@@ -6,7 +6,7 @@ module register #(parameter w = 8) (
   output logic [w] Q);
 
   logic [w] value;
-   
+
   assign Q = value;
 
   always @(posedge clk) begin
@@ -60,7 +60,7 @@ module counter #(parameter W = 8) (
   output logic [W-1:0] count);
 
   logic [W-1:0] countIn, countOut;
-  
+
   assign countIn = (clear) ? 0 : countOut + 1;
   assign count = countOut;
 
@@ -80,15 +80,15 @@ endmodule
 //   -- 1 Read Port
 // 1 read-only port clocked at 100MHz to interface with VGA:
 //   -- NUMREAD Read Ports (Combinational)
-// 
+//
 module mem #(parameter DATA = 8, ADDR = 16, NUMREAD = 8)(
   input  logic 	                       a_clk, b_clk, rst_L,
-  input  logic [DATA-1:0]              data_in, 
+  input  logic [DATA-1:0]              data_in,
   input  logic [ADDR-1:0]              a_addr,
   input  logic [NUMREAD-1:0][ADDR-1:0] b_addr,
   input  logic                         a_we, a_re,
   input  logic [NUMREAD-1:0]           b_re,       // NUMREAD read ports
-  output logic [DATA-1:0]              a_data_out,	   
+  output logic [DATA-1:0]              a_data_out,
   output logic [NUMREAD-1:0][DATA-1:0] b_data_out);
 
   logic [2**ADDR-1:0][DATA-1:0] memory;
@@ -98,16 +98,16 @@ module mem #(parameter DATA = 8, ADDR = 16, NUMREAD = 8)(
     if (a_we) memory[a_addr] <= data_in;
     if (a_re) a_data_out <= memory[a_addr];
     else      a_data_out <= 'bz;
-  end 
-    
-  // B-port 
+  end
+
+  // B-port
   generate
     genvar i;
     for (i = 0; i < NUMREAD; i++) begin
       always_ff @(posedge b_clk, negedge rst_L) begin
         if (b_re[i]) b_data_out[i] <= memory[b_addr[i]];
         else         b_data_out[i] <= 'bz;
-      end 
+      end
     end
   endgenerate
 >>>>>>> 7f814a21581c6e36a83a6a99488dbc7d71f30849
