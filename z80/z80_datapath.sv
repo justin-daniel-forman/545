@@ -283,7 +283,10 @@ module datapath (
   //Interpret control signals to determine enable lines and inputs
   //---------------------------------------------------------------------------
   always_comb begin
-    A_in = internal_data;
+    //NOTE: I'm including a point to point connection between the A register
+    //      and the other registers so that a swap operation can occur
+    //      in a single clock cycle.
+    A_in = (swap_reg) ? reg_data_out : internal_data;
     F_in = 0;
     MDR1_in = internal_data;
     MDR2_in = internal_data;
@@ -551,7 +554,12 @@ module regfile(
   //Register Output logic
   //---------------------------------------------------------------------------
   always_comb begin
-    if(drive_single) begin
+
+    //In the case of a register swap with the A register, we need
+    //to put out a value from the regfile, but not drive it on the
+    //bus. This value will be propagated via a point-to-point
+    //connection with the A register
+    if(drive_single | swap_reg) begin
       out_double = 15'bz; //addr bus shouldn't be active now
 
       if(drive_B)       out_single = B_out;
@@ -678,24 +686,77 @@ module regfile(
 
     //switch the specified 16 bit registers
     else if(swap_reg) begin
-      case({ld_B, ld_D, ld_H, ld_IXH, ld_IYH, ld_SPH})
 
-        //TODO: implement the rest of the swapping logic if necessary
+      //TODO:
+      //We need to be able to switch out all of the 8-bit registers
+      //with eachother in a single clock cycle. This includes
+      //the 8-bit A register which exists outside of the register file.
+      //The A register has a point to point connection with the
+      //8-bit output of the register file. So in order to swap the
+      //A register, we output a value from the regfile without
+      //driving on the bus, and we load from the 8-bit bus into
+      //the other register.
 
-        //swap DE with HL
-        6'b011000: begin
-          H_en = 1;
-          L_en = 1;
-          D_en = 1;
-          E_en = 1;
+      B_en = ld_B;
+      C_en = ld_C;
+      D_en = ld_D;
+      E_en = ld_E;
+      H_en = ld_H;
+      L_en = ld_L;
+      IXH_en = ld_IXH;
+      IXL_en = ld_IXL;
+      IYH_en = ld_IYH;
+      IYL_en = ld_IYL;
+      SPH_en = ld_SPH;
+      SPL_en = ld_SPL;
+      PCH_en = ld_PCH;
+      PCL_en = ld_PCL;
 
+      case({ld_B, ld_C, ld_D, ld_E, ld_H, ld_L})
+
+        //8-bit swaps
+        //Any one hot combination implies a swap with the A register
+        6'b000_001: B_in = D_BUS;
+        6'b000_010: C_in = D_BUS;
+        6'b000_100: D_in = D_BUS;
+        6'b001_000: E_in = D_BUS;
+        6'b010_000: H_in = D_BUS;
+        6'b100_000: L_in = D_BUS;
+
+        //16-bit swaps
+        6'b001111: begin
           H_in = D_out;
           L_in = E_out;
           D_in = H_out;
           E_in = L_out;
         end
 
+        //any two hot combo implies two reg swap
+        default: begin
+          if(ld_B & ld_C)      begin B_in = C_out; C_in = B_out; end
+          else if(ld_B & ld_D) begin B_in = D_out; D_in = B_out; end
+          else if(ld_B & ld_E) begin B_in = E_out; E_in = B_out; end
+          else if(ld_B & ld_H) begin B_in = H_out; H_in = B_out; end
+          else if(ld_B & ld_L) begin B_in = L_out; L_in = B_out; end
+
+          else if(ld_C & ld_D) begin C_in = D_out; D_in = C_out; end
+          else if(ld_C & ld_E) begin C_in = E_out; E_in = C_out; end
+          else if(ld_C & ld_H) begin C_in = H_out; H_in = C_out; end
+          else if(ld_C & ld_L) begin C_in = L_out; L_in = C_out; end
+
+          else if(ld_D & ld_E) begin D_in = E_out; E_in = D_out; end
+          else if(ld_D & ld_H) begin D_in = H_out; H_in = D_out; end
+          else if(ld_D & ld_L) begin D_in = L_out; L_in = D_out; end
+
+          else if(ld_E & ld_H) begin E_in = H_out; H_in = E_out; end
+          else if(ld_E & ld_L) begin E_in = L_out; L_in = E_out; end
+
+          else if(ld_H & ld_L) begin H_in = L_out; L_in = H_out; end
+        end
+
       endcase
+
+
     end
 
     //load the specified register with the value from the appropriate bus

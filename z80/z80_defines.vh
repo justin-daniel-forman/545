@@ -4,6 +4,7 @@
 `define EXT_INST 8'hED
 `define LDI      8'hA0
 `define LD_HL_nn 8'h2A
+`define LD_r_r   8'b01??????
 
 //ALU commands
 `define INCR_A  4'b0001

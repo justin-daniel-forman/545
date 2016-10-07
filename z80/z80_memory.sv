@@ -32,6 +32,11 @@ module memory (
     defs[1]  = 8'hBB;
     defs[2]  = 8'h00;
 
+    //swap H with L
+    defs[3]  = 8'b01_100_101;
+    //swap A with L
+    defs[4]  = 8'b01_111_101;
+
     defs[188] = 8'hbe;
     defs[187] = 8'hef;
 
