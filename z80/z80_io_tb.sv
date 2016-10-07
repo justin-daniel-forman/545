@@ -58,12 +58,23 @@ module io_tb();
     @(posedge clk);
 
     write_in_prog <= 1;
-    io_write(16'h00BE, 8'hDD);
-    io_write(16'h00BF, 8'hBB);
+
+    // Write to VRAM 
+    io_write(16'h00BF, 8'hFF); // Write to VRAM, address 14'h3FFF
+    nop;
+    io_write(16'h00BF, 8'h7F); // 7F = 01_111111, so write to VRAM
+    nop;
+    io_write(16'h00BE, 8'h55); // Write 8'h55 in
+    nop;
+
+    // Read from VRAM
+    io_write(16'h00BF, 8'hFF); // Write to VRAM, address 14'h3FFF
+    nop;
+    io_write(16'h00BF, 8'h3F); // 3F = 00_111111, so read from VRAM
+    nop;
     write_in_prog <= 0;
     read_in_prog  <= 1;
     io_read(16'h00BE, read_data);
-    io_read(16'h00BF, read_data);
     read_in_prog <= 0;
     #10 $finish;
 
@@ -183,6 +194,12 @@ module io_tb();
     $display("Data received from I/O read to %h: %h\n", port_addr, port_data);
 
   endtask
+
+
+  task nop();
+    @(posedge clk);@(posedge clk);@(posedge clk);@(posedge clk);@(posedge clk);
+  endtask;
+
 
   //Z80 Performs and OUT command
   task io_write(
