@@ -54,6 +54,8 @@ module register_def #(parameter w = 8) (
 
   end
 
+endmodule
+
 module counter #(parameter W = 8) (
   input  logic         clk, rst_L,
   input  logic         clear, en,
@@ -110,6 +112,5 @@ module mem #(parameter DATA = 8, ADDR = 16, NUMREAD = 8)(
       end
     end
   endgenerate
->>>>>>> 7f814a21581c6e36a83a6a99488dbc7d71f30849
 
 endmodule
