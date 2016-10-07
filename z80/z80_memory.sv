@@ -41,6 +41,13 @@ module memory (
     defs[5]  = 8'b00_000_110;
     defs[6]  = 8'hcc;
 
+    //swap L with H
+    defs[7] = 8'b01_101_100;
+
+    //load the value from HL (ef00) into C
+    defs[8]   = 8'b01_001_110;
+    defs[239] = 8'hdd;
+
     defs[188] = 8'hbe;
     defs[187] = 8'hef;
 

@@ -6,6 +6,7 @@
 `define LD_HL_nn 8'h2A
 `define LD_r_r   8'b01??????
 `define LD_r_n   8'b00???110
+`define LD_r_HL  8'b01???110 //this can match LD_r_r as well
 
 //ALU commands
 `define INCR_A  4'b0001

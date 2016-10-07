@@ -460,9 +460,14 @@ module decoder (
     FETCH_7,
 
     LD_r_r_0,
+
     LD_r_n_0,
     LD_r_n_1,
     LD_r_n_2,
+
+    LD_r_HL_0,
+    LD_r_HL_1,
+    LD_r_HL_2,
 
     INC_0,
     INC_1,
@@ -555,7 +560,10 @@ module decoder (
       FETCH_2: begin
         //TODO: might need to acknowledge a WAIT cycle
         casex(op0)
-          `LD_r_r:    next_state = LD_r_r_0;
+          //Because of don't cares, this opcode can match other opcodes
+          //that have the last 3 bits as 110, which is not defined in
+          //this opcode.
+          `LD_r_r:    next_state = (op0[2:0] != 3'b110) ? LD_r_r_0 : FETCH_3;
           `INC:       next_state = INC_0;
           `EXT_INST:  next_state = EXT_INST_0;
 
@@ -568,6 +576,7 @@ module decoder (
       FETCH_3: begin
         casex(op0)
           `LD_r_n:    next_state = LD_r_n_0;
+          `LD_r_HL:   next_state = LD_r_HL_0;
           `LD_HL_nn:  next_state = LD_HL_nn_0;
           default:    next_state = FETCH_0;
         endcase
@@ -610,6 +619,12 @@ module decoder (
       LD_r_n_0: next_state = LD_r_n_1;
       LD_r_n_1: next_state = LD_r_n_2;
       LD_r_n_2: next_state = FETCH_0;
+
+      //LD r (HL)
+      LD_r_HL_0: next_state = LD_r_HL_1;
+      LD_r_HL_1: next_state = LD_r_HL_2;
+      LD_r_HL_2: next_state = FETCH_0;
+
       //-----------------------------------------------------------------------
       //END 8-bit load group
       //-----------------------------------------------------------------------
@@ -847,13 +862,13 @@ module decoder (
         ld_MARH = 1;
       end
 
-      LD_r_n_1: begin
+      LD_r_n_1, LD_r_HL_1: begin
         //continue the read
         MRD_bus   = 1;
         drive_MAR = 1;
       end
 
-      LD_r_n_2: begin
+      LD_r_n_2, LD_r_HL_2: begin
         //latch the data into the selected reg
         case(op0[5:3])
           3'b111: ld_A = 1;
@@ -865,6 +880,24 @@ module decoder (
           3'b101: ld_L = 1;
         endcase
       end
+
+      LD_r_HL_0: begin
+        //start a read
+        MRD_start = 1;
+        MRD_bus   = 1;
+
+        //use HL as the address
+        drive_H = 1;
+        drive_L = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        alu_op  = `ALU_NOP;
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
+      //LD_r_HL_1 = LD_r_n_1
+      //LD_r_HL_2 = LD_r_n_2
 
       //-----------------------------------------------------------------------
       //END 8-bit load group
