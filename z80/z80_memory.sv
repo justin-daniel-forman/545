@@ -37,6 +37,10 @@ module memory (
     //swap A with L
     defs[4]  = 8'b01_111_101;
 
+    //load a value into B
+    defs[5]  = 8'b00_000_110;
+    defs[6]  = 8'hcc;
+
     defs[188] = 8'hbe;
     defs[187] = 8'hef;
 

@@ -460,6 +460,9 @@ module decoder (
     FETCH_7,
 
     LD_r_r_0,
+    LD_r_n_0,
+    LD_r_n_1,
+    LD_r_n_2,
 
     INC_0,
     INC_1,
@@ -564,6 +567,7 @@ module decoder (
       //unless it is proceeded by an operand data fetch
       FETCH_3: begin
         casex(op0)
+          `LD_r_n:    next_state = LD_r_n_0;
           `LD_HL_nn:  next_state = LD_HL_nn_0;
           default:    next_state = FETCH_0;
         endcase
@@ -599,8 +603,13 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN 8-bit load group
       //-----------------------------------------------------------------------
+      //LD r r'
       LD_r_r_0: next_state = FETCH_0;
 
+      //LD r n
+      LD_r_n_0: next_state = LD_r_n_1;
+      LD_r_n_1: next_state = LD_r_n_2;
+      LD_r_n_2: next_state = FETCH_0;
       //-----------------------------------------------------------------------
       //END 8-bit load group
       //-----------------------------------------------------------------------
@@ -771,6 +780,10 @@ module decoder (
         OCF_bus = 1;
       end
 
+
+      //-----------------------------------------------------------------------
+      //BEGIN 8-bit load group
+      //-----------------------------------------------------------------------
       LD_r_r_0: begin
 
         swap_reg = 1;
@@ -816,6 +829,46 @@ module decoder (
         endcase
 
       end
+
+      LD_r_n_0: begin
+        //start a read
+        MRD_start = 1;
+        MRD_bus   = 1;
+
+        //increment the PC and use that as the address
+        drive_PCH = 1;
+        drive_PCL = 1;
+        ld_PCH = 1;
+        ld_PCL = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        alu_op  = `INCR_A;
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
+      LD_r_n_1: begin
+        //continue the read
+        MRD_bus   = 1;
+        drive_MAR = 1;
+      end
+
+      LD_r_n_2: begin
+        //latch the data into the selected reg
+        case(op0[5:3])
+          3'b111: ld_A = 1;
+          3'b000: ld_B = 1;
+          3'b001: ld_C = 1;
+          3'b010: ld_D = 1;
+          3'b011: ld_E = 1;
+          3'b100: ld_H = 1;
+          3'b101: ld_L = 1;
+        endcase
+      end
+
+      //-----------------------------------------------------------------------
+      //END 8-bit load group
+      //-----------------------------------------------------------------------
 
       LDI_0: begin
         //MAR <- HL
