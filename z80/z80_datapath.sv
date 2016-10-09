@@ -398,6 +398,15 @@ module alu #(parameter w = 8)(
         C = A - 1;
       end
 
+      `ADD: begin
+        C = A + B;
+      end
+
+      `ADD_SE_B: begin
+        //16 bit A plus sign extended 8 bit B
+        C = A + { {8{B[7]}}, B};
+      end
+
       default: begin
         C = A;
       end
@@ -669,6 +678,13 @@ module regfile(
         D_not_in  = D_out;
       end
 
+      if(ld_E) begin
+        E_en      = 1;
+        E_not_en  = 1;
+        E_in      = E_not_out;
+        E_not_in  = E_out;
+      end
+
       if(ld_H) begin
         H_en      = 1;
         H_not_en  = 1;
@@ -780,7 +796,7 @@ module regfile(
 
       //addr bus cases
       if( (ld_B & ld_C)
-         |(ld_D & ld_D)
+         |(ld_D & ld_E)
          |(ld_H & ld_L)
          |(ld_IXH & ld_IXL)
          |(ld_IYH & ld_IYL)
