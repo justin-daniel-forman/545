@@ -11,49 +11,28 @@ module memory (
   logic [1000:0] ens;
   logic [1000:0] [7:0] Qs, defs;
 
+  //Read out our memory contents from a textfile
+  logic [7:0] memory [100:0];
+  logic [50:0] j;
+  initial begin
+    $readmemb("traces/DUT.raw", memory);
+  end
+
+  //Put out the memory contents into our "register interpretation" of memory
   genvar i;
   generate
-
-    for(i = 0; i < 1000; i++) begin
+    for(i = 0; i < 100; i++) begin
       register_def #(8) foo (.clk, .rst_L, .D(data_bus), .Q(Qs[i]),
         .en(ens[i]),
-        .def(defs[i])
+        .def(memory[i])
       );
     end
-
   endgenerate
 
+  //Write a memory controller to output the memory values on the bus
+  //at the right time
   logic [7:0] out_value;
   assign data_bus = out_value;
-
-  always_comb begin
-    defs = 0;
-    defs[0]  = 8'h2A;
-    defs[1]  = 8'hBB;
-    defs[2]  = 8'h00;
-
-    //swap H with L
-    defs[3]  = 8'b01_100_101;
-    //swap A with L
-    defs[4]  = 8'b01_111_101;
-
-    //load a value into B
-    defs[5]  = 8'b00_000_110;
-    defs[6]  = 8'hcc;
-
-    //swap L with H
-    defs[7] = 8'b01_101_100;
-
-    //load the value from HL (ef00) into C
-    defs[8]   = 8'b01_001_110;
-    defs[239] = 8'hdd;
-
-    defs[188] = 8'hbe;
-    defs[187] = 8'hef;
-
-    defs[10] = 8'hED;
-    defs[11] = 8'hA0;
-  end
 
   always @(posedge clk) begin
 
