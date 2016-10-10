@@ -104,9 +104,9 @@ module tb ();
 
     $display("\n\n\n");
     $display("A:  %h\nBC: %h\nDE: %h\nHL: %h\nIX: %h\nIY: %h\nSP: %h\nPC: %h", DUT.DP.A_out,
+      {DUT.DP.RFILE.B_out, DUT.DP.RFILE.C_out},
       {DUT.DP.RFILE.D_out, DUT.DP.RFILE.E_out},
       {DUT.DP.RFILE.H_out, DUT.DP.RFILE.L_out},
-      {DUT.DP.RFILE.B_out, DUT.DP.RFILE.C_out},
       {DUT.DP.RFILE.IXH_out, DUT.DP.RFILE.IXL_out},
       {DUT.DP.RFILE.IYH_out, DUT.DP.RFILE.IYL_out},
       {DUT.DP.RFILE.SPH_out, DUT.DP.RFILE.SPL_out},
