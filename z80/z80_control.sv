@@ -448,7 +448,7 @@ module decoder (
   output logic      MWR_bus
 );
 
-  enum logic [15:0] {
+  enum logic [31:0] {
     START,
     FETCH_0,
     FETCH_1,
@@ -496,6 +496,30 @@ module decoder (
     LD_HL_r_0,
     LD_HL_r_1,
     LD_HL_r_2,
+
+    LD_IX_d_r_0,
+    LD_IX_d_r_1,
+    LD_IX_d_r_2,
+    LD_IX_d_r_3,
+    LD_IX_d_r_4,
+    LD_IX_d_r_5,
+    LD_IX_d_r_6,
+    LD_IX_d_r_7,
+    LD_IX_d_r_8,
+    LD_IX_d_r_9,
+    LD_IX_d_r_A,
+
+    LD_IY_d_r_0,
+    LD_IY_d_r_1,
+    LD_IY_d_r_2,
+    LD_IY_d_r_3,
+    LD_IY_d_r_4,
+    LD_IY_d_r_5,
+    LD_IY_d_r_6,
+    LD_IY_d_r_7,
+    LD_IY_d_r_8,
+    LD_IY_d_r_9,
+    LD_IY_d_r_A,
 
     INC_0,
     INC_1,
@@ -634,6 +658,8 @@ module decoder (
           //Some cases are identical and are only different in the first byte
           `LD_r_IX_d:   next_state = (op0[7:4] == 4'hD) ?  LD_r_IX_d_0 : LD_r_IY_d_0;
           `LD_r_IY_d:   next_state = (op0[7:4] == 4'hF) ?  LD_r_IY_d_0 : LD_r_IX_d_0;
+          `LD_IX_d_r:   next_state = (op0[7:4] == 4'hD) ?  LD_IX_d_r_0 : LD_IY_d_r_0;
+          `LD_IY_d_r:   next_state = (op0[7:4] == 4'hF) ?  LD_IY_d_r_0 : LD_IX_d_r_0;
           `LDI:         next_state = LDI_0;
           default:      next_state = FETCH_0;
         endcase
@@ -685,9 +711,36 @@ module decoder (
       LD_r_IY_d_9: next_state = LD_r_IY_d_A;
       LD_r_IY_d_A: next_state = FETCH_0;
 
+      //LD (HL), r
       LD_HL_r_0: next_state = LD_HL_r_1;
       LD_HL_r_1: next_state = LD_HL_r_2;
       LD_HL_r_2: next_state = FETCH_0;
+
+      //LD (IX+d), r
+      LD_IX_d_r_0: next_state = LD_IX_d_r_1;
+      LD_IX_d_r_1: next_state = LD_IX_d_r_2;
+      LD_IX_d_r_2: next_state = LD_IX_d_r_3;
+      LD_IX_d_r_3: next_state = LD_IX_d_r_4;
+      LD_IX_d_r_4: next_state = LD_IX_d_r_5;
+      LD_IX_d_r_5: next_state = LD_IX_d_r_6;
+      LD_IX_d_r_6: next_state = LD_IX_d_r_7;
+      LD_IX_d_r_7: next_state = LD_IX_d_r_8;
+      LD_IX_d_r_8: next_state = LD_IX_d_r_9;
+      LD_IX_d_r_9: next_state = LD_IX_d_r_A;
+      LD_IX_d_r_A: next_state = FETCH_0;
+
+      //LD (IY+d), r
+      LD_IY_d_r_0: next_state = LD_IY_d_r_1;
+      LD_IY_d_r_1: next_state = LD_IY_d_r_2;
+      LD_IY_d_r_2: next_state = LD_IY_d_r_3;
+      LD_IY_d_r_3: next_state = LD_IY_d_r_4;
+      LD_IY_d_r_4: next_state = LD_IY_d_r_5;
+      LD_IY_d_r_5: next_state = LD_IY_d_r_6;
+      LD_IY_d_r_6: next_state = LD_IY_d_r_7;
+      LD_IY_d_r_7: next_state = LD_IY_d_r_8;
+      LD_IY_d_r_8: next_state = LD_IY_d_r_9;
+      LD_IY_d_r_9: next_state = LD_IY_d_r_A;
+      LD_IY_d_r_A: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END 8-bit load group
@@ -1124,6 +1177,7 @@ module decoder (
         //put HL out as the address
         drive_H = 1;
         drive_L = 1;
+        drive_reg_addr = 1;
         drive_alu_addr = 1;
         alu_op = `NOP;
 
@@ -1146,6 +1200,75 @@ module decoder (
           3'b100: begin drive_H = 1; drive_reg_data = 1; end
           3'b101: begin drive_L = 1; drive_reg_data = 1; end
         endcase
+      end
+
+      //LD_IX_d_r, LD_IY_d_r
+      LD_IX_d_r_0, LD_IY_d_r_0: begin
+        //start a read
+        MRD_start = 1;
+        MRD_bus   = 1;
+
+        //increment the PC and use that as the address
+        drive_PCH = 1;
+        drive_PCL = 1;
+        ld_PCH = 1;
+        ld_PCL = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        alu_op  = `INCR_A;
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
+      LD_IX_d_r_1, LD_IY_d_r_1: begin
+        //continue the read
+        MRD_bus   = 1;
+        drive_MAR = 1;
+      end
+
+      LD_IX_d_r_2, LD_IY_d_r_2: begin
+        //latch the data into TEMP
+        ld_TEMP = 1;
+      end
+
+      LD_IX_d_r_3, LD_IY_d_r_3: begin
+        //add IX + d in the 16 bit alu
+        drive_IXH = 1;
+        drive_IXL = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        alu_op = `ADD;
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
+      //Do nothing for the rest of this machine cycle since we can do
+      //that add in a single cycle
+
+      LD_IX_d_r_8, LD_IY_d_r_8: begin
+        //start a write
+        MWR_start = 1;
+        MWR_bus   = 1;
+        drive_MAR = 1;
+      end
+
+      LD_IX_d_r_9, LD_IY_d_r_9: begin
+        //continue the write
+        MWR_bus = 1;
+        drive_MAR = 1;
+        drive_MDR1 = 1;
+
+        //put the right register out on the databus
+        case(op1[2:0])
+          3'b111: drive_A = 1;
+          3'b000: begin drive_B = 1; drive_reg_data = 1; end
+          3'b001: begin drive_C = 1; drive_reg_data = 1; end
+          3'b010: begin drive_D = 1; drive_reg_data = 1; end
+          3'b011: begin drive_E = 1; drive_reg_data = 1; end
+          3'b100: begin drive_H = 1; drive_reg_data = 1; end
+          3'b101: begin drive_L = 1; drive_reg_data = 1; end
+        endcase
+
       end
 
       //-----------------------------------------------------------------------
@@ -1536,6 +1659,7 @@ module MWR_fsm(
       T1: begin
         if(MWR_start) begin
           MWR_MREQ_L = 0;
+          MWR_WR_L   = 0;
         end
       end
 

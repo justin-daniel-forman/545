@@ -12,6 +12,8 @@
 `define IY_INST   8'hFD
 `define LD_r_IY_d 8'b01???110 //this is state dependent
 `define LD_HL_r   8'b01110???
+`define LD_IX_d_r 8'b01110???
+`define LD_IY_d_r 8'b01110???
 
 //ALU commands
 `define INCR_A    4'b0001
