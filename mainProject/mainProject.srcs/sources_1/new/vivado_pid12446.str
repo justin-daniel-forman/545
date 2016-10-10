@@ -1,0 +1,242 @@
+/*
+
+Vivado v2015.2 (64-bit)
+SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+Process ID: 12446
+
+Current time: 	9/16/16 10:48:08 AM EDT
+Time zone: 	Eastern Standard Time (America/New_York)
+
+OS: Red Hat Enterprise Linux Server release 7.2 (Maipo)
+Version: 3.10.0-327.22.2.el7.x86_64
+Architecture: amd64
+Available processors (cores): 8
+
+DISPLAY: :0
+Screen size: 1600x1200
+Screen resolution (DPI): 96
+Available screens: 1
+Default font: family=Dialog,name=Dialog,style=plain,size=12
+
+Java version: 	1.8.0_25 64-bit
+Java home: 	/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/tps/lnx64/jre
+
+User name: 	suyashb
+User directory: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new
+User country: 	US
+User language: 	en
+User locale: 	en_US
+
+Vivado preferences path: /afs/ece.cmu.edu/usr/suyashb/.Xilinx/Vivado/2015.2/vivado.ini
+Vivado layouts directory: /afs/ece.cmu.edu/usr/suyashb/.Xilinx/Vivado/2015.2/layouts/application
+
+GUI allocated memory:	119 MB
+GUI max memory:		3,052 MB
+Engine allocated memory: 4,842 MB
+
+*/
+
+// TclEventType: START_GUI
+// Tcl Message: start_gui 
+// [GUI Memory]: 41 MB (+40250kb) [00:00:05]
+// [Engine Memory]: 4,842 MB (+4925762kb) [00:00:05]
+// HMemoryUtils.trashcanNow. Engine heap size: 4,852 MB. GUI used memory: 22 MB. Current time: 9/16/16 10:48:10 AM EDT
+selectList(PAResourceEtoH.GettingStartedView_RECENT_PROJECTS, "/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.xpr", 0); // t:v (JViewport:JComponent, cl:JFrame)
+// cp:P (cl:JFrame):  Open Project : addNotify
+// Opening Vivado Project: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.xpr. Version: Vivado v2015.2 
+// TclEventType: DEBUG_PROBE_SET_CHANGE
+// Tcl Message: open_project /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.xpr 
+// TclEventType: MSGMGR_MOVEMSG
+// TclEventType: FILE_SET_NEW
+// TclEventType: RUN_CURRENT
+// TclEventType: PROJECT_NEW
+// Tcl Message: open_project /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.xpr 
+// Tcl Message: Scanning sources... Finished scanning sources 
+// Tcl Message: INFO: [IP_Flow 19-234] Refreshing IP repositories INFO: [IP_Flow 19-1704] No user IP repositories specified 
+// TclEventType: PROJECT_NEW
+// [GUI Memory]: 54 MB (+11971kb) [00:00:27]
+// [GUI Memory]: 60 MB (+3474kb) [00:00:28]
+// TclEventType: FILE_SET_OPTIONS_CHANGE
+// HMemoryUtils.trashcanNow. Engine heap size: 4,950 MB. GUI used memory: 28 MB. Current time: 9/16/16 10:48:32 AM EDT
+// Tcl Message: INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/data/ip'. 
+// TclEventType: FILE_SET_OPTIONS_CHANGE
+// Project name: mainProject; location: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject; part: xc7z020clg484-1
+dismissDialog("Open Project"); // cp:P (cl:JFrame)
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// HMemoryUtils.trashcanNow. Engine heap size: 4,971 MB. GUI used memory: 28 MB. Current time: 9/16/16 10:48:50 AM EDT
+// Elapsed time: 18 seconds
+selectMenu(PAResourceItoN.MainMenuMgr_TOOLS, "Tools"); // R:JideMenu (CommandMenuBar:CommandBar, cl:JFrame)
+dismissMenu(PAResourceItoN.MainMenuMgr_TOOLS, "Tools"); // R:JideMenu (CommandMenuBar:CommandBar, cl:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Simulation Sources]", 5); // A:k (H:JPanel, cl:JFrame)
+collapseTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Simulation Sources]", 5); // A:k (H:JPanel, cl:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Simulation Sources]", 5); // A:k (H:JPanel, cl:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Simulation Sources, sim_1]", 6); // A:k (H:JPanel, cl:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Simulation Sources, sim_1, SystemVerilog]", 7); // A:k (H:JPanel, cl:JFrame)
+// Elapsed time: 14 seconds
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Simulation Sources, sim_1, test (freqSynthTest.sv)]", 9); // A:k (H:JPanel, cl:JFrame)
+collapseTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Simulation Sources, sim_1, test (freqSynthTest.sv)]", 9); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Simulation Sources, sim_1, test (freqSynthTest.sv)]", 9, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Simulation Sources, sim_1, test (freqSynthTest.sv)]", 9, true, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click - Node
+selectMenu(PAResourceItoN.MainMenuMgr_WINDOW, "Window"); // R:JideMenu (CommandMenuBar:CommandBar, cl:JFrame)
+dismissMenu(PAResourceItoN.MainMenuMgr_WINDOW, "Window"); // R:JideMenu (CommandMenuBar:CommandBar, cl:JFrame)
+selectMenu(PAResourceItoN.MainMenuMgr_TOOLS, "Tools"); // R:JideMenu (CommandMenuBar:CommandBar, cl:JFrame)
+selectMenu(PAResourceItoN.MainMenuMgr_REPORT, "Report"); // X:JMenu (JPopupMenu:JComponent, cl:JFrame)
+selectMenuItem(PAResourceCommand.PACommandNames_SIMULATION_COMPILE_LIBRARIES, "Compile Simulation Libraries..."); // ab:JMenuItem (JPopupMenu:JComponent, cl:JFrame)
+dismissMenu(PAResourceItoN.MainMenuMgr_TOOLS, "Tools"); // R:JideMenu (CommandMenuBar:CommandBar, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_SIMULATION_COMPILE_LIBRARIES
+// e:ag (cl:JFrame): Compile Simulation Libraries: addNotify
+selectButton(PAResourceQtoS.SimulationCompileLibrariesDialog_SIMULATOR_EXECUTABLE_PATH, (String) null); // r:a (aS:JPanel, e:ag)
+// Elapsed time: 61 seconds
+dismissFolderChooser();
+// Elapsed time: 16 seconds
+setText(PAResourceQtoS.SimulationCompileLibrariesDialog_SIMULATOR_EXECUTABLE_PATH, (String) null); // ao:JTextField (aS:JPanel, e:ag)
+selectButton(PAResourceQtoS.SimulationCompileLibrariesDialog_COMPILE, "Compile"); // a:JButton (G:JPanel, e:ag)
+// cp:P (cl:JFrame):  Compile Simulation Libraries : addNotify
+// Tcl Message: compile_simlib -language all -dir {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.cache/compile_simlib} -simulator vcs_mx -library all -family  all 
+// Tcl Message: Compiling libraries for 'vcs_mx' in '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.cache/compile_simlib' Creating synopsys_sim.setup file... --> Compiling 'verilog.secureip' library...     > Source Library = '/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/data/secureip'     > Compiled Path  = '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.cache/compile_simlib/secureip' 
+// [GUI Memory]: 65 MB (+1510kb) [00:03:16]
+// Tcl Message:     > Log File       = '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.cache/compile_simlib/secureip/.cxl.verilog.secureip.secureip.lin64.log' --> Compiling 'verilog.secureip:verilog.axi_bfm' library...     > Source Library = '/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/data/secureip/axi_bfm'     > Compiled Path  = '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.cache/compile_simlib/secureip' 
+// Tcl Message:     > Log File       = '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.cache/compile_simlib/secureip/.cxl.verilog.axi_bfm.secureip.lin64.log' compile_simlib[verilog.secureip:verilog.axi_bfm]: 0 error(s), 0 warning(s)  compile_simlib[verilog.secureip]: 0 error(s), 0 warning(s), 25.00 % complete   --> Compiling 'vhdl.unisim' library...     > Source Library = '/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/data/vhdl/src/unisims'     > Compiled Path  = '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.cache/compile_simlib/unisim' 
+// Tcl Message:     > Log File       = '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.cache/compile_simlib/unisim/.cxl.vhdl.unisim.unisim.lin64.log' --> Compiling 'vhdl.unisim:vhdl.unimacro' library...     > Source Library = '/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/data/vhdl/src/unimacro'     > Compiled Path  = '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.cache/compile_simlib/unimacro' 
+// Tcl Message:     > Log File       = '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.cache/compile_simlib/unimacro/.cxl.vhdl.unimacro.unimacro.lin64.log' compile_simlib[vhdl.unisim:vhdl.unimacro]: 0 error(s), 0 warning(s)  --> Compiling 'vhdl.unisim:vhdl.unifast' library...     > Source Library = '/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/data/vhdl/src/unifast'     > Compiled Path  = '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.cache/compile_simlib/unifast' 
+// Tcl Message:     > Log File       = '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.cache/compile_simlib/unifast/.cxl.vhdl.unifast.unifast.lin64.log' compile_simlib[vhdl.unisim:vhdl.unifast]: 0 error(s), 0 warning(s)  compile_simlib[vhdl.unisim]: 0 error(s), 0 warning(s), 50.00 % complete   --> Compiling 'verilog.unisim' library...     > Source Library = '/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/data/verilog/src'     > Compiled Path  = '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.cache/compile_simlib/unisims_ver' 
+// Tcl Message: compile_simlib: Time (s): cpu = 00:00:34 ; elapsed = 00:01:46 . Memory (MB): peak = 5906.996 ; gain = 0.000 ; free physical = 855 ; free virtual = 18650 
+// 'b' command handler elapsed time: 192 seconds
+// Elapsed time: 106 seconds
+dismissDialog("Compile Simulation Libraries"); // cp:P (cl:JFrame)
+dismissDialog("Compile Simulation Libraries"); // e:ag (cl:JFrame)
+selectCodeEditor("freqSynthTest.sv", 368, 280); // bj:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("freqSynthTest.sv", 237, 553); // bj:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("freqSynthTest.sv", 196, 330); // bj:J (JPanel:JComponent, cl:JFrame)
+selectTab((HResource) null, (HResource) null, "Reports", 3); // FrameContainer:JideTabbedPane (ContainerContainer:JideSplitPane, cl:JFrame)
+// [GUI Memory]: 71 MB (+3619kb) [00:04:38]
+selectTab((HResource) null, (HResource) null, "Log", 2); // FrameContainer:JideTabbedPane (ContainerContainer:JideSplitPane, cl:JFrame)
+selectTab((HResource) null, (HResource) null, "Messages", 1); // FrameContainer:JideTabbedPane (ContainerContainer:JideSplitPane, cl:JFrame)
+selectTab((HResource) null, (HResource) null, "Tcl Console", 0); // FrameContainer:JideTabbedPane (ContainerContainer:JideSplitPane, cl:JFrame)
+selectTab((HResource) null, (HResource) null, "Messages", 1); // FrameContainer:JideTabbedPane (ContainerContainer:JideSplitPane, cl:JFrame)
+// Elapsed time: 10 seconds
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Simulation, Run Simulation]", 11, false); // w:Y (v:H, cl:JFrame)
+selectMenuItem(PAResourceCommand.PACommandNames_SIMULATION_RUN_BEHAVIORAL, "Run Behavioral Simulation"); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_SIMULATION_RUN_BEHAVIORAL
+// TclEventType: FILE_SET_CHANGE
+// d:cp (cl:JFrame):  Run Simulation : addNotify
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: FILE_SET_OPTIONS_CHANGE
+// Tcl Message: launch_simulation 
+// Tcl Message: INFO: [USF-VCS-99] Step results log file:'/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.sim/sim_1/behav/vlogan.log' 
+// Tcl Message: ERROR: [USF-VCS-63] 'compile' step failed with error(s). Please check the Tcl console output or '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.sim/sim_1/behav/vlogan.log' file for more information. 
+// a:a (cl:JFrame): Critical Messages: addNotify
+dismissDialog("Run Simulation"); // d:cp (cl:JFrame)
+selectButton(PAResourceAtoD.CmdMsgDialog_OK, "OK"); // i:a (JPanel:JComponent, a:a)
+dismissDialog("Critical Messages"); // a:a (cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Vivado Commands, launch_simulation. ]", 5, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Vivado Commands, launch_simulation. , [USF-VCS 63] 'compile' step failed with error(s). Please check the Tcl console output or '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.sim/sim_1/behav/vlogan.log' file for more information.. ]", 19, false); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Vivado Commands, launch_simulation. , [USF-VCS 63] 'compile' step failed with error(s). Please check the Tcl console output or '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.sim/sim_1/behav/vlogan.log' file for more information.. ]", 19, false, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Vivado Commands, launch_simulation. , [USF-VCS 63] 'compile' step failed with error(s). Please check the Tcl console output or '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.sim/sim_1/behav/vlogan.log' file for more information.. ]", 19, false); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Vivado Commands, launch_simulation. , [USF-VCS 63] 'compile' step failed with error(s). Please check the Tcl console output or '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.sim/sim_1/behav/vlogan.log' file for more information.. ]", 19, false, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click
+selectTab((HResource) null, (HResource) null, "Tcl Console", 0); // FrameContainer:JideTabbedPane (ContainerContainer:JideSplitPane, cl:JFrame)
+selectCodeEditor(RDIResource.TclConsoleView_TCL_CONSOLE_CODE_EDITOR, 255, 135); // dQ:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor(RDIResource.TclConsoleView_TCL_CONSOLE_CODE_EDITOR, 255, 135, false, false, false, false, true); // dQ:J (JPanel:JComponent, cl:JFrame) - Double Click
+selectCodeEditor(RDIResource.TclConsoleView_TCL_CONSOLE_CODE_EDITOR, 255, 135); // dQ:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor(RDIResource.TclConsoleView_TCL_CONSOLE_CODE_EDITOR, 457, 133); // dQ:J (JPanel:JComponent, cl:JFrame)
+selectTab((HResource) null, (HResource) null, "Messages", 1); // FrameContainer:JideTabbedPane (ContainerContainer:JideSplitPane, cl:JFrame)
+selectTab((HResource) null, (HResource) null, "Reports", 3); // FrameContainer:JideTabbedPane (ContainerContainer:JideSplitPane, cl:JFrame)
+selectTab((HResource) null, (HResource) null, "Log", 2); // FrameContainer:JideTabbedPane (ContainerContainer:JideSplitPane, cl:JFrame)
+selectTab(PAResourceItoN.LogView_TABBED_PANE, (HResource) null, "Implementation", 1); // g:JideTabbedPane (w:aK, cl:JFrame)
+selectTab(PAResourceItoN.LogView_TABBED_PANE, (HResource) null, "Simulation", 2); // g:JideTabbedPane (w:aK, cl:JFrame)
+selectCodeEditor(PAResourceItoN.LogMonitor_MONITOR, 198, 110); // H:bj (JPanel:JComponent, cl:JFrame)
+selectTab((HResource) null, (HResource) null, "Tcl Console", 0); // FrameContainer:JideTabbedPane (ContainerContainer:JideSplitPane, cl:JFrame)
+// Elapsed time: 55 seconds
+selectCodeEditor("freqSynthTest.sv", 478, 153); // bj:J (JPanel:JComponent, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, freqSynth (freqSynth.sv)]", 2, false); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Simulation Sources, sim_1, divider (freqSynthTest.sv)]", 12, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Simulation Sources, sim_1, freqSynth (freqSynthTest.sv)]", 15, false); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Simulation Sources, sim_1, freqSynth (freqSynth.sv)]", 14, false); // A:k (H:JPanel, cl:JFrame)
+selectCodeEditor("freqSynthTest.sv", 108, 11); // bj:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("freqSynthTest.sv", 108, 11, false, false, false, false, true); // bj:J (JPanel:JComponent, cl:JFrame) - Double Click
+selectCodeEditor("freqSynthTest.sv", 108, 11); // bj:J (JPanel:JComponent, cl:JFrame)
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Simulation, Run Simulation]", 11, false); // w:Y (v:H, cl:JFrame)
+selectMenuItem(PAResourceCommand.PACommandNames_SIMULATION_RUN_BEHAVIORAL, "Run Behavioral Simulation"); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_SIMULATION_RUN_BEHAVIORAL
+// TclEventType: FILE_SET_CHANGE
+// d:cp (cl:JFrame):  Run Simulation : addNotify
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: FILE_SET_OPTIONS_CHANGE
+// Tcl Message: launch_simulation 
+// TclEventType: LAUNCH_SIM_LOG
+// Tcl Message: INFO: [USF-VCS-3] VCS::Elaborate design INFO: [USF-VCS-62] Executing 'ELABORATE' step in '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.sim/sim_1/behav' 
+// Tcl Message: Doing common elaboration                           Chronologic VCS (TM)       Version J-2014.12-SP3-1_Full64 -- Fri Sep 16 10:54:47 2016                Copyright (c) 1991-2014 by Synopsys Inc.                          ALL RIGHTS RESERVED  This program is proprietary and confidential information of Synopsys Inc. and may be used and disclosed only as authorized in a license agreement controlling such use and disclosure.  
+// Tcl Message: Vendor daemon is down or not responding. Restart the vendor daemon on the server.  Retrying request....  [Fri Sep 16 10:54:49] Queuing for License......   HIT CTRL-C to exit 
+// [GUI Memory]: 75 MB (+427kb) [00:07:48]
+// [GUI Memory]: 80 MB (+280kb) [00:17:58]
+// Elapsed time: 897 seconds
+selectButton(RDIResource.ProgressDialog_CANCEL, "Cancel"); // a:JButton (JPanel:JComponent, d:cp)
+// TclEventType: LAUNCH_SIM
+// Tcl Message: INFO: [Common 17-41] Interrupt caught. Command should exit soon. 
+// Tcl Message: run_program: Time (s): cpu = 00:00:16 ; elapsed = 00:14:57 . Memory (MB): peak = 5916.996 ; gain = 8.000 ; free physical = 867 ; free virtual = 18631 
+// Tcl Message: INFO: [Common 17-344] 'run_program' was cancelled 
+// Tcl Message: 1     while executing "catch {rdi::run_program $scr_file} error_log"     (procedure "::tclapp::xilinx::vcs::usf_launch_script" line 31)     invoked from within "::tclapp::xilinx::vcs::usf_launch_script "vcs" $step"     (procedure "tclapp::xilinx::vcs::elaborate" line 13)     invoked from within "tclapp::xilinx::vcs::elaborate { -simset sim_1 -mode behavioral -run_dir /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.sim/sim_1/be..." 
+// Tcl Message: launch_simulation: Time (s): cpu = 00:00:16 ; elapsed = 00:14:57 . Memory (MB): peak = 5916.996 ; gain = 8.000 ; free physical = 875 ; free virtual = 18639 
+// Tcl Message: INFO: [Common 17-344] 'launch_simulation' was cancelled 
+// 'c' command handler elapsed time: 897 seconds
+dismissDialog("Run Simulation"); // d:cp (cl:JFrame)
+selectCodeEditor("freqSynthTest.sv", 206, 541); // bj:J (JPanel:JComponent, cl:JFrame)
+selectMenu(PAResourceItoN.MainMenuMgr_TOOLS, "Tools"); // R:JideMenu (CommandMenuBar:CommandBar, cl:JFrame)
+selectMenu(PAResourceItoN.MainMenuMgr_REPORT, "Report"); // X:JMenu (JPopupMenu:JComponent, cl:JFrame)
+selectMenu(RDIResourceCommand.RDICommands_CUSTOM_COMMANDS, "Customize Commands"); // X:JMenu (JPopupMenu:JComponent, cl:JFrame)
+selectMenu(PAResourceItoN.MainMenuMgr_REPORT, "Report"); // X:JMenu (JPopupMenu:JComponent, cl:JFrame)
+selectMenu(RDIResourceCommand.RDICommands_CUSTOM_COMMANDS, "Customize Commands"); // X:JMenu (JPopupMenu:JComponent, cl:JFrame)
+selectMenu(RDIResourceCommand.RDICommands_CUSTOM_COMMANDS, "Customize Commands"); // X:JMenu (JPopupMenu:JComponent, cl:JFrame)
+selectMenuItem(PAResourceCommand.PACommandNames_SIMULATION_COMPILE_LIBRARIES, "Compile Simulation Libraries..."); // ab:JMenuItem (JPopupMenu:JComponent, cl:JFrame)
+dismissMenu(PAResourceItoN.MainMenuMgr_TOOLS, "Tools"); // R:JideMenu (CommandMenuBar:CommandBar, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_SIMULATION_COMPILE_LIBRARIES
+// e:ag (cl:JFrame): Compile Simulation Libraries: addNotify
+selectButton(PAResourceQtoS.SimulationCompileLibrariesDialog_COMPILE, "Compile"); // a:JButton (G:JPanel, e:ag)
+// cp:P (cl:JFrame):  Compile Simulation Libraries : addNotify
+// Tcl Message: compile_simlib -language all -dir {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.cache/compile_simlib} -simulator vcs_mx -library all -family  all 
+// 'b' command handler elapsed time: 6 seconds
+dismissDialog("Compile Simulation Libraries"); // cp:P (cl:JFrame)
+dismissDialog("Compile Simulation Libraries"); // e:ag (cl:JFrame)
+selectTab((HResource) null, (HResource) null, "Messages", 1); // FrameContainer:JideTabbedPane (ContainerContainer:JideSplitPane, cl:JFrame)
+selectTab((HResource) null, (HResource) null, "Tcl Console", 0); // FrameContainer:JideTabbedPane (ContainerContainer:JideSplitPane, cl:JFrame)
+selectTab((HResource) null, (HResource) null, "Messages", 1); // FrameContainer:JideTabbedPane (ContainerContainer:JideSplitPane, cl:JFrame)
+selectTab((HResource) null, (HResource) null, "Log", 2); // FrameContainer:JideTabbedPane (ContainerContainer:JideSplitPane, cl:JFrame)
+selectTab((HResource) null, (HResource) null, "Reports", 3); // FrameContainer:JideTabbedPane (ContainerContainer:JideSplitPane, cl:JFrame)
+selectTab((HResource) null, (HResource) null, "Design Runs", 4); // FrameContainer:JideTabbedPane (ContainerContainer:JideSplitPane, cl:JFrame)
+selectTab((HResource) null, (HResource) null, "Tcl Console", 0); // FrameContainer:JideTabbedPane (ContainerContainer:JideSplitPane, cl:JFrame)
+selectCodeEditor(RDIResource.TclConsoleView_TCL_CONSOLE_CODE_EDITOR, 106, 133); // dQ:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor(RDIResource.TclConsoleView_TCL_CONSOLE_CODE_EDITOR, 106, 133, false, false, false, false, true); // dQ:J (JPanel:JComponent, cl:JFrame) - Double Click
+selectCodeEditor(RDIResource.TclConsoleView_TCL_CONSOLE_CODE_EDITOR, 106, 133); // dQ:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor(RDIResource.TclConsoleView_TCL_CONSOLE_CODE_EDITOR, 312, 124); // dQ:J (JPanel:JComponent, cl:JFrame)
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Simulation, Run Simulation]", 11, false); // w:Y (v:H, cl:JFrame)
+selectMenuItem(PAResourceCommand.PACommandNames_SIMULATION_RUN_BEHAVIORAL, "Run Behavioral Simulation"); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_SIMULATION_RUN_BEHAVIORAL
+// TclEventType: FILE_SET_CHANGE
+// d:cp (cl:JFrame):  Run Simulation : addNotify
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: FILE_SET_OPTIONS_CHANGE
+// Tcl Message: launch_simulation 
+// Tcl Message: INFO: [USF-VCS-99] Step results log file:'/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.sim/sim_1/behav/vlogan.log' 
+// Tcl Message: ERROR: [USF-VCS-63] 'compile' step failed with error(s). Please check the Tcl console output or '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.sim/sim_1/behav/vlogan.log' file for more information. 
+// a:a (cl:JFrame): Critical Messages: addNotify
+dismissDialog("Run Simulation"); // d:cp (cl:JFrame)
+selectButton(PAResourceAtoD.CmdMsgDialog_OPEN_MESSAGES_VIEW, "Open Messages View"); // a:JButton (JPanel:JComponent, a:a)
+// Run Command: PAResourceCommand.PACommandNames_MESSAGE_WINDOW
+dismissDialog("Critical Messages"); // a:a (cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Vivado Commands, launch_simulation. , [USF-VCS 63] 'compile' step failed with error(s). Please check the Tcl console output or '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.sim/sim_1/behav/vlogan.log' file for more information.. ]", 2, false); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Vivado Commands, launch_simulation. , [USF-VCS 63] 'compile' step failed with error(s). Please check the Tcl console output or '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.sim/sim_1/behav/vlogan.log' file for more information.. ]", 2, false, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click
+collapseTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Vivado Commands, launch_simulation. ]", 1); // ae:k (JViewport:JComponent, cl:JFrame)
+expandTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Vivado Commands, launch_simulation. ]", 1); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Vivado Commands, launch_simulation. , [USF-VCS 63] 'compile' step failed with error(s). Please check the Tcl console output or '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.sim/sim_1/behav/vlogan.log' file for more information.. ]", 2, false); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Vivado Commands, launch_simulation. , [USF-VCS 63] 'compile' step failed with error(s). Please check the Tcl console output or '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.sim/sim_1/behav/vlogan.log' file for more information.. ]", 2, false, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click
+// Elapsed time: 21 seconds
+selectCodeEditor("freqSynthTest.sv", 426, 273); // bj:J (JPanel:JComponent, cl:JFrame)

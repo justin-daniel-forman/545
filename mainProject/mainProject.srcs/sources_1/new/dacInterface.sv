@@ -30,10 +30,7 @@ module dacInterface(input logic [15:0] waveform,
     output logic MCLK, 
     output logic BCLK,
     output logic LRCLK, 
-    output logic SDATA,
-    output logic byteAck,
-    output logic byteDone,
-    output logic [1:0] byteCount);
+    output logic SDATA);
     
     typedef enum {locking,init,transmit} state;
     state cs,ns;
@@ -294,10 +291,7 @@ module I2C(
     input logic dataValid, 
     output logic writeDone,
     output logic SCL,
-    inout SDA,
-    output byteAck,
-    output byteDone,
-    output byteCount);
+    inout SDA);
     
     typedef enum {start,I2CData,stop} state;
     state cs,ns;

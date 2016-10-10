@@ -1,0 +1,16 @@
+#-----------------------------------------------------------
+# Vivado v2015.2 (64-bit)
+# SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+# IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+# Start of session at: Fri Sep 16 10:47:57 2016
+# Process ID: 12446
+# Log file: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/vivado.log
+# Journal file: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.xpr
+compile_simlib -language all -dir {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.cache/compile_simlib} -simulator vcs_mx -library all -family  all
+launch_simulation
+launch_simulation
+compile_simlib -language all -dir {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.cache/compile_simlib} -simulator vcs_mx -library all -family  all
+launch_simulation

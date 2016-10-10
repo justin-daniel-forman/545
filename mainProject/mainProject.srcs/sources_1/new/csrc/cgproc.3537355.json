@@ -1,0 +1,86 @@
+{
+    "Modules": {
+        "freqSynth": {
+            "Compiled Times": 1,
+            "Compiled": "Yes"
+        },
+        "std": {
+            "Compiled Times": 1,
+            "Compiled": "Yes"
+        },
+        "...MASTER...": {},
+        "divider": {
+            "Compiled Times": 1,
+            "Compiled": "Yes"
+        },
+        "test": {
+            "Compiled Times": 1,
+            "Compiled": "Yes"
+        }
+    },
+    "CompUnits": {
+        "ANMrv_d": {
+            "bytes": 11395,
+            "mod": "divider",
+            "out": "ANMrv_d.o",
+            "archive": "archive.0/_3537355_archive_1.a",
+            "mode": 4
+        },
+        "amcQw_d": {
+            "bytes": 8370,
+            "mod": "...MASTER...",
+            "out": "amcQw_d.o",
+            "archive": "archive.0/_3537355_archive_1.a",
+            "mode": 4
+        },
+        "vx8iT_d": {
+            "bytes": 6095,
+            "mod": "freqSynth",
+            "out": "vx8iT_d.o",
+            "archive": "archive.0/_3537355_archive_1.a",
+            "mode": 4
+        },
+        "reYIK_d": {
+            "bytes": 29004,
+            "mod": "std",
+            "out": "reYIK_d.o",
+            "archive": "archive.0/_3537355_archive_1.a",
+            "mode": 4
+        },
+        "x9Hvb_d": {
+            "bytes": 42366,
+            "mod": "test",
+            "out": "x9Hvb_d.o",
+            "archive": "archive.0/_3537355_archive_1.a",
+            "mode": 4
+        }
+    },
+    "ObjArchives": [
+        {
+            "archive": "archive.0/_3537355_archive_1.a",
+            "objects": [
+                [
+                    "amcQw_d.o",
+                    8370
+                ],
+                [
+                    "reYIK_d.o",
+                    29004
+                ],
+                [
+                    "vx8iT_d.o",
+                    6095
+                ],
+                [
+                    "ANMrv_d.o",
+                    11395
+                ],
+                [
+                    "x9Hvb_d.o",
+                    42366
+                ]
+            ],
+            "size": 97230
+        }
+    ]
+}

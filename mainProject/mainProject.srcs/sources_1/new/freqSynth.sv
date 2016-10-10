@@ -24,10 +24,10 @@ module freqSynth(
     input logic [9:0] freq,
     input logic reset,
     input logic clk,
-    output logic [15:0] waveform,
+    output logic signed [15:0] waveform,
     output logic waveform_valid,
     input logic enable,
-    input logic step
+    input logic acquire
     );
     
     logic div_en,div_done;
@@ -60,28 +60,24 @@ module freqSynth(
 endmodule: freqSynth
 
 module waveGen(input logic [15:0] step_size_curr, 
-    input logic clk, reset, step,
-    output logic [15:0] waveform,
+    input logic clk, reset, acquire,
+    output logic signed [15:0] waveform,
     output logic waveform_valid);
 
     typedef enum {plus,minus} step_type;
     logic overflow_positive, overflow_negative;
     step_type status;
 
-    logic sent;
-
     assign overflow_negative = ((waveform >= 16'h8000) && (waveform - step_size_curr < 16'h8000));
     assign overflow_positive = ((waveform < 16'h8000) && (waveform + step_size_curr >= 16'h8000));
-    assign waveform_valid = step;
+    assign waveform_valid = acquire;
 
     always_ff @(posedge clk, posedge reset) begin
         if(reset) begin
             waveform <= 0;
             status <= plus;
-            sent <= 0;
         end
-        else if(step && !sent) begin 
-            sent <= 1;
+        else if(acquire) begin 
             if(status == plus) begin
                 if(overflow_positive) begin
                     status <= minus;
@@ -99,8 +95,6 @@ module waveGen(input logic [15:0] step_size_curr,
                     waveform <= waveform - step_size_curr;
             end
         end
-        else if(!step) 
-            sent <= 0;
     end
 
 endmodule: waveGen

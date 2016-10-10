@@ -18,13 +18,14 @@ module test;
 	logic writeDone;
 	logic locked;
 	logic dataValid;
+	logic byteAck;
+	logic [1:0] byteCount;
 	
 	logic SCL,BCLK,LRCLK,SDATA;
 	wire SDA;
 		
     assign writeDone = interfaceTest.writeDone;
 	assign SDA = byteDone ? 0 : 1'bz;
-	assign byteDone = interfaceTest.control.byteDone;
 	assign div_done = synthTest.div_done;
 	assign step_size_curr = synthTest.step_size_curr;
 	assign serial_count = interfaceTest.dacVal.count;
@@ -32,6 +33,7 @@ module test;
 	assign count = interfaceTest.count;
 	assign locked = interfaceTest.locked;
 	assign dataValid = interfaceTest.dataValid;
+	
 
 	freqSynth synthTest(.*);
 	dacInterface interfaceTest(.*);

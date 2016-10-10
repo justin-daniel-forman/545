@@ -1,0 +1,75 @@
+#-----------------------------------------------------------
+# Vivado v2015.2 (64-bit)
+# SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+# IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+# Start of session at: Fri Sep 16 10:38:35 2016
+# Process ID: 11223
+# Log file: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/vivado.log
+# Journal file: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.xpr
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/data/ip'.
+set_property target_simulator VCS [current_project]
+set_property SOURCE_SET sources_1 [get_filesets sim_1]
+add_files -fileset sim_1 -norecurse {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqSynth.sv /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqSynthTest.sv}
+update_compile_order -fileset sim_1
+update_compile_order -fileset sim_1
+set_property target_simulator XSim [current_project]
+set_property target_simulator VCS [current_project]
+set_property top test [get_filesets sim_1]
+set_property top_lib xil_defaultlib [get_filesets sim_1]
+update_compile_order -fileset sim_1
+launch_simulation
+INFO: [USF-VCS-40] Finding simulator installation...
+INFO: [USF-VCS-42] Using simulator executables from '/afs/ece.cmu.edu/support/synopsys/synopsys/share/image/usr/local/synopsys/vcs-mx_vJ-2014.12/bin'
+INFO: [USF-VCS-23] Simulation object is 'sim_1'...
+INFO: [USF-VCS-6] Finding pre-compiled libraries...
+CRITICAL WARNING: [USF-VCS-8] Failed to find the pre-compiled simulation library!
+INFO: [USF-VCS-9] Please set the 'COMPXLIB.COMPILED_LIBRARY_DIR' project property to the directory where Xilinx simulation libraries are compiled for VCS.
+INFO: [USF-VCS-33] Inspecting design source files for 'test' in fileset 'sim_1'...
+INFO: [USF-VCS-68] Exported '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqSynth.sv'
+INFO: [USF-VCS-68] Exported '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqSynthTest.sv'
+INFO: [USF-VCS-100] Finding global include files...
+INFO: [USF-VCS-101] Finding include directories and verilog header directory paths...
+INFO: [USF-VCS-102] Fetching design files from 'sim_1'...
+INFO: [USF-VCS-2] VCS::Compile design
+INFO: [USF-VCS-62] Executing 'COMPILE' step in '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.sim/sim_1/behav'
+                         Chronologic VCS (TM)
+      Version J-2014.12-SP3-1_Full64 -- Fri Sep 16 10:45:16 2016
+               Copyright (c) 1991-2014 by Synopsys Inc.
+                         ALL RIGHTS RESERVED
+
+This program is proprietary and confidential information of Synopsys Inc.
+and may be used and disclosed only as authorized in a license agreement
+controlling such use and disclosure.
+
+
+Error-[SETUP_INCLUDE_ERR] Included setup file failure
+./synopsys_sim.setup, 1
+  Cannot open included setup file '?/synopsys_sim.setup'.
+  Please make sure it exists and readable.
+
+CPU time: .081 seconds to compile
+                         Chronologic VCS (TM)
+      Version J-2014.12-SP3-1_Full64 -- Fri Sep 16 10:45:17 2016
+               Copyright (c) 1991-2014 by Synopsys Inc.
+                         ALL RIGHTS RESERVED
+
+This program is proprietary and confidential information of Synopsys Inc.
+and may be used and disclosed only as authorized in a license agreement
+controlling such use and disclosure.
+
+
+Error-[SETUP_INCLUDE_ERR] Included setup file failure
+./synopsys_sim.setup, 1
+  Cannot open included setup file '?/synopsys_sim.setup'.
+  Please make sure it exists and readable.
+
+CPU time: .076 seconds to compile
+INFO: [USF-VCS-99] Step results log file:'/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.sim/sim_1/behav/vlogan.log'
+ERROR: [USF-VCS-63] 'compile' step failed with error(s). Please check the Tcl console output or '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.sim/sim_1/behav/vlogan.log' file for more information.
