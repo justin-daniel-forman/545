@@ -40,17 +40,19 @@ module memory (
       out_value <= 8'bz;
     end
 
+    //reads appear at the next clock cycle
     if(~RD_L) begin
       out_value <= Qs[addr_bus];
     end
 
+    //writes take the present value on the data bus
     else if(~WR_L) begin
-      ens[addr_bus] <= 1;
+      ens[addr_bus] = 1;
     end
 
     else begin
       out_value <= 8'bz;
-      ens <= 0;
+      ens = 0;
     end
 
   end
