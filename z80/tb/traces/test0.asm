@@ -10,6 +10,7 @@ section code
   ld d, $ff
   ld e, $aa
   ld a, [st+$51]
+  ld b, [uv+$52]
 
 section data
   addr0: data !DEAD !BEEF

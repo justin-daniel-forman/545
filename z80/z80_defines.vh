@@ -9,6 +9,9 @@
 `define LD_r_HL   8'b01???110 //this can match LD_r_r as well
 `define IX_INST   8'hDD
 `define LD_r_IX_d 8'b01???110 //this is state dependent
+`define IY_INST   8'hFD
+`define LD_r_IY_d 8'b01???110 //this is state dependent
+
 
 //ALU commands
 `define INCR_A    4'b0001

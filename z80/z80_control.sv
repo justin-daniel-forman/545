@@ -481,6 +481,17 @@ module decoder (
     LD_r_IX_d_9,
     LD_r_IX_d_A,
 
+    LD_r_IY_d_0,
+    LD_r_IY_d_1,
+    LD_r_IY_d_2,
+    LD_r_IY_d_3,
+    LD_r_IY_d_4,
+    LD_r_IY_d_5,
+    LD_r_IY_d_6,
+    LD_r_IY_d_7,
+    LD_r_IY_d_8,
+    LD_r_IY_d_9,
+    LD_r_IY_d_A,
     INC_0,
     INC_1,
     INC_2,
@@ -515,7 +526,7 @@ module decoder (
     //another part of the opcode.
     IX_INST_0,  //IX instructions Group
                 //IX bit instructions Group
-                //IY instructions Group
+    IY_INST_0,  //IY instructions Group
                 //IY bit instructions Group
                 //Bit Instructions Group
     EXT_INST_0  //Extended Instructions Group
@@ -579,6 +590,7 @@ module decoder (
           `INC:       next_state = INC_0;
           `EXT_INST:  next_state = EXT_INST_0;
           `IX_INST:   next_state = IX_INST_0;
+          `IY_INST:   next_state = IY_INST_0;
           default:    next_state = FETCH_3;
         endcase
       end
@@ -612,7 +624,9 @@ module decoder (
       //in Fetch 7 to start performing logic next cycle
       FETCH_7: begin
         casex(op1)
-          `LD_r_IX_d:   next_state = LD_r_IX_d_0;
+          //Some cases are identical and are only different in the first byte
+          `LD_r_IX_d:   next_state = (op0[7:4] == 4'hD) ?  LD_r_IX_d_0 : LD_r_IY_d_0;
+          `LD_r_IY_d:   next_state = (op0[7:4] == 4'hF) ?  LD_r_IY_d_0 : LD_r_IX_d_0;
           `LDI:         next_state = LDI_0;
           default:      next_state = FETCH_0;
         endcase
@@ -650,6 +664,19 @@ module decoder (
       LD_r_IX_d_8: next_state = LD_r_IX_d_9;
       LD_r_IX_d_9: next_state = LD_r_IX_d_A;
       LD_r_IX_d_A: next_state = FETCH_0;
+
+      //LD r, (IY+d)
+      LD_r_IY_d_0: next_state = LD_r_IY_d_1;
+      LD_r_IY_d_1: next_state = LD_r_IY_d_2;
+      LD_r_IY_d_2: next_state = LD_r_IY_d_3;
+      LD_r_IY_d_3: next_state = LD_r_IY_d_4;
+      LD_r_IY_d_4: next_state = LD_r_IY_d_5;
+      LD_r_IY_d_5: next_state = LD_r_IY_d_6;
+      LD_r_IY_d_6: next_state = LD_r_IY_d_7;
+      LD_r_IY_d_7: next_state = LD_r_IY_d_8;
+      LD_r_IY_d_8: next_state = LD_r_IY_d_9;
+      LD_r_IY_d_9: next_state = LD_r_IY_d_A;
+      LD_r_IY_d_A: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END 8-bit load group
@@ -702,6 +729,15 @@ module decoder (
       IX_INST_0: next_state = FETCH_4;
       //-----------------------------------------------------------------------
       //END IX instructions group
+      //-----------------------------------------------------------------------
+
+
+      //-----------------------------------------------------------------------
+      //BEGIN IY instructions group
+      //-----------------------------------------------------------------------
+      IY_INST_0: next_state = FETCH_4;
+      //-----------------------------------------------------------------------
+      //END IY instructions group
       //-----------------------------------------------------------------------
 
     endcase
@@ -986,6 +1022,73 @@ module decoder (
       end
 
       LD_r_IX_d_5: begin
+        //latch the data into the selected reg
+        case(op1[5:3])
+          3'b111: ld_A = 1;
+          3'b000: ld_B = 1;
+          3'b001: ld_C = 1;
+          3'b010: ld_D = 1;
+          3'b011: ld_E = 1;
+          3'b100: ld_H = 1;
+          3'b101: ld_L = 1;
+        endcase
+      end
+
+      //the rest of the states for this opcode do nothing, our implementation
+      //is faster than the original
+
+      //LD r (IY,d)
+      LD_r_IY_d_0: begin
+        //start a read
+        MRD_start = 1;
+        MRD_bus   = 1;
+
+        //increment the PC and use that as the address
+        drive_PCH = 1;
+        drive_PCL = 1;
+        ld_PCH = 1;
+        ld_PCL = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        alu_op  = `INCR_A;
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
+      LD_r_IY_d_1: begin
+        //continue the read
+        MRD_bus   = 1;
+        drive_MAR = 1;
+      end
+
+      LD_r_IY_d_2: begin
+        //latch the data into the TEMP register of the 16 bit alu
+        ld_TEMP = 1;
+      end
+
+      LD_r_IY_d_3: begin
+        //add the d from the bus to the IX register and drive that as
+        //an address
+        alu_op         = `ADD;
+        drive_alu_addr = 1;
+        drive_reg_addr = 1;
+        drive_IYH      = 1;
+        drive_IYL      = 1;
+        ld_MARL        = 1;
+        ld_MARH        = 1;
+
+        //start a read
+        MRD_start = 1;
+        MRD_bus   = 1;
+      end
+
+      LD_r_IY_d_4: begin
+        //continue the read
+        MRD_bus   = 1;
+        drive_MAR = 1;
+      end
+
+      LD_r_IY_d_5: begin
         //latch the data into the selected reg
         case(op1[5:3])
           3'b111: ld_A = 1;
