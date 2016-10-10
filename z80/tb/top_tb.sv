@@ -36,6 +36,7 @@ module tb ();
   logic [31:0] i;
   initial begin
 
+    if($test$plusargs("DEBUG")) begin
     $monitor($stime,, "addr bus: %h, data bus: %h, state: %s, A: %h, DE: %h, HL: %h, BC: %h, IX: %h, m_data:%h, z80_data: %h",
       addr_bus,
       data_bus,
@@ -48,6 +49,7 @@ module tb ();
       m_DUT.out_value,
       DUT.DP.data_out,
     );
+    end
 
     rst_L = 0;
     @(posedge clk);
@@ -97,13 +99,13 @@ module tb ();
     //T4
     @(posedge clk);
 
-
-    for(i = 0; i < 100; i++) begin
+    //currently our range for assembly programs is $51
+    while( {DUT.DP.RFILE.PCH_out, DUT.DP.RFILE.PCL_out} <= 16'h0050 ) begin
       @(posedge clk);
     end
 
     $display("\n\n\n");
-    $display("A:  %h\nBC: %h\nDE: %h\nHL: %h\nIX: %h\nIY: %h\nSP: %h\nPC: %h", DUT.DP.A_out,
+    $display("A: %h\nBC: %h\nDE: %h\nHL: %h\nIX: %h\nIY: %h\nSP: %h\nPC: %h", DUT.DP.A_out,
       {DUT.DP.RFILE.B_out, DUT.DP.RFILE.C_out},
       {DUT.DP.RFILE.D_out, DUT.DP.RFILE.E_out},
       {DUT.DP.RFILE.H_out, DUT.DP.RFILE.L_out},

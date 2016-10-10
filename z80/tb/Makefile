@@ -22,3 +22,12 @@ datapath:
 clean:
 	rm -rf simv
 	rm -rf simv.daidir
+
+verify-all:
+	perl testbench.pl NULL NULL VERIFY
+
+verify-file:
+	perl testbench.pl NULL ${ARGS} VERIFY
+
+debug-file:
+	perl testbench.pl DEBUG ${ARGS} NULL
