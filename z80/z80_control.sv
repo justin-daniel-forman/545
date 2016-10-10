@@ -591,7 +591,8 @@ module decoder (
           //Because of don't cares, this opcode can match other opcodes
           //that have the last 3 bits as 110, which is not defined in
           //this opcode.
-          `LD_r_r:    next_state = (op0[2:0] != 3'b110 && op0[5:3] != 3'b110) ? LD_r_r_0 : FETCH_3;
+          `LD_r_r:    next_state =
+            (op0[2:0] != 3'b110 && op0[5:3] != 3'b110) ? LD_r_r_0 : FETCH_3;
           `INC:       next_state = INC_0;
           `EXT_INST:  next_state = EXT_INST_0;
           `IX_INST:   next_state = IX_INST_0;
