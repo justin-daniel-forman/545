@@ -492,6 +492,11 @@ module decoder (
     LD_r_IY_d_8,
     LD_r_IY_d_9,
     LD_r_IY_d_A,
+
+    LD_HL_r_0,
+    LD_HL_r_1,
+    LD_HL_r_2,
+
     INC_0,
     INC_1,
     INC_2,
@@ -586,7 +591,7 @@ module decoder (
           //Because of don't cares, this opcode can match other opcodes
           //that have the last 3 bits as 110, which is not defined in
           //this opcode.
-          `LD_r_r:    next_state = (op0[2:0] != 3'b110) ? LD_r_r_0 : FETCH_3;
+          `LD_r_r:    next_state = (op0[2:0] != 3'b110 && op0[5:3] != 3'b110) ? LD_r_r_0 : FETCH_3;
           `INC:       next_state = INC_0;
           `EXT_INST:  next_state = EXT_INST_0;
           `IX_INST:   next_state = IX_INST_0;
@@ -601,6 +606,7 @@ module decoder (
         casex(op0)
           `LD_r_n:    next_state = LD_r_n_0;
           `LD_r_HL:   next_state = LD_r_HL_0;
+          `LD_HL_r:   next_state = LD_HL_r_0;
           `LD_HL_nn:  next_state = LD_HL_nn_0;
           default:    next_state = FETCH_0;
         endcase
@@ -677,6 +683,10 @@ module decoder (
       LD_r_IY_d_8: next_state = LD_r_IY_d_9;
       LD_r_IY_d_9: next_state = LD_r_IY_d_A;
       LD_r_IY_d_A: next_state = FETCH_0;
+
+      LD_HL_r_0: next_state = LD_HL_r_1;
+      LD_HL_r_1: next_state = LD_HL_r_2;
+      LD_HL_r_2: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END 8-bit load group
@@ -1103,6 +1113,39 @@ module decoder (
 
       //the rest of the states for this opcode do nothing, our implementation
       //is faster than the original
+
+      //LD (HL), r
+      LD_HL_r_0: begin
+        //start a write
+        MWR_start = 1;
+        MWR_bus   = 1;
+
+        //put HL out as the address
+        drive_H = 1;
+        drive_L = 1;
+        drive_alu_addr = 1;
+        alu_op = `NOP;
+
+        //move the address into MAR
+        ld_MARH = 1;
+        ld_MARL = 1;
+      end
+
+      LD_HL_r_1: begin
+        //continue the write from MAR with r on the data line
+        drive_MAR = 1;
+        MWR_bus   = 1;
+
+        case(op0[2:0])
+          3'b111: drive_A = 1;
+          3'b000: begin drive_B = 1; drive_reg_data = 1; end
+          3'b001: begin drive_C = 1; drive_reg_data = 1; end
+          3'b010: begin drive_D = 1; drive_reg_data = 1; end
+          3'b011: begin drive_E = 1; drive_reg_data = 1; end
+          3'b100: begin drive_H = 1; drive_reg_data = 1; end
+          3'b101: begin drive_L = 1; drive_reg_data = 1; end
+        endcase
+      end
 
       //-----------------------------------------------------------------------
       //END 8-bit load group
