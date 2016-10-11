@@ -20,6 +20,8 @@
 `define LD_A_BC   8'h0A
 `define LD_A_DE   8'h1A
 `define LD_A_nn   8'h3A
+`define LD_BC_A   8'h02
+`define LD_DE_A   8'h12
 
 //ALU commands
 `define INCR_A    4'h1

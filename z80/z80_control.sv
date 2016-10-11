@@ -570,6 +570,14 @@ module decoder (
     LD_A_nn_7,
     LD_A_nn_8,
 
+    LD_BC_A_0,
+    LD_BC_A_1,
+    LD_BC_A_2,
+
+    LD_DE_A_0,
+    LD_DE_A_1,
+    LD_DE_A_2,
+
     INC_0,
     INC_1,
     INC_2,
@@ -711,6 +719,8 @@ module decoder (
             `LD_A_BC:   next_state = LD_A_BC_0;
             `LD_A_DE:   next_state = LD_A_DE_0;
             `LD_A_nn:   next_state = LD_A_nn_0;
+            `LD_BC_A:   next_state = LD_BC_A_0;
+            `LD_DE_A:   next_state = LD_DE_A_0;
             default:    next_state = FETCH_0;
           endcase
         end
@@ -878,6 +888,16 @@ module decoder (
       LD_A_nn_6: next_state = LD_A_nn_7;
       LD_A_nn_7: next_state = LD_A_nn_8;
       LD_A_nn_8: next_state = FETCH_0;
+
+      //LD (BC), A
+      LD_BC_A_0: next_state = LD_BC_A_1;
+      LD_BC_A_1: next_state = LD_BC_A_2;
+      LD_BC_A_2: next_state = FETCH_0;
+
+      //LD (DE), A
+      LD_DE_A_0: next_state = LD_DE_A_1;
+      LD_DE_A_1: next_state = LD_DE_A_2;
+      LD_DE_A_2: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END 8-bit load group
@@ -1596,6 +1616,35 @@ module decoder (
         MRD_bus = 1;
         drive_MAR = 1;
         ld_A    = 1;
+      end
+
+      //LD (BC), A and LD(DE), A
+      LD_BC_A_0, LD_DE_A_0: begin
+        //start a write
+        MWR_start = 1;
+        MWR_bus   = 1;
+
+        //drive the address bus with the appropriate register
+        drive_B = (state == LD_BC_A_0);
+        drive_C = (state == LD_BC_A_0);
+        drive_D = (state == LD_DE_A_0);
+        drive_E = (state == LD_DE_A_0);
+
+        alu_op = `NOP;
+        drive_alu_addr = 1;
+        drive_reg_addr = 1;
+        ld_MARL = 1;
+        ld_MARH = 1;
+
+        //drive the data from the A reg
+        drive_A = 1;
+      end
+
+      LD_BC_A_1, LD_DE_A_1: begin
+        //continue the write
+        MWR_bus   = 1;
+        drive_MAR = 1;
+        drive_A   = 1;
       end
 
       //-----------------------------------------------------------------------
