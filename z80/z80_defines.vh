@@ -19,10 +19,12 @@
 `define LD_IY_d_n 8'h36
 `define LD_A_BC   8'h0A
 `define LD_A_DE   8'h1A
+`define LD_A_nn   8'h3A
 
 //ALU commands
-`define INCR_A    4'b0001
-`define DECR_A    4'b0010
-`define ALU_NOP   4'b0000
-`define ADD       4'b1000
-`define ADD_SE_B  4'b1001
+`define INCR_A    4'h1
+`define DECR_A    4'h2
+`define ALU_NOP   4'h3
+`define ADD       4'h4
+`define ADD_SE_B  4'h5
+`define ALU_B     4'h6

@@ -402,6 +402,10 @@ module alu #(parameter w = 8)(
         C = A + B;
       end
 
+      `ALU_B: begin
+        C = B;
+      end
+
       `ADD_SE_B: begin
         //16 bit A plus sign extended 8 bit B
         C = A + { {8{B[7]}}, B};

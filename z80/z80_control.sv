@@ -560,6 +560,16 @@ module decoder (
     LD_A_DE_1,
     LD_A_DE_2,
 
+    LD_A_nn_0,
+    LD_A_nn_1,
+    LD_A_nn_2,
+    LD_A_nn_3,
+    LD_A_nn_4,
+    LD_A_nn_5,
+    LD_A_nn_6,
+    LD_A_nn_7,
+    LD_A_nn_8,
+
     INC_0,
     INC_1,
     INC_2,
@@ -700,6 +710,7 @@ module decoder (
           casex(op0)
             `LD_A_BC:   next_state = LD_A_BC_0;
             `LD_A_DE:   next_state = LD_A_DE_0;
+            `LD_A_nn:   next_state = LD_A_nn_0;
             default:    next_state = FETCH_0;
           endcase
         end
@@ -857,6 +868,16 @@ module decoder (
       LD_A_DE_1: next_state = LD_A_DE_2;
       LD_A_DE_2: next_state = FETCH_0;
 
+      //LD A, (nn)
+      LD_A_nn_0: next_state = LD_A_nn_1;
+      LD_A_nn_1: next_state = LD_A_nn_2;
+      LD_A_nn_2: next_state = LD_A_nn_3;
+      LD_A_nn_3: next_state = LD_A_nn_4;
+      LD_A_nn_4: next_state = LD_A_nn_5;
+      LD_A_nn_5: next_state = LD_A_nn_6;
+      LD_A_nn_6: next_state = LD_A_nn_7;
+      LD_A_nn_7: next_state = LD_A_nn_8;
+      LD_A_nn_8: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END 8-bit load group
@@ -1515,6 +1536,66 @@ module decoder (
       LD_A_BC_2, LD_A_DE_2: begin
         //latch the data into A
         ld_A = 1;
+      end
+
+      //LD_A_nn
+      LD_A_nn_0, LD_A_nn_3: begin
+        //start a read
+        MRD_start = 1;
+        MRD_bus   = 1;
+
+        //increment the PC and use that as the address
+        drive_PCH = 1;
+        drive_PCL = 1;
+        ld_PCH = 1;
+        ld_PCL = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        alu_op  = `INCR_A;
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
+      LD_A_nn_1, LD_A_nn_4: begin
+        //continue the read
+        MRD_bus = 1;
+        drive_MAR = 1;
+      end
+
+      LD_A_nn_2: begin
+        //put the data in TEMP
+        ld_TEMP = 1;
+      end
+
+      LD_A_nn_5: begin
+        //as we load the new value into temp, put the old fetched byted
+        //into MAR
+        ld_TEMP = 1;
+        alu_op  = `ALU_B;
+        drive_alu_addr = 1;
+        ld_MARL = 1;
+      end
+
+      LD_A_nn_6: begin
+        ld_MARH = 1;
+        alu_op = `ALU_B;
+        drive_alu_addr = 1;
+      end
+
+      LD_A_nn_7: begin
+        //start a read
+        MRD_start = 1;
+        MRD_bus   = 1;
+        drive_MAR = 1;
+      end
+
+      LD_A_nn_8: begin
+        //continue the read and grab the value of A off the bus
+        //one cycle before it is normal. This might come back to bite
+        //us later down the road
+        MRD_bus = 1;
+        drive_MAR = 1;
+        ld_A    = 1;
       end
 
       //-----------------------------------------------------------------------
