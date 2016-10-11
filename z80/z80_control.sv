@@ -528,6 +528,30 @@ module decoder (
     LD_HL_n_4,
     LD_HL_n_5,
 
+    LD_IX_d_n_0,
+    LD_IX_d_n_1,
+    LD_IX_d_n_2,
+    LD_IX_d_n_3,
+    LD_IX_d_n_4,
+    LD_IX_d_n_5,
+    LD_IX_d_n_6,
+    LD_IX_d_n_7,
+    LD_IX_d_n_8,
+    LD_IX_d_n_9,
+    LD_IX_d_n_A,
+
+    LD_IY_d_n_0,
+    LD_IY_d_n_1,
+    LD_IY_d_n_2,
+    LD_IY_d_n_3,
+    LD_IY_d_n_4,
+    LD_IY_d_n_5,
+    LD_IY_d_n_6,
+    LD_IY_d_n_7,
+    LD_IY_d_n_8,
+    LD_IY_d_n_9,
+    LD_IY_d_n_A,
+
     INC_0,
     INC_1,
     INC_2,
@@ -695,6 +719,8 @@ module decoder (
           `LD_r_IY_d:   next_state = (op0[7:4] == 4'hF) ?  LD_r_IY_d_0 : LD_r_IX_d_0;
           `LD_IX_d_r:   next_state = (op0[7:4] == 4'hD) ?  LD_IX_d_r_0 : LD_IY_d_r_0;
           `LD_IY_d_r:   next_state = (op0[7:4] == 4'hF) ?  LD_IY_d_r_0 : LD_IX_d_r_0;
+          `LD_IX_d_n:   next_state = (op0[7:4] == 4'hD) ?  LD_IX_d_n_0 : LD_IY_d_n_0;
+          `LD_IY_d_n:   next_state = (op0[7:4] == 4'hF) ?  LD_IY_d_n_0 : LD_IX_d_n_0;
           `LDI:         next_state = LDI_0;
           default:      next_state = FETCH_0;
         endcase
@@ -784,6 +810,32 @@ module decoder (
       LD_HL_n_3: next_state = LD_HL_n_4;
       LD_HL_n_4: next_state = LD_HL_n_5;
       LD_HL_n_5: next_state = FETCH_0;
+
+      //LD (IX+d), n
+      LD_IX_d_n_0: next_state = LD_IX_d_n_1;
+      LD_IX_d_n_1: next_state = LD_IX_d_n_2;
+      LD_IX_d_n_2: next_state = LD_IX_d_n_3;
+      LD_IX_d_n_3: next_state = LD_IX_d_n_4;
+      LD_IX_d_n_4: next_state = LD_IX_d_n_5;
+      LD_IX_d_n_5: next_state = LD_IX_d_n_6;
+      LD_IX_d_n_6: next_state = LD_IX_d_n_7;
+      LD_IX_d_n_7: next_state = LD_IX_d_n_8;
+      LD_IX_d_n_8: next_state = LD_IX_d_n_9;
+      LD_IX_d_n_9: next_state = LD_IX_d_n_A;
+      LD_IX_d_n_A: next_state = FETCH_0;
+
+      //LD (IY+d), n
+      LD_IY_d_n_0: next_state = LD_IY_d_n_1;
+      LD_IY_d_n_1: next_state = LD_IY_d_n_2;
+      LD_IY_d_n_2: next_state = LD_IY_d_n_3;
+      LD_IY_d_n_3: next_state = LD_IY_d_n_4;
+      LD_IY_d_n_4: next_state = LD_IY_d_n_5;
+      LD_IY_d_n_5: next_state = LD_IY_d_n_6;
+      LD_IY_d_n_6: next_state = LD_IY_d_n_7;
+      LD_IY_d_n_7: next_state = LD_IY_d_n_8;
+      LD_IY_d_n_8: next_state = LD_IY_d_n_9;
+      LD_IY_d_n_9: next_state = LD_IY_d_n_A;
+      LD_IY_d_n_A: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END 8-bit load group
@@ -1366,6 +1418,69 @@ module decoder (
         MWR_bus     = 1;
         drive_MAR   = 1;
         drive_MDR1  = 1;
+      end
+
+      //LD_IX_d_n, LD_IY_d_n
+      LD_IX_d_n_0, LD_IY_d_n_0, LD_IX_d_n_3, LD_IY_d_n_4: begin
+        //start a read
+        MRD_start = 1;
+        MRD_bus   = 1;
+
+        //increment the PC and use that as the address
+        drive_PCH = 1;
+        drive_PCL = 1;
+        ld_PCH = 1;
+        ld_PCL = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        alu_op  = `INCR_A;
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
+      LD_IX_d_n_1, LD_IY_d_n_1, LD_IX_d_n_4, LD_IY_d_n_4: begin
+        //continue the read
+        MRD_bus   = 1;
+        drive_MAR = 1;
+      end
+
+      LD_IX_d_n_2, LD_IY_d_n_2: begin
+        //latch the data into TEMP
+        ld_TEMP = 1;
+      end
+
+      LD_IX_d_n_5, LD_IY_d_n_5: begin
+        //latch data into MDR1
+        ld_MDR1 = 1;
+      end
+
+      LD_IX_d_n_6, LD_IY_d_n_6: begin
+        //add IX + d in the 16 bit alu
+        drive_IXH = 1;
+        drive_IXL = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        alu_op = `ADD;
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
+      //Do nothing for the rest of this machine cycle since we can do
+      //that add in a single cycle
+
+      LD_IX_d_n_8, LD_IY_d_n_8: begin
+        //start a write
+        MWR_start = 1;
+        MWR_bus   = 1;
+        drive_MAR = 1;
+        drive_MDR1 = 1;
+      end
+
+      LD_IX_d_n_9, LD_IY_d_n_9: begin
+        //continue the write
+        MWR_bus = 1;
+        drive_MAR = 1;
+        drive_MDR1 = 1;
       end
 
       //-----------------------------------------------------------------------

@@ -15,6 +15,8 @@
 `define LD_IX_d_r 8'b01110???
 `define LD_IY_d_r 8'b01110???
 `define LD_HL_n   8'h36
+`define LD_IX_d_n 8'h36
+`define LD_IY_d_n 8'h36
 
 //ALU commands
 `define INCR_A    4'b0001
