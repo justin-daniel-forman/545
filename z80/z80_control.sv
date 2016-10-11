@@ -578,6 +578,16 @@ module decoder (
     LD_DE_A_1,
     LD_DE_A_2,
 
+    LD_nn_A_0,
+    LD_nn_A_1,
+    LD_nn_A_2,
+    LD_nn_A_3,
+    LD_nn_A_4,
+    LD_nn_A_5,
+    LD_nn_A_6,
+    LD_nn_A_7,
+    LD_nn_A_8,
+
     INC_0,
     INC_1,
     INC_2,
@@ -686,18 +696,13 @@ module decoder (
       //unless it is proceeded by an operand data fetch
       FETCH_3: begin
 
-        if(op0[5:3] == 3'b110 && op0[2:0] == 3'b110) begin
-          casex(op0)
-            default:    next_state = FETCH_0;
-          endcase
-        end
-
         //remove all opcodes with dont cares in 5:3
         if(op0[5:3] == 3'b110) begin
           casex(op0)
             `LD_HL_r:   next_state = LD_HL_r_0;
             `LD_HL_n:   next_state = LD_HL_n_0;
             `LD_HL_nn:  next_state = LD_HL_nn_0;
+            `LD_nn_A:   next_state = LD_nn_A_0;
             default:    next_state = FETCH_0;
           endcase
         end
@@ -898,6 +903,17 @@ module decoder (
       LD_DE_A_0: next_state = LD_DE_A_1;
       LD_DE_A_1: next_state = LD_DE_A_2;
       LD_DE_A_2: next_state = FETCH_0;
+
+      //LD (nn), A
+      LD_nn_A_0: next_state = LD_nn_A_1;
+      LD_nn_A_1: next_state = LD_nn_A_2;
+      LD_nn_A_2: next_state = LD_nn_A_3;
+      LD_nn_A_3: next_state = LD_nn_A_4;
+      LD_nn_A_4: next_state = LD_nn_A_5;
+      LD_nn_A_5: next_state = LD_nn_A_6;
+      LD_nn_A_6: next_state = LD_nn_A_7;
+      LD_nn_A_7: next_state = LD_nn_A_8;
+      LD_nn_A_8: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END 8-bit load group
@@ -1572,50 +1588,73 @@ module decoder (
         drive_reg_addr = 1;
         drive_alu_addr = 1;
         alu_op  = `INCR_A;
-        ld_MARL = 1;
-        ld_MARH = 1;
       end
 
       LD_A_nn_1, LD_A_nn_4: begin
         //continue the read
         MRD_bus = 1;
-        drive_MAR = 1;
+
+        //keep the PC the same and use that as an addr
+        drive_PCH = 1;
+        drive_PCL = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        alu_op  = `ALU_NOP;
       end
 
       LD_A_nn_2: begin
-        //put the data in TEMP
-        ld_TEMP = 1;
+        //put HL into MAR for storage
+        drive_alu_addr = 1;
+        drive_reg_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_H = 1;
+        drive_L = 1;
+        ld_MARL = 1;
+        ld_MARH = 1;
+
+        //load data into L
+        ld_L = 1;
       end
 
       LD_A_nn_5: begin
-        //as we load the new value into temp, put the old fetched byted
-        //into MAR
-        ld_TEMP = 1;
-        alu_op  = `ALU_B;
-        drive_alu_addr = 1;
-        ld_MARL = 1;
+        //load data into H
+        ld_H = 1;
       end
 
       LD_A_nn_6: begin
-        ld_MARH = 1;
-        alu_op = `ALU_B;
+        //start a read
+        MRD_start = 1;
+        MRD_bus = 1;
+
+        //put HL out on the addr bus
+        drive_H = 1;
+        drive_L = 1;
         drive_alu_addr = 1;
+        drive_reg_addr = 1;
+        alu_op = `ALU_NOP;
       end
 
       LD_A_nn_7: begin
-        //start a read
-        MRD_start = 1;
-        MRD_bus   = 1;
-        drive_MAR = 1;
+        //continue the RD
+        MRD_bus = 1;
+
+        //put HL out on the addr bus
+        drive_H = 1;
+        drive_L = 1;
+        drive_alu_addr = 1;
+        drive_reg_addr = 1;
+        alu_op = `ALU_NOP;
+
       end
 
       LD_A_nn_8: begin
-        //continue the read and grab the value of A off the bus
-        //one cycle before it is normal. This might come back to bite
-        //us later down the road
-        MRD_bus = 1;
+        //restore HL to original value
         drive_MAR = 1;
-        ld_A    = 1;
+        ld_H = 1;
+        ld_L = 1;
+
+        //grab A off the data bus
+        ld_A = 1;
       end
 
       //LD (BC), A and LD(DE), A
@@ -1645,6 +1684,91 @@ module decoder (
         MWR_bus   = 1;
         drive_MAR = 1;
         drive_A   = 1;
+      end
+
+      //LD_A_nn
+      LD_nn_A_0, LD_nn_A_3: begin
+        //start a read
+        MRD_start = 1;
+        MRD_bus   = 1;
+
+        //increment the PC and use that as the address
+        drive_PCH = 1;
+        drive_PCL = 1;
+        ld_PCH = 1;
+        ld_PCL = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        alu_op  = `INCR_A;
+      end
+
+      LD_nn_A_1, LD_nn_A_4: begin
+        //continue the read
+        MRD_bus = 1;
+
+        //keep the PC the same and use that as an addr
+        drive_PCH = 1;
+        drive_PCL = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        alu_op  = `ALU_NOP;
+      end
+
+      LD_nn_A_2: begin
+        //put HL into MAR for storage
+        drive_alu_addr = 1;
+        drive_reg_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_H = 1;
+        drive_L = 1;
+        ld_MARL = 1;
+        ld_MARH = 1;
+
+        //load data into L
+        ld_L = 1;
+      end
+
+      LD_nn_A_5: begin
+        //load data into H
+        ld_H = 1;
+      end
+
+      LD_nn_A_6: begin
+        //start a write
+        MWR_start = 1;
+        MWR_bus = 1;
+
+        //put HL out on the addr bus
+        drive_H = 1;
+        drive_L = 1;
+        drive_alu_addr = 1;
+        drive_reg_addr = 1;
+        alu_op = `ALU_NOP;
+
+        //put A out on the data bus
+        drive_A = 1;
+      end
+
+      LD_nn_A_7: begin
+        //continue the write
+        MWR_bus = 1;
+
+        //put HL out on the addr bus
+        drive_H = 1;
+        drive_L = 1;
+        drive_alu_addr = 1;
+        drive_reg_addr = 1;
+        alu_op = `ALU_NOP;
+
+        //put A out on the data bus
+        drive_A = 1;
+      end
+
+      LD_nn_A_8: begin
+        //restore HL to original value
+        drive_MAR = 1;
+        ld_H = 1;
+        ld_L = 1;
       end
 
       //-----------------------------------------------------------------------
