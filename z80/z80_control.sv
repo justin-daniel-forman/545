@@ -1030,46 +1030,29 @@ module decoder (
       //-----------------------------------------------------------------------
       LD_r_r_0: begin
 
-        swap_reg = 1;
+        //This opcode is not a swap, it is just a simple load from one
+        //register into another
 
-        //NOTE: There is a point to point connection between A and the
-        //regfile that makes this all possible in a single cycle
+        //Destination register
         case(op0[5:3])
-          //When A is selected, we need to drive the value of A on the
-          //data bus in order for the regfile to read it. The other
-          //direction is taken care of with a point-2-point connection.
-          3'b111: begin //A
-            ld_A    = 1;
-            drive_A = 1;
-            alu_op  = `ALU_NOP;
-            drive_alu_data = 1;
-          end
-
-          //The drives are here so that the regfile out gives the
-          //value of the register we might want to put into A
-          //through that p2p connection. If we don't specify, we
-          //get zz out
-          3'b000: begin ld_B = 1; drive_B = 1; end//B
-          3'b001: begin ld_C = 1; drive_C = 1; end//C
-          3'b010: begin ld_D = 1; drive_D = 1; end//D
-          3'b011: begin ld_E = 1; drive_E = 1; end//E
-          3'b100: begin ld_H = 1; drive_H = 1; end//H
-          3'b101: begin ld_L = 1; drive_L = 1; end//L
+          3'b111: ld_A = 1;
+          3'b000: ld_B = 1;
+          3'b001: ld_C = 1;
+          3'b010: ld_D = 1;
+          3'b011: ld_E = 1;
+          3'b100: ld_H = 1;
+          3'b101: ld_L = 1;
         endcase
 
+        //source register
         case(op0[2:0])
-           3'b111: begin //A
-            ld_A = 1;
-            drive_A = 1;
-            alu_op = `ALU_NOP;
-            drive_alu_data = 1;
-          end
-          3'b000: begin ld_B = 1; drive_B = 1; end//B
-          3'b001: begin ld_C = 1; drive_C = 1; end//C
-          3'b010: begin ld_D = 1; drive_D = 1; end//D
-          3'b011: begin ld_E = 1; drive_E = 1; end//E
-          3'b100: begin ld_H = 1; drive_H = 1; end//H
-          3'b101: begin ld_L = 1; drive_L = 1; end//L
+          3'b111: drive_A = 1;
+          3'b000: begin drive_B = 1; drive_reg_data = 1; end
+          3'b001: begin drive_C = 1; drive_reg_data = 1; end
+          3'b010: begin drive_D = 1; drive_reg_data = 1; end
+          3'b011: begin drive_E = 1; drive_reg_data = 1; end
+          3'b100: begin drive_H = 1; drive_reg_data = 1; end
+          3'b101: begin drive_L = 1; drive_reg_data = 1; end
         endcase
 
       end
