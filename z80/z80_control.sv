@@ -521,6 +521,13 @@ module decoder (
     LD_IY_d_r_9,
     LD_IY_d_r_A,
 
+    LD_HL_n_0,
+    LD_HL_n_1,
+    LD_HL_n_2,
+    LD_HL_n_3,
+    LD_HL_n_4,
+    LD_HL_n_5,
+
     INC_0,
     INC_1,
     INC_2,
@@ -628,13 +635,41 @@ module decoder (
       //The instruction processed did nothing, so loop back and restart
       //unless it is proceeded by an operand data fetch
       FETCH_3: begin
-        casex(op0)
-          `LD_r_n:    next_state = LD_r_n_0;
-          `LD_r_HL:   next_state = LD_r_HL_0;
-          `LD_HL_r:   next_state = LD_HL_r_0;
-          `LD_HL_nn:  next_state = LD_HL_nn_0;
-          default:    next_state = FETCH_0;
-        endcase
+
+        if(op0[5:3] == 3'b110 && op0[2:0] == 3'b110) begin
+          casex(op0)
+            default:    next_state = FETCH_0;
+          endcase
+        end
+
+        //remove all opcodes with dont cares in 5:3
+        if(op0[5:3] == 3'b110) begin
+          casex(op0)
+            `LD_HL_r:   next_state = LD_HL_r_0;
+            `LD_HL_n:   next_state = LD_HL_n_0;
+            `LD_HL_nn:  next_state = LD_HL_nn_0;
+            default:    next_state = FETCH_0;
+          endcase
+        end
+
+        //remove all opcodes with dont cares in 2:0
+        else if(op0[2:0] == 3'b110) begin
+          casex(op0)
+            `LD_r_n:    next_state = LD_r_n_0;
+            `LD_r_HL:   next_state = LD_r_HL_0;
+            `LD_HL_n:   next_state = LD_HL_n_0;
+            `LD_HL_nn:  next_state = LD_HL_nn_0;
+            default:    next_state = FETCH_0;
+          endcase
+        end
+
+        //case for all opcodes with both fields variable
+        else begin
+          casex(op0)
+            default:    next_state = FETCH_0;
+          endcase
+        end
+
       end
 
 
@@ -741,6 +776,14 @@ module decoder (
       LD_IY_d_r_8: next_state = LD_IY_d_r_9;
       LD_IY_d_r_9: next_state = LD_IY_d_r_A;
       LD_IY_d_r_A: next_state = FETCH_0;
+
+      //LD (HL), n
+      LD_HL_n_0: next_state = LD_HL_n_1;
+      LD_HL_n_1: next_state = LD_HL_n_2;
+      LD_HL_n_2: next_state = LD_HL_n_3;
+      LD_HL_n_3: next_state = LD_HL_n_4;
+      LD_HL_n_4: next_state = LD_HL_n_5;
+      LD_HL_n_5: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END 8-bit load group
@@ -1269,6 +1312,60 @@ module decoder (
           3'b101: begin drive_L = 1; drive_reg_data = 1; end
         endcase
 
+      end
+
+      //LD (HL), n
+      LD_HL_n_0: begin
+        //start a read
+        MRD_start = 1;
+        MRD_bus   = 1;
+
+        //increment the PC and use that as the address
+        drive_PCH = 1;
+        drive_PCL = 1;
+        ld_PCH = 1;
+        ld_PCL = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        alu_op  = `INCR_A;
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
+      LD_HL_n_1: begin
+        //continue the read
+        MRD_bus = 1;
+        drive_MAR = 1;
+      end
+
+      LD_HL_n_2: begin
+        //latch the data into MDR1
+        ld_MDR1 = 1;
+      end
+
+      LD_HL_n_3: begin
+        //start a write
+        MWR_start = 1;
+        MWR_bus   = 1;
+
+        //use the address as HL
+        drive_H = 1;
+        drive_L = 1;
+        drive_alu_addr = 1;
+        drive_reg_addr = 1;
+        alu_op = `ALU_NOP;
+        ld_MARL = 1;
+        ld_MARH = 1;
+
+        //use the data from MDR1
+        drive_MDR1 = 1;
+      end
+
+      LD_HL_n_4: begin
+        //continue the write
+        MWR_bus     = 1;
+        drive_MAR   = 1;
+        drive_MDR1  = 1;
       end
 
       //-----------------------------------------------------------------------
