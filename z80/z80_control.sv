@@ -552,6 +552,14 @@ module decoder (
     LD_IY_d_n_9,
     LD_IY_d_n_A,
 
+    LD_A_BC_0,
+    LD_A_BC_1,
+    LD_A_BC_2,
+
+    LD_A_DE_0,
+    LD_A_DE_1,
+    LD_A_DE_2,
+
     INC_0,
     INC_1,
     INC_2,
@@ -690,6 +698,8 @@ module decoder (
         //case for all opcodes with both fields variable
         else begin
           casex(op0)
+            `LD_A_BC:   next_state = LD_A_BC_0;
+            `LD_A_DE:   next_state = LD_A_DE_0;
             default:    next_state = FETCH_0;
           endcase
         end
@@ -836,6 +846,17 @@ module decoder (
       LD_IY_d_n_8: next_state = LD_IY_d_n_9;
       LD_IY_d_n_9: next_state = LD_IY_d_n_A;
       LD_IY_d_n_A: next_state = FETCH_0;
+
+      //LD A, (BC)
+      LD_A_BC_0: next_state = LD_A_BC_1;
+      LD_A_BC_1: next_state = LD_A_BC_2;
+      LD_A_BC_2: next_state = FETCH_0;
+
+      //LD A, (DE)
+      LD_A_DE_0: next_state = LD_A_DE_1;
+      LD_A_DE_1: next_state = LD_A_DE_2;
+      LD_A_DE_2: next_state = FETCH_0;
+
 
       //-----------------------------------------------------------------------
       //END 8-bit load group
@@ -1464,6 +1485,36 @@ module decoder (
         MWR_bus = 1;
         drive_MAR = 1;
         drive_MDR1 = 1;
+      end
+
+      //LD A, (BC), LD A, (DE)
+      LD_A_BC_0, LD_A_DE_0: begin
+        //start a read
+        MRD_start = 1;
+        MRD_bus   = 1;
+
+        drive_alu_addr = 1;
+        drive_reg_addr = 1;
+        alu_op = `ALU_NOP;
+
+        drive_B = (state == LD_A_BC_0);
+        drive_C = (state == LD_A_BC_0);
+        drive_D = (state == LD_A_DE_0);
+        drive_E = (state == LD_A_DE_0);
+
+        ld_MARH = 1;
+        ld_MARL = 1;
+      end
+
+      LD_A_BC_1, LD_A_DE_1: begin
+        //continue the read
+        MRD_bus   = 1;
+        drive_MAR = 1;
+      end
+
+      LD_A_BC_2, LD_A_DE_2: begin
+        //latch the data into A
+        ld_A = 1;
       end
 
       //-----------------------------------------------------------------------
