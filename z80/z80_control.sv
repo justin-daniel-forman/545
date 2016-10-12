@@ -594,13 +594,20 @@ module decoder (
     LD_dd_nn_3,
     LD_dd_nn_4,
     LD_dd_nn_5,
-    
+
     LD_IX_nn_0,
     LD_IX_nn_1,
     LD_IX_nn_2,
     LD_IX_nn_3,
     LD_IX_nn_4,
     LD_IX_nn_5,
+
+    LD_IY_nn_0,
+    LD_IY_nn_1,
+    LD_IY_nn_2,
+    LD_IY_nn_3,
+    LD_IY_nn_4,
+    LD_IY_nn_5,
 
     INC_0,
     INC_1,
@@ -774,8 +781,8 @@ module decoder (
           `LD_IY_d_r:   next_state = (op0[7:4] == 4'hF) ?  LD_IY_d_r_0 : LD_IX_d_r_0;
           `LD_IX_d_n:   next_state = (op0[7:4] == 4'hD) ?  LD_IX_d_n_0 : LD_IY_d_n_0;
           `LD_IY_d_n:   next_state = (op0[7:4] == 4'hF) ?  LD_IY_d_n_0 : LD_IX_d_n_0;
-					//TODO: implement LD_IY_nn_0 and replace FETCH_0 with it
-					`LD_IX_nn: 		next_state = (op0[7:4] == 4'hD) ?  LD_IX_nn_0  : FETCH_0;
+          `LD_IX_nn: 		next_state = (op0[7:4] == 4'hD) ?  LD_IX_nn_0  : LD_IY_nn_0;
+          `LD_IY_nn:    next_state = (op0[7:4] == 4'hF) ?  LD_IY_nn_0  : LD_IX_nn_0;
           `LDI:         next_state = LDI_0;
           default:      next_state = FETCH_0;
         endcase
@@ -957,6 +964,14 @@ module decoder (
       LD_IX_nn_3: next_state = LD_IX_nn_4;
       LD_IX_nn_4: next_state = LD_IX_nn_5;
       LD_IX_nn_5: next_state = FETCH_0;
+
+      //LD_IY_nn
+      LD_IY_nn_0: next_state = LD_IY_nn_1;
+      LD_IY_nn_1: next_state = LD_IY_nn_2;
+      LD_IY_nn_2: next_state = LD_IY_nn_3;
+      LD_IY_nn_3: next_state = LD_IY_nn_4;
+      LD_IY_nn_4: next_state = LD_IY_nn_5;
+      LD_IY_nn_5: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END 16-bit load group
@@ -1861,30 +1876,55 @@ module decoder (
         endcase
       end
 
-     	//LD_IX_nn
-			LD_IX_nn_0, LD_IX_nn_3: begin
-				ld_PCH    = 1;
-				ld_PCL    = 1;
-				drive_PCH = 1;
-				drive_PCL = 1;
-				alu_op    = `INCR_A;
-				drive_reg_addr = 1;
-				drive_alu_addr = 1;
-				MRD_start = 1;
-				MRD_bus   = 1;
+      //LD_IX_nn
+      LD_IX_nn_0, LD_IX_nn_3: begin
+        ld_PCH    = 1;
+        ld_PCL    = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        alu_op    = `INCR_A;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        MRD_start = 1;
+        MRD_bus   = 1;
+      end
+
+      LD_IX_nn_1, LD_IX_nn_4: begin
+        drive_PCH = 1;
+        drive_PCL = 1;
+        alu_op    = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        MRD_bus = 1;
 			end
 
-			LD_IX_nn_1, LD_IX_nn_4: begin
-				drive_PCH = 1;
-				drive_PCL = 1;
-				alu_op    = `ALU_NOP;
-				drive_reg_addr = 1;
-				drive_alu_addr = 1;
-				MRD_bus = 1;
-			end
+      LD_IX_nn_2: ld_IXL = 1;
+      LD_IX_nn_5: ld_IXH = 1;
 
-			LD_IX_nn_2: ld_IXL = 1;
-			LD_IX_nn_5: ld_IXH = 1;
+      //LD_IY_nn
+      LD_IY_nn_0,LD_IY_nn_3: begin
+        ld_PCH    = 1;
+        ld_PCL    = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        alu_op    = `INCR_A;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        MRD_start = 1;
+        MRD_bus   = 1;
+      end
+
+      LD_IY_nn_1,LD_IY_nn_4: begin
+        drive_PCH = 1;
+        drive_PCL = 1;
+        alu_op    = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        MRD_bus = 1;
+      end
+
+      LD_IY_nn_2: ld_IYL = 1;
+      LD_IY_nn_5: ld_IYH = 1;
 
       //-----------------------------------------------------------------------
       //END 16-bit load group
