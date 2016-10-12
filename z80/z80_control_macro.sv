@@ -594,6 +594,8 @@ module decoder (
 
     MACRO_DEFINE_STATES LD_IY_nn 6
 
+    MACRO_DEFINE_STATES LD_HL_nn 12
+
     INC_0,
     INC_1,
     INC_2,
@@ -606,19 +608,6 @@ module decoder (
     LDI_5,
     LDI_6,
     LDI_7,
-
-    LD_HL_nn_0,
-    LD_HL_nn_1,
-    LD_HL_nn_2,
-    LD_HL_nn_3,
-    LD_HL_nn_4,
-    LD_HL_nn_5,
-    LD_HL_nn_6,
-    LD_HL_nn_7,
-    LD_HL_nn_8,
-    LD_HL_nn_9,
-    LD_HL_nn_A,
-    LD_HL_nn_B,
 
     //Multi-OCF Instructions
     //There is a difference between multi-ocf instructions and
@@ -940,6 +929,8 @@ module decoder (
 
       MACRO_ENUM_STATES LD_IY_nn 6
 
+      MACRO_ENUM_STATES LD_HL_nn 12
+
       //-----------------------------------------------------------------------
       //END 16-bit load group
       //-----------------------------------------------------------------------
@@ -947,19 +938,6 @@ module decoder (
       //TODO: include support for INC
       INC_0: next_state = FETCH_0;
 
-      //LD_HL_nn
-      LD_HL_nn_0: next_state = LD_HL_nn_1;
-      LD_HL_nn_1: next_state = LD_HL_nn_2;
-      LD_HL_nn_2: next_state = LD_HL_nn_3;
-      LD_HL_nn_3: next_state = LD_HL_nn_4;
-      LD_HL_nn_4: next_state = LD_HL_nn_5;
-      LD_HL_nn_5: next_state = LD_HL_nn_6;
-      LD_HL_nn_6: next_state = LD_HL_nn_7;
-      LD_HL_nn_7: next_state = LD_HL_nn_8;
-      LD_HL_nn_8: next_state = LD_HL_nn_9;
-      LD_HL_nn_9: next_state = LD_HL_nn_A;
-      LD_HL_nn_A: next_state = LD_HL_nn_B;
-      LD_HL_nn_B: next_state = FETCH_0;
 
 
       //-----------------------------------------------------------------------
@@ -2028,13 +2006,13 @@ module decoder (
         drive_MAR = 1;
       end
 
-      LD_HL_nn_A: begin
+      LD_HL_nn_10: begin
         //continue the read
         MRD_bus = 1;
         drive_MAR = 1;
       end
 
-      LD_HL_nn_B: begin
+      LD_HL_nn_11: begin
         //load the data into H
         ld_H = 1;
       end

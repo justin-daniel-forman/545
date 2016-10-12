@@ -7,6 +7,8 @@ range data $0051 $0100
 section code
   ld st,$10
 	ld st,$23
+  
+  ld hl,[$51]
 
 section data
   addr0: data !DEAD !BEEF
