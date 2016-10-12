@@ -590,6 +590,8 @@ module decoder (
 
     MACRO_DEFINE_STATES LD_dd_nn 6
 
+    MACRO_DEFINE_STATES LD_IX_nn 6
+
     INC_0,
     INC_1,
     INC_2,
@@ -762,6 +764,8 @@ module decoder (
           `LD_IY_d_r:   next_state = (op0[7:4] == 4'hF) ?  LD_IY_d_r_0 : LD_IX_d_r_0;
           `LD_IX_d_n:   next_state = (op0[7:4] == 4'hD) ?  LD_IX_d_n_0 : LD_IY_d_n_0;
           `LD_IY_d_n:   next_state = (op0[7:4] == 4'hF) ?  LD_IY_d_n_0 : LD_IX_d_n_0;
+          //TODO: implement LD_IY_nn_0 and replace FETCH_0 with it
+          `LD_IX_nn: 		next_state = (op0[7:4] == 4'hD) ?  LD_IX_nn_0  : FETCH_0;
           `LDI:         next_state = LDI_0;
           default:      next_state = FETCH_0;
         endcase
@@ -929,6 +933,8 @@ module decoder (
       //-----------------------------------------------------------------------
 
       MACRO_ENUM_STATES LD_dd_nn 6
+
+      MACRO_ENUM_STATES LD_IX_nn 6
 
       //-----------------------------------------------------------------------
       //END 16-bit load group
@@ -1821,6 +1827,20 @@ module decoder (
           2'b11: ld_SPH = 1;
         endcase
       end
+
+      //LD_IX_nn
+      LD_IX_nn_0, LD_IX_nn_3: begin
+        MACRO_INC_PC
+        MACRO_READ_0
+      end
+
+      LD_IX_nn_1, LD_IX_nn_4: begin
+        MACRO_DRIVE_PC
+        MACRO_READ_1
+			end
+
+      LD_IX_nn_2: ld_IXL = 1;
+      LD_IX_nn_5: ld_IXH = 1;
 
       //-----------------------------------------------------------------------
       //END 16-bit load group
