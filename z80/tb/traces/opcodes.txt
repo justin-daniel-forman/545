@@ -1,0 +1,1197 @@
+# Sarcasm's list of opcodes.
+#
+# This isn't simply a reference file.  This data is necessary for Sarcasm
+# to assemble code.  So if you fuck it up, Sarcasm won't work anymore.
+#
+# Rules:
+#
+# 1.  Instruction operands cannot contain numbers that are not assembled
+#     into bytes in the instruction's bytecode.
+#
+# 2.  Instruction operands cannot contain numbers that are not assembled
+#     into bytes in the instruction's bytecode.
+#
+# 3.  Instruction operands cannot contain numbers that are not assembled
+#     into bytes in the instruction's bytecode.
+#
+# 4.  No commas!
+#
+# 5.  Sarcasm always appends immediate values to the end of the instruction.
+#
+# 6.  Sarcasm always inserts relative offsets (specified as 'zz') as the
+#     third byte of the instruction, since the Z80 always expects them there.
+#
+# 7.  As long as you obey these rules, you can pretty much rename the opcodes
+#     and registers as you see fit just by modifying this file.  Have fun!
+#
+# Special terms:
+#
+#   xx      an immediate byte value
+#   xxxx    an immediate word value
+#   rr      a signed byte value, relative to PC, used for short jumps
+#   zz      a signed byte value, used for indexing ST and UV registers
+#
+# If you want to maintain Sarcasm compatibility, just include your changes
+# in addition to the lines already here.  Sarcasm isn't going to give a rats
+# ass if both "ld a s" and "ld a ixl" assemble to the same byte sequence.
+#
+
+00 nop
+01 ld bc xxxx
+02 ld [bc] a
+03 inc bc
+04 inc b
+05 dec b
+06 ld b xx
+07 rol
+08 ex af
+09 add hl bc
+0A ld a [bc]
+0B dec bc
+0C inc c
+0D dec c
+0E ld c xx
+0F ror
+10 djnz rr
+11 ld de xxxx
+12 ld [de] a
+13 inc de
+14 inc d
+15 dec d
+16 ld d xx
+17 rcl
+18 jr rr
+19 add hl de
+1A ld a [de]
+1B dec de
+1C inc e
+1D dec e
+1E ld e xx
+1F rcr
+20 jr nz rr
+21 ld hl xxxx
+22 ld [xxxx] hl
+23 inc hl
+24 inc h
+25 dec h
+26 ld h xx
+27 daa
+28 jr z rr
+29 add hl hl
+29 shl hl
+2A ld hl [xxxx]
+2B dec hl
+2C inc l
+2D dec l
+2E ld l xx
+2F not
+30 jr nc rr
+31 ld sp xxxx
+32 ld [xxxx] a
+33 inc sp
+34 inc [hl]
+35 dec [hl]
+36 ld [hl] xx
+37 stc
+38 jr c rr
+39 add hl sp
+3A ld a [xxxx]
+3B dec sp
+3C inc a
+3D dec a
+3E ld a xx
+3F cmc
+40 ld b b
+41 ld b c
+42 ld b d
+43 ld b e
+44 ld b h
+45 ld b l
+46 ld b [hl]
+47 ld b a
+48 ld c b
+49 ld c c
+4A ld c d
+4B ld c e
+4C ld c h
+4D ld c l
+4E ld c [hl]
+4F ld c a
+50 ld d b
+51 ld d c
+52 ld d d
+53 ld d e
+54 ld d h
+55 ld d l
+56 ld d [hl]
+57 ld d a
+58 ld e b
+59 ld e c
+5A ld e d
+5B ld e e
+5C ld e h
+5D ld e l
+5E ld e [hl]
+5F ld e a
+60 ld h b
+61 ld h c
+62 ld h d
+63 ld h e
+64 ld h h
+65 ld h l
+66 ld h [hl]
+67 ld h a
+68 ld l b
+69 ld l c
+6A ld l d
+6B ld l e
+6C ld l h
+6D ld l l
+6E ld l [hl]
+6F ld l a
+70 ld [hl] b
+71 ld [hl] c
+72 ld [hl] d
+73 ld [hl] e
+74 ld [hl] h
+75 ld [hl] l
+76 halt
+77 ld [hl] a
+78 ld a b
+79 ld a c
+7A ld a d
+7B ld a e
+7C ld a h
+7D ld a l
+7E ld a [hl]
+7F ld a a
+80 add b
+81 add c
+82 add d
+83 add e
+84 add h
+85 add l
+86 add [hl]
+87 add a
+88 adc b
+89 adc c
+8A adc d
+8B adc e
+8C adc h
+8D adc l
+8E adc [hl]
+8F adc a
+90 sub b
+91 sub c
+92 sub d
+93 sub e
+94 sub h
+95 sub l
+96 sub [hl]
+97 sub a
+98 sbc b
+99 sbc c
+9A sbc d
+9B sbc e
+9C sbc h
+9D sbc l
+9E sbc [hl]
+9F sbc a
+A0 and b
+A1 and c
+A2 and d
+A3 and e
+A4 and h
+A5 and l
+A6 and [hl]
+A7 and a
+A8 xor b
+A9 xor c
+AA xor d
+AB xor e
+AC xor h
+AD xor l
+AE xor [hl]
+AF xor a
+B0 or b
+B1 or c
+B2 or d
+B3 or e
+B4 or h
+B5 or l
+B6 or [hl]
+B7 or a
+B8 cp b
+B9 cp c
+BA cp d
+BB cp e
+BC cp h
+BD cp l
+BE cp [hl]
+BF cp a
+C0 ret nz
+C1 pop bc
+C2 jp nz xxxx
+C3 jp xxxx
+C4 call nz xxxx
+C5 push bc
+C6 add xx
+C7 rst00
+C8 ret z
+C9 ret
+CA jp z xxxx
+CC call z xxxx
+CD call xxxx
+CE adc xx
+CF rst08
+D0 ret nc
+D1 pop de
+D2 jp nc xxxx
+D3 out xx
+D4 call nc xxxx
+D5 push de
+D6 sub xx
+D7 rst10
+D8 ret c
+D9 exx
+DA jp c xxxx
+DB in xx
+DC call c xxxx
+DE sbc xx
+DF rst18
+E0 ret po
+E1 pop hl
+E2 jp po xxxx
+E3 ex [sp] hl
+E3 ex hl [sp]
+E4 call po xxxx
+E5 push hl
+E6 and xx
+E7 rst20
+E8 ret pe
+E9 jp hl
+EA jp e xxxx
+EB ex de hl
+EB ex hl de
+EC call pe xxxx
+EE xor xx
+EF rst28
+F0 ret p
+F1 pop af
+F2 jp p xxxx
+F3 di
+F4 call p xxxx
+F5 push af
+F6 or xx
+F7 rst30
+F8 ret m
+F9 ld sp hl
+FA jp m xxxx
+FB ei
+FC call m xxxx
+FE cp xx
+FF rst38
+CB00 rol b
+CB01 rol c
+CB02 rol d
+CB03 rol e
+CB04 rol h
+CB05 rol l
+CB06 rol [hl]
+CB07 rol a
+CB08 ror b
+CB09 ror c
+CB0A ror d
+CB0B ror e
+CB0C ror h
+CB0D ror l
+CB0E ror [hl]
+CB0F ror a
+CB10 rcl b
+CB11 rcl c
+CB12 rcl d
+CB13 rcl e
+CB14 rcl h
+CB15 rcl l
+CB16 rcl [hl]
+CB17 rcl a
+CB18 rcr b
+CB19 rcr c
+CB1A rcr d
+CB1B rcr e
+CB1C rcr h
+CB1D rcr l
+CB1E rcr [hl]
+CB1F rcr a
+CB20 sal b
+CB21 sal c
+CB22 sal d
+CB23 sal e
+CB24 sal h
+CB25 sal l
+CB26 sal [hl]
+CB27 sal a
+CB20 shl b
+CB21 shl c
+CB22 shl d
+CB23 shl e
+CB24 shl h
+CB25 shl l
+CB26 shl [hl]
+CB27 shl a
+CB28 sar b
+CB29 sar c
+CB2A sar d
+CB2B sar e
+CB2C sar h
+CB2D sar l
+CB2E sar [hl]
+CB2F sar a
+CB30 sil b
+CB31 sil c
+CB32 sil d
+CB33 sil e
+CB34 sil h
+CB35 sil l
+CB36 sil [hl]
+CB37 sil a
+CB38 shr b
+CB39 shr c
+CB3A shr d
+CB3B shr e
+CB3C shr h
+CB3D shr l
+CB3E shr [hl]
+CB3F shr a
+CB40 bit0 b
+CB41 bit0 c
+CB42 bit0 d
+CB43 bit0 e
+CB44 bit0 h
+CB45 bit0 l
+CB46 bit0 [hl]
+CB47 bit0 a
+CB48 bit1 b
+CB49 bit1 c
+CB4A bit1 d
+CB4B bit1 e
+CB4C bit1 h
+CB4D bit1 l
+CB4E bit1 [hl]
+CB4F bit1 a
+CB50 bit2 b
+CB51 bit2 c
+CB52 bit2 d
+CB53 bit2 e
+CB54 bit2 h
+CB55 bit2 l
+CB56 bit2 [hl]
+CB57 bit2 a
+CB58 bit3 b
+CB59 bit3 c
+CB5A bit3 d
+CB5B bit3 e
+CB5C bit3 h
+CB5D bit3 l
+CB5E bit3 [hl]
+CB5F bit3 a
+CB60 bit4 b
+CB61 bit4 c
+CB62 bit4 d
+CB63 bit4 e
+CB64 bit4 h
+CB65 bit4 l
+CB66 bit4 [hl]
+CB67 bit4 a
+CB68 bit5 b
+CB69 bit5 c
+CB6A bit5 d
+CB6B bit5 e
+CB6C bit5 h
+CB6D bit5 l
+CB6E bit5 [hl]
+CB6F bit5 a
+CB70 bit6 b
+CB71 bit6 c
+CB72 bit6 d
+CB73 bit6 e
+CB74 bit6 h
+CB75 bit6 l
+CB76 bit6 [hl]
+CB77 bit6 a
+CB78 bit7 b
+CB79 bit7 c
+CB7A bit7 d
+CB7B bit7 e
+CB7C bit7 h
+CB7D bit7 l
+CB7E bit7 [hl]
+CB7F bit7 a
+CB80 res0 b
+CB81 res0 c
+CB82 res0 d
+CB83 res0 e
+CB84 res0 h
+CB85 res0 l
+CB86 res0 [hl]
+CB87 res0 a
+CB88 res1 b
+CB89 res1 c
+CB8A res1 d
+CB8B res1 e
+CB8C res1 h
+CB8D res1 l
+CB8E res1 [hl]
+CB8F res1 a
+CB90 res2 b
+CB91 res2 c
+CB92 res2 d
+CB93 res2 e
+CB94 res2 h
+CB95 res2 l
+CB96 res2 [hl]
+CB97 res2 a
+CB98 res3 b
+CB99 res3 c
+CB9A res3 d
+CB9B res3 e
+CB9C res3 h
+CB9D res3 l
+CB9E res3 [hl]
+CB9F res3 a
+CBA0 res4 b
+CBA1 res4 c
+CBA2 res4 d
+CBA3 res4 e
+CBA4 res4 h
+CBA5 res4 l
+CBA6 res4 [hl]
+CBA7 res4 a
+CBA8 res5 b
+CBA9 res5 c
+CBAA res5 d
+CBAB res5 e
+CBAC res5 h
+CBAD res5 l
+CBAE res5 [hl]
+CBAF res5 a
+CBB0 res6 b
+CBB1 res6 c
+CBB2 res6 d
+CBB3 res6 e
+CBB4 res6 h
+CBB5 res6 l
+CBB6 res6 [hl]
+CBB7 res6 a
+CBB8 res7 b
+CBB9 res7 c
+CBBA res7 d
+CBBB res7 e
+CBBC res7 h
+CBBD res7 l
+CBBE res7 [hl]
+CBBF res7 a
+CBC0 set0 b
+CBC1 set0 c
+CBC2 set0 d
+CBC3 set0 e
+CBC4 set0 h
+CBC5 set0 l
+CBC6 set0 [hl]
+CBC7 set0 a
+CBC8 set1 b
+CBC9 set1 c
+CBCA set1 d
+CBCB set1 e
+CBCC set1 h
+CBCD set1 l
+CBCE set1 [hl]
+CBCF set1 a
+CBD0 set2 b
+CBD1 set2 c
+CBD2 set2 d
+CBD3 set2 e
+CBD4 set2 h
+CBD5 set2 l
+CBD6 set2 [hl]
+CBD7 set2 a
+CBD8 set3 b
+CBD9 set3 c
+CBDA set3 d
+CBDB set3 e
+CBDC set3 h
+CBDD set3 l
+CBDE set3 [hl]
+CBDF set3 a
+CBE0 set4 b
+CBE1 set4 c
+CBE2 set4 d
+CBE3 set4 e
+CBE4 set4 h
+CBE5 set4 l
+CBE6 set4 [hl]
+CBE7 set4 a
+CBE8 set5 b
+CBE9 set5 c
+CBEA set5 d
+CBEB set5 e
+CBEC set5 h
+CBED set5 l
+CBEE set5 [hl]
+CBEF set5 a
+CBF0 set6 b
+CBF1 set6 c
+CBF2 set6 d
+CBF3 set6 e
+CBF4 set6 h
+CBF5 set6 l
+CBF6 set6 [hl]
+CBF7 set6 a
+CBF8 set7 b
+CBF9 set7 c
+CBFA set7 d
+CBFB set7 e
+CBFC set7 h
+CBFD set7 l
+CBFE set7 [hl]
+CBFF set7 a
+ED40 in b
+ED41 out b
+ED42 sbc hl bc
+ED43 ld [xxxx] bc
+ED44 neg
+ED45 retn
+ED46 im0
+ED47 ld i a
+ED48 in c
+ED49 out c
+ED4A adc hl bc
+ED4B ld bc [xxxx]
+ED4D reti
+ED4F ld r a
+ED50 in d
+ED51 out d
+ED52 sbc hl de
+ED53 ld [xxxx] de
+ED56 im1
+ED57 ld a i
+ED58 in e
+ED59 out e
+ED5A adc hl de
+ED5B ld de [xxxx]
+ED5E im2
+ED5F ld a r
+ED60 in h
+ED61 out h
+ED62 sbc hl hl
+ED67 rrd
+ED68 in l
+ED69 out l
+ED6A adc hl hl
+ED6F rld
+ED70 in
+ED71 out
+ED72 sbc hl sp
+ED73 ld [xxxx] sp
+ED78 in a
+ED79 out a
+ED7A adc hl sp
+ED7B ld sp [xxxx]
+EDA0 ldi
+EDA1 cpi
+EDA2 ini
+EDA3 outi
+EDA8 ldd
+EDA9 cpd
+EDAA ind
+EDAB outd
+EDB0 ldir
+EDB1 cpir
+EDB2 inir
+EDB3 outir
+EDB8 lddr
+EDB9 cpdr
+EDBA indr
+EDBB outdr
+DD09 add st bc
+DD19 add st de
+DD21 ld st xxxx
+DD22 ld [xxxx] st
+DD23 inc st
+DD24 inc s
+DD25 dec s
+DD26 ld s xx
+DD29 add st st
+DD29 shl st
+DD2A ld st [xxxx]
+DD2B dec st
+DD2C inc t
+DD2D dec t
+DD2E ld t xx
+DD34 inc [st+zz]
+DD35 dec [st+zz]
+DD36 ld [st+zz] xx
+DD39 add st sp
+DD44 ld b s
+DD45 ld b t
+DD46 ld b [st+zz]
+DD4C ld c s
+DD4D ld c t
+DD4E ld c [st+zz]
+DD54 ld d s
+DD55 ld d t
+DD56 ld d [st+zz]
+DD5C ld e s
+DD5D ld e t
+DD5E ld e [st+zz]
+DD60 ld s b
+DD61 ld s c
+DD62 ld s d
+DD63 ld s e
+DD64 ld s s
+DD65 ld s t
+DD66 ld h [st+zz]
+DD67 ld s a
+DD68 ld t b
+DD69 ld t c
+DD6A ld t d
+DD6B ld t e
+DD6C ld t s
+DD6D ld t t
+DD6E ld l [st+zz]
+DD6F ld t a
+DD70 ld [st+zz] b
+DD71 ld [st+zz] c
+DD72 ld [st+zz] d
+DD73 ld [st+zz] e
+DD74 ld [st+zz] h
+DD75 ld [st+zz] l
+DD77 ld [st+zz] a
+DD7C ld a s
+DD7D ld a t
+DD7E ld a [st+zz]
+DD84 add s
+DD85 add t
+DD86 add [st+zz]
+DD8C adc s
+DD8D adc t
+DD8E adc [st+zz]
+DD94 sub s
+DD95 sub t
+DD96 sub [st+zz]
+DD9C sbc s
+DD9D sbc t
+DD9E sbc [st+zz]
+DDA4 and s
+DDA5 and t
+DDA6 and [st+zz]
+DDAC xor s
+DDAD xor t
+DDAE xor [st+zz]
+DDB4 or s
+DDB5 or t
+DDB6 or [st+zz]
+DDBC cp s
+DDBD cp t
+DDBE cp [st+zz]
+FD09 add uv bc
+FD19 add uv de
+FD21 ld uv xxxx
+FD22 ld [xxxx] uv
+FD23 inc uv
+FD24 inc u
+FD25 dec u
+FD26 ld u xx
+FD29 add uv uv
+FD29 shl uv
+FD2A ld uv [xxxx]
+FD2B dec uv
+FD2C inc v
+FD2D dec v
+FD2E ld v xx
+FD34 inc [uv+zz]
+FD35 dec [uv+zz]
+FD36 ld [uv+zz] xx
+FD39 add uv sp
+FD44 ld b u
+FD45 ld b v
+FD46 ld b [uv+zz]
+FD4C ld c u
+FD4D ld c v
+FD4E ld c [uv+zz]
+FD54 ld d u
+FD55 ld d v
+FD56 ld d [uv+zz]
+FD5C ld e u
+FD5D ld e v
+FD5E ld e [uv+zz]
+FD60 ld u b
+FD61 ld u c
+FD62 ld u d
+FD63 ld u e
+FD64 ld u u
+FD65 ld u v
+FD66 ld h [uv+zz]
+FD67 ld u a
+FD68 ld v b
+FD69 ld v c
+FD6A ld v d
+FD6B ld v e
+FD6C ld v u
+FD6D ld v v
+FD6E ld l [uv+zz]
+FD6F ld v a
+FD70 ld [uv+zz] b
+FD71 ld [uv+zz] c
+FD72 ld [uv+zz] d
+FD73 ld [uv+zz] e
+FD74 ld [uv+zz] h
+FD75 ld [uv+zz] l
+FD77 ld [uv+zz] a
+FD7C ld a u
+FD7D ld a v
+FD7E ld a [uv+zz]
+FD84 add u
+FD85 add v
+FD86 add [uv+zz]
+FD8C adc u
+FD8D adc v
+FD8E adc [uv+zz]
+FD94 sub u
+FD95 sub v
+FD96 sub [uv+zz]
+FD9C sbc u
+FD9D sbc v
+FD9E sbc [uv+zz]
+FDA4 and u
+FDA5 and v
+FDA6 and [uv+zz]
+FDAC xor u
+FDAD xor v
+FDAE xor [uv+zz]
+FDB4 or u
+FDB5 or v
+FDB6 or [uv+zz]
+FDBC cp u
+FDBD cp v
+FDBE cp [uv+zz]
+DDCB00 rol b [st+zz]
+DDCB01 rol c [st+zz]
+DDCB02 rol d [st+zz]
+DDCB03 rol e [st+zz]
+DDCB04 rol h [st+zz]
+DDCB05 rol l [st+zz]
+DDCB06 rol [st+zz]
+DDCB08 ror b [st+zz]
+DDCB09 ror c [st+zz]
+DDCB0A ror d [st+zz]
+DDCB0B ror e [st+zz]
+DDCB0C ror h [st+zz]
+DDCB0D ror l [st+zz]
+DDCB0E ror [st+zz]
+DDCB10 rcl b [st+zz]
+DDCB11 rcl c [st+zz]
+DDCB12 rcl d [st+zz]
+DDCB13 rcl e [st+zz]
+DDCB14 rcl h [st+zz]
+DDCB15 rcl l [st+zz]
+DDCB16 rcl [st+zz]
+DDCB18 rcr b [st+zz]
+DDCB19 rcr c [st+zz]
+DDCB1A rcr d [st+zz]
+DDCB1B rcr e [st+zz]
+DDCB1C rcr h [st+zz]
+DDCB1D rcr l [st+zz]
+DDCB1E rcr [st+zz]
+DDCB20 sal b [st+zz]
+DDCB21 sal c [st+zz]
+DDCB22 sal d [st+zz]
+DDCB23 sal e [st+zz]
+DDCB24 sal h [st+zz]
+DDCB25 sal l [st+zz]
+DDCB26 sal [st+zz]
+DDCB27 sal a [st+zz]
+DDCB20 shl b [st+zz]
+DDCB21 shl c [st+zz]
+DDCB22 shl d [st+zz]
+DDCB23 shl e [st+zz]
+DDCB24 shl h [st+zz]
+DDCB25 shl l [st+zz]
+DDCB26 shl [st+zz]
+DDCB27 shl a [st+zz]
+DDCB28 sar b [st+zz]
+DDCB29 sar c [st+zz]
+DDCB2A sar d [st+zz]
+DDCB2B sar e [st+zz]
+DDCB2C sar h [st+zz]
+DDCB2D sar l [st+zz]
+DDCB2E sar [st+zz]
+DDCB2F sar a [st+zz]
+DDCB30 sil b [st+zz]
+DDCB31 sil c [st+zz]
+DDCB32 sil d [st+zz]
+DDCB33 sil e [st+zz]
+DDCB34 sil h [st+zz]
+DDCB35 sil l [st+zz]
+DDCB36 sil [st+zz]
+DDCB37 sil a [st+zz]
+DDCB38 shr b [st+zz]
+DDCB39 shr c [st+zz]
+DDCB3A shr d [st+zz]
+DDCB3B shr e [st+zz]
+DDCB3C shr h [st+zz]
+DDCB3D shr l [st+zz]
+DDCB3E shr [st+zz]
+DDCB3F shr a [st+zz]
+DDCB46 bit0 [st+zz]
+DDCB4E bit1 [st+zz]
+DDCB56 bit2 [st+zz]
+DDCB5E bit3 [st+zz]
+DDCB66 bit4 [st+zz]
+DDCB6E bit5 [st+zz]
+DDCB76 bit6 [st+zz]
+DDCB7E bit7 [st+zz]
+DDCB80 res0 b [st+zz]
+DDCB81 res0 c [st+zz]
+DDCB82 res0 d [st+zz]
+DDCB83 res0 e [st+zz]
+DDCB84 res0 h [st+zz]
+DDCB85 res0 l [st+zz]
+DDCB86 res0 [st+zz]
+DDCB87 res0 a [st+zz]
+DDCB88 res1 b [st+zz]
+DDCB89 res1 c [st+zz]
+DDCB8A res1 d [st+zz]
+DDCB8B res1 e [st+zz]
+DDCB8C res1 h [st+zz]
+DDCB8D res1 l [st+zz]
+DDCB8E res1 [st+zz]
+DDCB8F res1 a [st+zz]
+DDCB90 res2 b [st+zz]
+DDCB91 res2 c [st+zz]
+DDCB92 res2 d [st+zz]
+DDCB93 res2 e [st+zz]
+DDCB94 res2 h [st+zz]
+DDCB95 res2 l [st+zz]
+DDCB96 res2 [st+zz]
+DDCB97 res2 a [st+zz]
+DDCB98 res3 b [st+zz]
+DDCB99 res3 c [st+zz]
+DDCB9A res3 d [st+zz]
+DDCB9B res3 e [st+zz]
+DDCB9C res3 h [st+zz]
+DDCB9D res3 l [st+zz]
+DDCB9E res3 [st+zz]
+DDCB9F res3 a [st+zz]
+DDCBA0 res4 b [st+zz]
+DDCBA1 res4 c [st+zz]
+DDCBA2 res4 d [st+zz]
+DDCBA3 res4 e [st+zz]
+DDCBA4 res4 h [st+zz]
+DDCBA5 res4 l [st+zz]
+DDCBA6 res4 [st+zz]
+DDCBA7 res4 a [st+zz]
+DDCBA8 res5 b [st+zz]
+DDCBA9 res5 c [st+zz]
+DDCBAA res5 d [st+zz]
+DDCBAB res5 e [st+zz]
+DDCBAC res5 h [st+zz]
+DDCBAD res5 l [st+zz]
+DDCBAE res5 [st+zz]
+DDCBAF res5 a [st+zz]
+DDCBB0 res6 b [st+zz]
+DDCBB1 res6 c [st+zz]
+DDCBB2 res6 d [st+zz]
+DDCBB3 res6 e [st+zz]
+DDCBB4 res6 h [st+zz]
+DDCBB5 res6 l [st+zz]
+DDCBB6 res6 [st+zz]
+DDCBB7 res6 a [st+zz]
+DDCBB8 res7 b [st+zz]
+DDCBB9 res7 c [st+zz]
+DDCBBA res7 d [st+zz]
+DDCBBB res7 e [st+zz]
+DDCBBC res7 h [st+zz]
+DDCBBD res7 l [st+zz]
+DDCBBE res7 [st+zz]
+DDCBBF res7 a [st+zz]
+DDCBC0 set0 b [st+zz]
+DDCBC1 set0 c [st+zz]
+DDCBC2 set0 d [st+zz]
+DDCBC3 set0 e [st+zz]
+DDCBC4 set0 h [st+zz]
+DDCBC5 set0 l [st+zz]
+DDCBC6 set0 [st+zz]
+DDCBC7 set0 a [st+zz]
+DDCBC8 set1 b [st+zz]
+DDCBC9 set1 c [st+zz]
+DDCBCA set1 d [st+zz]
+DDCBCB set1 e [st+zz]
+DDCBCC set1 h [st+zz]
+DDCBCD set1 l [st+zz]
+DDCBCE set1 [st+zz]
+DDCBCF set1 a [st+zz]
+DDCBD0 set2 b [st+zz]
+DDCBD1 set2 c [st+zz]
+DDCBD2 set2 d [st+zz]
+DDCBD3 set2 e [st+zz]
+DDCBD4 set2 h [st+zz]
+DDCBD5 set2 l [st+zz]
+DDCBD6 set2 [st+zz]
+DDCBD7 set2 a [st+zz]
+DDCBD8 set3 b [st+zz]
+DDCBD9 set3 c [st+zz]
+DDCBDA set3 d [st+zz]
+DDCBDB set3 e [st+zz]
+DDCBDC set3 h [st+zz]
+DDCBDD set3 l [st+zz]
+DDCBDE set3 [st+zz]
+DDCBDF set3 a [st+zz]
+DDCBE0 set4 b [st+zz]
+DDCBE1 set4 c [st+zz]
+DDCBE2 set4 d [st+zz]
+DDCBE3 set4 e [st+zz]
+DDCBE4 set4 h [st+zz]
+DDCBE5 set4 l [st+zz]
+DDCBE6 set4 [st+zz]
+DDCBE7 set4 a [st+zz]
+DDCBE8 set5 b [st+zz]
+DDCBE9 set5 c [st+zz]
+DDCBEA set5 d [st+zz]
+DDCBEB set5 e [st+zz]
+DDCBEC set5 h [st+zz]
+DDCBED set5 l [st+zz]
+DDCBEE set5 [st+zz]
+DDCBEF set5 a [st+zz]
+DDCBF0 set6 b [st+zz]
+DDCBF1 set6 c [st+zz]
+DDCBF2 set6 d [st+zz]
+DDCBF3 set6 e [st+zz]
+DDCBF4 set6 h [st+zz]
+DDCBF5 set6 l [st+zz]
+DDCBF6 set6 [st+zz]
+DDCBF7 set6 a [st+zz]
+DDCBF8 set7 b [st+zz]
+DDCBF9 set7 c [st+zz]
+DDCBFA set7 d [st+zz]
+DDCBFB set7 e [st+zz]
+DDCBFC set7 h [st+zz]
+DDCBFD set7 l [st+zz]
+DDCBFE set7 [st+zz]
+DDCBFF set7 a [st+zz]
+FDCB00 rol b [uv+zz]
+FDCB01 rol c [uv+zz]
+FDCB02 rol d [uv+zz]
+FDCB03 rol e [uv+zz]
+FDCB04 rol h [uv+zz]
+FDCB05 rol l [uv+zz]
+FDCB06 rol [uv+zz]
+FDCB08 ror b [uv+zz]
+FDCB09 ror c [uv+zz]
+FDCB0A ror d [uv+zz]
+FDCB0B ror e [uv+zz]
+FDCB0C ror h [uv+zz]
+FDCB0D ror l [uv+zz]
+FDCB0E ror [uv+zz]
+FDCB10 rcl b [uv+zz]
+FDCB11 rcl c [uv+zz]
+FDCB12 rcl d [uv+zz]
+FDCB13 rcl e [uv+zz]
+FDCB14 rcl h [uv+zz]
+FDCB15 rcl l [uv+zz]
+FDCB16 rcl [uv+zz]
+FDCB18 rcr b [uv+zz]
+FDCB19 rcr c [uv+zz]
+FDCB1A rcr d [uv+zz]
+FDCB1B rcr e [uv+zz]
+FDCB1C rcr h [uv+zz]
+FDCB1D rcr l [uv+zz]
+FDCB1E rcr [uv+zz]
+FDCB20 sal b [uv+zz]
+FDCB21 sal c [uv+zz]
+FDCB22 sal d [uv+zz]
+FDCB23 sal e [uv+zz]
+FDCB24 sal h [uv+zz]
+FDCB25 sal l [uv+zz]
+FDCB26 sal [uv+zz]
+FDCB27 sal a [uv+zz]
+FDCB20 shl b [uv+zz]
+FDCB21 shl c [uv+zz]
+FDCB22 shl d [uv+zz]
+FDCB23 shl e [uv+zz]
+FDCB24 shl h [uv+zz]
+FDCB25 shl l [uv+zz]
+FDCB26 shl [uv+zz]
+FDCB27 shl a [uv+zz]
+FDCB28 sar b [uv+zz]
+FDCB29 sar c [uv+zz]
+FDCB2A sar d [uv+zz]
+FDCB2B sar e [uv+zz]
+FDCB2C sar h [uv+zz]
+FDCB2D sar l [uv+zz]
+FDCB2E sar [uv+zz]
+FDCB2F sar a [uv+zz]
+FDCB30 sil b [uv+zz]
+FDCB31 sil c [uv+zz]
+FDCB32 sil d [uv+zz]
+FDCB33 sil e [uv+zz]
+FDCB34 sil h [uv+zz]
+FDCB35 sil l [uv+zz]
+FDCB36 sil [uv+zz]
+FDCB37 sil a [uv+zz]
+FDCB38 shr b [uv+zz]
+FDCB39 shr c [uv+zz]
+FDCB3A shr d [uv+zz]
+FDCB3B shr e [uv+zz]
+FDCB3C shr h [uv+zz]
+FDCB3D shr l [uv+zz]
+FDCB3E shr [uv+zz]
+FDCB3F shr a [uv+zz]
+FDCB46 bit0 [uv+zz]
+FDCB4E bit1 [uv+zz]
+FDCB56 bit2 [uv+zz]
+FDCB5E bit3 [uv+zz]
+FDCB66 bit4 [uv+zz]
+FDCB6E bit5 [uv+zz]
+FDCB76 bit6 [uv+zz]
+FDCB7E bit7 [uv+zz]
+FDCB80 res0 b [uv+zz]
+FDCB81 res0 c [uv+zz]
+FDCB82 res0 d [uv+zz]
+FDCB83 res0 e [uv+zz]
+FDCB84 res0 h [uv+zz]
+FDCB85 res0 l [uv+zz]
+FDCB86 res0 [uv+zz]
+FDCB87 res0 a [uv+zz]
+FDCB88 res1 b [uv+zz]
+FDCB89 res1 c [uv+zz]
+FDCB8A res1 d [uv+zz]
+FDCB8B res1 e [uv+zz]
+FDCB8C res1 h [uv+zz]
+FDCB8D res1 l [uv+zz]
+FDCB8E res1 [uv+zz]
+FDCB8F res1 a [uv+zz]
+FDCB90 res2 b [uv+zz]
+FDCB91 res2 c [uv+zz]
+FDCB92 res2 d [uv+zz]
+FDCB93 res2 e [uv+zz]
+FDCB94 res2 h [uv+zz]
+FDCB95 res2 l [uv+zz]
+FDCB96 res2 [uv+zz]
+FDCB97 res2 a [uv+zz]
+FDCB98 res3 b [uv+zz]
+FDCB99 res3 c [uv+zz]
+FDCB9A res3 d [uv+zz]
+FDCB9B res3 e [uv+zz]
+FDCB9C res3 h [uv+zz]
+FDCB9D res3 l [uv+zz]
+FDCB9E res3 [uv+zz]
+FDCB9F res3 a [uv+zz]
+FDCBA0 res4 b [uv+zz]
+FDCBA1 res4 c [uv+zz]
+FDCBA2 res4 d [uv+zz]
+FDCBA3 res4 e [uv+zz]
+FDCBA4 res4 h [uv+zz]
+FDCBA5 res4 l [uv+zz]
+FDCBA6 res4 [uv+zz]
+FDCBA7 res4 a [uv+zz]
+FDCBA8 res5 b [uv+zz]
+FDCBA9 res5 c [uv+zz]
+FDCBAA res5 d [uv+zz]
+FDCBAB res5 e [uv+zz]
+FDCBAC res5 h [uv+zz]
+FDCBAD res5 l [uv+zz]
+FDCBAE res5 [uv+zz]
+FDCBAF res5 a [uv+zz]
+FDCBB0 res6 b [uv+zz]
+FDCBB1 res6 c [uv+zz]
+FDCBB2 res6 d [uv+zz]
+FDCBB3 res6 e [uv+zz]
+FDCBB4 res6 h [uv+zz]
+FDCBB5 res6 l [uv+zz]
+FDCBB6 res6 [uv+zz]
+FDCBB7 res6 a [uv+zz]
+FDCBB8 res7 b [uv+zz]
+FDCBB9 res7 c [uv+zz]
+FDCBBA res7 d [uv+zz]
+FDCBBB res7 e [uv+zz]
+FDCBBC res7 h [uv+zz]
+FDCBBD res7 l [uv+zz]
+FDCBBE res7 [uv+zz]
+FDCBBF res7 a [uv+zz]
+FDCBC0 set0 b [uv+zz]
+FDCBC1 set0 c [uv+zz]
+FDCBC2 set0 d [uv+zz]
+FDCBC3 set0 e [uv+zz]
+FDCBC4 set0 h [uv+zz]
+FDCBC5 set0 l [uv+zz]
+FDCBC6 set0 [uv+zz]
+FDCBC7 set0 a [uv+zz]
+FDCBC8 set1 b [uv+zz]
+FDCBC9 set1 c [uv+zz]
+FDCBCA set1 d [uv+zz]
+FDCBCB set1 e [uv+zz]
+FDCBCC set1 h [uv+zz]
+FDCBCD set1 l [uv+zz]
+FDCBCE set1 [uv+zz]
+FDCBCF set1 a [uv+zz]
+FDCBD0 set2 b [uv+zz]
+FDCBD1 set2 c [uv+zz]
+FDCBD2 set2 d [uv+zz]
+FDCBD3 set2 e [uv+zz]
+FDCBD4 set2 h [uv+zz]
+FDCBD5 set2 l [uv+zz]
+FDCBD6 set2 [uv+zz]
+FDCBD7 set2 a [uv+zz]
+FDCBD8 set3 b [uv+zz]
+FDCBD9 set3 c [uv+zz]
+FDCBDA set3 d [uv+zz]
+FDCBDB set3 e [uv+zz]
+FDCBDC set3 h [uv+zz]
+FDCBDD set3 l [uv+zz]
+FDCBDE set3 [uv+zz]
+FDCBDF set3 a [uv+zz]
+FDCBE0 set4 b [uv+zz]
+FDCBE1 set4 c [uv+zz]
+FDCBE2 set4 d [uv+zz]
+FDCBE3 set4 e [uv+zz]
+FDCBE4 set4 h [uv+zz]
+FDCBE5 set4 l [uv+zz]
+FDCBE6 set4 [uv+zz]
+FDCBE7 set4 a [uv+zz]
+FDCBE8 set5 b [uv+zz]
+FDCBE9 set5 c [uv+zz]
+FDCBEA set5 d [uv+zz]
+FDCBEB set5 e [uv+zz]
+FDCBEC set5 h [uv+zz]
+FDCBED set5 l [uv+zz]
+FDCBEE set5 [uv+zz]
+FDCBEF set5 a [uv+zz]
+FDCBF0 set6 b [uv+zz]
+FDCBF1 set6 c [uv+zz]
+FDCBF2 set6 d [uv+zz]
+FDCBF3 set6 e [uv+zz]
+FDCBF4 set6 h [uv+zz]
+FDCBF5 set6 l [uv+zz]
+FDCBF6 set6 [uv+zz]
+FDCBF7 set6 a [uv+zz]
+FDCBF8 set7 b [uv+zz]
+FDCBF9 set7 c [uv+zz]
+FDCBFA set7 d [uv+zz]
+FDCBFB set7 e [uv+zz]
+FDCBFC set7 h [uv+zz]
+FDCBFD set7 l [uv+zz]
+FDCBFE set7 [uv+zz]
+FDCBFF set7 a [uv+zz]
+DDE1 pop st
+DDE3 ex [sp] st
+DDE3 ex st [sp]
+DDE5 push st
+DDE9 jp st
+DDF9 ld sp st
+FDE1 pop uv
+FDE3 ex [sp] uv
+FDE3 ex uv [sp]
+FDE5 push uv
+FDE9 jp uv
+FDF9 ld sp uv

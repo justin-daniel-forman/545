@@ -10,8 +10,8 @@ module z80(
   //          fully reset. Starts fetching instructions from location 0x0000
   //          on reset.
   //---------------------------------------------------------------------------
-  input   logic         CLK,
-  input   logic         RESET_L,
+  input   logic         clk,
+  input   logic         rst_L,
 
   //---------------------------------------------------------------------------
   //Bus Interface
@@ -23,11 +23,11 @@ module z80(
 
   //---------------------------------------------------------------------------
   //Interrupt Interface
-  //  - M1_L:   Sets the mode for interrupt acknowledge
+  //  - M1_L:
   //  - INT_L:  Maskable interrupt
   //  - NMI_L:  Non-Maskable Interrupt
   //---------------------------------------------------------------------------
-  input   logic         M1_L,
+  output  logic         M1_L,
   input   logic         INT_L,
   input   logic         NMI_L,
 
@@ -69,7 +69,108 @@ module z80(
   output  logic         HALT_L
 );
 
-  //TODO instantiate control path (drives addr bus when enabled by itself)
-  //TODO instantiate datapath     (drives data bus when enabled by control_logic)
+  //-----------------------------------
+  //Regfile loads
+  //  Specifying 2 of these signals at once will indicate a 16-bit load
+  //  from the addr bus. Specifying only one will indicate an 8-bit load
+  //  from the databus. We cannot do both simultaneously.
+  //-----------------------------------
+  logic         ld_B;
+  logic         ld_C;
+  logic         ld_D;
+  logic         ld_E;
+  logic         ld_H;
+  logic         ld_L;
+  logic         ld_IXH;
+  logic         ld_IXL;
+  logic         ld_IYH;
+  logic         ld_IYL;
+  logic         ld_SPH;
+  logic         ld_SPL;
+  logic         ld_PCH;
+  logic         ld_PCL;
+
+  //-----------------------------------
+  //Regfile Drives
+  //  Specifying 2 of these signals will cause a 16 bit drive onto the addr
+  //  bus and specifying two of these signals will cause an 8-bit drive onto
+  //  the data bus. We cannot do both simultaneously.
+  //------------------------------------
+  logic         drive_reg_data;
+  logic         drive_reg_addr;
+  logic         drive_B;
+  logic         drive_C;
+  logic         drive_D;
+  logic         drive_E;
+  logic         drive_H;
+  logic         drive_L;
+  logic         drive_IXH;
+  logic         drive_IXL;
+  logic         drive_IYH;
+  logic         drive_IYL;
+  logic         drive_SPH;
+  logic         drive_SPL;
+  logic         drive_PCH;
+  logic         drive_PCL;
+
+  //-----------------------------------
+  //Accumulator and Flag loads
+  //  The original system only had a single 8-bit ALU. As an optimization;
+  //  we have put in a second 16-bit alu to make the control simpler. As
+  //  A result; we must conditionally load from the ALU that performs
+  //  arithmetic on the A register.
+  //-----------------------------------
+  logic         ld_A;
+  logic         ld_F_data;      //8bit load
+  logic         ld_F_addr;      //16bit load
+  logic         drive_A;
+  logic         drive_F;
+  logic [3:0]   alu_op;
+  logic         drive_alu_data; //8bit drive
+  logic         drive_alu_addr; //16bit drive
+
+  //-----------------------------------
+  //Miscellaneous register controls
+  // - switch_context: tells the registers to switch with their "not"
+  //      counterparts. The ld signals determine which registers
+  //      will switch contexts.
+  // - swap_reg: tells the registers to swap contents in a single cycle
+  //      The ld signals determine which registers will swap
+  //-----------------------------------
+  logic         switch_context;
+  logic         swap_reg;
+
+  //-----------------------------------
+  //temporary data_bus registers
+  //  These registers sit on the databus.
+  //-----------------------------------
+  logic         ld_MDR1;
+  logic         ld_MDR2;
+  logic         ld_TEMP;
+  logic         drive_MDR1;
+  logic         drive_MDR2;
+  logic         drive_TEMP;
+
+  //-----------------------------------
+  //temporary addr_bus registers
+  //  These registers sit on the addr bus
+  //-----------------------------------
+  logic         ld_MARH; //load upper byte of MAR
+  logic         ld_MARL; //load lower byte of MAR
+  logic         drive_MAR;
+
+  //External bus outputs
+  logic [7:0]   data_in;
+  logic [7:0]   data_out;
+  logic [15:0]  addr_out;
+
+  datapath DP (.*);
+
+  control_logic CTRL(.*);
+
+  assign data_in  = data_bus;
+  assign data_bus = data_out;
+  assign addr_bus = addr_out;
+
 
 endmodule: z80

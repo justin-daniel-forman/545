@@ -588,12 +588,7 @@ module decoder (
     LD_nn_A_7,
     LD_nn_A_8,
 
-    LD_dd_nn_0,
-    LD_dd_nn_1,
-    LD_dd_nn_2,
-    LD_dd_nn_3,
-    LD_dd_nn_4,
-    LD_dd_nn_5,
+    MACRO_DEFINE_STATES LD_dd_nn 6
 
     INC_0,
     INC_1,
@@ -933,13 +928,7 @@ module decoder (
       //BEGIN 16-bit load group
       //-----------------------------------------------------------------------
 
-      //LD_dd_nn
-      LD_dd_nn_0: next_state = LD_dd_nn_1;
-      LD_dd_nn_1: next_state = LD_dd_nn_2;
-      LD_dd_nn_2: next_state = LD_dd_nn_3;
-      LD_dd_nn_3: next_state = LD_dd_nn_4;
-      LD_dd_nn_4: next_state = LD_dd_nn_5;
-      LD_dd_nn_5: next_state = FETCH_0;
+      MACRO_ENUM_STATES LD_dd_nn 6
 
       //-----------------------------------------------------------------------
       //END 16-bit load group
@@ -1806,24 +1795,13 @@ module decoder (
 
       //LD_dd_nn
       LD_dd_nn_0, LD_dd_nn_3: begin
-        ld_PCH    = 1;
-        ld_PCL    = 1;
-        drive_PCH = 1;
-        drive_PCL = 1;
-        alu_op    = `INCR_A;
-        drive_reg_addr = 1;
-        drive_alu_addr = 1;
-        MRD_start = 1;
-        MRD_bus   = 1;
+        MACRO_INC_PC
+        MACRO_READ_0
       end
 
       LD_dd_nn_1, LD_dd_nn_4: begin
-        drive_PCH = 1;
-        drive_PCL = 1;
-        alu_op    = `ALU_NOP;
-        drive_reg_addr = 1;
-        drive_alu_addr = 1;
-        MRD_bus = 1;
+        MACRO_DRIVE_PC
+        MACRO_READ_1
       end
 
       LD_dd_nn_2: begin
