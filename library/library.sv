@@ -63,7 +63,7 @@ module mem #(parameter DATA = 8, ADDR = 16, NUMREAD = 8)(
   output logic [DATA-1:0]              a_data_out,	   
   output logic [NUMREAD-1:0][DATA-1:0] b_data_out);
 
-  logic [2**ADDR-1:0][DATA-1:0] memory;
+  logic [DATA-1:0] memory [2**ADDR-1:0];
 
   // A-port
   always_ff @(posedge a_clk, negedge rst_L) begin
@@ -76,9 +76,9 @@ module mem #(parameter DATA = 8, ADDR = 16, NUMREAD = 8)(
   generate
     genvar i;
     for (i = 0; i < NUMREAD; i++) begin
-      always_ff @(posedge b_clk, negedge rst_L) begin
-        if (b_re[i]) b_data_out[i] <= memory[b_addr[i]];
-        else         b_data_out[i] <= 'bz;
+      always_comb begin
+        if (b_re[i]) b_data_out[i] = memory[b_addr[i]];
+        else         b_data_out[i] = 'bz;
       end 
     end
   endgenerate
