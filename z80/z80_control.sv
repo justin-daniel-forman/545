@@ -595,6 +595,8 @@ module decoder (
     LD_dd_nn_4,
     LD_dd_nn_5,
 
+    EX_DE_HL_0,
+
     INC_0,
     INC_1,
     INC_2,
@@ -691,6 +693,7 @@ module decoder (
           //this opcode.
           `LD_r_r:    next_state =
             (op0[2:0] != 3'b110 && op0[5:3] != 3'b110) ? LD_r_r_0 : FETCH_3;
+          `EX_DE_HL:  next_state = EX_DE_HL_0;
           `INC:       next_state = INC_0;
           `EXT_INST:  next_state = EXT_INST_0;
           `IX_INST:   next_state = IX_INST_0;
@@ -944,6 +947,18 @@ module decoder (
       //-----------------------------------------------------------------------
       //END 16-bit load group
       //-----------------------------------------------------------------------
+
+      //-----------------------------------------------------------------------
+      //BEGIN EXCHANGE, BLOCK TRANSFER GROUP
+      //-----------------------------------------------------------------------
+
+      //EX_DE_HL
+      EX_DE_HL_0: next_state = FETCH_0;
+
+      //-----------------------------------------------------------------------
+      //END EXCHANGE, BLOCK TRANSFER GROUP
+      //-----------------------------------------------------------------------
+
 
       //TODO: include support for INC
       INC_0: next_state = FETCH_0;
@@ -1846,6 +1861,24 @@ module decoder (
 
       //-----------------------------------------------------------------------
       //END 16-bit load group
+      //-----------------------------------------------------------------------
+
+      //-----------------------------------------------------------------------
+      //BEGIN EXCHANGE, BLOCK TRANSFER GROUP
+      //-----------------------------------------------------------------------
+
+      EX_DE_HL_0: begin
+        //all of these registers have a point to point connection within the
+        //register file which makes the swap possible in a single cycle
+        swap_reg = 1;
+        ld_H     = 1;
+        ld_L     = 1;
+        ld_D     = 1;
+        ld_E     = 1;
+      end
+
+      //-----------------------------------------------------------------------
+      //END EXCHANGE, BLOCK TRANSFER GROUP
       //-----------------------------------------------------------------------
 
       LDI_0: begin
