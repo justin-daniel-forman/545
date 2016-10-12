@@ -28,6 +28,7 @@
 `define LD_IY_nn  8'h21
 
 `define EX_DE_HL  8'hEB
+`define EXX       8'hD9
 
 //ALU commands
 `define INCR_A    4'h1

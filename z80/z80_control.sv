@@ -624,6 +624,8 @@ module decoder (
 
     EX_DE_HL_0,
 
+    EXX_0,
+
     INC_0,
     INC_1,
     INC_2,
@@ -708,6 +710,7 @@ module decoder (
           `LD_r_r:    next_state =
             (op0[2:0] != 3'b110 && op0[5:3] != 3'b110) ? LD_r_r_0 : FETCH_3;
           `EX_DE_HL:  next_state = EX_DE_HL_0;
+          `EXX:       next_state = EXX_0;
           `INC:       next_state = INC_0;
           `EXT_INST:  next_state = EXT_INST_0;
           `IX_INST:   next_state = IX_INST_0;
@@ -1000,6 +1003,9 @@ module decoder (
 
       //EX_DE_HL
       EX_DE_HL_0: next_state = FETCH_0;
+
+      //EXX
+      EXX_0: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END EXCHANGE, BLOCK TRANSFER GROUP
@@ -2046,6 +2052,16 @@ module decoder (
         ld_L     = 1;
         ld_D     = 1;
         ld_E     = 1;
+      end
+
+      EXX_0: begin
+        switch_context = 1;
+        ld_B = 1;
+        ld_C = 1;
+        ld_D = 1;
+        ld_E = 1;
+        ld_H = 1;
+        ld_L = 1;
       end
 
       //-----------------------------------------------------------------------

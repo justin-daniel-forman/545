@@ -635,6 +635,12 @@ module regfile(
     E_in = 0;
     H_in = 0;
     L_in = 0;
+    B_not_in = 0;
+    C_not_in = 0;
+    D_not_in = 0;
+    E_not_in = 0;
+    H_not_in = 0;
+    L_not_in = 0;
     IXH_in = 0;
     IXL_in = 0;
     IYH_in = 0;
@@ -650,6 +656,12 @@ module regfile(
     E_en = 0;
     H_en = 0;
     L_en = 0;
+    B_not_en = 0;
+    C_not_en = 0;
+    D_not_en = 0;
+    E_not_en = 0;
+    H_not_en = 0;
+    L_not_en = 0;
     IXH_en = 0;
     IXL_en = 0;
     IYH_en = 0;
@@ -910,12 +922,28 @@ module regfile(
     .Q(H_out)
   );
 
+ register #(8) H_not(
+    .clk(clk),
+    .rst_L(rst_L),
+    .D(H_not_in),
+    .en(H_not_en),
+    .Q(H_not_out)
+  );
+
  register #(8) L(
     .clk(clk),
     .rst_L(rst_L),
     .D(L_in),
     .en(L_en),
     .Q(L_out)
+  );
+
+ register #(8) L_not(
+    .clk(clk),
+    .rst_L(rst_L),
+    .D(L_not_in),
+    .en(L_not_en),
+    .Q(L_not_out)
   );
 
  register #(8) IXH(
