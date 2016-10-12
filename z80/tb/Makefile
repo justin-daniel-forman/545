@@ -11,6 +11,7 @@ control:
 	vcs -sverilog -debug ../z80_control.sv control_tb.sv ../../library/library.sv
 
 top:
+	perl macros.pl
 	vcs -sverilog ../z80_control.sv ../z80_datapath.sv ../z80_top.sv ../../library/library.sv ../z80_memory.sv top_tb.sv
 
 regfile:

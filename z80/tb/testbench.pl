@@ -105,6 +105,10 @@ foreach my $fileroot (@asm_files) {
       print "Got:\nA: $A\nBC: $BC\nDE: $DE\nHL: $HL\nIX: $IX\nIY: $IY\nSP: $SP\nPC: $PC\n";
       print "Expected:\nA: $A_d\nBC: $BC_d\nDE: $DE_d\nHL: $HL_d\nIX: $IX_d\nIY: $IY_d\nSP: $SP_d\nPC: $PC_d\n";
     }
+
+    else {
+      print "Passed: $fileroot\n";
+    }
   }
 
   elsif(defined $debug_arg and $debug_arg eq "DEBUG") {
