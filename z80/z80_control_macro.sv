@@ -596,6 +596,8 @@ module decoder (
 
     MACRO_DEFINE_STATES LD_HL_nn 12
 
+    MACRO_DEFINE_STATES LD_dd_nn_x 12
+
     MACRO_DEFINE_STATES EX_DE_HL 1
 
     INC_0,
@@ -760,6 +762,7 @@ module decoder (
           `LD_IY_d_n:   next_state = (op0[7:4] == 4'hF) ?  LD_IY_d_n_0 : LD_IX_d_n_0;
           `LD_IX_nn: 		next_state = (op0[7:4] == 4'hD) ?  LD_IX_nn_0  : LD_IY_nn_0;
           `LD_IY_nn:    next_state = (op0[7:4] == 4'hF) ?  LD_IY_nn_0  : LD_IX_nn_0;
+          `LD_dd_nn_x:  next_state = LD_dd_nn_x_0;
           `LDI:         next_state = LDI_0;
           default:      next_state = FETCH_0;
         endcase
@@ -933,6 +936,8 @@ module decoder (
       MACRO_ENUM_STATES LD_IY_nn 6
 
       MACRO_ENUM_STATES LD_HL_nn 12
+
+      MACRO_ENUM_STATES LD_dd_nn_x 12
 
       //-----------------------------------------------------------------------
       //END 16-bit load group
@@ -1938,6 +1943,113 @@ module decoder (
       LD_HL_nn_11: begin
         //load the data into H
         ld_H = 1;
+      end
+
+      //LD_dd_nn_x
+      LD_dd_nn_x_0,LD_dd_nn_x_3: begin
+        MACRO_INC_PC
+        MACRO_READ_0
+      end
+
+      LD_dd_nn_x_1, LD_dd_nn_x_4: begin
+        MACRO_DRIVE_PC
+        MACRO_READ_1
+			end
+
+      LD_dd_nn_x_2: begin
+        case(op1[5:4])
+          00: ld_C = 1;
+          01: ld_E = 1;
+          10: ld_L = 1;
+          11: ld_SPL = 1;
+        endcase
+      end
+
+      LD_dd_nn_x_5: begin
+        case(op1[5:4])
+          00: ld_B = 1;
+          01: ld_D = 1;
+          10: ld_H = 1;
+          11: ld_SPH = 1;
+        endcase
+      end
+
+      LD_dd_nn_x_6: begin
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        alu_op = `NOP;
+        ld_MARL = 1;
+        ld_MARH = 1;
+        MACRO_READ_0
+        case(op1[5:4])
+          00: begin
+            drive_B = 1;
+            drive_C = 1;
+          end
+          01: begin
+            drive_D = 1;
+            drive_E = 1;
+          end
+          10: begin
+            drive_H = 1;
+            drive_L = 1;
+          end
+          11: begin
+            drive_SPH = 1;
+            drive_SPL = 1;
+          end
+        endcase
+      end
+
+      LD_dd_nn_x_7: begin
+        MACRO_READ_1
+      end
+
+      LD_dd_nn_x_8: begin
+        ld_MARL = 1;
+        ld_MARH = 1;
+        alu_op = `INCR_A;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        case(op1[5:4])
+          00: begin
+            ld_C = 1;
+            drive_C = 1;
+            drive_B = 1;
+          end
+          01: begin
+            ld_E = 1;
+            drive_E = 1;
+            drive_D = 1;
+          end
+          10: begin
+             ld_L = 1;
+             drive_L = 1;
+             drive_H = 1;
+          end
+          11: begin
+            ld_SPL = 1;
+            drive_SPL = 1;
+            drive_SPH = 1;
+          end
+        endcase
+      end
+
+      LD_dd_nn_x_9: begin
+        MACRO_READ_0
+      end
+
+      LD_dd_nn_x_10: begin
+        MACRO_READ_1
+      end
+
+      LD_dd_nn_x_11: begin
+        case(op1[5:4])
+          00: ld_B = 1;
+          01: ld_D = 1;
+          10: ld_H = 1;
+          11: ld_SPH = 1;
+        endcase
       end
 
       //-----------------------------------------------------------------------
