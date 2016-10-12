@@ -590,6 +590,12 @@ module decoder (
 
     MACRO_DEFINE_STATES LD_dd_nn 6
 
+    MACRO_DEFINE_STATES LD_IX_nn 6
+
+    MACRO_DEFINE_STATES LD_IY_nn 6
+
+    MACRO_DEFINE_STATES LD_HL_nn 12
+
     MACRO_DEFINE_STATES EX_DE_HL 1
 
     INC_0,
@@ -604,19 +610,6 @@ module decoder (
     LDI_5,
     LDI_6,
     LDI_7,
-
-    LD_HL_nn_0,
-    LD_HL_nn_1,
-    LD_HL_nn_2,
-    LD_HL_nn_3,
-    LD_HL_nn_4,
-    LD_HL_nn_5,
-    LD_HL_nn_6,
-    LD_HL_nn_7,
-    LD_HL_nn_8,
-    LD_HL_nn_9,
-    LD_HL_nn_A,
-    LD_HL_nn_B,
 
     //Multi-OCF Instructions
     //There is a difference between multi-ocf instructions and
@@ -765,6 +758,8 @@ module decoder (
           `LD_IY_d_r:   next_state = (op0[7:4] == 4'hF) ?  LD_IY_d_r_0 : LD_IX_d_r_0;
           `LD_IX_d_n:   next_state = (op0[7:4] == 4'hD) ?  LD_IX_d_n_0 : LD_IY_d_n_0;
           `LD_IY_d_n:   next_state = (op0[7:4] == 4'hF) ?  LD_IY_d_n_0 : LD_IX_d_n_0;
+          `LD_IX_nn: 		next_state = (op0[7:4] == 4'hD) ?  LD_IX_nn_0  : LD_IY_nn_0;
+          `LD_IY_nn:    next_state = (op0[7:4] == 4'hF) ?  LD_IY_nn_0  : LD_IX_nn_0;
           `LDI:         next_state = LDI_0;
           default:      next_state = FETCH_0;
         endcase
@@ -933,6 +928,12 @@ module decoder (
 
       MACRO_ENUM_STATES LD_dd_nn 6
 
+      MACRO_ENUM_STATES LD_IX_nn 6
+
+      MACRO_ENUM_STATES LD_IY_nn 6
+
+      MACRO_ENUM_STATES LD_HL_nn 12
+
       //-----------------------------------------------------------------------
       //END 16-bit load group
       //-----------------------------------------------------------------------
@@ -951,19 +952,6 @@ module decoder (
       //TODO: include support for INC
       INC_0: next_state = FETCH_0;
 
-      //LD_HL_nn
-      LD_HL_nn_0: next_state = LD_HL_nn_1;
-      LD_HL_nn_1: next_state = LD_HL_nn_2;
-      LD_HL_nn_2: next_state = LD_HL_nn_3;
-      LD_HL_nn_3: next_state = LD_HL_nn_4;
-      LD_HL_nn_4: next_state = LD_HL_nn_5;
-      LD_HL_nn_5: next_state = LD_HL_nn_6;
-      LD_HL_nn_6: next_state = LD_HL_nn_7;
-      LD_HL_nn_7: next_state = LD_HL_nn_8;
-      LD_HL_nn_8: next_state = LD_HL_nn_9;
-      LD_HL_nn_9: next_state = LD_HL_nn_A;
-      LD_HL_nn_A: next_state = LD_HL_nn_B;
-      LD_HL_nn_B: next_state = FETCH_0;
 
 
       //-----------------------------------------------------------------------
@@ -1836,6 +1824,122 @@ module decoder (
         endcase
       end
 
+      //LD_IX_nn
+      LD_IX_nn_0, LD_IX_nn_3: begin
+        MACRO_INC_PC
+        MACRO_READ_0
+      end
+
+      LD_IX_nn_1, LD_IX_nn_4: begin
+        MACRO_DRIVE_PC
+        MACRO_READ_1
+			end
+
+      LD_IX_nn_2: ld_IXL = 1;
+      LD_IX_nn_5: ld_IXH = 1;
+
+      //LD_IY_nn
+      LD_IY_nn_0,LD_IY_nn_3: begin
+        MACRO_INC_PC
+        MACRO_READ_0
+      end
+
+      LD_IY_nn_1,LD_IY_nn_4: begin
+        MACRO_DRIVE_PC
+        MACRO_READ_1
+      end
+
+      LD_IY_nn_2: ld_IYL = 1;
+      LD_IY_nn_5: ld_IYH = 1;
+
+      //LD_HL_nn
+      LD_HL_nn_0, LD_HL_nn_3: begin
+        //start a read
+        MRD_start = 1;
+        MRD_bus   = 1;
+
+        //increment the PC and use that as the address
+        drive_PCH = 1;
+        drive_PCL = 1;
+        ld_PCH = 1;
+        ld_PCL = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        alu_op  = `INCR_A;
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
+      LD_HL_nn_1, LD_HL_nn_4: begin
+        //continue the read
+        MRD_bus   = 1;
+        drive_MAR = 1;
+      end
+
+      LD_HL_nn_2: begin
+        //put the value from the read into L
+        ld_L = 1;
+      end
+
+
+      LD_HL_nn_5: begin
+        //put the value from the read into H
+        ld_H = 1;
+      end
+
+      LD_HL_nn_6: begin
+        //put HL into MAR
+        ld_MARL = 1;
+        ld_MARH = 1;
+        drive_H = 1;
+        drive_L = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        alu_op = `NOP;
+
+        //start the read from (nn)
+        MRD_start = 1;
+        MRD_bus   = 1;
+      end
+
+      LD_HL_nn_7: begin
+        //keep reading
+        MRD_bus     = 1;
+        drive_MAR   = 1;
+      end
+
+      LD_HL_nn_8: begin
+        //load the data into L
+        ld_L = 1;
+
+        //put HL + 1 into MAR as we wipe out L
+        drive_H = 1;
+        drive_L = 1;
+        drive_alu_addr = 1;
+        drive_reg_addr = 1;
+        alu_op = `INCR_A;
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
+      LD_HL_nn_9: begin
+        //start a read at nn+1
+        MRD_start = 1;
+        MRD_bus = 1;
+        drive_MAR = 1;
+      end
+
+      LD_HL_nn_10: begin
+        //continue the read
+        MRD_bus = 1;
+        drive_MAR = 1;
+      end
+
+      LD_HL_nn_11: begin
+        //load the data into H
+        ld_H = 1;
+      end
+
       //-----------------------------------------------------------------------
       //END 16-bit load group
       //-----------------------------------------------------------------------
@@ -1942,95 +2046,6 @@ module decoder (
         ld_B    = 1;
         ld_C    = 1;
         alu_op  = `DECR_A;
-      end
-
-      //LD_HL_nn
-
-      LD_HL_nn_0, LD_HL_nn_3: begin
-        //start a read
-        MRD_start = 1;
-        MRD_bus   = 1;
-
-        //increment the PC and use that as the address
-        drive_PCH = 1;
-        drive_PCL = 1;
-        ld_PCH = 1;
-        ld_PCL = 1;
-        drive_reg_addr = 1;
-        drive_alu_addr = 1;
-        alu_op  = `INCR_A;
-        ld_MARL = 1;
-        ld_MARH = 1;
-      end
-
-      LD_HL_nn_1, LD_HL_nn_4: begin
-        //continue the read
-        MRD_bus   = 1;
-        drive_MAR = 1;
-      end
-
-      LD_HL_nn_2: begin
-        //put the value from the read into L
-        ld_L = 1;
-      end
-
-
-      LD_HL_nn_5: begin
-        //put the value from the read into H
-        ld_H = 1;
-      end
-
-      LD_HL_nn_6: begin
-        //put HL into MAR
-        ld_MARL = 1;
-        ld_MARH = 1;
-        drive_H = 1;
-        drive_L = 1;
-        drive_reg_addr = 1;
-        drive_alu_addr = 1;
-        alu_op = `NOP;
-
-        //start the read from (nn)
-        MRD_start = 1;
-        MRD_bus   = 1;
-      end
-
-      LD_HL_nn_7: begin
-        //keep reading
-        MRD_bus     = 1;
-        drive_MAR   = 1;
-      end
-
-      LD_HL_nn_8: begin
-        //load the data into L
-        ld_L = 1;
-
-        //put HL + 1 into MAR as we wipe out L
-        drive_H = 1;
-        drive_L = 1;
-        drive_alu_addr = 1;
-        drive_reg_addr = 1;
-        alu_op = `INCR_A;
-        ld_MARL = 1;
-        ld_MARH = 1;
-      end
-
-      LD_HL_nn_9: begin
-        //start a read at nn+1
-        MRD_start = 1;
-        MRD_bus = 1;
-        drive_MAR = 1;
-      end
-
-      LD_HL_nn_A: begin
-        //continue the read
-        MRD_bus = 1;
-        drive_MAR = 1;
-      end
-
-      LD_HL_nn_B: begin
-        //load the data into H
-        ld_H = 1;
       end
 
     endcase
