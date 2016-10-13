@@ -70,6 +70,14 @@ module control_logic (
   output  logic         ld_A,
   output  logic         ld_F_data,      //8bit load
   output  logic         ld_F_addr,      //16bit load
+
+  output  logic [1:0]   set_S,
+  output  logic [1:0]   set_Z,
+  output  logic [1:0]   set_H,
+  output  logic [1:0]   set_PV,
+  output  logic [1:0]   set_N,
+  output  logic [1:0]   set_C,
+
   output  logic         drive_A,
   output  logic         drive_F,
   output  logic [3:0]   alu_op,
@@ -247,6 +255,13 @@ module control_logic (
     .drive_alu_data,
     .drive_alu_addr,
 
+    .set_S,
+    .set_Z,
+    .set_H,
+    .set_PV,
+    .set_N,
+    .set_C,
+
     //misc register controls
     .switch_context,
     .swap_reg,
@@ -404,6 +419,12 @@ module decoder (
   output  logic [3:0]   alu_op,
   output  logic         drive_alu_data, //8bit drive
   output  logic         drive_alu_addr, //16bit drive
+  output  logic [1:0]   set_S,
+  output  logic [1:0]   set_Z,
+  output  logic [1:0]   set_H,
+  output  logic [1:0]   set_PV,
+  output  logic [1:0]   set_N,
+  output  logic [1:0]   set_C,
 
   //-----------------------------------
   //Miscellaneous register controls
@@ -848,6 +869,12 @@ module decoder (
     ld_A = 0;
     ld_F_data = 0;
     ld_F_addr = 0;
+    set_S = 0;
+    set_Z = 0;
+    set_H = 0;
+    set_PV = 0;
+    set_N = 0;
+    set_C = 0;
 
     //Accumulator and Flag drives
     drive_A = 0;
@@ -2069,6 +2096,12 @@ module decoder (
         ld_B    = 1;
         ld_C    = 1;
         alu_op  = `DECR_A;
+
+        //set the P/V flag if BC-1 != 0
+        ld_F_addr = 1;
+
+        MACRO_RESET H
+        MACRO_RESET N
       end
 
       //-----------------------------------------------------------------------

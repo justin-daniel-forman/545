@@ -128,6 +128,13 @@ module z80(
   logic [3:0]   alu_op;
   logic         drive_alu_data; //8bit drive
   logic         drive_alu_addr; //16bit drive
+  logic [1:0]   set_S;
+  logic [1:0]   set_Z;
+  logic [1:0]   set_H;
+  logic [1:0]   set_PV;
+  logic [1:0]   set_N;
+  logic [1:0]   set_C;
+
 
   //-----------------------------------
   //Miscellaneous register controls

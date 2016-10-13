@@ -172,6 +172,55 @@ while (my $line = <$in_fh>) {
         $line .= $whitespace."drive_IYH = 1;\n";
       }
     }
+
+    elsif($macro =~ /^SET (.*)\s*/) {
+      $line = '';
+      my $flag = $1;
+
+      if($flag eq 'S') {
+        $line .= $whitespace."set_S = 2'b11;\n";
+      }
+      elsif($flag eq 'Z') {
+        $line .= $whitespace."set_Z = 2'b11;\n";
+      }
+      elsif($flag eq 'H') {
+        $line .= $whitespace."set_H = 2'b11;\n";
+      }
+      elsif($flag eq 'PV') {
+        $line .= $whitespace."set_PV = 2'b11;\n";
+      }
+      elsif($flag eq 'N') {
+        $line .= $whitespace."set_N = 2'b11;\n";
+      }
+      elsif($flag eq 'C') {
+        $line .= $whitespace."set_C = 2'b11;\n";
+      }
+    }
+
+    elsif($macro =~ /RESET (.*)\s*/) {
+      $line = '';
+      my $flag = $1;
+
+      if($flag eq 'S') {
+        $line .= $whitespace."set_S = 2'b10;\n";
+      }
+      elsif($flag eq 'Z') {
+        $line .= $whitespace."set_Z = 2'b10;\n";
+      }
+      elsif($flag eq 'H') {
+        $line .= $whitespace."set_H = 2'b10;\n";
+      }
+      elsif($flag eq 'PV') {
+        $line .= $whitespace."set_PV = 2'b10;\n";
+      }
+      elsif($flag eq 'N') {
+        $line .= $whitespace."set_N = 2'b10;\n";
+      }
+      elsif($flag eq 'C') {
+        $line .= $whitespace."set_C = 2'b10;\n";
+      }
+    }
+
   }
 
   #write the line that was either the original or the replaced macro

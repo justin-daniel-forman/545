@@ -55,6 +55,12 @@ module datapath (
   input  logic         ld_A,
   input  logic         ld_F_data,
   input  logic         ld_F_addr,
+  input  logic [1:0]   set_S,
+  input  logic [1:0]   set_Z,
+  input  logic [1:0]   set_H,
+  input  logic [1:0]   set_PV,
+  input  logic [1:0]   set_N,
+  input  logic [1:0]   set_C,
 
   //Accumulator and Flag drives
   input  logic         drive_A,
@@ -264,19 +270,25 @@ module datapath (
   //--------------------------------------------------------------------------
   logic [7:0]   alu_out_data;
   logic [15:0]  alu_out_addr;
+  logic [7:0]   alu_flag_data;
+  logic [7:0]   alu_flag_addr;
 
   alu #(8) eightBit(
     .A(A_out),
     .B(data_in),
     .op(alu_op),
-    .C(alu_out_data)
+    .C(alu_out_data),
+    .F_in(F_out),
+    .F_out(alu_flag_data)
   );
 
   alu #(16) sixteenBit(
     .A(reg_addr_out),
     .B({8'b0, TEMP_out}),
     .op(alu_op),
-    .C(alu_out_addr)
+    .C(alu_out_addr),
+    .F_in(F_out),
+    .F_out(alu_flag_addr)
   );
 
   //---------------------------------------------------------------------------
@@ -287,13 +299,29 @@ module datapath (
     //      and the other registers so that a swap operation can occur
     //      in a single clock cycle.
     A_in = (swap_reg) ? reg_data_out : internal_data;
-    F_in = 0;
+    A_en = ld_A;
+
+    F_in = (ld_F_data) ? (alu_flag_data) : ((ld_F_addr) ? (alu_flag_addr) : F_out);
+    F_en = ld_F_data | ld_F_addr;
+
+    //set or unset flags based on global sets/resets on top of alu sets
+    if     (set_S == 2'b11) begin F_in =  F_in  | 8'b1000_0000; F_en = 1; end
+    else if(set_S == 2'b10) begin F_in =  F_in  & 8'b0111_1111; F_en = 1; end
+    if     (set_Z == 2'b11) begin F_in[6] = 1; F_en = 1; end
+    else if(set_Z == 2'b10) begin F_in[6] = 0; F_en = 1; end
+    if     (set_H == 2'b11) begin F_in[4] = 1; F_en = 1; end
+    else if(set_H == 2'b10) begin F_in[4] = 0; F_en = 1; end
+    if     (set_PV == 2'b11)begin F_in[2] = 1; F_en = 1; end
+    else if(set_PV == 2'b10)begin F_in[2] = 0; F_en = 1; end
+    if     (set_N == 2'b11) begin F_in[1] = 1; F_en = 1; end
+    else if(set_N == 2'b10) begin F_in[1] = 0; F_en = 1; end
+    if     (set_C == 2'b11) begin F_in[0] = 1; F_en = 1; end
+    else if(set_C == 2'b10) begin F_in[0] = 0; F_en = 1; end
+
     MDR1_in = internal_data;
     MDR2_in = internal_data;
     TEMP_in = internal_data;
 
-    A_en = ld_A;
-    F_en = ld_F_data | ld_F_addr;
     MDR1_en = ld_MDR1;
     MDR2_en = ld_MDR2;
     TEMP_en = ld_TEMP;
@@ -378,16 +406,21 @@ module alu #(parameter w = 8)(
   // - B: Bus input
   // - op: defines the alu opcode
   // - C: Simply the output
+  // - F_in: Contents of flag register before operation
+  // - F_out: Contents of flag register after operation
   //---------------------------------------------------------------------------
   input   logic [w-1:0] A,
   input   logic [w-1:0] B, //B stands for Bus
   input   logic [3:0] op,
-  output  logic [w-1:0] C
+  input   logic [7:0] F_in,
+  output  logic [w-1:0] C,
+  output  logic [7:0] F_out
 );
 
-  //TODO: Implement flag support
-
   always_comb begin
+
+    F_out = F_in;
+
     case(op)
 
       `INCR_A: begin
@@ -396,6 +429,9 @@ module alu #(parameter w = 8)(
 
       `DECR_A: begin
         C = A - 1;
+
+        //set the PV flag when ARG_A - 1 != 0, otherwise reset
+        F_out[2] = (C == 0) ? 0 : 1;
       end
 
       `ADD: begin
