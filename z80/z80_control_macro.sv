@@ -598,6 +598,8 @@ module decoder (
 
     MACRO_DEFINE_STATES LD_dd_nn_x 12
 
+    MACRO_DEFINE_STATES LD_SP_IX 2
+
     MACRO_DEFINE_STATES EX_DE_HL 1
 
     INC_0,
@@ -763,6 +765,7 @@ module decoder (
           `LD_IX_nn: 		next_state = (op0[7:4] == 4'hD) ?  LD_IX_nn_0  : LD_IY_nn_0;
           `LD_IY_nn:    next_state = (op0[7:4] == 4'hF) ?  LD_IY_nn_0  : LD_IX_nn_0;
           `LD_dd_nn_x:  next_state = LD_dd_nn_x_0;
+          `LD_SP_IX:    next_state = LD_SP_IX_0;
           `LDI:         next_state = LDI_0;
           default:      next_state = FETCH_0;
         endcase
@@ -938,6 +941,8 @@ module decoder (
       MACRO_ENUM_STATES LD_HL_nn 12
 
       MACRO_ENUM_STATES LD_dd_nn_x 12
+
+      MACRO_ENUM_STATES LD_SP_IX 2
 
       //-----------------------------------------------------------------------
       //END 16-bit load group
@@ -2050,6 +2055,18 @@ module decoder (
           10: ld_H = 1;
           11: ld_SPH = 1;
         endcase
+      end
+
+      //LD_SP_IX
+
+      LD_SP_IX_0: begin
+        drive_IXL = 1;
+        drive_IXH = 1;
+        ld_SPL = 1;
+        ld_SPH = 1;
+        alu_op = `NOP;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
       end
 
       //-----------------------------------------------------------------------
