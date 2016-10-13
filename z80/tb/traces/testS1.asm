@@ -8,6 +8,9 @@ section code
   ld uv,$10
 	ld uv,$23
 
+  ld hl,$12
+  ld sp,hl
+
 section data
   addr0: data !DEAD !BEEF
 

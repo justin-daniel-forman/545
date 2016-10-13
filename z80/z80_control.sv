@@ -638,6 +638,9 @@ module decoder (
     LD_SP_IX_0,
     LD_SP_IX_1,
 
+    LD_SP_HL_0,
+    LD_SP_HL_1,
+
     EX_DE_HL_0,
 
     EXX_0,
@@ -788,6 +791,7 @@ module decoder (
             `LD_BC_A:   next_state = LD_BC_A_0;
             `LD_DE_A:   next_state = LD_DE_A_0;
             `LD_dd_nn:  next_state = LD_dd_nn_0;
+            `LD_SP_HL:  next_state = LD_SP_HL_0;
             default:    next_state = FETCH_0;
           endcase
         end
@@ -1044,6 +1048,10 @@ module decoder (
       //LD_SP_IX
       LD_SP_IX_0: next_state = LD_SP_IX_1;
       LD_SP_IX_1: next_state = FETCH_0;
+
+      //LD_SP_HL
+      LD_SP_HL_0: next_state = LD_SP_HL_1;
+      LD_SP_HL_1: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END 16-bit load group
@@ -2223,7 +2231,6 @@ module decoder (
       end
 
       //LD_SP_IX
-
       LD_SP_IX_0: begin
         drive_IXL = 1;
         drive_IXH = 1;
@@ -2232,6 +2239,17 @@ module decoder (
         alu_op = `NOP;
         drive_reg_addr = 1;
         drive_alu_addr = 1;
+      end
+
+      //LD_SP_HL
+      LD_SP_HL_0: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_H = 1;
+        drive_L = 1;
+        ld_SPH = 1;
+        ld_SPL = 1;
       end
 
       //-----------------------------------------------------------------------
