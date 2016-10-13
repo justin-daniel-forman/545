@@ -626,6 +626,22 @@ module decoder (
 
     EXX_0,
 
+    EX_SP_HL_0,
+    EX_SP_HL_1,
+    EX_SP_HL_2,
+    EX_SP_HL_3,
+    EX_SP_HL_4,
+    EX_SP_HL_5,
+    EX_SP_HL_6,
+    EX_SP_HL_7,
+    EX_SP_HL_8,
+    EX_SP_HL_9,
+    EX_SP_HL_10,
+    EX_SP_HL_11,
+    EX_SP_HL_12,
+    EX_SP_HL_13,
+    EX_SP_HL_14,
+
     INC_0,
     INC_1,
     INC_2,
@@ -1007,23 +1023,22 @@ module decoder (
       //EXX
       EXX_0: next_state = FETCH_0;
 
-      //-----------------------------------------------------------------------
-      //END EXCHANGE, BLOCK TRANSFER GROUP
-      //-----------------------------------------------------------------------
-
-
-      //TODO: include support for INC
-      INC_0: next_state = FETCH_0;
-
-
-
-      //-----------------------------------------------------------------------
-      //BEGIN Extended instructions group
-      //-----------------------------------------------------------------------
-
-      //We need to fetch another byte to figure out which op this is,
-      //so go to the second op code fetch cycle
-      EXT_INST_0: next_state = FETCH_4;
+      //EX_SP_HL
+      EX_SP_HL_0: next_state = EX_SP_HL_1;
+      EX_SP_HL_1: next_state = EX_SP_HL_2;
+      EX_SP_HL_2: next_state = EX_SP_HL_3;
+      EX_SP_HL_3: next_state = EX_SP_HL_4;
+      EX_SP_HL_4: next_state = EX_SP_HL_5;
+      EX_SP_HL_5: next_state = EX_SP_HL_6;
+      EX_SP_HL_6: next_state = EX_SP_HL_7;
+      EX_SP_HL_7: next_state = EX_SP_HL_8;
+      EX_SP_HL_8: next_state = EX_SP_HL_9;
+      EX_SP_HL_9: next_state = EX_SP_HL_10;
+      EX_SP_HL_10: next_state = EX_SP_HL_11;
+      EX_SP_HL_11: next_state = EX_SP_HL_12;
+      EX_SP_HL_12: next_state = EX_SP_HL_13;
+      EX_SP_HL_13: next_state = EX_SP_HL_14;
+      EX_SP_HL_14: next_state = FETCH_0;
 
       //LDI
       LDI_0: next_state = LDI_1;
@@ -1034,6 +1049,21 @@ module decoder (
       LDI_5: next_state = LDI_6;
       LDI_6: next_state = LDI_7;
       LDI_7: next_state = FETCH_0;
+
+      //-----------------------------------------------------------------------
+      //END EXCHANGE, BLOCK TRANSFER GROUP
+      //-----------------------------------------------------------------------
+
+      //TODO: include support for INC
+      INC_0: next_state = FETCH_0;
+
+      //-----------------------------------------------------------------------
+      //BEGIN Extended instructions group
+      //-----------------------------------------------------------------------
+
+      //We need to fetch another byte to figure out which op this is,
+      //so go to the second op code fetch cycle
+      EXT_INST_0: next_state = FETCH_4;
 
       //-----------------------------------------------------------------------
       //END Extended instructions group
@@ -2064,10 +2094,104 @@ module decoder (
         ld_L = 1;
       end
 
-      //-----------------------------------------------------------------------
-      //END EXCHANGE, BLOCK TRANSFER GROUP
-      //-----------------------------------------------------------------------
+      //EX (SP), HL
+      EX_SP_HL_0: begin
+        MRD_start = 1;
+        MRD_bus   = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+      end
 
+      EX_SP_HL_1: begin
+        MRD_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+      end
+
+      EX_SP_HL_2: begin
+        ld_MDR1 = 1;
+      end
+
+      EX_SP_HL_3: begin
+        MRD_start = 1;
+        MRD_bus   = 1;
+
+        //put the SP+1 into MAR
+        drive_SPL = 1;
+        drive_SPH = 1;
+        drive_alu_addr = 1;
+        drive_reg_addr = 1;
+        alu_op = `INCR_A;
+      end
+
+      EX_SP_HL_4: begin
+        MRD_bus = 1;
+        drive_MAR = 1;
+      end
+
+      EX_SP_HL_5: begin
+        ld_MDR2 = 1;
+      end
+
+      EX_SP_HL_6: begin
+        //now that SP+1 is in MAR, write H into (SP+1)
+        MWR_start = 1;
+        MWR_bus   = 1;
+        drive_MAR = 1;
+        drive_H = 1;
+        drive_reg_data = 1;
+      end
+
+      EX_SP_HL_7: begin
+        MWR_bus = 1;
+        drive_MAR = 1;
+        drive_H = 1;
+        drive_reg_data = 1;
+      end
+
+      EX_SP_HL_8: begin
+        //put SP into MAR
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
+      EX_SP_HL_9: begin
+        MWR_start = 1;
+        MWR_bus   = 1;
+        drive_MAR = 1;
+        drive_L = 1;
+        drive_reg_data = 1;
+      end
+
+      EX_SP_HL_10: begin
+        MWR_bus = 1;
+        drive_MAR = 1;
+        drive_L = 1;
+        drive_reg_data = 1;
+      end
+
+      EX_SP_HL_11: begin
+        drive_MDR1 = 1;
+        ld_H = 1;
+      end
+
+      EX_SP_HL_12: begin
+        drive_MDR2 = 1;
+        ld_L = 1;
+      end
+
+      //LDI
       LDI_0: begin
         //MAR <- HL
         drive_H = 1;
@@ -2153,6 +2277,10 @@ module decoder (
         ld_C    = 1;
         alu_op  = `DECR_A;
       end
+
+      //-----------------------------------------------------------------------
+      //END EXCHANGE, BLOCK TRANSFER GROUP
+      //-----------------------------------------------------------------------
 
     endcase
   end
