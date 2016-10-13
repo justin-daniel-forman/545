@@ -1,7 +1,7 @@
 A: 00
-BC: dead
+BC: adde
 DE: 0000
-HL: dead
+HL: adde
 IX: 0023
 IY: 0000
 SP: 0023

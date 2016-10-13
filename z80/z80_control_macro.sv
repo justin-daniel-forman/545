@@ -497,6 +497,8 @@ module decoder (
 
     MACRO_DEFINE_STATES LD_dd_nn_x 12
 
+    MACRO_DEFINE_STATES LD_IX_nn_x 12
+
     MACRO_DEFINE_STATES LD_SP_IX 2
 
     MACRO_DEFINE_STATES LD_SP_HL 2
@@ -602,7 +604,6 @@ module decoder (
           casex(op0)
             `LD_HL_r:   next_state = LD_HL_r_0;
             `LD_HL_n:   next_state = LD_HL_n_0;
-            `LD_HL_nn:  next_state = LD_HL_nn_0;
             `LD_nn_A:   next_state = LD_nn_A_0;
             `LD_dd_nn:  next_state = LD_dd_nn_0;
             default:    next_state = FETCH_0;
@@ -615,7 +616,6 @@ module decoder (
             `LD_r_n:    next_state = LD_r_n_0;
             `LD_r_HL:   next_state = LD_r_HL_0;
             `LD_HL_n:   next_state = LD_HL_n_0;
-            `LD_HL_nn:  next_state = LD_HL_nn_0;
             `LD_dd_nn:  next_state = LD_dd_nn_0;
             default:    next_state = FETCH_0;
           endcase
@@ -629,6 +629,7 @@ module decoder (
             `LD_A_nn:   next_state = LD_A_nn_0;
             `LD_BC_A:   next_state = LD_BC_A_0;
             `LD_DE_A:   next_state = LD_DE_A_0;
+            `LD_HL_nn:  next_state = LD_HL_nn_0;
             `LD_dd_nn:  next_state = LD_dd_nn_0;
             `LD_SP_HL:  next_state = LD_SP_HL_0;
             default:    next_state = FETCH_0;
@@ -665,6 +666,7 @@ module decoder (
           `LD_IX_nn: 		next_state = (op0[7:4] == 4'hD) ?  LD_IX_nn_0  : LD_IY_nn_0;
           `LD_IY_nn:    next_state = (op0[7:4] == 4'hF) ?  LD_IY_nn_0  : LD_IX_nn_0;
           `LD_dd_nn_x:  next_state = LD_dd_nn_x_0;
+          `LD_IX_nn_x:  next_state = LD_IX_nn_x_0;
           `LD_SP_IX:    next_state = LD_SP_IX_0;
           `LDI:         next_state = LDI_0;
           default:      next_state = FETCH_0;
@@ -729,6 +731,8 @@ module decoder (
       MACRO_ENUM_STATES LD_HL_nn 12
 
       MACRO_ENUM_STATES LD_dd_nn_x 12
+
+      MACRO_ENUM_STATES LD_IX_nn_x 12
 
       MACRO_ENUM_STATES LD_SP_IX 2
 
@@ -1842,6 +1846,17 @@ module decoder (
           11: ld_SPH = 1;
         endcase
       end
+
+      //LD_IX_nn_x
+      LD_IX_nn_x_0,LD_IX_nn_x_3: begin
+        MACRO_INC_PC
+        MACRO_READ_0
+      end
+
+      LD_IX_nn_x_1,LD_IX_nn_x_4: begin
+        MACRO_DRIVE_PC
+        MACRO_READ_1
+      end 
 
       //LD_SP_IX
       LD_SP_IX_0: begin
