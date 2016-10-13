@@ -80,6 +80,36 @@ while (my $line = <$in_fh>) {
       $line = $whitespace."MWR_bus = 1;\n";
     }
 
+    elsif($macro =~ /16_LOAD (.*)\s*/) {
+      $line = '';
+      my $reg = $1;
+
+      if($reg eq 'BC') {
+        $line .= $whitespace."ld_B = 1;\n";
+        $line .= $whitespace."ld_C = 1;\n";
+      }
+      if($reg eq 'DE') {
+        $line .= $whitespace."ld_D = 1;\n";
+        $line .= $whitespace."ld_E = 1;\n";
+      }
+      if($reg eq 'HL') {
+        $line .= $whitespace."ld_H = 1;\n";
+        $line .= $whitespace."ld_L = 1;\n";
+      }
+      if($reg eq 'SP') {
+        $line .= $whitespace."ld_SPL = 1;\n";
+        $line .= $whitespace."ld_SPH = 1;\n";
+      }
+      if($reg eq 'IX') {
+        $line .= $whitespace."ld_IXL = 1;\n";
+        $line .= $whitespace."ld_IXH = 1;\n";
+      }
+      if($reg eq 'IY') {
+        $line .= $whitespace."ld_IYL = 1;\n";
+        $line .= $whitespace."ld_IYH = 1;\n";
+      }
+    }
+
     elsif($macro =~ /8_DRIVE (.*)\s*/) {
       my $reg = $1;
 

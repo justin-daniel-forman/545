@@ -450,6 +450,7 @@ module decoder (
 
   enum logic [31:0] {
     START,
+
     FETCH_0,
     FETCH_1,
     FETCH_2,
@@ -479,7 +480,7 @@ module decoder (
     LD_r_IX_d_7,
     LD_r_IX_d_8,
     LD_r_IX_d_9,
-    LD_r_IX_d_A,
+    LD_r_IX_d_10,
 
     LD_r_IY_d_0,
     LD_r_IY_d_1,
@@ -491,7 +492,7 @@ module decoder (
     LD_r_IY_d_7,
     LD_r_IY_d_8,
     LD_r_IY_d_9,
-    LD_r_IY_d_A,
+    LD_r_IY_d_10,
 
     LD_HL_r_0,
     LD_HL_r_1,
@@ -507,7 +508,7 @@ module decoder (
     LD_IX_d_r_7,
     LD_IX_d_r_8,
     LD_IX_d_r_9,
-    LD_IX_d_r_A,
+    LD_IX_d_r_10,
 
     LD_IY_d_r_0,
     LD_IY_d_r_1,
@@ -519,7 +520,7 @@ module decoder (
     LD_IY_d_r_7,
     LD_IY_d_r_8,
     LD_IY_d_r_9,
-    LD_IY_d_r_A,
+    LD_IY_d_r_10,
 
     LD_HL_n_0,
     LD_HL_n_1,
@@ -538,7 +539,7 @@ module decoder (
     LD_IX_d_n_7,
     LD_IX_d_n_8,
     LD_IX_d_n_9,
-    LD_IX_d_n_A,
+    LD_IX_d_n_10,
 
     LD_IY_d_n_0,
     LD_IY_d_n_1,
@@ -550,7 +551,7 @@ module decoder (
     LD_IY_d_n_7,
     LD_IY_d_n_8,
     LD_IY_d_n_9,
-    LD_IY_d_n_A,
+    LD_IY_d_n_10,
 
     LD_A_BC_0,
     LD_A_BC_1,
@@ -658,10 +659,6 @@ module decoder (
     EX_SP_HL_13,
     EX_SP_HL_14,
 
-    INC_0,
-    INC_1,
-    INC_2,
-
     LDI_0,
     LDI_1,
     LDI_2,
@@ -670,6 +667,10 @@ module decoder (
     LDI_5,
     LDI_6,
     LDI_7,
+
+    INC_0,
+    INC_1,
+    INC_2,
 
     //Multi-OCF Instructions
     //There is a difference between multi-ocf instructions and
@@ -835,20 +836,20 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN 8-bit load group
       //-----------------------------------------------------------------------
-      //LD r r'
+      //LD_r_r
       LD_r_r_0: next_state = FETCH_0;
 
-      //LD r n
+      //LD_r_n
       LD_r_n_0: next_state = LD_r_n_1;
       LD_r_n_1: next_state = LD_r_n_2;
       LD_r_n_2: next_state = FETCH_0;
 
-      //LD r (HL)
+      //LD_r_HL
       LD_r_HL_0: next_state = LD_r_HL_1;
       LD_r_HL_1: next_state = LD_r_HL_2;
       LD_r_HL_2: next_state = FETCH_0;
 
-      //LD r, (IX+d)
+      //LD_r_IX_d
       LD_r_IX_d_0: next_state = LD_r_IX_d_1;
       LD_r_IX_d_1: next_state = LD_r_IX_d_2;
       LD_r_IX_d_2: next_state = LD_r_IX_d_3;
@@ -858,10 +859,10 @@ module decoder (
       LD_r_IX_d_6: next_state = LD_r_IX_d_7;
       LD_r_IX_d_7: next_state = LD_r_IX_d_8;
       LD_r_IX_d_8: next_state = LD_r_IX_d_9;
-      LD_r_IX_d_9: next_state = LD_r_IX_d_A;
-      LD_r_IX_d_A: next_state = FETCH_0;
+      LD_r_IX_d_9: next_state = LD_r_IX_d_10;
+      LD_r_IX_d_10: next_state = FETCH_0;
 
-      //LD r, (IY+d)
+      //LD_r_IY_d
       LD_r_IY_d_0: next_state = LD_r_IY_d_1;
       LD_r_IY_d_1: next_state = LD_r_IY_d_2;
       LD_r_IY_d_2: next_state = LD_r_IY_d_3;
@@ -871,15 +872,15 @@ module decoder (
       LD_r_IY_d_6: next_state = LD_r_IY_d_7;
       LD_r_IY_d_7: next_state = LD_r_IY_d_8;
       LD_r_IY_d_8: next_state = LD_r_IY_d_9;
-      LD_r_IY_d_9: next_state = LD_r_IY_d_A;
-      LD_r_IY_d_A: next_state = FETCH_0;
+      LD_r_IY_d_9: next_state = LD_r_IY_d_10;
+      LD_r_IY_d_10: next_state = FETCH_0;
 
-      //LD (HL), r
+      //LD_HL_r
       LD_HL_r_0: next_state = LD_HL_r_1;
       LD_HL_r_1: next_state = LD_HL_r_2;
       LD_HL_r_2: next_state = FETCH_0;
 
-      //LD (IX+d), r
+      //LD_IX_d_r
       LD_IX_d_r_0: next_state = LD_IX_d_r_1;
       LD_IX_d_r_1: next_state = LD_IX_d_r_2;
       LD_IX_d_r_2: next_state = LD_IX_d_r_3;
@@ -889,10 +890,10 @@ module decoder (
       LD_IX_d_r_6: next_state = LD_IX_d_r_7;
       LD_IX_d_r_7: next_state = LD_IX_d_r_8;
       LD_IX_d_r_8: next_state = LD_IX_d_r_9;
-      LD_IX_d_r_9: next_state = LD_IX_d_r_A;
-      LD_IX_d_r_A: next_state = FETCH_0;
+      LD_IX_d_r_9: next_state = LD_IX_d_r_10;
+      LD_IX_d_r_10: next_state = FETCH_0;
 
-      //LD (IY+d), r
+      //LD_IY_d_r
       LD_IY_d_r_0: next_state = LD_IY_d_r_1;
       LD_IY_d_r_1: next_state = LD_IY_d_r_2;
       LD_IY_d_r_2: next_state = LD_IY_d_r_3;
@@ -902,10 +903,10 @@ module decoder (
       LD_IY_d_r_6: next_state = LD_IY_d_r_7;
       LD_IY_d_r_7: next_state = LD_IY_d_r_8;
       LD_IY_d_r_8: next_state = LD_IY_d_r_9;
-      LD_IY_d_r_9: next_state = LD_IY_d_r_A;
-      LD_IY_d_r_A: next_state = FETCH_0;
+      LD_IY_d_r_9: next_state = LD_IY_d_r_10;
+      LD_IY_d_r_10: next_state = FETCH_0;
 
-      //LD (HL), n
+      //LD_HL_n
       LD_HL_n_0: next_state = LD_HL_n_1;
       LD_HL_n_1: next_state = LD_HL_n_2;
       LD_HL_n_2: next_state = LD_HL_n_3;
@@ -913,7 +914,7 @@ module decoder (
       LD_HL_n_4: next_state = LD_HL_n_5;
       LD_HL_n_5: next_state = FETCH_0;
 
-      //LD (IX+d), n
+      //LD_IX_d_n
       LD_IX_d_n_0: next_state = LD_IX_d_n_1;
       LD_IX_d_n_1: next_state = LD_IX_d_n_2;
       LD_IX_d_n_2: next_state = LD_IX_d_n_3;
@@ -923,10 +924,10 @@ module decoder (
       LD_IX_d_n_6: next_state = LD_IX_d_n_7;
       LD_IX_d_n_7: next_state = LD_IX_d_n_8;
       LD_IX_d_n_8: next_state = LD_IX_d_n_9;
-      LD_IX_d_n_9: next_state = LD_IX_d_n_A;
-      LD_IX_d_n_A: next_state = FETCH_0;
+      LD_IX_d_n_9: next_state = LD_IX_d_n_10;
+      LD_IX_d_n_10: next_state = FETCH_0;
 
-      //LD (IY+d), n
+      //LD_IY_d_n
       LD_IY_d_n_0: next_state = LD_IY_d_n_1;
       LD_IY_d_n_1: next_state = LD_IY_d_n_2;
       LD_IY_d_n_2: next_state = LD_IY_d_n_3;
@@ -936,20 +937,20 @@ module decoder (
       LD_IY_d_n_6: next_state = LD_IY_d_n_7;
       LD_IY_d_n_7: next_state = LD_IY_d_n_8;
       LD_IY_d_n_8: next_state = LD_IY_d_n_9;
-      LD_IY_d_n_9: next_state = LD_IY_d_n_A;
-      LD_IY_d_n_A: next_state = FETCH_0;
+      LD_IY_d_n_9: next_state = LD_IY_d_n_10;
+      LD_IY_d_n_10: next_state = FETCH_0;
 
-      //LD A, (BC)
+      //LD_A_BC
       LD_A_BC_0: next_state = LD_A_BC_1;
       LD_A_BC_1: next_state = LD_A_BC_2;
       LD_A_BC_2: next_state = FETCH_0;
 
-      //LD A, (DE)
+      //LD_A_DE
       LD_A_DE_0: next_state = LD_A_DE_1;
       LD_A_DE_1: next_state = LD_A_DE_2;
       LD_A_DE_2: next_state = FETCH_0;
 
-      //LD A, (nn)
+      //LD_A_nn
       LD_A_nn_0: next_state = LD_A_nn_1;
       LD_A_nn_1: next_state = LD_A_nn_2;
       LD_A_nn_2: next_state = LD_A_nn_3;
@@ -960,17 +961,17 @@ module decoder (
       LD_A_nn_7: next_state = LD_A_nn_8;
       LD_A_nn_8: next_state = FETCH_0;
 
-      //LD (BC), A
+      //LD_BC_A
       LD_BC_A_0: next_state = LD_BC_A_1;
       LD_BC_A_1: next_state = LD_BC_A_2;
       LD_BC_A_2: next_state = FETCH_0;
 
-      //LD (DE), A
+      //LD_DE_A
       LD_DE_A_0: next_state = LD_DE_A_1;
       LD_DE_A_1: next_state = LD_DE_A_2;
       LD_DE_A_2: next_state = FETCH_0;
 
-      //LD (nn), A
+      //LD_nn_A
       LD_nn_A_0: next_state = LD_nn_A_1;
       LD_nn_A_1: next_state = LD_nn_A_2;
       LD_nn_A_2: next_state = LD_nn_A_3;

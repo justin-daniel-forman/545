@@ -450,143 +450,42 @@ module decoder (
 
   enum logic [31:0] {
     START,
-    FETCH_0,
-    FETCH_1,
-    FETCH_2,
-    FETCH_3,
-    FETCH_4,
-    FETCH_5,
-    FETCH_6,
-    FETCH_7,
 
-    LD_r_r_0,
+    MACRO_DEFINE_STATES FETCH 8
 
-    LD_r_n_0,
-    LD_r_n_1,
-    LD_r_n_2,
+    MACRO_DEFINE_STATES LD_r_r 1
 
-    LD_r_HL_0,
-    LD_r_HL_1,
-    LD_r_HL_2,
+    MACRO_DEFINE_STATES LD_r_n 3
 
-    LD_r_IX_d_0,
-    LD_r_IX_d_1,
-    LD_r_IX_d_2,
-    LD_r_IX_d_3,
-    LD_r_IX_d_4,
-    LD_r_IX_d_5,
-    LD_r_IX_d_6,
-    LD_r_IX_d_7,
-    LD_r_IX_d_8,
-    LD_r_IX_d_9,
-    LD_r_IX_d_A,
+    MACRO_DEFINE_STATES LD_r_HL 3
 
-    LD_r_IY_d_0,
-    LD_r_IY_d_1,
-    LD_r_IY_d_2,
-    LD_r_IY_d_3,
-    LD_r_IY_d_4,
-    LD_r_IY_d_5,
-    LD_r_IY_d_6,
-    LD_r_IY_d_7,
-    LD_r_IY_d_8,
-    LD_r_IY_d_9,
-    LD_r_IY_d_A,
+    MACRO_DEFINE_STATES LD_r_IX_d 11
 
-    LD_HL_r_0,
-    LD_HL_r_1,
-    LD_HL_r_2,
+    MACRO_DEFINE_STATES LD_r_IY_d 11
 
-    LD_IX_d_r_0,
-    LD_IX_d_r_1,
-    LD_IX_d_r_2,
-    LD_IX_d_r_3,
-    LD_IX_d_r_4,
-    LD_IX_d_r_5,
-    LD_IX_d_r_6,
-    LD_IX_d_r_7,
-    LD_IX_d_r_8,
-    LD_IX_d_r_9,
-    LD_IX_d_r_A,
+    MACRO_DEFINE_STATES LD_HL_r 3
 
-    LD_IY_d_r_0,
-    LD_IY_d_r_1,
-    LD_IY_d_r_2,
-    LD_IY_d_r_3,
-    LD_IY_d_r_4,
-    LD_IY_d_r_5,
-    LD_IY_d_r_6,
-    LD_IY_d_r_7,
-    LD_IY_d_r_8,
-    LD_IY_d_r_9,
-    LD_IY_d_r_A,
+    MACRO_DEFINE_STATES LD_IX_d_r 11
 
-    LD_HL_n_0,
-    LD_HL_n_1,
-    LD_HL_n_2,
-    LD_HL_n_3,
-    LD_HL_n_4,
-    LD_HL_n_5,
+    MACRO_DEFINE_STATES LD_IY_d_r 11
 
-    LD_IX_d_n_0,
-    LD_IX_d_n_1,
-    LD_IX_d_n_2,
-    LD_IX_d_n_3,
-    LD_IX_d_n_4,
-    LD_IX_d_n_5,
-    LD_IX_d_n_6,
-    LD_IX_d_n_7,
-    LD_IX_d_n_8,
-    LD_IX_d_n_9,
-    LD_IX_d_n_A,
+    MACRO_DEFINE_STATES LD_HL_n 6
 
-    LD_IY_d_n_0,
-    LD_IY_d_n_1,
-    LD_IY_d_n_2,
-    LD_IY_d_n_3,
-    LD_IY_d_n_4,
-    LD_IY_d_n_5,
-    LD_IY_d_n_6,
-    LD_IY_d_n_7,
-    LD_IY_d_n_8,
-    LD_IY_d_n_9,
-    LD_IY_d_n_A,
+    MACRO_DEFINE_STATES LD_IX_d_n 11
 
-    LD_A_BC_0,
-    LD_A_BC_1,
-    LD_A_BC_2,
+    MACRO_DEFINE_STATES LD_IY_d_n 11
 
-    LD_A_DE_0,
-    LD_A_DE_1,
-    LD_A_DE_2,
+    MACRO_DEFINE_STATES LD_A_BC 3
 
-    LD_A_nn_0,
-    LD_A_nn_1,
-    LD_A_nn_2,
-    LD_A_nn_3,
-    LD_A_nn_4,
-    LD_A_nn_5,
-    LD_A_nn_6,
-    LD_A_nn_7,
-    LD_A_nn_8,
+    MACRO_DEFINE_STATES LD_A_DE 3
 
-    LD_BC_A_0,
-    LD_BC_A_1,
-    LD_BC_A_2,
+    MACRO_DEFINE_STATES LD_A_nn 9
 
-    LD_DE_A_0,
-    LD_DE_A_1,
-    LD_DE_A_2,
+    MACRO_DEFINE_STATES LD_BC_A 3
 
-    LD_nn_A_0,
-    LD_nn_A_1,
-    LD_nn_A_2,
-    LD_nn_A_3,
-    LD_nn_A_4,
-    LD_nn_A_5,
-    LD_nn_A_6,
-    LD_nn_A_7,
-    LD_nn_A_8,
+    MACRO_DEFINE_STATES LD_DE_A 3
+
+    MACRO_DEFINE_STATES LD_nn_A 9
 
     MACRO_DEFINE_STATES LD_dd_nn 6
 
@@ -606,18 +505,11 @@ module decoder (
 
     MACRO_DEFINE_STATES EX_SP_HL 15
 
+    MACRO_DEFINE_STATES LDI 8
+
     INC_0,
     INC_1,
     INC_2,
-
-    LDI_0,
-    LDI_1,
-    LDI_2,
-    LDI_3,
-    LDI_4,
-    LDI_5,
-    LDI_6,
-    LDI_7,
 
     //Multi-OCF Instructions
     //There is a difference between multi-ocf instructions and
@@ -783,151 +675,39 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN 8-bit load group
       //-----------------------------------------------------------------------
-      //LD r r'
-      LD_r_r_0: next_state = FETCH_0;
+      MACRO_ENUM_STATES LD_r_r 1
 
-      //LD r n
-      LD_r_n_0: next_state = LD_r_n_1;
-      LD_r_n_1: next_state = LD_r_n_2;
-      LD_r_n_2: next_state = FETCH_0;
+      MACRO_ENUM_STATES LD_r_n 3
 
-      //LD r (HL)
-      LD_r_HL_0: next_state = LD_r_HL_1;
-      LD_r_HL_1: next_state = LD_r_HL_2;
-      LD_r_HL_2: next_state = FETCH_0;
+      MACRO_ENUM_STATES LD_r_HL 3
 
-      //LD r, (IX+d)
-      LD_r_IX_d_0: next_state = LD_r_IX_d_1;
-      LD_r_IX_d_1: next_state = LD_r_IX_d_2;
-      LD_r_IX_d_2: next_state = LD_r_IX_d_3;
-      LD_r_IX_d_3: next_state = LD_r_IX_d_4;
-      LD_r_IX_d_4: next_state = LD_r_IX_d_5;
-      LD_r_IX_d_5: next_state = LD_r_IX_d_6;
-      LD_r_IX_d_6: next_state = LD_r_IX_d_7;
-      LD_r_IX_d_7: next_state = LD_r_IX_d_8;
-      LD_r_IX_d_8: next_state = LD_r_IX_d_9;
-      LD_r_IX_d_9: next_state = LD_r_IX_d_A;
-      LD_r_IX_d_A: next_state = FETCH_0;
+      MACRO_ENUM_STATES LD_r_IX_d 11
 
-      //LD r, (IY+d)
-      LD_r_IY_d_0: next_state = LD_r_IY_d_1;
-      LD_r_IY_d_1: next_state = LD_r_IY_d_2;
-      LD_r_IY_d_2: next_state = LD_r_IY_d_3;
-      LD_r_IY_d_3: next_state = LD_r_IY_d_4;
-      LD_r_IY_d_4: next_state = LD_r_IY_d_5;
-      LD_r_IY_d_5: next_state = LD_r_IY_d_6;
-      LD_r_IY_d_6: next_state = LD_r_IY_d_7;
-      LD_r_IY_d_7: next_state = LD_r_IY_d_8;
-      LD_r_IY_d_8: next_state = LD_r_IY_d_9;
-      LD_r_IY_d_9: next_state = LD_r_IY_d_A;
-      LD_r_IY_d_A: next_state = FETCH_0;
+      MACRO_ENUM_STATES LD_r_IY_d 11
 
-      //LD (HL), r
-      LD_HL_r_0: next_state = LD_HL_r_1;
-      LD_HL_r_1: next_state = LD_HL_r_2;
-      LD_HL_r_2: next_state = FETCH_0;
+      MACRO_ENUM_STATES LD_HL_r 3
 
-      //LD (IX+d), r
-      LD_IX_d_r_0: next_state = LD_IX_d_r_1;
-      LD_IX_d_r_1: next_state = LD_IX_d_r_2;
-      LD_IX_d_r_2: next_state = LD_IX_d_r_3;
-      LD_IX_d_r_3: next_state = LD_IX_d_r_4;
-      LD_IX_d_r_4: next_state = LD_IX_d_r_5;
-      LD_IX_d_r_5: next_state = LD_IX_d_r_6;
-      LD_IX_d_r_6: next_state = LD_IX_d_r_7;
-      LD_IX_d_r_7: next_state = LD_IX_d_r_8;
-      LD_IX_d_r_8: next_state = LD_IX_d_r_9;
-      LD_IX_d_r_9: next_state = LD_IX_d_r_A;
-      LD_IX_d_r_A: next_state = FETCH_0;
+      MACRO_ENUM_STATES LD_IX_d_r 11
 
-      //LD (IY+d), r
-      LD_IY_d_r_0: next_state = LD_IY_d_r_1;
-      LD_IY_d_r_1: next_state = LD_IY_d_r_2;
-      LD_IY_d_r_2: next_state = LD_IY_d_r_3;
-      LD_IY_d_r_3: next_state = LD_IY_d_r_4;
-      LD_IY_d_r_4: next_state = LD_IY_d_r_5;
-      LD_IY_d_r_5: next_state = LD_IY_d_r_6;
-      LD_IY_d_r_6: next_state = LD_IY_d_r_7;
-      LD_IY_d_r_7: next_state = LD_IY_d_r_8;
-      LD_IY_d_r_8: next_state = LD_IY_d_r_9;
-      LD_IY_d_r_9: next_state = LD_IY_d_r_A;
-      LD_IY_d_r_A: next_state = FETCH_0;
+      MACRO_ENUM_STATES LD_IY_d_r 11
 
-      //LD (HL), n
-      LD_HL_n_0: next_state = LD_HL_n_1;
-      LD_HL_n_1: next_state = LD_HL_n_2;
-      LD_HL_n_2: next_state = LD_HL_n_3;
-      LD_HL_n_3: next_state = LD_HL_n_4;
-      LD_HL_n_4: next_state = LD_HL_n_5;
-      LD_HL_n_5: next_state = FETCH_0;
+      MACRO_ENUM_STATES LD_HL_n 6
 
-      //LD (IX+d), n
-      LD_IX_d_n_0: next_state = LD_IX_d_n_1;
-      LD_IX_d_n_1: next_state = LD_IX_d_n_2;
-      LD_IX_d_n_2: next_state = LD_IX_d_n_3;
-      LD_IX_d_n_3: next_state = LD_IX_d_n_4;
-      LD_IX_d_n_4: next_state = LD_IX_d_n_5;
-      LD_IX_d_n_5: next_state = LD_IX_d_n_6;
-      LD_IX_d_n_6: next_state = LD_IX_d_n_7;
-      LD_IX_d_n_7: next_state = LD_IX_d_n_8;
-      LD_IX_d_n_8: next_state = LD_IX_d_n_9;
-      LD_IX_d_n_9: next_state = LD_IX_d_n_A;
-      LD_IX_d_n_A: next_state = FETCH_0;
+      MACRO_ENUM_STATES LD_IX_d_n 11
 
-      //LD (IY+d), n
-      LD_IY_d_n_0: next_state = LD_IY_d_n_1;
-      LD_IY_d_n_1: next_state = LD_IY_d_n_2;
-      LD_IY_d_n_2: next_state = LD_IY_d_n_3;
-      LD_IY_d_n_3: next_state = LD_IY_d_n_4;
-      LD_IY_d_n_4: next_state = LD_IY_d_n_5;
-      LD_IY_d_n_5: next_state = LD_IY_d_n_6;
-      LD_IY_d_n_6: next_state = LD_IY_d_n_7;
-      LD_IY_d_n_7: next_state = LD_IY_d_n_8;
-      LD_IY_d_n_8: next_state = LD_IY_d_n_9;
-      LD_IY_d_n_9: next_state = LD_IY_d_n_A;
-      LD_IY_d_n_A: next_state = FETCH_0;
+      MACRO_ENUM_STATES LD_IY_d_n 11
 
-      //LD A, (BC)
-      LD_A_BC_0: next_state = LD_A_BC_1;
-      LD_A_BC_1: next_state = LD_A_BC_2;
-      LD_A_BC_2: next_state = FETCH_0;
+      MACRO_ENUM_STATES LD_A_BC 3
 
-      //LD A, (DE)
-      LD_A_DE_0: next_state = LD_A_DE_1;
-      LD_A_DE_1: next_state = LD_A_DE_2;
-      LD_A_DE_2: next_state = FETCH_0;
+      MACRO_ENUM_STATES LD_A_DE 3
 
-      //LD A, (nn)
-      LD_A_nn_0: next_state = LD_A_nn_1;
-      LD_A_nn_1: next_state = LD_A_nn_2;
-      LD_A_nn_2: next_state = LD_A_nn_3;
-      LD_A_nn_3: next_state = LD_A_nn_4;
-      LD_A_nn_4: next_state = LD_A_nn_5;
-      LD_A_nn_5: next_state = LD_A_nn_6;
-      LD_A_nn_6: next_state = LD_A_nn_7;
-      LD_A_nn_7: next_state = LD_A_nn_8;
-      LD_A_nn_8: next_state = FETCH_0;
+      MACRO_ENUM_STATES LD_A_nn 9
 
-      //LD (BC), A
-      LD_BC_A_0: next_state = LD_BC_A_1;
-      LD_BC_A_1: next_state = LD_BC_A_2;
-      LD_BC_A_2: next_state = FETCH_0;
+      MACRO_ENUM_STATES LD_BC_A 3
 
-      //LD (DE), A
-      LD_DE_A_0: next_state = LD_DE_A_1;
-      LD_DE_A_1: next_state = LD_DE_A_2;
-      LD_DE_A_2: next_state = FETCH_0;
+      MACRO_ENUM_STATES LD_DE_A 3
 
-      //LD (nn), A
-      LD_nn_A_0: next_state = LD_nn_A_1;
-      LD_nn_A_1: next_state = LD_nn_A_2;
-      LD_nn_A_2: next_state = LD_nn_A_3;
-      LD_nn_A_3: next_state = LD_nn_A_4;
-      LD_nn_A_4: next_state = LD_nn_A_5;
-      LD_nn_A_5: next_state = LD_nn_A_6;
-      LD_nn_A_6: next_state = LD_nn_A_7;
-      LD_nn_A_7: next_state = LD_nn_A_8;
-      LD_nn_A_8: next_state = FETCH_0;
+      MACRO_ENUM_STATES LD_nn_A 9
 
       //-----------------------------------------------------------------------
       //END 8-bit load group
