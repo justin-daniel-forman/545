@@ -89,6 +89,8 @@ module z80(
   logic         ld_SPL;
   logic         ld_PCH;
   logic         ld_PCL;
+  logic         ld_STRH;
+  logic         ld_STRL;
 
   //-----------------------------------
   //Regfile Drives
@@ -112,6 +114,8 @@ module z80(
   logic         drive_SPL;
   logic         drive_PCH;
   logic         drive_PCL;
+  logic         drive_STRH;
+  logic         drive_STRL;
 
   //-----------------------------------
   //Accumulator and Flag loads

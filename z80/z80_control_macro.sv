@@ -36,6 +36,8 @@ module control_logic (
   output  logic         ld_SPL,
   output  logic         ld_PCH,
   output  logic         ld_PCL,
+  output  logic         ld_STRH,
+  output  logic         ld_STRL,
 
   //-----------------------------------
   //Regfile Drives
@@ -59,6 +61,8 @@ module control_logic (
   output  logic         drive_SPL,
   output  logic         drive_PCH,
   output  logic         drive_PCL,
+  output  logic         drive_STRH,
+  output  logic         drive_STRL,
 
   //-----------------------------------
   //Accumulator and Flag loads
@@ -226,6 +230,8 @@ module control_logic (
     .ld_SPL,
     .ld_PCH,
     .ld_PCL,
+    .ld_STRH,
+    .ld_STRL,
 
     //regfile drives
     .drive_reg_data,
@@ -244,6 +250,8 @@ module control_logic (
     .drive_SPL,
     .drive_PCH,
     .drive_PCL,
+    .drive_STRH,
+    .drive_STRL,
 
     //accumulator flags and loads
     .ld_A,
@@ -380,6 +388,8 @@ module decoder (
   output  logic         ld_SPL,
   output  logic         ld_PCH,
   output  logic         ld_PCL,
+  output  logic         ld_STRH,
+  output  logic         ld_STRL,
 
   //-----------------------------------
   //Regfile Drives
@@ -403,6 +413,8 @@ module decoder (
   output  logic         drive_SPL,
   output  logic         drive_PCH,
   output  logic         drive_PCL,
+  output  logic         drive_STRH,
+  output  logic         drive_STRL,
 
   //-----------------------------------
   //Accumulator and Flag loads
@@ -846,6 +858,8 @@ module decoder (
     ld_SPL = 0;
     ld_PCH = 0;
     ld_PCL = 0;
+    ld_STRH = 0;
+    ld_STRL = 0;
 
     //Regfile Drives
     //Specifying two of these will cause a 16 bit drive onto the
@@ -867,6 +881,8 @@ module decoder (
     drive_SPL = 0;
     drive_PCH = 0;
     drive_PCL = 0;
+    drive_STRH = 0;
+    drive_STRL = 0;
 
     //Accumulator and Flag loads
     //We can load the flags from either the 16-bit ALU or the

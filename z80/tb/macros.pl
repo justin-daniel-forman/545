@@ -108,6 +108,11 @@ while (my $line = <$in_fh>) {
         $line .= $whitespace."ld_IYL = 1;\n";
         $line .= $whitespace."ld_IYH = 1;\n";
       }
+      if($reg eq 'STR') {
+        $line .= $whitespace."ld_STRL = 1;\n";
+        $line .= $whitespace."ld_STRH = 1;\n";
+      }
+
     }
 
     elsif($macro =~ /8_DRIVE (.*)\s*/) {
@@ -136,7 +141,6 @@ while (my $line = <$in_fh>) {
         $line .= $whitespace."drive_L = 1;\n";
         $line .= $whitespace."drive_reg_data = 1;\n";
       }
-
     }
 
     elsif($macro =~/16_DRIVE (.*)\s*/) {
@@ -170,6 +174,10 @@ while (my $line = <$in_fh>) {
       if($reg eq 'IY') {
         $line .= $whitespace."drive_IYL = 1;\n";
         $line .= $whitespace."drive_IYH = 1;\n";
+      }
+      if($reg eq 'STR') {
+        $line .= $whitespace."drive_STRH = 1;\n";
+        $line .= $whitespace."drive_STRL = 1;\n";
       }
     }
 

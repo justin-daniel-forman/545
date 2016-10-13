@@ -27,6 +27,8 @@ module datapath (
   input  logic         ld_SPL,
   input  logic         ld_PCH,
   input  logic         ld_PCL,
+  input  logic         ld_STRH,
+  input  logic         ld_STRL,
 
   //Regfile Drives
   //Specifying two of these will cause a 16 bit drive onto the
@@ -48,6 +50,8 @@ module datapath (
   input  logic         drive_SPL,
   input  logic         drive_PCH,
   input  logic         drive_PCL,
+  input  logic         drive_STRH,
+  input  logic         drive_STRL,
 
   //Accumulator and Flag loads
   //We can load the flags from either the 16-bit ALU or the
@@ -228,6 +232,8 @@ module datapath (
     .drive_SPL(drive_SPL),
     .drive_PCH(drive_PCH),
     .drive_PCL(drive_PCL),
+    .drive_STRH,
+    .drive_STRL,
 
     .ld_B(ld_B),
     .ld_C(ld_C),
@@ -243,6 +249,8 @@ module datapath (
     .ld_SPL(ld_SPL),
     .ld_PCH(ld_PCH),
     .ld_PCL(ld_PCL),
+    .ld_STRH,
+    .ld_STRL,
 
     .drive_single(drive_reg_data),
     .drive_double(drive_reg_addr),
@@ -480,6 +488,8 @@ module regfile(
   input   logic drive_IYH,
   input   logic drive_PCH,
   input   logic drive_PCL,
+  input   logic drive_STRH,
+  input   logic drive_STRL,
 
   input   logic ld_B,
   input   logic ld_C,
@@ -495,6 +505,8 @@ module regfile(
   input   logic ld_IYH,
   input   logic ld_PCH,
   input   logic ld_PCL,
+  input   logic ld_STRH,
+  input   logic ld_STRL,
 
   input   logic drive_single,
   input   logic drive_double,
@@ -599,6 +611,14 @@ module regfile(
   logic [7:0] PCL_out;
   logic       PCL_en;
 
+  logic [7:0] STRH_in;
+  logic [7:0] STRH_out;
+  logic       STRH_en;
+
+  logic [7:0] STRL_in;
+  logic [7:0] STRL_out;
+  logic       STRL_en;
+
   //---------------------------------------------------------------------------
   //Register Output logic
   //---------------------------------------------------------------------------
@@ -625,6 +645,8 @@ module regfile(
       else if(drive_SPL)out_single = SPL_out;
       else if(drive_PCH)out_single = PCH_out;
       else if(drive_PCL)out_single = PCL_out;
+      else if(drive_STRL)out_single = STRL_out;
+      else if(drive_STRH)out_single = STRH_out;
       else              out_single = 8'bz; //shouldn't ever go on the bus
     end
 
@@ -638,6 +660,7 @@ module regfile(
       else if(drive_IYH & drive_IYL)  out_double = {IYH_out, IYL_out};
       else if(drive_SPH & drive_SPL)  out_double = {SPH_out, SPL_out};
       else if(drive_PCH & drive_PCL)  out_double = {PCH_out, PCL_out};
+      else if(drive_STRH & drive_STRL)out_double = {STRH_out, STRL_out};
       else                            out_double = 8'bz;
     end
 
@@ -685,6 +708,8 @@ module regfile(
     SPL_in = 0;
     PCH_in = 0;
     PCL_in = 0;
+    STRH_in = 0;
+    STRL_in = 0;
 
     B_en = 0;
     C_en = 0;
@@ -706,6 +731,8 @@ module regfile(
     SPL_en = 0;
     PCH_en = 0;
     PCL_en = 0;
+    STRH_en = 0;
+    STRL_en = 0;
 
     //context swap the specified register
     if(switch_context) begin
@@ -845,6 +872,8 @@ module regfile(
       SPL_en = ld_SPL;
       PCH_en = ld_PCH;
       PCL_en = ld_PCL;
+      STRH_en = ld_STRH;
+      STRL_en = ld_STRL;
 
       //addr bus cases
       if( (ld_B & ld_C)
@@ -854,6 +883,7 @@ module regfile(
          |(ld_IYH & ld_IYL)
          |(ld_SPH & ld_SPL)
          |(ld_PCH & ld_PCL)
+         |(ld_STRH & ld_STRL)
         ) begin
         {B_in, C_in} = A_BUS;
         {D_in, E_in} = A_BUS;
@@ -862,6 +892,7 @@ module regfile(
         {IYH_in, IYL_in} = A_BUS;
         {SPH_in, SPL_in} = A_BUS;
         {PCH_in, PCL_in} = A_BUS;
+        {STRH_in, STRL_in} = A_BUS;
       end
 
       //data bus cases
@@ -880,6 +911,8 @@ module regfile(
         SPL_in = D_BUS;
         PCH_in = D_BUS;
         PCL_in = D_BUS;
+        STRH_in = D_BUS;
+        STRL_in = D_BUS;
       end
 
     end
@@ -1045,5 +1078,22 @@ module regfile(
     .en(PCL_en),
     .Q(PCL_out)
   );
+
+  register #(8) STRH(
+    .clk(clk),
+    .rst_L(rst_L),
+    .D(STRH_in),
+    .en(STRH_en),
+    .Q(STRH_out)
+  );
+
+  register #(8) STRL(
+    .clk(clk),
+    .rst_L(rst_L),
+    .D(STRL_in),
+    .en(STRL_en),
+    .Q(STRL_out)
+  );
+
 
 endmodule: regfile
