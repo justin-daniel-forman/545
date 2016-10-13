@@ -14,6 +14,8 @@ section code
 
   ld sp,st
 
+  ld uv,[$51]
+
 section data
   addr0: data !DEAD !BEEF
 

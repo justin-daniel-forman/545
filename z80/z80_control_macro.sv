@@ -520,6 +520,8 @@ module decoder (
 
     MACRO_DEFINE_STATES LD_IX_nn_x 12
 
+    MACRO_DEFINE_STATES LD_IY_nn_x 12
+
     MACRO_DEFINE_STATES LD_SP_IX 2
 
     MACRO_DEFINE_STATES LD_SP_HL 2
@@ -679,16 +681,17 @@ module decoder (
       FETCH_7: begin
         casex(op1)
           //Some cases are identical and are only different in the first byte
-          `LD_r_IX_d:   next_state = (op0[7:4] == 4'hD) ?  LD_r_IX_d_0 : LD_r_IY_d_0;
-          `LD_r_IY_d:   next_state = (op0[7:4] == 4'hF) ?  LD_r_IY_d_0 : LD_r_IX_d_0;
-          `LD_IX_d_r:   next_state = (op0[7:4] == 4'hD) ?  LD_IX_d_r_0 : LD_IY_d_r_0;
-          `LD_IY_d_r:   next_state = (op0[7:4] == 4'hF) ?  LD_IY_d_r_0 : LD_IX_d_r_0;
-          `LD_IX_d_n:   next_state = (op0[7:4] == 4'hD) ?  LD_IX_d_n_0 : LD_IY_d_n_0;
-          `LD_IY_d_n:   next_state = (op0[7:4] == 4'hF) ?  LD_IY_d_n_0 : LD_IX_d_n_0;
-          `LD_IX_nn: 		next_state = (op0[7:4] == 4'hD) ?  LD_IX_nn_0  : LD_IY_nn_0;
-          `LD_IY_nn:    next_state = (op0[7:4] == 4'hF) ?  LD_IY_nn_0  : LD_IX_nn_0;
+          `LD_r_IX_d:   next_state = (op0[7:4] == 4'hD) ?  LD_r_IX_d_0  : LD_r_IY_d_0;
+          `LD_r_IY_d:   next_state = (op0[7:4] == 4'hF) ?  LD_r_IY_d_0  : LD_r_IX_d_0;
+          `LD_IX_d_r:   next_state = (op0[7:4] == 4'hD) ?  LD_IX_d_r_0  : LD_IY_d_r_0;
+          `LD_IY_d_r:   next_state = (op0[7:4] == 4'hF) ?  LD_IY_d_r_0  : LD_IX_d_r_0;
+          `LD_IX_d_n:   next_state = (op0[7:4] == 4'hD) ?  LD_IX_d_n_0  : LD_IY_d_n_0;
+          `LD_IY_d_n:   next_state = (op0[7:4] == 4'hF) ?  LD_IY_d_n_0  : LD_IX_d_n_0;
+          `LD_IX_nn: 		next_state = (op0[7:4] == 4'hD) ?  LD_IX_nn_0   : LD_IY_nn_0;
+          `LD_IY_nn:    next_state = (op0[7:4] == 4'hF) ?  LD_IY_nn_0   : LD_IX_nn_0;
           `LD_dd_nn_x:  next_state = LD_dd_nn_x_0;
-          `LD_IX_nn_x:  next_state = LD_IX_nn_x_0;
+          `LD_IX_nn_x:  next_state = (op0[7:4] == 4'hD) ?  LD_IX_nn_x_0 : LD_IY_nn_x_0;
+          `LD_IY_nn_x:  next_state = (op0[7:4] == 4'hF) ?  LD_IY_nn_x_0 : LD_IX_nn_x_0;
           `LD_SP_IX:    next_state = LD_SP_IX_0;
           `LDI:         next_state = LDI_0;
           default:      next_state = FETCH_0;
@@ -755,6 +758,8 @@ module decoder (
       MACRO_ENUM_STATES LD_dd_nn_x 12
 
       MACRO_ENUM_STATES LD_IX_nn_x 12
+
+      MACRO_ENUM_STATES LD_IY_nn_x 12
 
       MACRO_ENUM_STATES LD_SP_IX 2
 
@@ -1886,6 +1891,101 @@ module decoder (
         MACRO_READ_1
       end
 
+      LD_IX_nn_x_2: begin
+        ld_IXL = 1;
+      end
+
+      LD_IX_nn_x_5: begin
+        ld_IXH = 1;
+      end
+
+      LD_IX_nn_x_6: begin
+        MACRO_16_DRIVE IX
+        MACRO_READ_0
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
+      LD_IX_nn_x_7: begin
+        drive_MAR = 1;
+        MACRO_READ_1
+      end
+
+      LD_IX_nn_x_8: begin
+        MACRO_16_DRIVE IX
+        alu_op = `INCR_A;
+        ld_MARL = 1;
+        ld_MARH = 1;
+        ld_IXL = 1;
+      end
+
+      LD_IX_nn_x_9: begin
+        MACRO_READ_0
+        drive_MAR = 1;
+      end
+
+      LD_IX_nn_x_10: begin
+        MACRO_READ_1
+        drive_MAR = 1;
+      end
+
+      LD_IX_nn_x_11: begin
+        ld_IXH = 1;
+      end
+
+      //LD_IY_nn_x
+      LD_IY_nn_x_0,LD_IY_nn_x_3: begin
+        MACRO_INC_PC
+        MACRO_READ_0
+      end
+
+      LD_IY_nn_x_1,LD_IY_nn_x_4: begin
+        MACRO_DRIVE_PC
+        MACRO_READ_1
+      end
+
+      LD_IY_nn_x_2: begin
+        ld_IYL = 1;
+      end
+
+      LD_IY_nn_x_5: begin
+        ld_IYH = 1;
+      end
+
+      LD_IY_nn_x_6: begin
+        MACRO_16_DRIVE IY
+        MACRO_READ_0
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
+      LD_IY_nn_x_7: begin
+        drive_MAR = 1;
+        MACRO_READ_1
+      end
+
+      LD_IY_nn_x_8: begin
+        MACRO_16_DRIVE IY
+        alu_op = `INCR_A;
+        ld_MARL = 1;
+        ld_MARH = 1;
+        ld_IYL = 1;
+      end
+
+      LD_IY_nn_x_9: begin
+        MACRO_READ_0
+        drive_MAR = 1;
+      end
+
+      LD_IY_nn_x_10: begin
+        MACRO_READ_1
+        drive_MAR = 1;
+      end
+
+      LD_IY_nn_x_11: begin
+        ld_IYH = 1;
+      end
+
       //LD_SP_IX
       LD_SP_IX_0: begin
         drive_IXL = 1;
@@ -1900,8 +2000,7 @@ module decoder (
       //LD_SP_HL
       LD_SP_HL_0: begin
         MACRO_16_DRIVE HL
-        ld_SPH = 1;
-        ld_SPL = 1;
+        MACRO_16_LOAD SP
       end
 
       //-----------------------------------------------------------------------

@@ -4,6 +4,6 @@ BC: adde
 DE: 0000
 HL: adde
 IX: 0023
-IY: 0000
+IY: adde
 SP: 0023
 PC: 0051
