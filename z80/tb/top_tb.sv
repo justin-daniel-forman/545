@@ -37,15 +37,17 @@ module tb ();
   initial begin
 
     if($test$plusargs("DEBUG")) begin
-    $monitor($stime,, "addr bus: %h, data bus: %h, state: %s, A: %h, DE: %h, HL: %h, BC: %h, IX: %h, m_data:%h, z80_data: %h, MAR: %h, TEMP: %h, MEM_VAL: %h",
+    $monitor($stime,, "addr bus: %h, data bus: %h, state: %s, A: %h, F: %h, DE: %h, HL: %h, BC: %h, IX: %h,SP: %h, m_data:%h, z80_data: %h, MAR: %h, TEMP: %h, MEM_VAL: %h",
       addr_bus,
       data_bus,
       DUT.CTRL.DECODE.state.name,
       DUT.DP.A_out,
+      DUT.DP.F_out,
       {DUT.DP.RFILE.D_out, DUT.DP.RFILE.E_out},
       {DUT.DP.RFILE.H_out, DUT.DP.RFILE.L_out},
       {DUT.DP.RFILE.B_out, DUT.DP.RFILE.C_out},
       {DUT.DP.RFILE.IXH_out, DUT.DP.RFILE.IXL_out},
+      {DUT.DP.RFILE.SPH_out, DUT.DP.RFILE.SPL_out},
       m_DUT.out_value,
       DUT.DP.data_out,
       DUT.DP.MAR_out,
@@ -108,7 +110,7 @@ module tb ();
     end
 
     $display("\n\n\n");
-    $display("A: %h\nF: %h\nBC: %h\nDE: %h\nHL: %h\nIX: %h\nIY: %h\nSP: %h\nPC: %h", 
+    $display("A: %h\nF: %h\nBC: %h\nDE: %h\nHL: %h\nIX: %h\nIY: %h\nSP: %h\nPC: %h",
       DUT.DP.A_out,
       DUT.DP.F_out,
       {DUT.DP.RFILE.B_out, DUT.DP.RFILE.C_out},

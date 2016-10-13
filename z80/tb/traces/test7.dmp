@@ -1,9 +1,9 @@
 A: 00
 F: 00
-BC: 0000 
-DE: 0000
-HL: 0000
+BC: bbcc
+DE: eeee
+HL: adde
 IX: 0000
 IY: 0000
-SP: 0000
+SP: 0051
 PC: 0051

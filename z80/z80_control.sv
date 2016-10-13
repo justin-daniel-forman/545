@@ -805,6 +805,7 @@ module decoder (
             `LD_HL_nn:  next_state = LD_HL_nn_0;
             `LD_dd_nn:  next_state = LD_dd_nn_0;
             `LD_SP_HL:  next_state = LD_SP_HL_0;
+            `EX_SP_HL:  next_state = EX_SP_HL_0;
             default:    next_state = FETCH_0;
           endcase
         end
@@ -2367,6 +2368,8 @@ module decoder (
         drive_alu_addr = 1;
         drive_reg_addr = 1;
         alu_op = `INCR_A;
+        ld_MARL = 1;
+        ld_MARH = 1;
       end
 
       EX_SP_HL_4: begin
@@ -2421,12 +2424,12 @@ module decoder (
       end
 
       EX_SP_HL_11: begin
-        drive_MDR1 = 1;
+        drive_MDR2 = 1;
         ld_H = 1;
       end
 
       EX_SP_HL_12: begin
-        drive_MDR2 = 1;
+        drive_MDR1 = 1;
         ld_L = 1;
       end
 

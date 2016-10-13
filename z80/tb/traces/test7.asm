@@ -6,14 +6,14 @@ range data $0051 $0100
 
 section code
 
-  #ld sp, $0051
-  #ld bc, $ffff
-  #ld de, $eeee
-  #ld hl  $bbcc
+  ld sp, $0051
+  ld bc, $ffff
+  ld de, $eeee
+  ld hl  $bbcc
 
-  #ex [sp], hl
-  #ld bc, [$51] 
- 
+  ex [sp], hl
+  ld bc, [$51]
+
 section data
   addr0: data !DEAD !BEEF
 

@@ -33,6 +33,7 @@
 
 `define EX_DE_HL  8'hEB
 `define EXX       8'hD9
+`define EX_SP_HL  8'hE3
 
 //ALU commands
 `define INCR_A    4'h1
