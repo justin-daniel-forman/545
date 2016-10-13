@@ -1856,7 +1856,49 @@ module decoder (
       LD_IX_nn_x_1,LD_IX_nn_x_4: begin
         MACRO_DRIVE_PC
         MACRO_READ_1
-      end 
+      end
+
+      LD_IX_nn_x_2: begin
+        ld_IXL = 1;
+      end
+
+      LD_IX_nn_x_5: begin
+        ld_IXH = 1;
+      end
+
+      LD_IX_nn_x_6: begin
+        MACRO_16_DRIVE IX
+        MACRO_READ_0
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
+      LD_IX_nn_x_7: begin
+        drive_MAR = 1;
+        MACRO_READ_1
+      end
+
+      LD_IX_nn_x_8: begin
+        MACRO_16_DRIVE IX
+        alu_op = `INCR_A;
+        ld_MARL = 1;
+        ld_MARH = 1;
+        ld_IXL = 1;
+      end
+
+      LD_IX_nn_x_9: begin
+        MACRO_READ_0
+        drive_MAR = 1;
+      end
+
+      LD_IX_nn_x_10: begin
+        MACRO_READ_1
+        drive_MAR = 1;
+      end
+
+      LD_IX_nn_x_11: begin
+        ld_IXH = 1;
+      end
 
       //LD_SP_IX
       LD_SP_IX_0: begin
@@ -1872,8 +1914,7 @@ module decoder (
       //LD_SP_HL
       LD_SP_HL_0: begin
         MACRO_16_DRIVE HL
-        ld_SPH = 1;
-        ld_SPL = 1;
+        MACRO_16_LOAD SP
       end
 
       //-----------------------------------------------------------------------

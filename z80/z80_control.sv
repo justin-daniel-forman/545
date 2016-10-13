@@ -2281,7 +2281,59 @@ module decoder (
         drive_reg_addr = 1;
         drive_alu_addr = 1;
         MRD_bus = 1;
-      end 
+      end
+
+      LD_IX_nn_x_2: begin
+        ld_IXL = 1;
+      end
+
+      LD_IX_nn_x_5: begin
+        ld_IXH = 1;
+      end
+
+      LD_IX_nn_x_6: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_IXL = 1;
+        drive_IXH = 1;
+        MRD_start = 1;
+        MRD_bus   = 1;
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
+      LD_IX_nn_x_7: begin
+        drive_MAR = 1;
+        MRD_bus = 1;
+      end
+
+      LD_IX_nn_x_8: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_IXL = 1;
+        drive_IXH = 1;
+        alu_op = `INCR_A;
+        ld_MARL = 1;
+        ld_MARH = 1;
+        ld_IXL = 1;
+      end
+
+      LD_IX_nn_x_9: begin
+        MRD_start = 1;
+        MRD_bus   = 1;
+        drive_MAR = 1;
+      end
+
+      LD_IX_nn_x_10: begin
+        MRD_bus = 1;
+        drive_MAR = 1;
+      end
+
+      LD_IX_nn_x_11: begin
+        ld_IXH = 1;
+      end
 
       //LD_SP_IX
       LD_SP_IX_0: begin
@@ -2301,8 +2353,8 @@ module decoder (
         drive_reg_addr = 1;
         drive_H = 1;
         drive_L = 1;
-        ld_SPH = 1;
         ld_SPL = 1;
+        ld_SPH = 1;
       end
 
       //-----------------------------------------------------------------------
