@@ -10,6 +10,10 @@ section code
   
   ld hl,[$51]
 
+  ld bc,[$51]
+
+  ld sp,st
+
 section data
   addr0: data !DEAD !BEEF
 
