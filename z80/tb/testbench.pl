@@ -66,7 +66,7 @@ foreach my $fileroot (@asm_files) {
     my $dump = `./simv`;
 
     my ($A, $BC, $DE, $HL, $IX, $IY, $SP, $PC);
-    $dump =~ /A: (.*)\nBC: (.*)\nDE: (.*)\nHL: (.*)\nIX: (.*)\nIY: (.*)\nSP: (.*)\nPC: (.*)/;
+    $dump =~ /A: (.*)\nBC: (.*)\nDE: (.*)\nHL: (.*)\nIX: (.*)\nIY: (.*)\nSP: (.*)\nPC: (.*)\s*/;
     $A  = $1;
     $BC = $2;
     $DE = $3;
@@ -81,7 +81,8 @@ foreach my $fileroot (@asm_files) {
     while(my $line = <$fh_d>) {$dump .= $line;}
 
     my ($A_d, $BC_d, $DE_d, $HL_d, $IX_d, $IY_d, $SP_d, $PC_d);
-    $dump =~ /A: (.*)\nBC: (.*)\nDE: (.*)\nHL: (.*)\nIX: (.*)\nIY: (.*)\nSP: (.*)\nPC: (.*)/;
+
+    $dump =~ /A: (.*)\nBC: (.*)\nDE: (.*)\nHL: (.*)\nIX: (.*)\nIY: (.*)\nSP: (.*)\nPC: (.*)\s*/ or die "DMP FILE INCORRECTLY FORMATTED\n";
     $A_d  = $1;
     $BC_d = $2;
     $DE_d = $3;

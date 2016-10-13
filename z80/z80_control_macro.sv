@@ -1791,6 +1791,7 @@ module decoder (
 
       LD_dd_nn_x_7: begin
         MACRO_READ_1
+        drive_MAR = 1;
       end
 
       LD_dd_nn_x_8: begin
@@ -1825,10 +1826,12 @@ module decoder (
 
       LD_dd_nn_x_9: begin
         MACRO_READ_0
+        drive_MAR = 1;
       end
 
       LD_dd_nn_x_10: begin
         MACRO_READ_1
+        drive_MAR = 1;
       end
 
       LD_dd_nn_x_11: begin
