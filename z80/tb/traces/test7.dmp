@@ -1,7 +1,9 @@
 A: 00
-BC: ffff
-DE: eeee
-HL: 1111
+F: 00
+BC: 0000 
+DE: 0000
+HL: 0000
 IX: 0000
 IY: 0000
-SP: abcd
+SP: 0000
+PC: 0051
