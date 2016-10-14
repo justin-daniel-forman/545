@@ -175,6 +175,9 @@ module z80(
   logic [7:0]   data_out;
   logic [15:0]  addr_out;
 
+  //Datapath flags that the control module ueses
+  logic [7:0]   flags;
+
   datapath DP (.*);
 
   control_logic CTRL(.*);

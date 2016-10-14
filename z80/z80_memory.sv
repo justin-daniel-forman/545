@@ -12,7 +12,7 @@ module memory (
   logic [1000:0] [7:0] Qs, defs;
 
   //Read out our memory contents from a textfile
-  logic [7:0] memory [100:0];
+  logic [7:0] memory [150:0];
   logic [50:0] j;
   initial begin
     $readmemb("traces/DUT.raw", memory);
@@ -21,7 +21,7 @@ module memory (
   //Put out the memory contents into our "register interpretation" of memory
   genvar i;
   generate
-    for(i = 0; i < 100; i++) begin
+    for(i = 0; i < 150; i++) begin
       register_def #(8) foo (.clk, .rst_L, .D(data_bus), .Q(Qs[i]),
         .en(ens[i]),
         .def(memory[i])

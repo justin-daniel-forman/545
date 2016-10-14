@@ -31,6 +31,16 @@ while (my $line = <$in_fh>) {
       $line .= $whitespace."drive_alu_addr = 1;\n";
     }
 
+    elsif($macro eq 'DEC_PC') {
+      $line  = $whitespace."ld_PCH    = 1;\n";
+      $line .= $whitespace."ld_PCL    = 1;\n";
+      $line .= $whitespace."drive_PCH = 1;\n";
+      $line .= $whitespace."drive_PCL = 1;\n";
+      $line .= $whitespace."alu_op    = `DECR_A;\n";
+      $line .= $whitespace."drive_reg_addr = 1;\n";
+      $line .= $whitespace."drive_alu_addr = 1;\n";
+    }
+
     elsif($macro eq 'DRIVE_PC') {
       $line = $whitespace."drive_PCH = 1;\n";
       $line .= $whitespace."drive_PCL = 1;\n";
@@ -52,13 +62,28 @@ while (my $line = <$in_fh>) {
     elsif($macro =~ /ENUM_STATES (.*) (.*)\s*/) {
       my $state_name = $1;
       my $num_states = $2;
+      my $bool = $3;
 
       $line = $whitespace."//$state_name\n";
       for($i = 0; $i < $num_states - 1; $i+=1) {
         my $j = $i + 1;
         $line .= $whitespace."$state_name"."_$i: next_state = $state_name"."_$j;\n";
       }
+
       $line .= $whitespace."$state_name"."_$i: next_state = FETCH_0;\n";
+
+    }
+
+    elsif($macro =~ /ENUM_STATES_NR (.*) (.*)\s*/) {
+      my $state_name = $1;
+      my $num_states = $2;
+      my $bool = $3;
+
+      $line = $whitespace."//$state_name\n";
+      for($i = 0; $i < $num_states - 1; $i+=1) {
+        my $j = $i + 1;
+        $line .= $whitespace."$state_name"."_$i: next_state = $state_name"."_$j;\n";
+      }
 
     }
 

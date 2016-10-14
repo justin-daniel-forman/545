@@ -94,7 +94,10 @@ module datapath (
 
   //External bus outputs
   output logic [7:0]   data_out,
-  output logic [15:0]  addr_out
+  output logic [15:0]  addr_out,
+
+  //Flag outputs, the control module needs this information
+  output logic [7:0]   flags
 );
 
   //---------------------------------------------------------------------------
@@ -146,6 +149,9 @@ module datapath (
     .en(F_en),
     .Q(F_out)
   );
+
+  //Make flags visible to control unit
+  assign flags = F_out;
 
   register #(8) F_not(
     .clk(clk),
@@ -357,19 +363,21 @@ module datapath (
   //Data Bus Arbitration
   always_comb begin
     if(drive_A)             drive_value_data = A_out;
-    else if(drive_B)        drive_value_data = reg_data_out;
-    else if(drive_C)        drive_value_data = reg_data_out;
-    else if(drive_D)        drive_value_data = reg_data_out;
-    else if(drive_E)        drive_value_data = reg_data_out;
-    else if(drive_F)        drive_value_data = F_out;
-    else if(drive_H)        drive_value_data = reg_data_out;
-    else if(drive_L)        drive_value_data = reg_data_out;
-    else if(drive_IXH)      drive_value_data = reg_data_out;
-    else if(drive_IXL)      drive_value_data = reg_data_out;
-    else if(drive_IYH)      drive_value_data = reg_data_out;
-    else if(drive_IYL)      drive_value_data = reg_data_out;
-    else if(drive_SPH)      drive_value_data = reg_data_out;
-    else if(drive_SPL)      drive_value_data = reg_data_out;
+    else if(drive_B & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_C & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_D & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_E & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_F & ~drive_reg_addr) drive_value_data = F_out;
+    else if(drive_H & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_L & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_IXH & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_IXL & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_IYH & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_IYL & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_SPH & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_SPL & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_STRH & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_STRL & ~drive_reg_addr) drive_value_data = reg_data_out;
     else if(drive_TEMP)     drive_value_data = TEMP_out;
     else if(drive_MDR1)     drive_value_data = MDR1_out;
     else if(drive_MDR2)     drive_value_data = MDR2_out;
@@ -381,12 +389,6 @@ module datapath (
   always_comb begin
     if(drive_MAR)                   drive_value_addr = MAR_out;
     else if (drive_alu_addr)        drive_value_addr = alu_out_addr;
-    //else if (drive_B & drive_C)     drive_value_addr = reg_addr_out;
-    //else if (drive_D & drive_E)     drive_value_addr = reg_addr_out;
-    //else if (drive_H & drive_L)     drive_value_addr = reg_addr_out;
-    //else if (drive_IXH & drive_IXL) drive_value_addr = reg_addr_out;
-    //else if (drive_IYH & drive_IYL) drive_value_addr = reg_addr_out;
-    //else if (drive_SPH & drive_SPL) drive_value_addr = reg_addr_out;
     else                            drive_value_addr = 15'bz;
   end
 

@@ -9,7 +9,8 @@ module control_logic (
   //Bus Signals
   //  - data_in: The control segment only receives data from the bus
   //---------------------------------------------------------------------------
-   input   logic [7:0]   data_in,
+  input   logic [7:0]   data_in,
+  input   logic [7:0]   flags,
 
   //---------------------------------------------------------------------------
   //Control Signals
@@ -214,6 +215,7 @@ module control_logic (
 
     .WAIT_L,
     .data_in,
+    .flags,
 
     //regfile loads
     .ld_B,
@@ -355,13 +357,7 @@ module decoder (
   // - opcode:    What instruction we should run, is defined in z80_defines.h
   //---------------------------------------------------------------------------
   input logic [7:0] data_in,
-  //input logic [7:0] op0,
-  //input logic [7:0] op1,
-  //input logic [7:0] op2,
-
-  //output logic      ld_op0,
-  //output logic      ld_op1,
-  //output logic      ld_op2,
+  input logic [7:0] flags,
 
   //---------------------------------------------------------------------------
   //Control Signals
@@ -546,6 +542,8 @@ module decoder (
 
     MACRO_DEFINE_STATES LDI 8
 
+    MACRO_DEFINE_STATES LDIR 13
+
     INC_0,
     INC_1,
     INC_2,
@@ -706,6 +704,7 @@ module decoder (
           `LD_IY_nn_x:  next_state = (op0[7:4] == 4'hF) ?  LD_IY_nn_x_0 : LD_IX_nn_x_0;
           `LD_SP_IX:    next_state = LD_SP_IX_0;
           `LDI:         next_state = LDI_0;
+          `LDIR:        next_state = LDIR_0;
           default:      next_state = FETCH_0;
         endcase
       end
@@ -792,6 +791,14 @@ module decoder (
       MACRO_ENUM_STATES EX_SP_HL 15
 
       MACRO_ENUM_STATES LDI 8
+
+      MACRO_ENUM_STATES_NR LDIR 8
+      LDIR_7: next_state  = (flags[ `PV_flag ] == 0) ? FETCH_0 : LDIR_8;
+      LDIR_8: next_state  = LDIR_9;
+      LDIR_9: next_state  = LDIR_10;
+      LDIR_10: next_state = LDIR_11;
+      LDIR_11: next_state = LDIR_12;
+      LDIR_12: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END EXCHANGE, BLOCK TRANSFER GROUP
@@ -2127,60 +2134,34 @@ module decoder (
       end
 
       //LDI
-      LDI_0: begin
-        //MAR <- HL
-        drive_H = 1;
-        drive_L = 1;
-        drive_reg_addr = 1;
-        drive_alu_addr = 1;
-        alu_op = `ALU_NOP;
-        ld_MARH = 1;
-        ld_MARL = 1;
-
-        //start a memory read from HL
-        MRD_start = 1;
-        MRD_bus   = 1;
-        drive_MAR = 1;
+      LDI_0, LDIR_0: begin
+        MACRO_16_DRIVE HL
+        MACRO_READ_0
       end
 
-      LDI_1: begin
-        //Nothing to do but continue the read
-        MRD_bus  = 1;
-        drive_MAR = 1;
+      LDI_1, LDIR_1: begin
+        MACRO_16_DRIVE HL
+        MACRO_READ_1
       end
 
-      LDI_2: begin
+      LDI_2, LDIR_2: begin
         //MDR1 <- (HL) (put contents of D_BUS into MDR1)
         ld_MDR1 = 1;
       end
 
-      LDI_3: begin
-        //MAR <- DE
-        drive_D = 1;
-        drive_E = 1;
-        drive_reg_addr = 1;
-        drive_alu_addr = 1;
-        alu_op = `ALU_NOP;
-        ld_MARH = 1;
-        ld_MARL = 1;
-
-        //D_BUS <- MDR1
+      LDI_3, LDIR_3: begin
+        MACRO_16_DRIVE DE
+        MACRO_WRITE_0
         drive_MDR1 = 1;
-
-        //Start a write
-        MWR_start = 1;
-        MWR_bus   = 1;
-        drive_MAR = 1;
       end
 
-      LDI_4: begin
-        //continue the write
+      LDI_4, LDIR_4: begin
+        MACRO_16_DRIVE DE
+        MACRO_WRITE_1
         drive_MDR1 = 1;
-        MWR_bus    = 1;
-        drive_MAR  = 1;
       end
 
-      LDI_5: begin
+      LDI_5, LDIR_5: begin
         //DE <- DE + 1
         drive_D = 1;
         drive_E = 1;
@@ -2191,18 +2172,7 @@ module decoder (
         alu_op = `INCR_A;
       end
 
-      LDI_6: begin
-        //HL <- HL + 1
-        drive_H = 1;
-        drive_L = 1;
-        drive_reg_addr = 1;
-        drive_alu_addr = 1;
-        ld_H = 1;
-        ld_L = 1;
-        alu_op = `INCR_A;
-      end
-
-      LDI_7: begin
+      LDI_6, LDIR_6: begin
         //BC <- BC - 1
         drive_B = 1;
         drive_C = 1;
@@ -2217,6 +2187,24 @@ module decoder (
 
         MACRO_RESET H
         MACRO_RESET N
+      end
+
+      LDI_7, LDIR_7: begin
+        //HL <- HL + 1
+        drive_H = 1;
+        drive_L = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        ld_H = 1;
+        ld_L = 1;
+        alu_op = `INCR_A;
+      end
+
+      LDIR_8, LDIR_9: begin
+        //Repeat the instruction if BC != 0
+        if(flags[ `PV_flag ] == 1) begin
+          MACRO_DEC_PC
+        end
       end
 
       //-----------------------------------------------------------------------

@@ -35,6 +35,10 @@
 `define EX_DE_HL  8'hEB
 `define EXX       8'hD9
 `define EX_SP_HL  8'hE3
+`define LDIR      8'hB0
+
+//flags
+`define PV_flag   2
 
 //ALU commands
 `define INCR_A    4'h1
