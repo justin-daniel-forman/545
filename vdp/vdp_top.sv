@@ -41,8 +41,8 @@ module vdp_top (
   logic [13:0]      VRAM_io_addr; // 1 io address
   logic [7:0]       VRAM_VGA_re; // 8 read enables
   logic             VRAM_io_re, VRAM_io_we; // 1 write enable - Set in io_FSM
-  logic [5:0]       CRAM_VGA_data_out;
-  logic [5:0]       CRAM_io_data_in, 
+  logic [7:0]       CRAM_VGA_data_out;
+  logic [7:0]       CRAM_io_data_in, 
                     CRAM_io_data_out;
   logic [4:0]       CRAM_VGA_addr;
   logic [4:0]       CRAM_io_addr;
@@ -95,7 +95,7 @@ module vdp_top (
     .VRAM_io_data_out,
     .CRAM_io_re,
     .CRAM_io_we,
-    .CRAM_io_data_in,
+    .CRAM_io_data_in(CRAM_io_data_in[5:0]),
     .rf_data_in,
     .rf_addr,
     .rf_en,
@@ -147,7 +147,7 @@ module vdp_top (
     .b_data_out(VRAM_VGA_data_out)
   );
 
-  mem #(6, 5, 1) CRAM(
+  mem #(8, 5, 1) CRAM(
     .a_clk(clk_4),
     .b_clk(clk_100),
     .rst_L(reset_L),
@@ -189,7 +189,7 @@ module vdp_disp_interface(
   output logic      [3:0]  VGA_R, VGA_G, VGA_B
 );
 
-  logic       patSelLatch1_en, patSelLatch2_en; // Set in disp_fsm
+  logic       patSelLatch_en; // Set in disp_fsm
   logic [7:0] patSelLatch1_in, patSelLatch1_out, patSelLatch2_in, patSelLatch2_out;
 
   // Determines where the screen should be blank, since 256x192 doesn't divide 640x480 evenly
@@ -201,12 +201,12 @@ module vdp_disp_interface(
   logic        paletteSel, horizFlip, vertFlip, patInBg;
 
   // Background Select Logic
-  logic [13:0] bgSelIn, bgSelOut;
-  logic        bgSelEn, bgSelLoadOrInc, bgOrPat; // Set in disp_fsm
+  logic [13:0] bgSel_in, bgSel_out;
+  logic        bgSel_en; // Set in disp_fsm
 
   // Color Latch Logic
-  logic [3:0][7:0] colorLatchOut;
-  logic            colorLatchEn;
+  logic [3:0][7:0] colorLatch_out;
+  logic            colorLatch_en;
 
   // Misc stuff
   logic [5:0] colorToDisplay;
@@ -216,22 +216,26 @@ module vdp_disp_interface(
   register #(14) bgSelReg(
     .clk, 
     .rst_L,
-    .D(bgSelIn),
-    .Q(bgSelOut),
-    .en(bgSelEn)
+    .D(bgSel_in),
+    .Q(bgSel_out),
+    .en(bgSel_en)
   );
 
-  logic [8:0] pixelRow = row - 9'd48;
-  logic [9:0] pixelCol = col - 9'd64;
+  logic [8:0] pixelRow;
+  logic [9:0] pixelCol;
 
-  assign bgSelIn = (bgSelLoadOrInc) ? (
-                   (blank) ? (14'h3800 + {pixelRow[7:3], pixelCol[7:3]}) : 14'h3800 // Could be wrong? Did the math though
-                   ) : bgSelOut + 1;
+  assign pixelRow = row - 9'd48;
+  assign pixelCol = col - 9'd64 + 9'd1; // Add 1 to pre-fetch pixel data
 
-  assign VRAM_VGA_addr[0] = (bgOrPat) ? charPatternAddr : bgSelOut;
-  assign VRAM_VGA_addr[1] = VRAM_VGA_addr[0] + 1;
-  assign VRAM_VGA_addr[2] = VRAM_VGA_addr[0] + 2;  
-  assign VRAM_VGA_addr[3] = VRAM_VGA_addr[0] + 3; // Pixel colors are stored across 4 bytes each.
+  assign bgSel_in = (~blank) ? (14'h3800 + {pixelRow[7:3], pixelCol[7:3]}) : 14'h3800; // Either blank screen or iterating
+
+  assign VRAM_VGA_addr[0] = bgSel_out;
+  assign VRAM_VGA_addr[1] = bgSel_out + 14'd1;
+
+  assign VRAM_VGA_addr[2] = charPatternAddr;
+  assign VRAM_VGA_addr[3] = VRAM_VGA_addr[2] + 1;  
+  assign VRAM_VGA_addr[4] = VRAM_VGA_addr[2] + 2; // Pixel colors are stored across 4 bytes each.
+  assign VRAM_VGA_addr[5] = VRAM_VGA_addr[2] + 3;
 
   /******** Pattern Selection Latches ********/
 
@@ -240,7 +244,7 @@ module vdp_disp_interface(
     .rst_L,
     .D(patSelLatch1_in),
     .Q(patSelLatch1_out),
-    .en(patSelLatch1_en)
+    .en(patSelLatch_en)
   );
 
   register #(8) patSelLatch2(
@@ -248,11 +252,11 @@ module vdp_disp_interface(
     .rst_L,
     .D(patSelLatch2_in),
     .Q(patSelLatch2_out),
-    .en(patSelLatch2_en)
+    .en(patSelLatch_en)
   );
 
-  assign patSelLatch1_in = VRAM_VGA_data_out[0];
-  assign patSelLatch2_in = VRAM_VGA_data_out[0]; // Same input, latches different values
+  assign patSelLatch1_in = VRAM_VGA_data_out[1];
+  assign patSelLatch2_in = VRAM_VGA_data_out[0]; // Little Endian, MSB goes in first
 
   /******** patSel Parsing ********/
   
@@ -267,18 +271,17 @@ module vdp_disp_interface(
   register #(8) colorLatch [3:0] (
     .clk,
     .rst_L,
-    .D(VRAM_VGA_data_out[3:0]),
-    .Q(colorLatchOut[3:0]),
-    .en(colorLatchEn)
+    .D(VRAM_VGA_data_out[5:2]), // Again, little endian
+    .Q(colorLatch_out[3:0]),
+    .en(colorLatch_en)
   );  
   
-  assign colorLatchEn = (col[2:0] == 3'd7);
   assign CRAM_VGA_addr = {
     paletteSel,
-    colorLatchOut[3][col[2:0]], 
-    colorLatchOut[2][col[2:0]],
-    colorLatchOut[1][col[2:0]],
-    colorLatchOut[0][col[2:0]]
+    colorLatch_out[0][col[2:0]], 
+    colorLatch_out[1][col[2:0]],
+    colorLatch_out[2][col[2:0]],
+    colorLatch_out[3][col[2:0]]
   };
 
   /******* RGB Generation *******/
@@ -292,65 +295,70 @@ module vdp_disp_interface(
 
   disp_fsm DISP_FSM(
     .*,
-    .row,
-    .col,
-    .blank,
-    .bgSelLoadOrInc,
-    .bgSelEn,
-    .bgOrPat, 
-    .patSelLatch1_en,
-    .patSelLatch2_en 
+    .bgSel_en,
+    .patSelLatch_en,
+    .colorLatch_en
   );
 
 endmodule
 
 // FSM for vdp_disp_interface
+// NOTE: Assumes lockstep from reset, maybe wrong?
 module disp_fsm(
   input  logic       clk, rst_L,
-  input  logic [8:0] row,
-  input  logic [9:0] col,
-  input  logic       blank,
-  output logic       bgSelLoadOrInc, bgSelEn, bgOrPat, patSelLatch1_en, patSelLatch2_en
+  output logic       bgSel_en, patSelLatch_en, colorLatch_en
 );
 
-  enum logic [1:0] {PatFetch1, PatFetch2, PatDisp} cs, ns;
+  enum logic [1:0] {PosFetch, PatFetch, RowLoad, Wait} cs, ns;
+
+  logic [4:0] patWidthCount;
+  logic       patWidthCount_en;
 
   // Next State Logic
   always_comb begin
     case(cs)
-      PatFetch1: ns = PatFetch2;
-      PatFetch2: ns = PatDisp;
-      PatDisp:   ns = ((col[2:0] == 0) & (~blank)) ? PatFetch1 : PatDisp;
+      PosFetch: ns = PatFetch;
+      PatFetch: ns = RowLoad;
+      RowLoad:  ns = Wait;
+      Wait:     ns = (patWidthCount == 5'd28) ? PosFetch : Wait;
     endcase
   end
 
   // Output Logic
   always_comb begin
-    bgSelLoadOrInc = 0;
-    bgSelEn = 0;
-    bgOrPat = 0;
-    patSelLatch1_en = 0;
-    patSelLatch2_en = 0;
+    colorLatch_en = 0;
+    bgSel_en = 0;
+    patSelLatch_en = 0;
+    patWidthCount_en = 0;
     case(cs)
-      PatFetch1: begin
-        bgSelLoadOrInc = 1;
-        bgSelEn = 1;
+      PosFetch: begin
+        bgSel_en = 1;
       end
-      PatFetch2: begin
-        bgSelEn = 1;
-        patSelLatch1_en = 1;
+      PatFetch: begin
+        patSelLatch_en = 1;
       end
-      PatDisp: begin
-        bgOrPat = 1;
-        patSelLatch2_en = 1;
+      RowLoad: begin
+        colorLatch_en = 1;
+      end
+      Wait: begin
+        patWidthCount_en = 1;
       end
     endcase
   end
 
   always_ff @(posedge clk, negedge rst_L) begin
-    if (~rst_L) cs <= PatDisp;
+    if (~rst_L) cs <= Wait;
     else        cs <= ns;
   end
+
+  // Used to wait 28 cc's (4 cc's * 8 pixel/pattern not including 3 fetch states)
+  counter #(5) PatWidthCount (
+    .clk, 
+    .rst_L,
+    .clear(patWidthCount == 5'd28),
+    .en(patWidthCount_en),
+    .count(patWidthCount)
+  );
 
 endmodule
 
