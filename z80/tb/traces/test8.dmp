@@ -1,8 +1,8 @@
 A: 00
-F: 00
-BC: ffee
-DE: 0000
-HL: 0000
+F: 04
+BC: ffff
+DE: 0054
+HL: 0055
 IX: 0000
 IY: 0000
 SP: 0000

@@ -27,6 +27,8 @@ module datapath (
   input  logic         ld_SPL,
   input  logic         ld_PCH,
   input  logic         ld_PCL,
+  input  logic         ld_STRH,
+  input  logic         ld_STRL,
 
   //Regfile Drives
   //Specifying two of these will cause a 16 bit drive onto the
@@ -48,6 +50,8 @@ module datapath (
   input  logic         drive_SPL,
   input  logic         drive_PCH,
   input  logic         drive_PCL,
+  input  logic         drive_STRH,
+  input  logic         drive_STRL,
 
   //Accumulator and Flag loads
   //We can load the flags from either the 16-bit ALU or the
@@ -55,6 +59,12 @@ module datapath (
   input  logic         ld_A,
   input  logic         ld_F_data,
   input  logic         ld_F_addr,
+  input  logic [1:0]   set_S,
+  input  logic [1:0]   set_Z,
+  input  logic [1:0]   set_H,
+  input  logic [1:0]   set_PV,
+  input  logic [1:0]   set_N,
+  input  logic [1:0]   set_C,
 
   //Accumulator and Flag drives
   input  logic         drive_A,
@@ -84,7 +94,10 @@ module datapath (
 
   //External bus outputs
   output logic [7:0]   data_out,
-  output logic [15:0]  addr_out
+  output logic [15:0]  addr_out,
+
+  //Flag outputs, the control module needs this information
+  output logic [7:0]   flags
 );
 
   //---------------------------------------------------------------------------
@@ -136,6 +149,9 @@ module datapath (
     .en(F_en),
     .Q(F_out)
   );
+
+  //Make flags visible to control unit
+  assign flags = F_out;
 
   register #(8) F_not(
     .clk(clk),
@@ -222,6 +238,8 @@ module datapath (
     .drive_SPL(drive_SPL),
     .drive_PCH(drive_PCH),
     .drive_PCL(drive_PCL),
+    .drive_STRH,
+    .drive_STRL,
 
     .ld_B(ld_B),
     .ld_C(ld_C),
@@ -237,6 +255,8 @@ module datapath (
     .ld_SPL(ld_SPL),
     .ld_PCH(ld_PCH),
     .ld_PCL(ld_PCL),
+    .ld_STRH,
+    .ld_STRL,
 
     .drive_single(drive_reg_data),
     .drive_double(drive_reg_addr),
@@ -264,19 +284,25 @@ module datapath (
   //--------------------------------------------------------------------------
   logic [7:0]   alu_out_data;
   logic [15:0]  alu_out_addr;
+  logic [7:0]   alu_flag_data;
+  logic [7:0]   alu_flag_addr;
 
   alu #(8) eightBit(
     .A(A_out),
     .B(data_in),
     .op(alu_op),
-    .C(alu_out_data)
+    .C(alu_out_data),
+    .F_in(F_out),
+    .F_out(alu_flag_data)
   );
 
   alu #(16) sixteenBit(
     .A(reg_addr_out),
     .B({8'b0, TEMP_out}),
     .op(alu_op),
-    .C(alu_out_addr)
+    .C(alu_out_addr),
+    .F_in(F_out),
+    .F_out(alu_flag_addr)
   );
 
   //---------------------------------------------------------------------------
@@ -286,14 +312,51 @@ module datapath (
     //NOTE: I'm including a point to point connection between the A register
     //      and the other registers so that a swap operation can occur
     //      in a single clock cycle.
-    A_in = (swap_reg) ? reg_data_out : internal_data;
-    F_in = 0;
+    if(switch_context & (ld_F_addr | ld_F_data) & ld_A) begin
+      A_in = A_not_out;
+      A_not_in = A_out;
+      A_en = 1;
+      A_not_en = 1;
+
+      F_in = F_not_out;
+      F_not_in = F_out;
+      F_en = 1;
+      F_not_en = 1;
+    end
+
+    else begin
+      A_in = (swap_reg) ? reg_data_out : internal_data;
+      A_en = ld_A;
+
+      A_not_in = 0;
+      A_not_en = 0;
+
+      F_in = (ld_F_data) ? (alu_flag_data) : ((ld_F_addr) ? (alu_flag_addr) : F_out);
+      F_en = ld_F_data | ld_F_addr;
+
+      F_not_in = 0;
+      F_not_en = 0;
+
+      //set or unset flags based on global sets/resets on top of alu sets
+      if     (set_S == 2'b11) begin F_in =  F_in  | 8'b1000_0000; F_en = 1; end
+      else if(set_S == 2'b10) begin F_in =  F_in  & 8'b0111_1111; F_en = 1; end
+      if     (set_Z == 2'b11) begin F_in[6] = 1; F_en = 1; end
+      else if(set_Z == 2'b10) begin F_in[6] = 0; F_en = 1; end
+      if     (set_H == 2'b11) begin F_in[4] = 1; F_en = 1; end
+      else if(set_H == 2'b10) begin F_in[4] = 0; F_en = 1; end
+      if     (set_PV == 2'b11)begin F_in[2] = 1; F_en = 1; end
+      else if(set_PV == 2'b10)begin F_in[2] = 0; F_en = 1; end
+      if     (set_N == 2'b11) begin F_in[1] = 1; F_en = 1; end
+      else if(set_N == 2'b10) begin F_in[1] = 0; F_en = 1; end
+      if     (set_C == 2'b11) begin F_in[0] = 1; F_en = 1; end
+      else if(set_C == 2'b10) begin F_in[0] = 0; F_en = 1; end
+
+    end
+
     MDR1_in = internal_data;
     MDR2_in = internal_data;
     TEMP_in = internal_data;
 
-    A_en = ld_A;
-    F_en = ld_F_data | ld_F_addr;
     MDR1_en = ld_MDR1;
     MDR2_en = ld_MDR2;
     TEMP_en = ld_TEMP;
@@ -321,19 +384,21 @@ module datapath (
   //Data Bus Arbitration
   always_comb begin
     if(drive_A)             drive_value_data = A_out;
-    else if(drive_B)        drive_value_data = reg_data_out;
-    else if(drive_C)        drive_value_data = reg_data_out;
-    else if(drive_D)        drive_value_data = reg_data_out;
-    else if(drive_E)        drive_value_data = reg_data_out;
-    else if(drive_F)        drive_value_data = F_out;
-    else if(drive_H)        drive_value_data = reg_data_out;
-    else if(drive_L)        drive_value_data = reg_data_out;
-    else if(drive_IXH)      drive_value_data = reg_data_out;
-    else if(drive_IXL)      drive_value_data = reg_data_out;
-    else if(drive_IYH)      drive_value_data = reg_data_out;
-    else if(drive_IYL)      drive_value_data = reg_data_out;
-    else if(drive_SPH)      drive_value_data = reg_data_out;
-    else if(drive_SPL)      drive_value_data = reg_data_out;
+    else if(drive_B & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_C & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_D & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_E & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_F & ~drive_reg_addr) drive_value_data = F_out;
+    else if(drive_H & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_L & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_IXH & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_IXL & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_IYH & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_IYL & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_SPH & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_SPL & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_STRH & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_STRL & ~drive_reg_addr) drive_value_data = reg_data_out;
     else if(drive_TEMP)     drive_value_data = TEMP_out;
     else if(drive_MDR1)     drive_value_data = MDR1_out;
     else if(drive_MDR2)     drive_value_data = MDR2_out;
@@ -345,12 +410,6 @@ module datapath (
   always_comb begin
     if(drive_MAR)                   drive_value_addr = MAR_out;
     else if (drive_alu_addr)        drive_value_addr = alu_out_addr;
-    //else if (drive_B & drive_C)     drive_value_addr = reg_addr_out;
-    //else if (drive_D & drive_E)     drive_value_addr = reg_addr_out;
-    //else if (drive_H & drive_L)     drive_value_addr = reg_addr_out;
-    //else if (drive_IXH & drive_IXL) drive_value_addr = reg_addr_out;
-    //else if (drive_IYH & drive_IYL) drive_value_addr = reg_addr_out;
-    //else if (drive_SPH & drive_SPL) drive_value_addr = reg_addr_out;
     else                            drive_value_addr = 15'bz;
   end
 
@@ -378,16 +437,21 @@ module alu #(parameter w = 8)(
   // - B: Bus input
   // - op: defines the alu opcode
   // - C: Simply the output
+  // - F_in: Contents of flag register before operation
+  // - F_out: Contents of flag register after operation
   //---------------------------------------------------------------------------
   input   logic [w-1:0] A,
   input   logic [w-1:0] B, //B stands for Bus
   input   logic [3:0] op,
-  output  logic [w-1:0] C
+  input   logic [7:0] F_in,
+  output  logic [w-1:0] C,
+  output  logic [7:0] F_out
 );
 
-  //TODO: Implement flag support
-
   always_comb begin
+
+    F_out = F_in;
+
     case(op)
 
       `INCR_A: begin
@@ -396,6 +460,9 @@ module alu #(parameter w = 8)(
 
       `DECR_A: begin
         C = A - 1;
+
+        //set the PV flag when ARG_A - 1 != 0, otherwise reset
+        F_out[2] = (C == 0) ? 0 : 1;
       end
 
       `ADD: begin
@@ -444,6 +511,8 @@ module regfile(
   input   logic drive_IYH,
   input   logic drive_PCH,
   input   logic drive_PCL,
+  input   logic drive_STRH,
+  input   logic drive_STRL,
 
   input   logic ld_B,
   input   logic ld_C,
@@ -459,6 +528,8 @@ module regfile(
   input   logic ld_IYH,
   input   logic ld_PCH,
   input   logic ld_PCL,
+  input   logic ld_STRH,
+  input   logic ld_STRL,
 
   input   logic drive_single,
   input   logic drive_double,
@@ -563,6 +634,14 @@ module regfile(
   logic [7:0] PCL_out;
   logic       PCL_en;
 
+  logic [7:0] STRH_in;
+  logic [7:0] STRH_out;
+  logic       STRH_en;
+
+  logic [7:0] STRL_in;
+  logic [7:0] STRL_out;
+  logic       STRL_en;
+
   //---------------------------------------------------------------------------
   //Register Output logic
   //---------------------------------------------------------------------------
@@ -589,6 +668,8 @@ module regfile(
       else if(drive_SPL)out_single = SPL_out;
       else if(drive_PCH)out_single = PCH_out;
       else if(drive_PCL)out_single = PCL_out;
+      else if(drive_STRL)out_single = STRL_out;
+      else if(drive_STRH)out_single = STRH_out;
       else              out_single = 8'bz; //shouldn't ever go on the bus
     end
 
@@ -602,6 +683,7 @@ module regfile(
       else if(drive_IYH & drive_IYL)  out_double = {IYH_out, IYL_out};
       else if(drive_SPH & drive_SPL)  out_double = {SPH_out, SPL_out};
       else if(drive_PCH & drive_PCL)  out_double = {PCH_out, PCL_out};
+      else if(drive_STRH & drive_STRL)out_double = {STRH_out, STRL_out};
       else                            out_double = 8'bz;
     end
 
@@ -635,6 +717,12 @@ module regfile(
     E_in = 0;
     H_in = 0;
     L_in = 0;
+    B_not_in = 0;
+    C_not_in = 0;
+    D_not_in = 0;
+    E_not_in = 0;
+    H_not_in = 0;
+    L_not_in = 0;
     IXH_in = 0;
     IXL_in = 0;
     IYH_in = 0;
@@ -643,6 +731,8 @@ module regfile(
     SPL_in = 0;
     PCH_in = 0;
     PCL_in = 0;
+    STRH_in = 0;
+    STRL_in = 0;
 
     B_en = 0;
     C_en = 0;
@@ -650,6 +740,12 @@ module regfile(
     E_en = 0;
     H_en = 0;
     L_en = 0;
+    B_not_en = 0;
+    C_not_en = 0;
+    D_not_en = 0;
+    E_not_en = 0;
+    H_not_en = 0;
+    L_not_en = 0;
     IXH_en = 0;
     IXL_en = 0;
     IYH_en = 0;
@@ -658,6 +754,8 @@ module regfile(
     SPL_en = 0;
     PCH_en = 0;
     PCL_en = 0;
+    STRH_en = 0;
+    STRL_en = 0;
 
     //context swap the specified register
     if(switch_context) begin
@@ -797,6 +895,8 @@ module regfile(
       SPL_en = ld_SPL;
       PCH_en = ld_PCH;
       PCL_en = ld_PCL;
+      STRH_en = ld_STRH;
+      STRL_en = ld_STRL;
 
       //addr bus cases
       if( (ld_B & ld_C)
@@ -806,6 +906,7 @@ module regfile(
          |(ld_IYH & ld_IYL)
          |(ld_SPH & ld_SPL)
          |(ld_PCH & ld_PCL)
+         |(ld_STRH & ld_STRL)
         ) begin
         {B_in, C_in} = A_BUS;
         {D_in, E_in} = A_BUS;
@@ -814,6 +915,7 @@ module regfile(
         {IYH_in, IYL_in} = A_BUS;
         {SPH_in, SPL_in} = A_BUS;
         {PCH_in, PCL_in} = A_BUS;
+        {STRH_in, STRL_in} = A_BUS;
       end
 
       //data bus cases
@@ -832,6 +934,8 @@ module regfile(
         SPL_in = D_BUS;
         PCH_in = D_BUS;
         PCL_in = D_BUS;
+        STRH_in = D_BUS;
+        STRL_in = D_BUS;
       end
 
     end
@@ -910,12 +1014,28 @@ module regfile(
     .Q(H_out)
   );
 
+ register #(8) H_not(
+    .clk(clk),
+    .rst_L(rst_L),
+    .D(H_not_in),
+    .en(H_not_en),
+    .Q(H_not_out)
+  );
+
  register #(8) L(
     .clk(clk),
     .rst_L(rst_L),
     .D(L_in),
     .en(L_en),
     .Q(L_out)
+  );
+
+ register #(8) L_not(
+    .clk(clk),
+    .rst_L(rst_L),
+    .D(L_not_in),
+    .en(L_not_en),
+    .Q(L_not_out)
   );
 
  register #(8) IXH(
@@ -981,5 +1101,22 @@ module regfile(
     .en(PCL_en),
     .Q(PCL_out)
   );
+
+  register #(8) STRH(
+    .clk(clk),
+    .rst_L(rst_L),
+    .D(STRH_in),
+    .en(STRH_en),
+    .Q(STRH_out)
+  );
+
+  register #(8) STRL(
+    .clk(clk),
+    .rst_L(rst_L),
+    .D(STRL_in),
+    .en(STRL_en),
+    .Q(STRL_out)
+  );
+
 
 endmodule: regfile

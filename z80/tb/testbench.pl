@@ -65,34 +65,38 @@ foreach my $fileroot (@asm_files) {
   if(defined $verify_arg and $verify_arg eq "VERIFY") {
     my $dump = `./simv`;
 
-    my ($A, $BC, $DE, $HL, $IX, $IY, $SP, $PC);
-    $dump =~ /A: (.*)\nBC: (.*)\nDE: (.*)\nHL: (.*)\nIX: (.*)\nIY: (.*)\nSP: (.*)\nPC: (.*)/;
+    my ($A, $F, $BC, $DE, $HL, $IX, $IY, $SP, $PC);
+    $dump =~ /A: (.*)\nF: (.*)\nBC: (.*)\nDE: (.*)\nHL: (.*)\nIX: (.*)\nIY: (.*)\nSP: (.*)\nPC: (.*)\s*/ or die "TOP TB INCORRECTLY FORMATTED\n";
     $A  = $1;
-    $BC = $2;
-    $DE = $3;
-    $HL = $4;
-    $IX = $5;
-    $IY = $6;
-    $SP = $7;
-    $PC = $8;
+    $F  = $2;
+    $BC = $3;
+    $DE = $4;
+    $HL = $5;
+    $IX = $6;
+    $IY = $7;
+    $SP = $8;
+    $PC = $9;
 
     open (my $fh_d, '<', "traces/$fileroot.dmp") or die $!;
     $dump = '';
     while(my $line = <$fh_d>) {$dump .= $line;}
 
-    my ($A_d, $BC_d, $DE_d, $HL_d, $IX_d, $IY_d, $SP_d, $PC_d);
-    $dump =~ /A: (.*)\nBC: (.*)\nDE: (.*)\nHL: (.*)\nIX: (.*)\nIY: (.*)\nSP: (.*)\nPC: (.*)/;
+    my ($A_d, $F_d, $BC_d, $DE_d, $HL_d, $IX_d, $IY_d, $SP_d, $PC_d);
+
+    $dump =~ /A: (.*)\nF: (.*)\nBC: (.*)\nDE: (.*)\nHL: (.*)\nIX: (.*)\nIY: (.*)\nSP: (.*)\nPC: (.*)\s*/ or die "DMP FILE INCORRECTLY FORMATTED\n";
     $A_d  = $1;
-    $BC_d = $2;
-    $DE_d = $3;
-    $HL_d = $4;
-    $IX_d = $5;
-    $IY_d = $6;
-    $SP_d = $7;
-    $PC_d = $8;
+    $F_d  = $2;
+    $BC_d = $3;
+    $DE_d = $4;
+    $HL_d = $5;
+    $IX_d = $6;
+    $IY_d = $7;
+    $SP_d = $8;
+    $PC_d = $9;
     close ($fh_d);
 
     if(($A ne $A_d)
+        or ($F  ne $F_d)
         or ($BC ne $BC_d)
         or ($DE ne $DE_d)
         or ($HL ne $HL_d)
@@ -102,8 +106,8 @@ foreach my $fileroot (@asm_files) {
         or ($PC ne $PC_d)
     ) {
       print "There was an error in test: $fileroot\n";
-      print "Got:\nA: $A\nBC: $BC\nDE: $DE\nHL: $HL\nIX: $IX\nIY: $IY\nSP: $SP\nPC: $PC\n";
-      print "Expected:\nA: $A_d\nBC: $BC_d\nDE: $DE_d\nHL: $HL_d\nIX: $IX_d\nIY: $IY_d\nSP: $SP_d\nPC: $PC_d\n";
+      print "Got:\nA: $A\nF: $F\nBC: $BC\nDE: $DE\nHL: $HL\nIX: $IX\nIY: $IY\nSP: $SP\nPC: $PC\n";
+      print "Expected:\nA: $A_d\nF: $F_d\nBC: $BC_d\nDE: $DE_d\nHL: $HL_d\nIX: $IX_d\nIY: $IY_d\nSP: $SP_d\nPC: $PC_d\n";
     }
 
     else {

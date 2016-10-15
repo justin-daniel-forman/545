@@ -1,8 +1,8 @@
-A: ad
+A: 00
 F: 00
-BC: 0051
-DE: 0052
-HL: dead
+BC: adde
+DE: bead
+HL: 00cc
 IX: 0000
 IY: 0000
 SP: 0000
