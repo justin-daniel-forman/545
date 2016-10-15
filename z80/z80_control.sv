@@ -719,6 +719,38 @@ module decoder (
     EX_SP_HL_13,
     EX_SP_HL_14,
 
+    EX_SP_IX_0,
+    EX_SP_IX_1,
+    EX_SP_IX_2,
+    EX_SP_IX_3,
+    EX_SP_IX_4,
+    EX_SP_IX_5,
+    EX_SP_IX_6,
+    EX_SP_IX_7,
+    EX_SP_IX_8,
+    EX_SP_IX_9,
+    EX_SP_IX_10,
+    EX_SP_IX_11,
+    EX_SP_IX_12,
+    EX_SP_IX_13,
+    EX_SP_IX_14,
+
+    EX_SP_IY_0,
+    EX_SP_IY_1,
+    EX_SP_IY_2,
+    EX_SP_IY_3,
+    EX_SP_IY_4,
+    EX_SP_IY_5,
+    EX_SP_IY_6,
+    EX_SP_IY_7,
+    EX_SP_IY_8,
+    EX_SP_IY_9,
+    EX_SP_IY_10,
+    EX_SP_IY_11,
+    EX_SP_IY_12,
+    EX_SP_IY_13,
+    EX_SP_IY_14,
+
     LDI_0,
     LDI_1,
     LDI_2,
@@ -902,6 +934,8 @@ module decoder (
           `LD_IX_nn_x:  next_state = (op0[7:4] == 4'hD) ?  LD_IX_nn_x_0 : LD_IY_nn_x_0;
           `LD_IY_nn_x:  next_state = (op0[7:4] == 4'hF) ?  LD_IY_nn_x_0 : LD_IX_nn_x_0;
           `LD_SP_IX:    next_state = LD_SP_IX_0;
+          `EX_SP_IX:    next_state = (op0[7:4] == 4'hD) ?  EX_SP_IX_0   : EX_SP_IY_0;
+          `EX_SP_IY:    next_state = (op0[7:4] == 4'hF) ?  EX_SP_IY_0   : EX_SP_IX_0;
           `LDI:         next_state = LDI_0;
           `LDIR:        next_state = LDIR_0;
           default:      next_state = FETCH_0;
@@ -1190,6 +1224,40 @@ module decoder (
       EX_SP_HL_12: next_state = EX_SP_HL_13;
       EX_SP_HL_13: next_state = EX_SP_HL_14;
       EX_SP_HL_14: next_state = FETCH_0;
+
+      //EX_SP_IX
+      EX_SP_IX_0: next_state = EX_SP_IX_1;
+      EX_SP_IX_1: next_state = EX_SP_IX_2;
+      EX_SP_IX_2: next_state = EX_SP_IX_3;
+      EX_SP_IX_3: next_state = EX_SP_IX_4;
+      EX_SP_IX_4: next_state = EX_SP_IX_5;
+      EX_SP_IX_5: next_state = EX_SP_IX_6;
+      EX_SP_IX_6: next_state = EX_SP_IX_7;
+      EX_SP_IX_7: next_state = EX_SP_IX_8;
+      EX_SP_IX_8: next_state = EX_SP_IX_9;
+      EX_SP_IX_9: next_state = EX_SP_IX_10;
+      EX_SP_IX_10: next_state = EX_SP_IX_11;
+      EX_SP_IX_11: next_state = EX_SP_IX_12;
+      EX_SP_IX_12: next_state = EX_SP_IX_13;
+      EX_SP_IX_13: next_state = EX_SP_IX_14;
+      EX_SP_IX_14: next_state = FETCH_0;
+
+      //EX_SP_IY
+      EX_SP_IY_0: next_state = EX_SP_IY_1;
+      EX_SP_IY_1: next_state = EX_SP_IY_2;
+      EX_SP_IY_2: next_state = EX_SP_IY_3;
+      EX_SP_IY_3: next_state = EX_SP_IY_4;
+      EX_SP_IY_4: next_state = EX_SP_IY_5;
+      EX_SP_IY_5: next_state = EX_SP_IY_6;
+      EX_SP_IY_6: next_state = EX_SP_IY_7;
+      EX_SP_IY_7: next_state = EX_SP_IY_8;
+      EX_SP_IY_8: next_state = EX_SP_IY_9;
+      EX_SP_IY_9: next_state = EX_SP_IY_10;
+      EX_SP_IY_10: next_state = EX_SP_IY_11;
+      EX_SP_IY_11: next_state = EX_SP_IY_12;
+      EX_SP_IY_12: next_state = EX_SP_IY_13;
+      EX_SP_IY_13: next_state = EX_SP_IY_14;
+      EX_SP_IY_14: next_state = FETCH_0;
 
       //LDI
       LDI_0: next_state = LDI_1;
@@ -2571,7 +2639,7 @@ module decoder (
       end
 
       //EX (SP), HL
-      EX_SP_HL_0: begin
+      EX_SP_HL_0, EX_SP_IX_0, EX_SP_IY_0: begin
         MRD_start = 1;
         MRD_bus   = 1;
         drive_alu_addr = 1;
@@ -2581,7 +2649,7 @@ module decoder (
         drive_SPH = 1;
       end
 
-      EX_SP_HL_1: begin
+      EX_SP_HL_1, EX_SP_IX_1, EX_SP_IY_1: begin
         MRD_bus = 1;
         drive_alu_addr = 1;
         alu_op = `ALU_NOP;
@@ -2590,11 +2658,11 @@ module decoder (
         drive_SPH = 1;
       end
 
-      EX_SP_HL_2: begin
+      EX_SP_HL_2, EX_SP_IX_2, EX_SP_IY_2: begin
         ld_MDR1 = 1;
       end
 
-      EX_SP_HL_3: begin
+      EX_SP_HL_3, EX_SP_IX_3, EX_SP_IY_3: begin
         MRD_start = 1;
         MRD_bus   = 1;
 
@@ -2608,32 +2676,59 @@ module decoder (
         ld_MARH = 1;
       end
 
-      EX_SP_HL_4: begin
+      EX_SP_HL_4, EX_SP_IX_4, EX_SP_IY_4: begin
         MRD_bus = 1;
         drive_MAR = 1;
       end
 
-      EX_SP_HL_5: begin
+      EX_SP_HL_5, EX_SP_IX_5, EX_SP_IY_5: begin
         ld_MDR2 = 1;
       end
 
-      EX_SP_HL_6: begin
+      EX_SP_HL_6, EX_SP_IX_6, EX_SP_IY_6: begin
         //now that SP+1 is in MAR, write H into (SP+1)
         MWR_start = 1;
         MWR_bus   = 1;
         drive_MAR = 1;
-        drive_H = 1;
-        drive_reg_data = 1;
+
+        case(state)
+          EX_SP_HL_6: begin
+            drive_H = 1;
+            drive_reg_data = 1;
+          end
+          EX_SP_IX_6: begin
+            drive_IXH = 1;
+            drive_reg_data = 1;
+          end
+          EX_SP_IY_6: begin
+            drive_IYH = 1;
+            drive_reg_data = 1;
+          end
+        endcase
       end
 
-      EX_SP_HL_7: begin
+
+      EX_SP_HL_7, EX_SP_IX_7, EX_SP_IY_7: begin
         MWR_bus = 1;
         drive_MAR = 1;
-        drive_H = 1;
-        drive_reg_data = 1;
+
+        case(state)
+          EX_SP_HL_7: begin
+            drive_H = 1;
+            drive_reg_data = 1;
+          end
+          EX_SP_IX_7: begin
+            drive_IXH = 1;
+            drive_reg_data = 1;
+          end
+          EX_SP_IY_7: begin
+            drive_IYH = 1;
+            drive_reg_data = 1;
+          end
+        endcase
       end
 
-      EX_SP_HL_8: begin
+      EX_SP_HL_8, EX_SP_IX_8, EX_SP_IY_8: begin
         //put SP into MAR
         drive_alu_addr = 1;
         alu_op = `ALU_NOP;
@@ -2644,29 +2739,65 @@ module decoder (
         ld_MARH = 1;
       end
 
-      EX_SP_HL_9: begin
+      EX_SP_HL_9, EX_SP_IX_9, EX_SP_IY_9: begin
         MWR_start = 1;
         MWR_bus   = 1;
         drive_MAR = 1;
-        drive_L = 1;
-        drive_reg_data = 1;
+
+        case(state)
+          EX_SP_HL_9: begin
+            drive_L = 1;
+            drive_reg_data = 1;
+          end
+          EX_SP_IX_9: begin
+            drive_IXL = 1;
+            drive_reg_data = 1;
+          end
+          EX_SP_IY_9: begin
+            drive_IYL = 1;
+            drive_reg_data = 1;
+          end
+        endcase
       end
 
-      EX_SP_HL_10: begin
+      EX_SP_HL_10, EX_SP_IX_10, EX_SP_IY_10: begin
         MWR_bus = 1;
         drive_MAR = 1;
-        drive_L = 1;
-        drive_reg_data = 1;
+
+        case(state)
+          EX_SP_HL_10: begin
+            drive_L = 1;
+            drive_reg_data = 1;
+          end
+          EX_SP_IX_10: begin
+            drive_IXL = 1;
+            drive_reg_data = 1;
+          end
+          EX_SP_IY_10: begin
+            drive_IYL = 1;
+            drive_reg_data = 1;
+          end
+        endcase
       end
 
-      EX_SP_HL_11: begin
+      EX_SP_HL_11, EX_SP_IX_11, EX_SP_IY_11: begin
         drive_MDR2 = 1;
-        ld_H = 1;
+
+        case(state)
+          EX_SP_HL_11: ld_H   = 1;
+          EX_SP_IX_11: ld_IXH = 1;
+          EX_SP_IY_11: ld_IYH = 1;
+        endcase
       end
 
-      EX_SP_HL_12: begin
+      EX_SP_HL_12, EX_SP_IX_12, EX_SP_IY_12: begin
         drive_MDR1 = 1;
-        ld_L = 1;
+
+        case(state)
+          EX_SP_HL_12: ld_L   = 1;
+          EX_SP_IX_12: ld_IXL = 1;
+          EX_SP_IY_12: ld_IYL = 1;
+        endcase
       end
 
       //LDI

@@ -542,6 +542,10 @@ module decoder (
 
     MACRO_DEFINE_STATES EX_SP_HL 15
 
+    MACRO_DEFINE_STATES EX_SP_IX 15
+
+    MACRO_DEFINE_STATES EX_SP_IY 15
+
     MACRO_DEFINE_STATES LDI 8
 
     MACRO_DEFINE_STATES LDIR 13
@@ -706,6 +710,8 @@ module decoder (
           `LD_IX_nn_x:  next_state = (op0[7:4] == 4'hD) ?  LD_IX_nn_x_0 : LD_IY_nn_x_0;
           `LD_IY_nn_x:  next_state = (op0[7:4] == 4'hF) ?  LD_IY_nn_x_0 : LD_IX_nn_x_0;
           `LD_SP_IX:    next_state = LD_SP_IX_0;
+          `EX_SP_IX:    next_state = (op0[7:4] == 4'hD) ?  EX_SP_IX_0   : EX_SP_IY_0;
+          `EX_SP_IY:    next_state = (op0[7:4] == 4'hF) ?  EX_SP_IY_0   : EX_SP_IX_0;
           `LDI:         next_state = LDI_0;
           `LDIR:        next_state = LDIR_0;
           default:      next_state = FETCH_0;
@@ -794,6 +800,10 @@ module decoder (
       MACRO_ENUM_STATES EXX 1
 
       MACRO_ENUM_STATES EX_SP_HL 15
+
+      MACRO_ENUM_STATES EX_SP_IX 15
+
+      MACRO_ENUM_STATES EX_SP_IY 15
 
       MACRO_ENUM_STATES LDI 8
 
@@ -2067,21 +2077,21 @@ module decoder (
       end
 
       //EX (SP), HL
-      EX_SP_HL_0: begin
+      EX_SP_HL_0, EX_SP_IX_0, EX_SP_IY_0: begin
         MACRO_READ_0
         MACRO_16_DRIVE SP
       end
 
-      EX_SP_HL_1: begin
+      EX_SP_HL_1, EX_SP_IX_1, EX_SP_IY_1: begin
         MACRO_READ_1
         MACRO_16_DRIVE SP
       end
 
-      EX_SP_HL_2: begin
+      EX_SP_HL_2, EX_SP_IX_2, EX_SP_IY_2: begin
         ld_MDR1 = 1;
       end
 
-      EX_SP_HL_3: begin
+      EX_SP_HL_3, EX_SP_IX_3, EX_SP_IY_3: begin
         MACRO_READ_0
 
         //put the SP+1 into MAR
@@ -2094,55 +2104,110 @@ module decoder (
         ld_MARH = 1;
       end
 
-      EX_SP_HL_4: begin
+      EX_SP_HL_4, EX_SP_IX_4, EX_SP_IY_4: begin
         MACRO_READ_1
         drive_MAR = 1;
       end
 
-      EX_SP_HL_5: begin
+      EX_SP_HL_5, EX_SP_IX_5, EX_SP_IY_5: begin
         ld_MDR2 = 1;
       end
 
-      EX_SP_HL_6: begin
+      EX_SP_HL_6, EX_SP_IX_6, EX_SP_IY_6: begin
         //now that SP+1 is in MAR, write H into (SP+1)
         MACRO_WRITE_0;
         drive_MAR = 1;
-        MACRO_8_DRIVE H
+
+        case(state)
+          EX_SP_HL_6: begin
+            MACRO_8_DRIVE H
+          end
+          EX_SP_IX_6: begin
+            MACRO_8_DRIVE IXH
+          end
+          EX_SP_IY_6: begin
+            MACRO_8_DRIVE IYH
+          end
+        endcase
       end
 
-      EX_SP_HL_7: begin
+
+      EX_SP_HL_7, EX_SP_IX_7, EX_SP_IY_7: begin
         MACRO_WRITE_1;
         drive_MAR = 1;
-        MACRO_8_DRIVE H
+
+        case(state)
+          EX_SP_HL_7: begin
+            MACRO_8_DRIVE H
+          end
+          EX_SP_IX_7: begin
+            MACRO_8_DRIVE IXH
+          end
+          EX_SP_IY_7: begin
+            MACRO_8_DRIVE IYH
+          end
+        endcase
       end
 
-      EX_SP_HL_8: begin
+      EX_SP_HL_8, EX_SP_IX_8, EX_SP_IY_8: begin
         //put SP into MAR
         MACRO_16_DRIVE SP
         ld_MARL = 1;
         ld_MARH = 1;
       end
 
-      EX_SP_HL_9: begin
+      EX_SP_HL_9, EX_SP_IX_9, EX_SP_IY_9: begin
         MACRO_WRITE_0;
         drive_MAR = 1;
-        MACRO_8_DRIVE L
+
+        case(state)
+          EX_SP_HL_9: begin
+            MACRO_8_DRIVE L
+          end
+          EX_SP_IX_9: begin
+            MACRO_8_DRIVE IXL
+          end
+          EX_SP_IY_9: begin
+            MACRO_8_DRIVE IYL
+          end
+        endcase
       end
 
-      EX_SP_HL_10: begin
+      EX_SP_HL_10, EX_SP_IX_10, EX_SP_IY_10: begin
         MACRO_WRITE_1;
         drive_MAR = 1;
-        MACRO_8_DRIVE L
+
+        case(state)
+          EX_SP_HL_10: begin
+            MACRO_8_DRIVE L
+          end
+          EX_SP_IX_10: begin
+            MACRO_8_DRIVE IXL
+          end
+          EX_SP_IY_10: begin
+            MACRO_8_DRIVE IYL
+          end
+        endcase
       end
 
-      EX_SP_HL_11: begin
+      EX_SP_HL_11, EX_SP_IX_11, EX_SP_IY_11: begin
         drive_MDR2 = 1;
-        ld_H = 1;
+
+        case(state)
+          EX_SP_HL_11: ld_H   = 1;
+          EX_SP_IX_11: ld_IXH = 1;
+          EX_SP_IY_11: ld_IYH = 1;
+        endcase
       end
 
-      EX_SP_HL_12: begin
+      EX_SP_HL_12, EX_SP_IX_12, EX_SP_IY_12: begin
         drive_MDR1 = 1;
-        ld_L = 1;
+
+        case(state)
+          EX_SP_HL_12: ld_L   = 1;
+          EX_SP_IX_12: ld_IXL = 1;
+          EX_SP_IY_12: ld_IYL = 1;
+        endcase
       end
 
       //LDI

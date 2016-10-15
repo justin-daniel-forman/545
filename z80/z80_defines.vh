@@ -36,6 +36,8 @@
 `define EX_AF_AF  8'h08
 `define EXX       8'hD9
 `define EX_SP_HL  8'hE3
+`define EX_SP_IX  8'hE3
+`define EX_SP_IY  8'hE3
 `define LDIR      8'hB0
 
 //flags

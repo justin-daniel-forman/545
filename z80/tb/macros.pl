@@ -15,7 +15,7 @@ while (my $line = <$in_fh>) {
   #check if the line is a macro
   if ($line =~ /(\s*)MACRO_(.*)\s*/) {
 
-    print $line;
+    #print $line;
 
     #case on the specific macro
     my $whitespace = $1;
@@ -165,7 +165,20 @@ while (my $line = <$in_fh>) {
       } elsif( $reg eq 'L') {
         $line .= $whitespace."drive_L = 1;\n";
         $line .= $whitespace."drive_reg_data = 1;\n";
+      } elsif( $reg eq 'IXH') {
+        $line .= $whitespace."drive_IXH = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      } elsif( $reg eq 'IXL') {
+        $line .= $whitespace."drive_IXL = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      } elsif( $reg eq 'IYH') {
+        $line .= $whitespace."drive_IYH = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      } elsif( $reg eq 'IYL') {
+        $line .= $whitespace."drive_IYL = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
       }
+
     }
 
     elsif($macro =~/16_DRIVE (.*)\s*/) {
