@@ -28,11 +28,12 @@
 `define LD_IY_nn    8'h21
 `define LD_dd_nn_x  8'b01??1011
 `define LD_IX_nn_x  8'h2A
-`define LD_IY_nn_x  8'h2A 
+`define LD_IY_nn_x  8'h2A
 `define LD_SP_IX    8'hF9
 `define LD_SP_HL    8'hF9
 
 `define EX_DE_HL  8'hEB
+`define EX_AF_AF  8'h08
 `define EXX       8'hD9
 `define EX_SP_HL  8'hE3
 `define LDIR      8'hB0

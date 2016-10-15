@@ -536,6 +536,8 @@ module decoder (
 
     MACRO_DEFINE_STATES EX_DE_HL 1
 
+    MACRO_DEFINE_STATES EX_AF_AF 1
+
     MACRO_DEFINE_STATES EXX 1
 
     MACRO_DEFINE_STATES EX_SP_HL 15
@@ -619,6 +621,7 @@ module decoder (
           `LD_r_r:    next_state =
             (op0[2:0] != 3'b110 && op0[5:3] != 3'b110) ? LD_r_r_0 : FETCH_3;
           `EX_DE_HL:  next_state = EX_DE_HL_0;
+          `EX_AF_AF:  next_state = EX_AF_AF_0;
           `EXX:       next_state = EXX_0;
           `INC:       next_state = INC_0;
           `EXT_INST:  next_state = EXT_INST_0;
@@ -785,6 +788,8 @@ module decoder (
       //-----------------------------------------------------------------------
 
       MACRO_ENUM_STATES EX_DE_HL 1
+
+      MACRO_ENUM_STATES EX_AF_AF 1
 
       MACRO_ENUM_STATES EXX 1
 
@@ -2042,6 +2047,13 @@ module decoder (
         ld_L     = 1;
         ld_D     = 1;
         ld_E     = 1;
+      end
+
+      EX_AF_AF_0: begin
+        switch_context = 1;
+        ld_F_addr = 1;
+        ld_F_data = 1;
+        ld_A = 1;
       end
 
       EXX_0: begin

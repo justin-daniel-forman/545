@@ -699,6 +699,8 @@ module decoder (
 
     EX_DE_HL_0,
 
+    EX_AF_AF_0,
+
     EXX_0,
 
     EX_SP_HL_0,
@@ -815,6 +817,7 @@ module decoder (
           `LD_r_r:    next_state =
             (op0[2:0] != 3'b110 && op0[5:3] != 3'b110) ? LD_r_r_0 : FETCH_3;
           `EX_DE_HL:  next_state = EX_DE_HL_0;
+          `EX_AF_AF:  next_state = EX_AF_AF_0;
           `EXX:       next_state = EXX_0;
           `INC:       next_state = INC_0;
           `EXT_INST:  next_state = EXT_INST_0;
@@ -1165,6 +1168,9 @@ module decoder (
       //EX_DE_HL
       EX_DE_HL_0: next_state = FETCH_0;
 
+      //EX_AF_AF
+      EX_AF_AF_0: next_state = FETCH_0;
+
       //EXX
       EXX_0: next_state = FETCH_0;
 
@@ -1208,7 +1214,7 @@ module decoder (
       LDIR_9: next_state  = LDIR_10;
       LDIR_10: next_state = LDIR_11;
       LDIR_11: next_state = LDIR_12;
-      LDIR_12: next_state = FETCH_0; 
+      LDIR_12: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END EXCHANGE, BLOCK TRANSFER GROUP
@@ -2547,6 +2553,13 @@ module decoder (
         ld_E     = 1;
       end
 
+      EX_AF_AF_0: begin
+        switch_context = 1;
+        ld_F_addr = 1;
+        ld_F_data = 1;
+        ld_A = 1;
+      end
+
       EXX_0: begin
         switch_context = 1;
         ld_B = 1;
@@ -2699,7 +2712,7 @@ module decoder (
         drive_D = 1;
         drive_E = 1;
         MWR_bus = 1;
-        drive_MDR1 = 1;  
+        drive_MDR1 = 1;
       end
 
       LDI_5, LDIR_5: begin
@@ -2743,7 +2756,7 @@ module decoder (
 
       LDIR_8, LDIR_9: begin
         //Repeat the instruction if BC != 0
-        if(flags[ `PV_flag ] == 1) begin 
+        if(flags[ `PV_flag ] == 1) begin
           ld_PCH    = 1;
           ld_PCL    = 1;
           drive_PCH = 1;

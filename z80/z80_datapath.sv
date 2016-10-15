@@ -312,25 +312,46 @@ module datapath (
     //NOTE: I'm including a point to point connection between the A register
     //      and the other registers so that a swap operation can occur
     //      in a single clock cycle.
-    A_in = (swap_reg) ? reg_data_out : internal_data;
-    A_en = ld_A;
+    if(switch_context & (ld_F_addr | ld_F_data) & ld_A) begin
+      A_in = A_not_out;
+      A_not_in = A_out;
+      A_en = 1;
+      A_not_en = 1;
 
-    F_in = (ld_F_data) ? (alu_flag_data) : ((ld_F_addr) ? (alu_flag_addr) : F_out);
-    F_en = ld_F_data | ld_F_addr;
+      F_in = F_not_out;
+      F_not_in = F_out;
+      F_en = 1;
+      F_not_en = 1;
+    end
 
-    //set or unset flags based on global sets/resets on top of alu sets
-    if     (set_S == 2'b11) begin F_in =  F_in  | 8'b1000_0000; F_en = 1; end
-    else if(set_S == 2'b10) begin F_in =  F_in  & 8'b0111_1111; F_en = 1; end
-    if     (set_Z == 2'b11) begin F_in[6] = 1; F_en = 1; end
-    else if(set_Z == 2'b10) begin F_in[6] = 0; F_en = 1; end
-    if     (set_H == 2'b11) begin F_in[4] = 1; F_en = 1; end
-    else if(set_H == 2'b10) begin F_in[4] = 0; F_en = 1; end
-    if     (set_PV == 2'b11)begin F_in[2] = 1; F_en = 1; end
-    else if(set_PV == 2'b10)begin F_in[2] = 0; F_en = 1; end
-    if     (set_N == 2'b11) begin F_in[1] = 1; F_en = 1; end
-    else if(set_N == 2'b10) begin F_in[1] = 0; F_en = 1; end
-    if     (set_C == 2'b11) begin F_in[0] = 1; F_en = 1; end
-    else if(set_C == 2'b10) begin F_in[0] = 0; F_en = 1; end
+    else begin
+      A_in = (swap_reg) ? reg_data_out : internal_data;
+      A_en = ld_A;
+
+      A_not_in = 0;
+      A_not_en = 0;
+
+      F_in = (ld_F_data) ? (alu_flag_data) : ((ld_F_addr) ? (alu_flag_addr) : F_out);
+      F_en = ld_F_data | ld_F_addr;
+
+      F_not_in = 0;
+      F_not_en = 0;
+
+      //set or unset flags based on global sets/resets on top of alu sets
+      if     (set_S == 2'b11) begin F_in =  F_in  | 8'b1000_0000; F_en = 1; end
+      else if(set_S == 2'b10) begin F_in =  F_in  & 8'b0111_1111; F_en = 1; end
+      if     (set_Z == 2'b11) begin F_in[6] = 1; F_en = 1; end
+      else if(set_Z == 2'b10) begin F_in[6] = 0; F_en = 1; end
+      if     (set_H == 2'b11) begin F_in[4] = 1; F_en = 1; end
+      else if(set_H == 2'b10) begin F_in[4] = 0; F_en = 1; end
+      if     (set_PV == 2'b11)begin F_in[2] = 1; F_en = 1; end
+      else if(set_PV == 2'b10)begin F_in[2] = 0; F_en = 1; end
+      if     (set_N == 2'b11) begin F_in[1] = 1; F_en = 1; end
+      else if(set_N == 2'b10) begin F_in[1] = 0; F_en = 1; end
+      if     (set_C == 2'b11) begin F_in[0] = 1; F_en = 1; end
+      else if(set_C == 2'b10) begin F_in[0] = 0; F_en = 1; end
+
+    end
 
     MDR1_in = internal_data;
     MDR2_in = internal_data;
