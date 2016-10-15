@@ -2,7 +2,6 @@
 `define INC 8'b00???100
 
 `define EXT_INST    8'hED
-`define LDI         8'hA0
 `define LD_HL_nn    8'h2A
 `define LD_r_r      8'b01??????
 `define LD_r_n      8'b00???110
@@ -38,7 +37,10 @@
 `define EX_SP_HL  8'hE3
 `define EX_SP_IX  8'hE3
 `define EX_SP_IY  8'hE3
+`define LDI       8'hA0
 `define LDIR      8'hB0
+`define LDD       8'hA8
+`define LDDR      8'hB8
 
 //flags
 `define PV_flag   2
