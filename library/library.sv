@@ -95,12 +95,16 @@ module mem #(parameter DATA = 8, ADDR = 16, NUMREAD = 8)(
 
   logic [DATA-1:0] memory [2**ADDR-1:0];
 
+  /*
   // A-port
-  always_ff @(posedge a_clk, negedge rst_L) begin
+  always_ff @(posedge b_clk, negedge rst_L) begin // Change clk back later!
+    /* Removing write port for testing
     if (a_we) memory[a_addr] <= data_in;
+    /
     if (a_re) a_data_out <= memory[a_addr];
     else      a_data_out <= 'bz;
   end
+  */
 
   // B-port
   generate
