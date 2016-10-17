@@ -554,6 +554,8 @@ module decoder (
 
     MACRO_DEFINE_STATES LDDR 13
 
+    MACRO_DEFINE_STATES CPI 8
+
     INC_0,
     INC_1,
     INC_2,
@@ -720,6 +722,7 @@ module decoder (
           `LDIR:        next_state = LDIR_0;
           `LDD:         next_state = LDD_0;
           `LDDR:        next_state = LDDR_0;
+          `CPI:         next_state = CPI_0;
           default:      next_state = FETCH_0;
         endcase
       end
@@ -830,6 +833,8 @@ module decoder (
       LDDR_10: next_state = LDDR_11;
       LDDR_11: next_state = LDDR_12;
       LDDR_12: next_state = FETCH_0;
+
+      MACRO_ENUM_STATES CPI 8
 
       //-----------------------------------------------------------------------
       //END EXCHANGE, BLOCK TRANSFER GROUP
@@ -2321,6 +2326,54 @@ module decoder (
           MACRO_DEC_PC
         end
       end
+
+      CPI_0: begin
+        MACRO_16_DRIVE HL
+        MACRO_READ_0
+      end
+
+      CPI_1: begin
+        MACRO_16_DRIVE HL
+        MACRO_READ_1
+      end
+
+      CPI_2: begin
+        ld_TEMP = 1;
+      end
+
+      CPI_3: begin
+        alu_op = `SUB;
+        ld_F_data = 1;
+      end
+
+      CPI_4: begin
+        //BC <- BC - 1
+        drive_B = 1;
+        drive_C = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        ld_B    = 1;
+        ld_C    = 1;
+        alu_op  = `DECR_A;
+
+        //set the P/V flag if BC-1 != 0
+        ld_F_addr = 1;
+
+        MACRO_SET N
+      end
+
+      CPI_5: begin
+        //HL <- HL + 1
+        drive_H = 1;
+        drive_L = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        ld_H = 1;
+        ld_L = 1;
+        alu_op = `INCR_A;
+      end
+
+
 
       //-----------------------------------------------------------------------
       //END EXCHANGE, BLOCK TRANSFER GROUP

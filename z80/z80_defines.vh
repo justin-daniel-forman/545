@@ -41,9 +41,15 @@
 `define LDIR      8'hB0
 `define LDD       8'hA8
 `define LDDR      8'hB8
+`define CPI       8'hA1
 
 //flags
 `define PV_flag   2
+`define C_flag    0
+`define Z_flag    6
+`define H_flag    4
+`define S_flag    7
+`define N_flag    1
 
 //ALU commands
 `define INCR_A    4'h1
@@ -52,3 +58,4 @@
 `define ADD       4'h4
 `define ADD_SE_B  4'h5
 `define ALU_B     4'h6
+`define SUB       4'h7

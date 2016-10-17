@@ -797,6 +797,15 @@ module decoder (
     LDDR_11,
     LDDR_12,
 
+    CPI_0,
+    CPI_1,
+    CPI_2,
+    CPI_3,
+    CPI_4,
+    CPI_5,
+    CPI_6,
+    CPI_7,
+
     INC_0,
     INC_1,
     INC_2,
@@ -963,6 +972,7 @@ module decoder (
           `LDIR:        next_state = LDIR_0;
           `LDD:         next_state = LDD_0;
           `LDDR:        next_state = LDDR_0;
+          `CPI:         next_state = CPI_0;
           default:      next_state = FETCH_0;
         endcase
       end
@@ -1333,6 +1343,16 @@ module decoder (
       LDDR_10: next_state = LDDR_11;
       LDDR_11: next_state = LDDR_12;
       LDDR_12: next_state = FETCH_0;
+
+      //CPI
+      CPI_0: next_state = CPI_1;
+      CPI_1: next_state = CPI_2;
+      CPI_2: next_state = CPI_3;
+      CPI_3: next_state = CPI_4;
+      CPI_4: next_state = CPI_5;
+      CPI_5: next_state = CPI_6;
+      CPI_6: next_state = CPI_7;
+      CPI_7: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END EXCHANGE, BLOCK TRANSFER GROUP
@@ -2969,6 +2989,63 @@ module decoder (
           drive_alu_addr = 1;
         end
       end
+
+      CPI_0: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_H = 1;
+        drive_L = 1;
+        MRD_start = 1;
+        MRD_bus   = 1;
+      end
+
+      CPI_1: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_H = 1;
+        drive_L = 1;
+        MRD_bus = 1;
+      end
+
+      CPI_2: begin
+        ld_TEMP = 1;
+      end
+
+      CPI_3: begin
+        alu_op = `SUB;
+        ld_F_data = 1;
+      end
+
+      CPI_4: begin
+        //BC <- BC - 1
+        drive_B = 1;
+        drive_C = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        ld_B    = 1;
+        ld_C    = 1;
+        alu_op  = `DECR_A;
+
+        //set the P/V flag if BC-1 != 0
+        ld_F_addr = 1;
+
+        set_N = 2'b11;
+      end
+
+      CPI_5: begin
+        //HL <- HL + 1
+        drive_H = 1;
+        drive_L = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        ld_H = 1;
+        ld_L = 1;
+        alu_op = `INCR_A;
+      end
+
+
 
       //-----------------------------------------------------------------------
       //END EXCHANGE, BLOCK TRANSFER GROUP

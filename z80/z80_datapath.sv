@@ -289,7 +289,7 @@ module datapath (
 
   alu #(8) eightBit(
     .A(A_out),
-    .B(data_in),
+    .B(TEMP_out),
     .op(alu_op),
     .C(alu_out_data),
     .F_in(F_out),
@@ -467,6 +467,63 @@ module alu #(parameter w = 8)(
 
       `ADD: begin
         C = A + B;
+      end
+
+      `SUB: begin
+        C = B + ~A + 1;
+
+        //if both are negative numbers
+        if(A[7] == 1 && B[7] == 1) begin
+          F_out[ `S_flag ] = (B > A) ? 1 : 0;
+        end
+
+        //a positive minus a negative is a positive
+        else if (A[7] == 1 && B[7] == 0) begin
+          F_out[ `S_flag ] = 0;
+        end
+
+        //a negative minus a pos is a negative
+        else if (A[7] == 0 && B[7] == 1) begin
+          F_out[ `S_flag ] = 1;
+        end
+
+        //both are positive
+        else begin
+          F_out[ `S_flag ] = (B > A) ? 1 : 0;
+        end
+
+        F_out[ `Z_flag ] = (C == 0) ? 1 : 0;
+
+
+        //set H flag when there is a borrow from bit 4
+        if(A[3:0] < B[3:0]) begin
+
+          //tie until the last bit
+          if(A[3:1] == B[3:1]) begin
+            F_out[`H_flag] = (~A[0] & B[0]) ? 1 : 0;
+          end
+
+          //tie until bit 1
+          else if(A[3:2] == B[3:2]) begin
+            F_out[`H_flag] = (~A[1] & B[1]) ? 1 : 0;
+          end
+
+          //tie until bit 2
+          else if(A[3] == B[3]) begin
+            F_out[`H_flag] = (~A[2] & B[2]) ? 1 : 0;
+          end
+
+          //not a tie, and A is less, so set borrow
+          else begin
+            F_out[`H_flag] = (~A[3] & B[3]) ? 1 : 0;
+          end
+
+        end
+
+        else begin
+          F_out [`H_flag] = 0;
+        end
+
       end
 
       `ALU_B: begin
