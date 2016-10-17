@@ -556,6 +556,8 @@ module decoder (
 
     MACRO_DEFINE_STATES CPI 8
 
+    MACRO_DEFINE_STATES CPIR 13
+
     INC_0,
     INC_1,
     INC_2,
@@ -723,6 +725,7 @@ module decoder (
           `LDD:         next_state = LDD_0;
           `LDDR:        next_state = LDDR_0;
           `CPI:         next_state = CPI_0;
+          `CPIR:        next_state = CPIR_0;
           default:      next_state = FETCH_0;
         endcase
       end
@@ -835,6 +838,14 @@ module decoder (
       LDDR_12: next_state = FETCH_0;
 
       MACRO_ENUM_STATES CPI 8
+
+      MACRO_ENUM_STATES_NR CPIR 8
+      CPIR_7: next_state  = (flags[ `PV_flag ] == 0) ? FETCH_0 : CPIR_8;
+      CPIR_8: next_state  = CPIR_9;
+      CPIR_9: next_state  = CPIR_10;
+      CPIR_10: next_state = CPIR_11;
+      CPIR_11: next_state = CPIR_12;
+      CPIR_12: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END EXCHANGE, BLOCK TRANSFER GROUP
@@ -2327,26 +2338,26 @@ module decoder (
         end
       end
 
-      CPI_0: begin
+      CPI_0, CPIR_0: begin
         MACRO_16_DRIVE HL
         MACRO_READ_0
       end
 
-      CPI_1: begin
+      CPI_1, CPIR_1: begin
         MACRO_16_DRIVE HL
         MACRO_READ_1
       end
 
-      CPI_2: begin
+      CPI_2, CPIR_2: begin
         ld_TEMP = 1;
       end
 
-      CPI_3: begin
+      CPI_3, CPIR_3: begin
         alu_op = `SUB;
         ld_F_data = 1;
       end
 
-      CPI_4: begin
+      CPI_4, CPIR_4: begin
         //BC <- BC - 1
         drive_B = 1;
         drive_C = 1;
@@ -2362,7 +2373,7 @@ module decoder (
         MACRO_SET N
       end
 
-      CPI_5: begin
+      CPI_5, CPIR_5: begin
         //HL <- HL + 1
         drive_H = 1;
         drive_L = 1;
@@ -2373,7 +2384,12 @@ module decoder (
         alu_op = `INCR_A;
       end
 
-
+      CPIR_8, CPIR_9: begin
+        //Repeat the instruction if BC != 0 or if the compare succeeded
+        if(flags[`PV_flag] & ~flags[`Z_flag]) begin
+          MACRO_DEC_PC
+        end
+      end
 
       //-----------------------------------------------------------------------
       //END EXCHANGE, BLOCK TRANSFER GROUP

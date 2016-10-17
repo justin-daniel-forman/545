@@ -806,6 +806,20 @@ module decoder (
     CPI_6,
     CPI_7,
 
+    CPIR_0,
+    CPIR_1,
+    CPIR_2,
+    CPIR_3,
+    CPIR_4,
+    CPIR_5,
+    CPIR_6,
+    CPIR_7,
+    CPIR_8,
+    CPIR_9,
+    CPIR_10,
+    CPIR_11,
+    CPIR_12,
+
     INC_0,
     INC_1,
     INC_2,
@@ -973,6 +987,7 @@ module decoder (
           `LDD:         next_state = LDD_0;
           `LDDR:        next_state = LDDR_0;
           `CPI:         next_state = CPI_0;
+          `CPIR:        next_state = CPIR_0;
           default:      next_state = FETCH_0;
         endcase
       end
@@ -1353,6 +1368,21 @@ module decoder (
       CPI_5: next_state = CPI_6;
       CPI_6: next_state = CPI_7;
       CPI_7: next_state = FETCH_0;
+
+      //CPIR
+      CPIR_0: next_state = CPIR_1;
+      CPIR_1: next_state = CPIR_2;
+      CPIR_2: next_state = CPIR_3;
+      CPIR_3: next_state = CPIR_4;
+      CPIR_4: next_state = CPIR_5;
+      CPIR_5: next_state = CPIR_6;
+      CPIR_6: next_state = CPIR_7;
+      CPIR_7: next_state  = (flags[ `PV_flag ] == 0) ? FETCH_0 : CPIR_8;
+      CPIR_8: next_state  = CPIR_9;
+      CPIR_9: next_state  = CPIR_10;
+      CPIR_10: next_state = CPIR_11;
+      CPIR_11: next_state = CPIR_12;
+      CPIR_12: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END EXCHANGE, BLOCK TRANSFER GROUP
@@ -2990,7 +3020,7 @@ module decoder (
         end
       end
 
-      CPI_0: begin
+      CPI_0, CPIR_0: begin
         drive_alu_addr = 1;
         alu_op = `ALU_NOP;
         drive_reg_addr = 1;
@@ -3000,7 +3030,7 @@ module decoder (
         MRD_bus   = 1;
       end
 
-      CPI_1: begin
+      CPI_1, CPIR_1: begin
         drive_alu_addr = 1;
         alu_op = `ALU_NOP;
         drive_reg_addr = 1;
@@ -3009,16 +3039,16 @@ module decoder (
         MRD_bus = 1;
       end
 
-      CPI_2: begin
+      CPI_2, CPIR_2: begin
         ld_TEMP = 1;
       end
 
-      CPI_3: begin
+      CPI_3, CPIR_3: begin
         alu_op = `SUB;
         ld_F_data = 1;
       end
 
-      CPI_4: begin
+      CPI_4, CPIR_4: begin
         //BC <- BC - 1
         drive_B = 1;
         drive_C = 1;
@@ -3034,7 +3064,7 @@ module decoder (
         set_N = 2'b11;
       end
 
-      CPI_5: begin
+      CPI_5, CPIR_5: begin
         //HL <- HL + 1
         drive_H = 1;
         drive_L = 1;
@@ -3045,7 +3075,18 @@ module decoder (
         alu_op = `INCR_A;
       end
 
-
+      CPIR_8, CPIR_9: begin
+        //Repeat the instruction if BC != 0 or if the compare succeeded
+        if(flags[`PV_flag] & ~flags[`Z_flag]) begin
+          ld_PCH    = 1;
+          ld_PCL    = 1;
+          drive_PCH = 1;
+          drive_PCL = 1;
+          alu_op    = `DECR_A;
+          drive_reg_addr = 1;
+          drive_alu_addr = 1;
+        end
+      end
 
       //-----------------------------------------------------------------------
       //END EXCHANGE, BLOCK TRANSFER GROUP
