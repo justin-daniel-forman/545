@@ -662,11 +662,27 @@ module decoder (
     LD_IY_nn_x_10,
     LD_IY_nn_x_11,
 
-    LD_SP_IX_0,
-    LD_SP_IX_1,
+    LD_nn_x_HL_0,
+    LD_nn_x_HL_1,
+    LD_nn_x_HL_2,
+    LD_nn_x_HL_3,
+    LD_nn_x_HL_4,
+    LD_nn_x_HL_5,
+    LD_nn_x_HL_6,
+    LD_nn_x_HL_7,
+    LD_nn_x_HL_8,
+    LD_nn_x_HL_9,
+    LD_nn_x_HL_10,
+    LD_nn_x_HL_11,
 
     LD_SP_HL_0,
     LD_SP_HL_1,
+
+    LD_SP_IX_0,
+    LD_SP_IX_1,
+
+    LD_SP_IY_0,
+    LD_SP_IY_1,
 
     EX_DE_HL_0,
 
@@ -810,15 +826,16 @@ module decoder (
         //case for all opcodes with both fields variable
         else begin
           casex(op0)
-            `LD_A_BC:   next_state = LD_A_BC_0;
-            `LD_A_DE:   next_state = LD_A_DE_0;
-            `LD_A_nn:   next_state = LD_A_nn_0;
-            `LD_BC_A:   next_state = LD_BC_A_0;
-            `LD_DE_A:   next_state = LD_DE_A_0;
-            `LD_HL_nn:  next_state = LD_HL_nn_0;
-            `LD_dd_nn:  next_state = LD_dd_nn_0;
-            `LD_SP_HL:  next_state = LD_SP_HL_0;
-            default:    next_state = FETCH_0;
+            `LD_A_BC:    next_state = LD_A_BC_0;
+            `LD_A_DE:    next_state = LD_A_DE_0;
+            `LD_A_nn:    next_state = LD_A_nn_0;
+            `LD_BC_A:    next_state = LD_BC_A_0;
+            `LD_DE_A:    next_state = LD_DE_A_0;
+            `LD_HL_nn:   next_state = LD_HL_nn_0;
+            `LD_dd_nn:   next_state = LD_dd_nn_0;
+            `LD_nn_x_HL: next_state = LD_nn_x_HL_0;
+            `LD_SP_HL:   next_state = LD_SP_HL_0;
+            default:     next_state = FETCH_0;
           endcase
         end
 
@@ -854,7 +871,8 @@ module decoder (
           `LD_dd_nn_x:  next_state = LD_dd_nn_x_0;
           `LD_IX_nn_x:  next_state = (op0[7:4] == 4'hD) ?  LD_IX_nn_x_0 : LD_IY_nn_x_0;
           `LD_IY_nn_x:  next_state = (op0[7:4] == 4'hF) ?  LD_IY_nn_x_0 : LD_IX_nn_x_0;
-          `LD_SP_IX:    next_state = LD_SP_IX_0;
+          `LD_SP_IX:    next_state = (op0[7:4] == 4'hD) ?  LD_SP_IX_0   : LD_SP_IY_0;
+          `LD_SP_IY:    next_state = (op0[7:4] == 4'hF) ?  LD_SP_IY_0   : LD_SP_IX_0;
           `LDI:         next_state = LDI_0;
           default:      next_state = FETCH_0;
         endcase
@@ -1101,9 +1119,27 @@ module decoder (
       LD_IY_nn_x_10: next_state = LD_IY_nn_x_11;
       LD_IY_nn_x_11: next_state = FETCH_0;
 
+      //LD_nn_x_HL
+      LD_nn_x_HL_0: next_state = LD_nn_x_HL_1;
+      LD_nn_x_HL_1: next_state = LD_nn_x_HL_2;
+      LD_nn_x_HL_2: next_state = LD_nn_x_HL_3;
+      LD_nn_x_HL_3: next_state = LD_nn_x_HL_4;
+      LD_nn_x_HL_4: next_state = LD_nn_x_HL_5;
+      LD_nn_x_HL_5: next_state = LD_nn_x_HL_6;
+      LD_nn_x_HL_6: next_state = LD_nn_x_HL_7;
+      LD_nn_x_HL_7: next_state = LD_nn_x_HL_8;
+      LD_nn_x_HL_8: next_state = LD_nn_x_HL_9;
+      LD_nn_x_HL_9: next_state = LD_nn_x_HL_10;
+      LD_nn_x_HL_10: next_state = LD_nn_x_HL_11;
+      LD_nn_x_HL_11: next_state = FETCH_0;
+
       //LD_SP_IX
       LD_SP_IX_0: next_state = LD_SP_IX_1;
       LD_SP_IX_1: next_state = FETCH_0;
+
+      //LD_SP_IY
+      LD_SP_IY_0: next_state = LD_SP_IY_1;
+      LD_SP_IY_1: next_state = FETCH_0;
 
       //LD_SP_HL
       LD_SP_HL_0: next_state = LD_SP_HL_1;
@@ -2437,16 +2473,93 @@ module decoder (
         ld_IYH = 1;
       end
 
-      //LD_SP_IX
-      LD_SP_IX_0: begin
-        drive_IXL = 1;
-        drive_IXH = 1;
-        ld_SPL = 1;
-        ld_SPH = 1;
-        alu_op = `NOP;
+      //LD_nn_x_HL
+      LD_nn_x_HL_0,LD_nn_x_HL_3: begin
+        MRD_start = 1;
+        MRD_bus   = 1;
+        ld_PCH    = 1;
+        ld_PCL    = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        alu_op    = `INCR_A;
         drive_reg_addr = 1;
         drive_alu_addr = 1;
+        ld_MARL = 1; 
+        ld_MARH = 1; 
+    
       end
+
+      LD_nn_x_HL_1: begin
+        MRD_bus = 1;
+        drive_MAR = 1;
+      end
+
+      LD_nn_x_HL_4: begin
+        MRD_bus = 1;
+        drive_MAR = 1;
+      end
+
+      LD_nn_x_HL_2: begin
+        ld_L = 1;
+      end
+
+      LD_nn_x_HL_5: begin
+        ld_H = 1;
+      end
+
+      LD_nn_x_HL_6: begin
+        MWR_start = 1;
+        MWR_bus   = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_H = 1;
+        drive_L = 1;
+        ld_MARL = 1;
+        ld_MARH = 1;
+        drive_MDR1 = 1;
+      end
+
+      LD_nn_x_HL_7: begin
+        MWR_bus = 1;
+        drive_MAR = 1;
+        drive_MDR1 = 1;
+      end
+
+      LD_nn_x_HL_9: begin
+        MWR_start = 1;
+        MWR_bus   = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_H = 1;
+        drive_L = 1;
+        alu_op = `INCR_A;
+        ld_MARL = 1;
+        ld_MARH = 1;
+        drive_MDR2 = 1;
+        ld_H = 1;
+      end
+
+      LD_nn_x_HL_10: begin
+        MWR_bus = 1;
+        drive_MAR = 1;
+        drive_MDR2 = 1;
+      end
+
+      LD_nn_x_HL_11: begin
+        ld_L = 1;
+        drive_MDR1 = 1;
+      end
+
+      //LD_nn_x_dd
+      //LD_nn_x_IX
+      //LD_nn_x_IY
+
+      //LD_nn_x_HL
+      //LD_nn_x_dd
+      //LD_nn_x_IX
+      //LD_nn_x_IY
 
       //LD_SP_HL
       LD_SP_HL_0: begin
@@ -2455,6 +2568,28 @@ module decoder (
         drive_reg_addr = 1;
         drive_H = 1;
         drive_L = 1;
+        ld_SPL = 1;
+        ld_SPH = 1;
+      end
+
+      //LD_SP_IX
+      LD_SP_IX_0: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_IXL = 1;
+        drive_IXH = 1;
+        ld_SPL = 1;
+        ld_SPH = 1;
+      end
+
+      //LD_SP_IY
+      LD_SP_IY_0: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_IYL = 1;
+        drive_IYH = 1;
         ld_SPL = 1;
         ld_SPH = 1;
       end

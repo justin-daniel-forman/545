@@ -29,7 +29,9 @@
 `define LD_dd_nn_x  8'b01??1011
 `define LD_IX_nn_x  8'h2A
 `define LD_IY_nn_x  8'h2A 
+`define LD_nn_x_HL  8'h22
 `define LD_SP_IX    8'hF9
+`define LD_SP_IY    8'hF9
 `define LD_SP_HL    8'hF9
 
 `define EX_DE_HL  8'hEB

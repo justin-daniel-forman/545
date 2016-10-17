@@ -137,6 +137,8 @@ while (my $line = <$in_fh>) {
         $line .= $whitespace."drive_reg_data = 1;\n";
       }
 
+      print $line."\n\n\n";
+
     }
 
     elsif($macro =~/16_DRIVE (.*)\s*/) {

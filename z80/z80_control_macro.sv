@@ -501,9 +501,13 @@ module decoder (
 
     MACRO_DEFINE_STATES LD_IY_nn_x 12
 
-    MACRO_DEFINE_STATES LD_SP_IX 2
+    MACRO_DEFINE_STATES LD_nn_x_HL 12
 
     MACRO_DEFINE_STATES LD_SP_HL 2
+
+    MACRO_DEFINE_STATES LD_SP_IX 2
+
+    MACRO_DEFINE_STATES LD_SP_IY 2
 
     MACRO_DEFINE_STATES EX_DE_HL 1
 
@@ -626,15 +630,16 @@ module decoder (
         //case for all opcodes with both fields variable
         else begin
           casex(op0)
-            `LD_A_BC:   next_state = LD_A_BC_0;
-            `LD_A_DE:   next_state = LD_A_DE_0;
-            `LD_A_nn:   next_state = LD_A_nn_0;
-            `LD_BC_A:   next_state = LD_BC_A_0;
-            `LD_DE_A:   next_state = LD_DE_A_0;
-            `LD_HL_nn:  next_state = LD_HL_nn_0;
-            `LD_dd_nn:  next_state = LD_dd_nn_0;
-            `LD_SP_HL:  next_state = LD_SP_HL_0;
-            default:    next_state = FETCH_0;
+            `LD_A_BC:    next_state = LD_A_BC_0;
+            `LD_A_DE:    next_state = LD_A_DE_0;
+            `LD_A_nn:    next_state = LD_A_nn_0;
+            `LD_BC_A:    next_state = LD_BC_A_0;
+            `LD_DE_A:    next_state = LD_DE_A_0;
+            `LD_HL_nn:   next_state = LD_HL_nn_0;
+            `LD_dd_nn:   next_state = LD_dd_nn_0;
+            `LD_nn_x_HL: next_state = LD_nn_x_HL_0;
+            `LD_SP_HL:   next_state = LD_SP_HL_0;
+            default:     next_state = FETCH_0;
           endcase
         end
 
@@ -670,7 +675,8 @@ module decoder (
           `LD_dd_nn_x:  next_state = LD_dd_nn_x_0;
           `LD_IX_nn_x:  next_state = (op0[7:4] == 4'hD) ?  LD_IX_nn_x_0 : LD_IY_nn_x_0;
           `LD_IY_nn_x:  next_state = (op0[7:4] == 4'hF) ?  LD_IY_nn_x_0 : LD_IX_nn_x_0;
-          `LD_SP_IX:    next_state = LD_SP_IX_0;
+          `LD_SP_IX:    next_state = (op0[7:4] == 4'hD) ?  LD_SP_IX_0   : LD_SP_IY_0;
+          `LD_SP_IY:    next_state = (op0[7:4] == 4'hF) ?  LD_SP_IY_0   : LD_SP_IX_0;
           `LDI:         next_state = LDI_0;
           default:      next_state = FETCH_0;
         endcase
@@ -739,7 +745,11 @@ module decoder (
 
       MACRO_ENUM_STATES LD_IY_nn_x 12
 
+      MACRO_ENUM_STATES LD_nn_x_HL 12
+
       MACRO_ENUM_STATES LD_SP_IX 2
+
+      MACRO_ENUM_STATES LD_SP_IY 2
 
       MACRO_ENUM_STATES LD_SP_HL 2
 
@@ -1958,20 +1968,92 @@ module decoder (
         ld_IYH = 1;
       end
 
-      //LD_SP_IX
-      LD_SP_IX_0: begin
-        drive_IXL = 1;
-        drive_IXH = 1;
-        ld_SPL = 1;
-        ld_SPH = 1;
-        alu_op = `NOP;
-        drive_reg_addr = 1;
-        drive_alu_addr = 1;
+      //LD_nn_x_HL
+      LD_nn_x_HL_0,LD_nn_x_HL_3: begin
+        MACRO_READ_0
+        MACRO_INC_PC
+        ld_MARL = 1; 
+        ld_MARH = 1; 
+    
       end
+
+      LD_nn_x_HL_1: begin
+        MACRO_READ_1
+        drive_MAR = 1;
+      end
+
+      LD_nn_x_HL_4: begin
+        MACRO_READ_1
+        drive_MAR = 1;
+      end
+
+      LD_nn_x_HL_2: begin
+        ld_L = 1;
+      end
+
+      LD_nn_x_HL_5: begin
+        ld_H = 1;
+      end
+
+      LD_nn_x_HL_6: begin
+        MACRO_WRITE_0
+        MACRO_16_DRIVE HL
+        ld_MARL = 1;
+        ld_MARH = 1;
+        drive_MDR1 = 1;
+      end
+
+      LD_nn_x_HL_7: begin
+        MACRO_WRITE_1
+        drive_MAR = 1;
+        drive_MDR1 = 1;
+      end
+
+      LD_nn_x_HL_9: begin
+        MACRO_WRITE_0
+        MACRO_16_DRIVE HL
+        alu_op = `INCR_A;
+        ld_MARL = 1;
+        ld_MARH = 1;
+        drive_MDR2 = 1;
+        ld_H = 1;
+      end
+
+      LD_nn_x_HL_10: begin
+        MACRO_WRITE_1
+        drive_MAR = 1;
+        drive_MDR2 = 1;
+      end
+
+      LD_nn_x_HL_11: begin
+        ld_L = 1;
+        drive_MDR1 = 1;
+      end
+
+      //LD_nn_x_dd
+      //LD_nn_x_IX
+      //LD_nn_x_IY
+
+      //LD_nn_x_HL
+      //LD_nn_x_dd
+      //LD_nn_x_IX
+      //LD_nn_x_IY
 
       //LD_SP_HL
       LD_SP_HL_0: begin
         MACRO_16_DRIVE HL
+        MACRO_16_LOAD SP
+      end
+
+      //LD_SP_IX
+      LD_SP_IX_0: begin
+        MACRO_16_DRIVE IX
+        MACRO_16_LOAD SP
+      end
+
+      //LD_SP_IY
+      LD_SP_IY_0: begin
+        MACRO_16_DRIVE IY
         MACRO_16_LOAD SP
       end
 
