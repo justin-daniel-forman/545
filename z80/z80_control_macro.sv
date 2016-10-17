@@ -9,7 +9,8 @@ module control_logic (
   //Bus Signals
   //  - data_in: The control segment only receives data from the bus
   //---------------------------------------------------------------------------
-   input   logic [7:0]   data_in,
+  input   logic [7:0]   data_in,
+  input   logic [7:0]   flags,
 
   //---------------------------------------------------------------------------
   //Control Signals
@@ -36,6 +37,8 @@ module control_logic (
   output  logic         ld_SPL,
   output  logic         ld_PCH,
   output  logic         ld_PCL,
+  output  logic         ld_STRH,
+  output  logic         ld_STRL,
 
   //-----------------------------------
   //Regfile Drives
@@ -59,6 +62,8 @@ module control_logic (
   output  logic         drive_SPL,
   output  logic         drive_PCH,
   output  logic         drive_PCL,
+  output  logic         drive_STRH,
+  output  logic         drive_STRL,
 
   //-----------------------------------
   //Accumulator and Flag loads
@@ -70,6 +75,14 @@ module control_logic (
   output  logic         ld_A,
   output  logic         ld_F_data,      //8bit load
   output  logic         ld_F_addr,      //16bit load
+
+  output  logic [1:0]   set_S,
+  output  logic [1:0]   set_Z,
+  output  logic [1:0]   set_H,
+  output  logic [1:0]   set_PV,
+  output  logic [1:0]   set_N,
+  output  logic [1:0]   set_C,
+
   output  logic         drive_A,
   output  logic         drive_F,
   output  logic [3:0]   alu_op,
@@ -202,6 +215,7 @@ module control_logic (
 
     .WAIT_L,
     .data_in,
+    .flags,
 
     //regfile loads
     .ld_B,
@@ -218,6 +232,8 @@ module control_logic (
     .ld_SPL,
     .ld_PCH,
     .ld_PCL,
+    .ld_STRH,
+    .ld_STRL,
 
     //regfile drives
     .drive_reg_data,
@@ -236,6 +252,8 @@ module control_logic (
     .drive_SPL,
     .drive_PCH,
     .drive_PCL,
+    .drive_STRH,
+    .drive_STRL,
 
     //accumulator flags and loads
     .ld_A,
@@ -246,6 +264,13 @@ module control_logic (
     .alu_op,
     .drive_alu_data,
     .drive_alu_addr,
+
+    .set_S,
+    .set_Z,
+    .set_H,
+    .set_PV,
+    .set_N,
+    .set_C,
 
     //misc register controls
     .switch_context,
@@ -332,13 +357,7 @@ module decoder (
   // - opcode:    What instruction we should run, is defined in z80_defines.h
   //---------------------------------------------------------------------------
   input logic [7:0] data_in,
-  //input logic [7:0] op0,
-  //input logic [7:0] op1,
-  //input logic [7:0] op2,
-
-  //output logic      ld_op0,
-  //output logic      ld_op1,
-  //output logic      ld_op2,
+  input logic [7:0] flags,
 
   //---------------------------------------------------------------------------
   //Control Signals
@@ -365,6 +384,8 @@ module decoder (
   output  logic         ld_SPL,
   output  logic         ld_PCH,
   output  logic         ld_PCL,
+  output  logic         ld_STRH,
+  output  logic         ld_STRL,
 
   //-----------------------------------
   //Regfile Drives
@@ -388,6 +409,8 @@ module decoder (
   output  logic         drive_SPL,
   output  logic         drive_PCH,
   output  logic         drive_PCL,
+  output  logic         drive_STRH,
+  output  logic         drive_STRL,
 
   //-----------------------------------
   //Accumulator and Flag loads
@@ -404,6 +427,12 @@ module decoder (
   output  logic [3:0]   alu_op,
   output  logic         drive_alu_data, //8bit drive
   output  logic         drive_alu_addr, //16bit drive
+  output  logic [1:0]   set_S,
+  output  logic [1:0]   set_Z,
+  output  logic [1:0]   set_H,
+  output  logic [1:0]   set_PV,
+  output  logic [1:0]   set_N,
+  output  logic [1:0]   set_C,
 
   //-----------------------------------
   //Miscellaneous register controls
@@ -511,11 +540,19 @@ module decoder (
 
     MACRO_DEFINE_STATES EX_DE_HL 1
 
+    MACRO_DEFINE_STATES EX_AF_AF 1
+
     MACRO_DEFINE_STATES EXX 1
 
     MACRO_DEFINE_STATES EX_SP_HL 15
 
+    MACRO_DEFINE_STATES EX_SP_IX 15
+
+    MACRO_DEFINE_STATES EX_SP_IY 15
+
     MACRO_DEFINE_STATES LDI 8
+
+    MACRO_DEFINE_STATES LDIR 13
 
     INC_0,
     INC_1,
@@ -592,6 +629,7 @@ module decoder (
           `LD_r_r:    next_state =
             (op0[2:0] != 3'b110 && op0[5:3] != 3'b110) ? LD_r_r_0 : FETCH_3;
           `EX_DE_HL:  next_state = EX_DE_HL_0;
+          `EX_AF_AF:  next_state = EX_AF_AF_0;
           `EXX:       next_state = EXX_0;
           `INC:       next_state = INC_0;
           `EXT_INST:  next_state = EXT_INST_0;
@@ -630,6 +668,7 @@ module decoder (
         //case for all opcodes with both fields variable
         else begin
           casex(op0)
+<<<<<<< HEAD
             `LD_A_BC:    next_state = LD_A_BC_0;
             `LD_A_DE:    next_state = LD_A_DE_0;
             `LD_A_nn:    next_state = LD_A_nn_0;
@@ -640,6 +679,18 @@ module decoder (
             `LD_nn_x_HL: next_state = LD_nn_x_HL_0;
             `LD_SP_HL:   next_state = LD_SP_HL_0;
             default:     next_state = FETCH_0;
+=======
+            `LD_A_BC:   next_state = LD_A_BC_0;
+            `LD_A_DE:   next_state = LD_A_DE_0;
+            `LD_A_nn:   next_state = LD_A_nn_0;
+            `LD_BC_A:   next_state = LD_BC_A_0;
+            `LD_DE_A:   next_state = LD_DE_A_0;
+            `LD_HL_nn:  next_state = LD_HL_nn_0;
+            `LD_dd_nn:  next_state = LD_dd_nn_0;
+            `LD_SP_HL:  next_state = LD_SP_HL_0;
+            `EX_SP_HL:  next_state = EX_SP_HL_0;
+            default:    next_state = FETCH_0;
+>>>>>>> 5d3ff7379359a69d6394e90b85759c7beb1f1950
           endcase
         end
 
@@ -675,9 +726,16 @@ module decoder (
           `LD_dd_nn_x:  next_state = LD_dd_nn_x_0;
           `LD_IX_nn_x:  next_state = (op0[7:4] == 4'hD) ?  LD_IX_nn_x_0 : LD_IY_nn_x_0;
           `LD_IY_nn_x:  next_state = (op0[7:4] == 4'hF) ?  LD_IY_nn_x_0 : LD_IX_nn_x_0;
+<<<<<<< HEAD
           `LD_SP_IX:    next_state = (op0[7:4] == 4'hD) ?  LD_SP_IX_0   : LD_SP_IY_0;
           `LD_SP_IY:    next_state = (op0[7:4] == 4'hF) ?  LD_SP_IY_0   : LD_SP_IX_0;
+=======
+          `LD_SP_IX:    next_state = LD_SP_IX_0;
+          `EX_SP_IX:    next_state = (op0[7:4] == 4'hD) ?  EX_SP_IX_0   : EX_SP_IY_0;
+          `EX_SP_IY:    next_state = (op0[7:4] == 4'hF) ?  EX_SP_IY_0   : EX_SP_IX_0;
+>>>>>>> 5d3ff7379359a69d6394e90b85759c7beb1f1950
           `LDI:         next_state = LDI_0;
+          `LDIR:        next_state = LDIR_0;
           default:      next_state = FETCH_0;
         endcase
       end
@@ -763,11 +821,25 @@ module decoder (
 
       MACRO_ENUM_STATES EX_DE_HL 1
 
+      MACRO_ENUM_STATES EX_AF_AF 1
+
       MACRO_ENUM_STATES EXX 1
 
       MACRO_ENUM_STATES EX_SP_HL 15
 
+      MACRO_ENUM_STATES EX_SP_IX 15
+
+      MACRO_ENUM_STATES EX_SP_IY 15
+
       MACRO_ENUM_STATES LDI 8
+
+      MACRO_ENUM_STATES_NR LDIR 8
+      LDIR_7: next_state  = (flags[ `PV_flag ] == 0) ? FETCH_0 : LDIR_8;
+      LDIR_8: next_state  = LDIR_9;
+      LDIR_9: next_state  = LDIR_10;
+      LDIR_10: next_state = LDIR_11;
+      LDIR_11: next_state = LDIR_12;
+      LDIR_12: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END EXCHANGE, BLOCK TRANSFER GROUP
@@ -834,6 +906,8 @@ module decoder (
     ld_SPL = 0;
     ld_PCH = 0;
     ld_PCL = 0;
+    ld_STRH = 0;
+    ld_STRL = 0;
 
     //Regfile Drives
     //Specifying two of these will cause a 16 bit drive onto the
@@ -855,6 +929,8 @@ module decoder (
     drive_SPL = 0;
     drive_PCH = 0;
     drive_PCL = 0;
+    drive_STRH = 0;
+    drive_STRL = 0;
 
     //Accumulator and Flag loads
     //We can load the flags from either the 16-bit ALU or the
@@ -862,6 +938,12 @@ module decoder (
     ld_A = 0;
     ld_F_data = 0;
     ld_F_addr = 0;
+    set_S = 0;
+    set_Z = 0;
+    set_H = 0;
+    set_PV = 0;
+    set_N = 0;
+    set_C = 0;
 
     //Accumulator and Flag drives
     drive_A = 0;
@@ -2075,6 +2157,13 @@ module decoder (
         ld_E     = 1;
       end
 
+      EX_AF_AF_0: begin
+        switch_context = 1;
+        ld_F_addr = 1;
+        ld_F_data = 1;
+        ld_A = 1;
+      end
+
       EXX_0: begin
         switch_context = 1;
         ld_B = 1;
@@ -2086,21 +2175,21 @@ module decoder (
       end
 
       //EX (SP), HL
-      EX_SP_HL_0: begin
+      EX_SP_HL_0, EX_SP_IX_0, EX_SP_IY_0: begin
         MACRO_READ_0
         MACRO_16_DRIVE SP
       end
 
-      EX_SP_HL_1: begin
+      EX_SP_HL_1, EX_SP_IX_1, EX_SP_IY_1: begin
         MACRO_READ_1
         MACRO_16_DRIVE SP
       end
 
-      EX_SP_HL_2: begin
+      EX_SP_HL_2, EX_SP_IX_2, EX_SP_IY_2: begin
         ld_MDR1 = 1;
       end
 
-      EX_SP_HL_3: begin
+      EX_SP_HL_3, EX_SP_IX_3, EX_SP_IY_3: begin
         MACRO_READ_0
 
         //put the SP+1 into MAR
@@ -2109,114 +2198,145 @@ module decoder (
         drive_alu_addr = 1;
         drive_reg_addr = 1;
         alu_op = `INCR_A;
+        ld_MARL = 1;
+        ld_MARH = 1;
       end
 
-      EX_SP_HL_4: begin
+      EX_SP_HL_4, EX_SP_IX_4, EX_SP_IY_4: begin
         MACRO_READ_1
         drive_MAR = 1;
       end
 
-      EX_SP_HL_5: begin
+      EX_SP_HL_5, EX_SP_IX_5, EX_SP_IY_5: begin
         ld_MDR2 = 1;
       end
 
-      EX_SP_HL_6: begin
+      EX_SP_HL_6, EX_SP_IX_6, EX_SP_IY_6: begin
         //now that SP+1 is in MAR, write H into (SP+1)
         MACRO_WRITE_0;
         drive_MAR = 1;
-        MACRO_8_DRIVE H
+
+        case(state)
+          EX_SP_HL_6: begin
+            MACRO_8_DRIVE H
+          end
+          EX_SP_IX_6: begin
+            MACRO_8_DRIVE IXH
+          end
+          EX_SP_IY_6: begin
+            MACRO_8_DRIVE IYH
+          end
+        endcase
       end
 
-      EX_SP_HL_7: begin
+
+      EX_SP_HL_7, EX_SP_IX_7, EX_SP_IY_7: begin
         MACRO_WRITE_1;
         drive_MAR = 1;
-        MACRO_8_DRIVE H
+
+        case(state)
+          EX_SP_HL_7: begin
+            MACRO_8_DRIVE H
+          end
+          EX_SP_IX_7: begin
+            MACRO_8_DRIVE IXH
+          end
+          EX_SP_IY_7: begin
+            MACRO_8_DRIVE IYH
+          end
+        endcase
       end
 
-      EX_SP_HL_8: begin
+      EX_SP_HL_8, EX_SP_IX_8, EX_SP_IY_8: begin
         //put SP into MAR
         MACRO_16_DRIVE SP
         ld_MARL = 1;
         ld_MARH = 1;
       end
 
-      EX_SP_HL_9: begin
+      EX_SP_HL_9, EX_SP_IX_9, EX_SP_IY_9: begin
         MACRO_WRITE_0;
         drive_MAR = 1;
-        MACRO_8_DRIVE L
+
+        case(state)
+          EX_SP_HL_9: begin
+            MACRO_8_DRIVE L
+          end
+          EX_SP_IX_9: begin
+            MACRO_8_DRIVE IXL
+          end
+          EX_SP_IY_9: begin
+            MACRO_8_DRIVE IYL
+          end
+        endcase
       end
 
-      EX_SP_HL_10: begin
+      EX_SP_HL_10, EX_SP_IX_10, EX_SP_IY_10: begin
         MACRO_WRITE_1;
         drive_MAR = 1;
-        MACRO_8_DRIVE L
+
+        case(state)
+          EX_SP_HL_10: begin
+            MACRO_8_DRIVE L
+          end
+          EX_SP_IX_10: begin
+            MACRO_8_DRIVE IXL
+          end
+          EX_SP_IY_10: begin
+            MACRO_8_DRIVE IYL
+          end
+        endcase
       end
 
-      EX_SP_HL_11: begin
-        drive_MDR1 = 1;
-        ld_H = 1;
-      end
-
-      EX_SP_HL_12: begin
+      EX_SP_HL_11, EX_SP_IX_11, EX_SP_IY_11: begin
         drive_MDR2 = 1;
-        ld_L = 1;
+
+        case(state)
+          EX_SP_HL_11: ld_H   = 1;
+          EX_SP_IX_11: ld_IXH = 1;
+          EX_SP_IY_11: ld_IYH = 1;
+        endcase
+      end
+
+      EX_SP_HL_12, EX_SP_IX_12, EX_SP_IY_12: begin
+        drive_MDR1 = 1;
+
+        case(state)
+          EX_SP_HL_12: ld_L   = 1;
+          EX_SP_IX_12: ld_IXL = 1;
+          EX_SP_IY_12: ld_IYL = 1;
+        endcase
       end
 
       //LDI
-      LDI_0: begin
-        //MAR <- HL
-        drive_H = 1;
-        drive_L = 1;
-        drive_reg_addr = 1;
-        drive_alu_addr = 1;
-        alu_op = `ALU_NOP;
-        ld_MARH = 1;
-        ld_MARL = 1;
-
-        //start a memory read from HL
-        MRD_start = 1;
-        MRD_bus   = 1;
-        drive_MAR = 1;
+      LDI_0, LDIR_0: begin
+        MACRO_16_DRIVE HL
+        MACRO_READ_0
       end
 
-      LDI_1: begin
-        //Nothing to do but continue the read
-        MRD_bus  = 1;
-        drive_MAR = 1;
+      LDI_1, LDIR_1: begin
+        MACRO_16_DRIVE HL
+        MACRO_READ_1
       end
 
-      LDI_2: begin
+      LDI_2, LDIR_2: begin
         //MDR1 <- (HL) (put contents of D_BUS into MDR1)
         ld_MDR1 = 1;
       end
 
-      LDI_3: begin
-        //MAR <- DE
-        drive_D = 1;
-        drive_E = 1;
-        drive_reg_addr = 1;
-        drive_alu_addr = 1;
-        alu_op = `ALU_NOP;
-        ld_MARH = 1;
-        ld_MARL = 1;
-
-        //D_BUS <- MDR1
+      LDI_3, LDIR_3: begin
+        MACRO_16_DRIVE DE
+        MACRO_WRITE_0
         drive_MDR1 = 1;
-
-        //Start a write
-        MWR_start = 1;
-        MWR_bus   = 1;
-        drive_MAR = 1;
       end
 
-      LDI_4: begin
-        //continue the write
+      LDI_4, LDIR_4: begin
+        MACRO_16_DRIVE DE
+        MACRO_WRITE_1
         drive_MDR1 = 1;
-        MWR_bus    = 1;
-        drive_MAR  = 1;
       end
 
-      LDI_5: begin
+      LDI_5, LDIR_5: begin
         //DE <- DE + 1
         drive_D = 1;
         drive_E = 1;
@@ -2227,7 +2347,24 @@ module decoder (
         alu_op = `INCR_A;
       end
 
-      LDI_6: begin
+      LDI_6, LDIR_6: begin
+        //BC <- BC - 1
+        drive_B = 1;
+        drive_C = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        ld_B    = 1;
+        ld_C    = 1;
+        alu_op  = `DECR_A;
+
+        //set the P/V flag if BC-1 != 0
+        ld_F_addr = 1;
+
+        MACRO_RESET H
+        MACRO_RESET N
+      end
+
+      LDI_7, LDIR_7: begin
         //HL <- HL + 1
         drive_H = 1;
         drive_L = 1;
@@ -2238,15 +2375,11 @@ module decoder (
         alu_op = `INCR_A;
       end
 
-      LDI_7: begin
-        //BC <- BC - 1
-        drive_B = 1;
-        drive_C = 1;
-        drive_reg_addr = 1;
-        drive_alu_addr = 1;
-        ld_B    = 1;
-        ld_C    = 1;
-        alu_op  = `DECR_A;
+      LDIR_8, LDIR_9: begin
+        //Repeat the instruction if BC != 0
+        if(flags[ `PV_flag ] == 1) begin
+          MACRO_DEC_PC
+        end
       end
 
       //-----------------------------------------------------------------------

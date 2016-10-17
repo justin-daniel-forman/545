@@ -15,7 +15,7 @@ while (my $line = <$in_fh>) {
   #check if the line is a macro
   if ($line =~ /(\s*)MACRO_(.*)\s*/) {
 
-    print $line;
+    #print $line;
 
     #case on the specific macro
     my $whitespace = $1;
@@ -27,6 +27,16 @@ while (my $line = <$in_fh>) {
       $line .= $whitespace."drive_PCH = 1;\n";
       $line .= $whitespace."drive_PCL = 1;\n";
       $line .= $whitespace."alu_op    = `INCR_A;\n";
+      $line .= $whitespace."drive_reg_addr = 1;\n";
+      $line .= $whitespace."drive_alu_addr = 1;\n";
+    }
+
+    elsif($macro eq 'DEC_PC') {
+      $line  = $whitespace."ld_PCH    = 1;\n";
+      $line .= $whitespace."ld_PCL    = 1;\n";
+      $line .= $whitespace."drive_PCH = 1;\n";
+      $line .= $whitespace."drive_PCL = 1;\n";
+      $line .= $whitespace."alu_op    = `DECR_A;\n";
       $line .= $whitespace."drive_reg_addr = 1;\n";
       $line .= $whitespace."drive_alu_addr = 1;\n";
     }
@@ -52,13 +62,28 @@ while (my $line = <$in_fh>) {
     elsif($macro =~ /ENUM_STATES (.*) (.*)\s*/) {
       my $state_name = $1;
       my $num_states = $2;
+      my $bool = $3;
 
       $line = $whitespace."//$state_name\n";
       for($i = 0; $i < $num_states - 1; $i+=1) {
         my $j = $i + 1;
         $line .= $whitespace."$state_name"."_$i: next_state = $state_name"."_$j;\n";
       }
+
       $line .= $whitespace."$state_name"."_$i: next_state = FETCH_0;\n";
+
+    }
+
+    elsif($macro =~ /ENUM_STATES_NR (.*) (.*)\s*/) {
+      my $state_name = $1;
+      my $num_states = $2;
+      my $bool = $3;
+
+      $line = $whitespace."//$state_name\n";
+      for($i = 0; $i < $num_states - 1; $i+=1) {
+        my $j = $i + 1;
+        $line .= $whitespace."$state_name"."_$i: next_state = $state_name"."_$j;\n";
+      }
 
     }
 
@@ -108,6 +133,11 @@ while (my $line = <$in_fh>) {
         $line .= $whitespace."ld_IYL = 1;\n";
         $line .= $whitespace."ld_IYH = 1;\n";
       }
+      if($reg eq 'STR') {
+        $line .= $whitespace."ld_STRL = 1;\n";
+        $line .= $whitespace."ld_STRH = 1;\n";
+      }
+
     }
 
     elsif($macro =~ /8_DRIVE (.*)\s*/) {
@@ -134,6 +164,18 @@ while (my $line = <$in_fh>) {
         $line .= $whitespace."drive_reg_data = 1;\n";
       } elsif( $reg eq 'L') {
         $line .= $whitespace."drive_L = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      } elsif( $reg eq 'IXH') {
+        $line .= $whitespace."drive_IXH = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      } elsif( $reg eq 'IXL') {
+        $line .= $whitespace."drive_IXL = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      } elsif( $reg eq 'IYH') {
+        $line .= $whitespace."drive_IYH = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      } elsif( $reg eq 'IYL') {
+        $line .= $whitespace."drive_IYL = 1;\n";
         $line .= $whitespace."drive_reg_data = 1;\n";
       }
 
@@ -173,7 +215,60 @@ while (my $line = <$in_fh>) {
         $line .= $whitespace."drive_IYL = 1;\n";
         $line .= $whitespace."drive_IYH = 1;\n";
       }
+      if($reg eq 'STR') {
+        $line .= $whitespace."drive_STRH = 1;\n";
+        $line .= $whitespace."drive_STRL = 1;\n";
+      }
     }
+
+    elsif($macro =~ /^SET (.*)\s*/) {
+      $line = '';
+      my $flag = $1;
+
+      if($flag eq 'S') {
+        $line .= $whitespace."set_S = 2'b11;\n";
+      }
+      elsif($flag eq 'Z') {
+        $line .= $whitespace."set_Z = 2'b11;\n";
+      }
+      elsif($flag eq 'H') {
+        $line .= $whitespace."set_H = 2'b11;\n";
+      }
+      elsif($flag eq 'PV') {
+        $line .= $whitespace."set_PV = 2'b11;\n";
+      }
+      elsif($flag eq 'N') {
+        $line .= $whitespace."set_N = 2'b11;\n";
+      }
+      elsif($flag eq 'C') {
+        $line .= $whitespace."set_C = 2'b11;\n";
+      }
+    }
+
+    elsif($macro =~ /RESET (.*)\s*/) {
+      $line = '';
+      my $flag = $1;
+
+      if($flag eq 'S') {
+        $line .= $whitespace."set_S = 2'b10;\n";
+      }
+      elsif($flag eq 'Z') {
+        $line .= $whitespace."set_Z = 2'b10;\n";
+      }
+      elsif($flag eq 'H') {
+        $line .= $whitespace."set_H = 2'b10;\n";
+      }
+      elsif($flag eq 'PV') {
+        $line .= $whitespace."set_PV = 2'b10;\n";
+      }
+      elsif($flag eq 'N') {
+        $line .= $whitespace."set_N = 2'b10;\n";
+      }
+      elsif($flag eq 'C') {
+        $line .= $whitespace."set_C = 2'b10;\n";
+      }
+    }
+
   }
 
   #write the line that was either the original or the replaced macro

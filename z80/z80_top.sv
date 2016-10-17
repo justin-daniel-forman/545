@@ -89,6 +89,8 @@ module z80(
   logic         ld_SPL;
   logic         ld_PCH;
   logic         ld_PCL;
+  logic         ld_STRH;
+  logic         ld_STRL;
 
   //-----------------------------------
   //Regfile Drives
@@ -112,6 +114,8 @@ module z80(
   logic         drive_SPL;
   logic         drive_PCH;
   logic         drive_PCL;
+  logic         drive_STRH;
+  logic         drive_STRL;
 
   //-----------------------------------
   //Accumulator and Flag loads
@@ -128,6 +132,13 @@ module z80(
   logic [3:0]   alu_op;
   logic         drive_alu_data; //8bit drive
   logic         drive_alu_addr; //16bit drive
+  logic [1:0]   set_S;
+  logic [1:0]   set_Z;
+  logic [1:0]   set_H;
+  logic [1:0]   set_PV;
+  logic [1:0]   set_N;
+  logic [1:0]   set_C;
+
 
   //-----------------------------------
   //Miscellaneous register controls
@@ -163,6 +174,9 @@ module z80(
   logic [7:0]   data_in;
   logic [7:0]   data_out;
   logic [15:0]  addr_out;
+
+  //Datapath flags that the control module ueses
+  logic [7:0]   flags;
 
   datapath DP (.*);
 
