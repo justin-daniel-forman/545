@@ -43,6 +43,8 @@
 `define LDDR      8'hB8
 `define CPI       8'hA1
 `define CPIR      8'hB1
+`define CPD       8'hA9
+`define CPDR      8'hB9
 
 //flags
 `define PV_flag   2

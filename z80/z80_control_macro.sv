@@ -558,6 +558,10 @@ module decoder (
 
     MACRO_DEFINE_STATES CPIR 13
 
+    MACRO_DEFINE_STATES CPD 8
+
+    MACRO_DEFINE_STATES CPDR 13
+
     INC_0,
     INC_1,
     INC_2,
@@ -726,6 +730,8 @@ module decoder (
           `LDDR:        next_state = LDDR_0;
           `CPI:         next_state = CPI_0;
           `CPIR:        next_state = CPIR_0;
+          `CPD:         next_state = CPD_0;
+          `CPDR:        next_state = CPDR_0;
           default:      next_state = FETCH_0;
         endcase
       end
@@ -840,12 +846,22 @@ module decoder (
       MACRO_ENUM_STATES CPI 8
 
       MACRO_ENUM_STATES_NR CPIR 8
-      CPIR_7: next_state  = (flags[ `PV_flag ] == 0) ? FETCH_0 : CPIR_8;
+      CPIR_7: next_state  = (~flags[`PV_flag] == 0 | flags[`Z_flag]) ? FETCH_0 : CPIR_8;
       CPIR_8: next_state  = CPIR_9;
       CPIR_9: next_state  = CPIR_10;
       CPIR_10: next_state = CPIR_11;
       CPIR_11: next_state = CPIR_12;
       CPIR_12: next_state = FETCH_0;
+
+      MACRO_ENUM_STATES CPD 8
+
+      MACRO_ENUM_STATES_NR CPDR 8
+      CPDR_7: next_state  = (~flags[`PV_flag] == 0 | flags[`Z_flag]) ? FETCH_0 : CPDR_8;
+      CPDR_8: next_state  = CPDR_9;
+      CPDR_9: next_state  = CPDR_10;
+      CPDR_10: next_state = CPDR_11;
+      CPDR_11: next_state = CPDR_12;
+      CPDR_12: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END EXCHANGE, BLOCK TRANSFER GROUP
@@ -2338,26 +2354,26 @@ module decoder (
         end
       end
 
-      CPI_0, CPIR_0: begin
+      CPI_0, CPIR_0, CPD_0, CPDR_0: begin
         MACRO_16_DRIVE HL
         MACRO_READ_0
       end
 
-      CPI_1, CPIR_1: begin
+      CPI_1, CPIR_1, CPD_1, CPDR_1: begin
         MACRO_16_DRIVE HL
         MACRO_READ_1
       end
 
-      CPI_2, CPIR_2: begin
+      CPI_2, CPIR_2, CPD_2, CPDR_2: begin
         ld_TEMP = 1;
       end
 
-      CPI_3, CPIR_3: begin
+      CPI_3, CPIR_3, CPD_3, CPDR_3: begin
         alu_op = `SUB;
         ld_F_data = 1;
       end
 
-      CPI_4, CPIR_4: begin
+      CPI_4, CPIR_4, CPD_4, CPDR_4: begin
         //BC <- BC - 1
         drive_B = 1;
         drive_C = 1;
@@ -2384,7 +2400,18 @@ module decoder (
         alu_op = `INCR_A;
       end
 
-      CPIR_8, CPIR_9: begin
+      CPD_5, CPDR_5: begin
+        //HL <- HL - 1
+        drive_H = 1;
+        drive_L = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        ld_H = 1;
+        ld_L = 1;
+        alu_op = `DECR_A;
+      end
+
+      CPIR_8, CPIR_9, CPDR_8, CPDR_9: begin
         //Repeat the instruction if BC != 0 or if the compare succeeded
         if(flags[`PV_flag] & ~flags[`Z_flag]) begin
           MACRO_DEC_PC
