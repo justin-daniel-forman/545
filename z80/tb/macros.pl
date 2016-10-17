@@ -147,6 +147,12 @@ while (my $line = <$in_fh>) {
       if($reg eq 'A') {
         $line .= $whitespace."drive_A = 1;\n";
         $line .= $whitespace."drive_reg_data = 1;\n";
+      } elsif( $reg eq 'F') {
+        $line .= $whitespace."drive_F = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      } elsif( $reg eq 'B') {
+        $line .= $whitespace."drive_B = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
       } elsif( $reg eq 'B') {
         $line .= $whitespace."drive_B = 1;\n";
         $line .= $whitespace."drive_reg_data = 1;\n";
