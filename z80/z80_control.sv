@@ -691,6 +691,20 @@ module decoder (
     LD_IY_nn_x_10,
     LD_IY_nn_x_11,
 
+    POP_IX_0,
+    POP_IX_1,
+    POP_IX_2,
+    POP_IX_3,
+    POP_IX_4,
+    POP_IX_5,
+
+    POP_IY_0,
+    POP_IY_1,
+    POP_IY_2,
+    POP_IY_3,
+    POP_IY_4,
+    POP_IY_5,
+
     LD_SP_IX_0,
     LD_SP_IX_1,
 
@@ -1016,6 +1030,8 @@ module decoder (
           `CPIR:        next_state = CPIR_0;
           `CPD:         next_state = CPD_0;
           `CPDR:        next_state = CPDR_0;
+          `POP_IX:      next_state = (op0[7:4] == 4'hD) ?  POP_IX_0   : POP_IY_0;
+          `POP_IY:      next_state = (op0[7:4] == 4'hF) ?  POP_IY_0   : POP_IX_0;
           default:      next_state = FETCH_0;
         endcase
       end
@@ -1268,6 +1284,22 @@ module decoder (
       //LD_SP_HL
       LD_SP_HL_0: next_state = LD_SP_HL_1;
       LD_SP_HL_1: next_state = FETCH_0;
+
+      //POP_IX
+      POP_IX_0: next_state = POP_IX_1;
+      POP_IX_1: next_state = POP_IX_2;
+      POP_IX_2: next_state = POP_IX_3;
+      POP_IX_3: next_state = POP_IX_4;
+      POP_IX_4: next_state = POP_IX_5;
+      POP_IX_5: next_state = FETCH_0;
+
+      //POP_IY
+      POP_IY_0: next_state = POP_IY_1;
+      POP_IY_1: next_state = POP_IY_2;
+      POP_IY_2: next_state = POP_IY_3;
+      POP_IY_3: next_state = POP_IY_4;
+      POP_IY_4: next_state = POP_IY_5;
+      POP_IY_5: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END 16-bit load group
@@ -2765,6 +2797,64 @@ module decoder (
         drive_L = 1;
         ld_SPL = 1;
         ld_SPH = 1;
+      end
+
+      //POP IX, IY
+      POP_IX_0, POP_IY_0: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+        MRD_start = 1;
+        MRD_bus   = 1;
+      end
+
+      POP_IX_1, POP_IY_1: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+        MRD_bus = 1;
+      end
+
+      POP_IX_2, POP_IY_2: begin
+        ld_IXL = (state == POP_IX_2) ? 1 : 0;
+        ld_IYL = (state == POP_IY_2) ? 1 : 0;
+      end
+
+      POP_IX_3, POP_IY_3: begin
+        drive_alu_addr = 1;
+        alu_op = `INCR_A;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+        ld_SPH    = 1;
+        ld_SPL    = 1;
+        MRD_start = 1;
+        MRD_bus   = 1;
+      end
+
+      POP_IX_4, POP_IY_4: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+        MRD_bus = 1;
+      end
+
+      POP_IX_5, POP_IY_5: begin
+        drive_alu_addr = 1;
+        alu_op = `INCR_A;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+        ld_SPH    = 1;
+        ld_SPL    = 1;
+        ld_IXH = (state == POP_IX_5) ? 1 : 0;
+        ld_IYH = (state == POP_IY_5) ? 1 : 0;
       end
 
       //-----------------------------------------------------------------------

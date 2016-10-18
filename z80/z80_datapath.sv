@@ -1012,14 +1012,25 @@ module regfile(
          |(ld_PCH & ld_PCL)
          |(ld_STRH & ld_STRL)
         ) begin
-        {B_in, C_in} = A_BUS;
-        {D_in, E_in} = A_BUS;
-        {H_in, L_in} = A_BUS;
-        {IXH_in, IXL_in} = A_BUS;
-        {IYH_in, IYL_in} = A_BUS;
-        {SPH_in, SPL_in} = A_BUS;
-        {PCH_in, PCL_in} = A_BUS;
-        {STRH_in, STRL_in} = A_BUS;
+
+        //We can load in these registers with the databus in parallel
+        //as the add bus load, or we can load them like an address
+        B_in = (ld_B & ld_C) ? A_BUS[15:8] : D_BUS;
+        C_in = (ld_B & ld_C) ? A_BUS[7:0]  : D_BUS;
+        D_in = (ld_D & ld_E) ? A_BUS[15:8] : D_BUS;
+        E_in = (ld_D & ld_E) ? A_BUS[7:0]  : D_BUS;
+        H_in = (ld_H & ld_L) ? A_BUS[15:8] : D_BUS;
+        L_in = (ld_H & ld_L) ? A_BUS[7:0]  : D_BUS;
+        IXH_in = (ld_IXH & ld_IXL) ? A_BUS[15:8] : D_BUS;
+        IXL_in = (ld_IXH & ld_IXL) ? A_BUS[7:0]  : D_BUS;
+        IYH_in = (ld_IYH & ld_IYL) ? A_BUS[15:8] : D_BUS;
+        IYL_in = (ld_IYH & ld_IYL) ? A_BUS[7:0]  : D_BUS;
+        SPH_in = (ld_SPH & ld_SPL) ? A_BUS[15:8] : D_BUS;
+        SPL_in = (ld_SPH & ld_SPL) ? A_BUS[7:0]  : D_BUS;
+        PCH_in = (ld_PCH & ld_PCL) ? A_BUS[15:8] : D_BUS;
+        PCL_in = (ld_PCH & ld_PCL) ? A_BUS[7:0]  : D_BUS;
+        STRH_in = (ld_STRH & ld_STRL) ? A_BUS[15:8] : D_BUS;
+        STRL_in = (ld_STRH & ld_STRL) ? A_BUS[7:0]  : D_BUS;
       end
 
       //data bus cases

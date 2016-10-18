@@ -530,6 +530,10 @@ module decoder (
 
     MACRO_DEFINE_STATES LD_IY_nn_x 12
 
+    MACRO_DEFINE_STATES POP_IX 6
+
+    MACRO_DEFINE_STATES POP_IY 6
+
     MACRO_DEFINE_STATES LD_SP_IX 2
 
     MACRO_DEFINE_STATES LD_SP_HL 2
@@ -735,6 +739,8 @@ module decoder (
           `CPIR:        next_state = CPIR_0;
           `CPD:         next_state = CPD_0;
           `CPDR:        next_state = CPDR_0;
+          `POP_IX:      next_state = (op0[7:4] == 4'hD) ?  POP_IX_0   : POP_IY_0;
+          `POP_IY:      next_state = (op0[7:4] == 4'hF) ?  POP_IY_0   : POP_IX_0;
           default:      next_state = FETCH_0;
         endcase
       end
@@ -805,6 +811,10 @@ module decoder (
       MACRO_ENUM_STATES LD_SP_IX 2
 
       MACRO_ENUM_STATES LD_SP_HL 2
+
+      MACRO_ENUM_STATES POP_IX 6
+
+      MACRO_ENUM_STATES POP_IY 6
 
       //-----------------------------------------------------------------------
       //END 16-bit load group
@@ -2100,6 +2110,38 @@ module decoder (
       LD_SP_HL_0: begin
         MACRO_16_DRIVE HL
         MACRO_16_LOAD SP
+      end
+
+      //POP IX, IY
+      POP_IX_0, POP_IY_0: begin
+        MACRO_16_DRIVE SP
+        MACRO_READ_0
+      end
+
+      POP_IX_1, POP_IY_1: begin
+        MACRO_16_DRIVE SP
+        MACRO_READ_1
+      end
+
+      POP_IX_2, POP_IY_2: begin
+        ld_IXL = (state == POP_IX_2) ? 1 : 0;
+        ld_IYL = (state == POP_IY_2) ? 1 : 0;
+      end
+
+      POP_IX_3, POP_IY_3: begin
+        MACRO_16_INC SP
+        MACRO_READ_0
+      end
+
+      POP_IX_4, POP_IY_4: begin
+        MACRO_16_DRIVE SP
+        MACRO_READ_1
+      end
+
+      POP_IX_5, POP_IY_5: begin
+        MACRO_16_INC SP
+        ld_IXH = (state == POP_IX_5) ? 1 : 0;
+        ld_IYH = (state == POP_IY_5) ? 1 : 0;
       end
 
       //-----------------------------------------------------------------------

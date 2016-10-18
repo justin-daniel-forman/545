@@ -31,6 +31,9 @@
 `define LD_SP_IX    8'hF9
 `define LD_SP_HL    8'hF9
 
+`define POP_IX      8'hE1
+`define POP_IY      8'hE1
+
 `define EX_DE_HL  8'hEB
 `define EX_AF_AF  8'h08
 `define EXX       8'hD9
