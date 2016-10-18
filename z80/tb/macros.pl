@@ -259,6 +259,11 @@ while (my $line = <$in_fh>) {
         $line .= $whitespace."drive_STRH = 1;\n";
         $line .= $whitespace."drive_STRL = 1;\n";
       }
+      if($reg eq 'PC') {
+        $line .= $whitespace."drive_PCH = 1;\n";
+        $line .= $whitespace."drive_PCL = 1;\n";
+      }
+
     }
 
     elsif($macro =~/16_INC (.*)\s*/) {
@@ -311,6 +316,13 @@ while (my $line = <$in_fh>) {
         $line .= $whitespace."ld_STRH    = 1;\n";
         $line .= $whitespace."ld_STRL    = 1;\n";
       }
+      if($reg eq 'PC') {
+        $line .= $whitespace."drive_PCH = 1;\n";
+        $line .= $whitespace."drive_PCL = 1;\n";
+        $line .= $whitespace."ld_PCH    = 1;\n";
+        $line .= $whitespace."ld_PCL    = 1;\n";
+      }
+
     }
 
     elsif($macro =~ /^SET (.*)\s*/) {

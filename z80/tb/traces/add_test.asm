@@ -20,7 +20,7 @@ section code
   add a               # A <- 56   $38
   add a               # A <- 112  $38 + $38 = $70, H = 1
   add a               # A <- 224  $70 + $70 = $EO, H = 0
-  add a               # a <- 1C0  $E0 + $E0 = $1C0, H = 0, C = 1
+  add $E0             # a <- 1C0  $E0 + $E0 = $1C0, H = 0, C = 1
 
 section data
   addr0: data !0102 !BEEF

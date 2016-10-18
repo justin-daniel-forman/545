@@ -859,6 +859,10 @@ module decoder (
 
     ADD_A_r_0,
 
+    ADD_A_n_0,
+    ADD_A_n_1,
+    ADD_A_n_2,
+
     INC_0,
     INC_1,
     INC_2,
@@ -967,6 +971,7 @@ module decoder (
             `LD_r_HL:   next_state = LD_r_HL_0;
             `LD_HL_n:   next_state = LD_HL_n_0;
             `LD_dd_nn:  next_state = LD_dd_nn_0;
+            `ADD_A_n:   next_state = ADD_A_n_0;
             default:    next_state = FETCH_0;
           endcase
         end
@@ -1479,6 +1484,11 @@ module decoder (
 
       //ADD_A_r
       ADD_A_r_0: next_state = FETCH_0;
+
+      //ADD_A_n
+      ADD_A_n_0: next_state = ADD_A_n_1;
+      ADD_A_n_1: next_state = ADD_A_n_2;
+      ADD_A_n_2: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END 8-bit arithmetic group
@@ -3324,6 +3334,36 @@ module decoder (
 
         set_N = 2'b10;
       end
+
+      ADD_A_n_0: begin
+        drive_alu_addr = 1;
+        alu_op = `INCR_A;
+        drive_reg_addr = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        ld_PCH    = 1;
+        ld_PCL    = 1;
+        MRD_start = 1;
+        MRD_bus   = 1;
+      end
+
+      ADD_A_n_1: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        MRD_bus = 1;
+      end
+
+      ADD_A_n_2: begin
+        ld_F_data      = 1;
+        drive_alu_data = 1;
+        ld_A           = 1;
+        alu_op         = `ADD;
+        set_N = 2'b10;
+      end
+
       //-----------------------------------------------------------------------
       //END 8-bit arithmetic group
       //-----------------------------------------------------------------------
