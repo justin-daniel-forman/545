@@ -843,6 +843,8 @@ module decoder (
     CPDR_11,
     CPDR_12,
 
+    ADD_A_r_0,
+
     INC_0,
     INC_1,
     INC_2,
@@ -920,6 +922,7 @@ module decoder (
           `EX_DE_HL:  next_state = EX_DE_HL_0;
           `EX_AF_AF:  next_state = EX_AF_AF_0;
           `EXX:       next_state = EXX_0;
+          `ADD_A_r:   next_state = ADD_A_r_0;
           `INC:       next_state = INC_0;
           `EXT_INST:  next_state = EXT_INST_0;
           `IX_INST:   next_state = IX_INST_0;
@@ -1436,6 +1439,17 @@ module decoder (
 
       //-----------------------------------------------------------------------
       //END EXCHANGE, BLOCK TRANSFER GROUP
+      //-----------------------------------------------------------------------
+
+      //-----------------------------------------------------------------------
+      //BEGIN 8-bit arithmetic group
+      //-----------------------------------------------------------------------
+
+      //ADD_A_r
+      ADD_A_r_0: next_state = FETCH_0;
+
+      //-----------------------------------------------------------------------
+      //END 8-bit arithmetic group
       //-----------------------------------------------------------------------
 
       //TODO: include support for INC
@@ -3095,7 +3109,8 @@ module decoder (
 
       CPI_3, CPIR_3, CPD_3, CPDR_3: begin
         alu_op = `SUB;
-        ld_F_data = 1;
+        ld_F_data  = 1;
+        drive_TEMP = 1;
       end
 
       CPI_4, CPIR_4, CPD_4, CPDR_4: begin
@@ -3151,6 +3166,76 @@ module decoder (
 
       //-----------------------------------------------------------------------
       //END EXCHANGE, BLOCK TRANSFER GROUP
+      //-----------------------------------------------------------------------
+
+
+      //-----------------------------------------------------------------------
+      //BEGIN 8-bit arithmetic group
+      //-----------------------------------------------------------------------
+      ADD_A_r_0: begin
+
+        case(op0[2:0])
+          3'b111: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `ADD;
+            drive_A        = 1;
+          end
+          3'b000: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `ADD;
+            drive_B        = 1;
+            drive_reg_data = 1;
+          end
+          3'b001: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `ADD;
+            drive_C        = 1;
+            drive_reg_data = 1;
+          end
+          3'b010: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `ADD;
+            drive_D        = 1;
+            drive_reg_data = 1;
+          end
+          3'b011: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `ADD;
+            drive_E        = 1;
+            drive_reg_data = 1;
+          end
+          3'b100: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `ADD;
+            drive_H        = 1;
+            drive_reg_data = 1;
+          end
+          3'b101: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `ADD;
+            drive_L        = 1;
+            drive_reg_data = 1;
+          end
+        endcase
+
+        set_N = 2'b10;
+      end
+      //-----------------------------------------------------------------------
+      //END 8-bit arithmetic group
       //-----------------------------------------------------------------------
 
     endcase

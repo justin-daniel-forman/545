@@ -562,6 +562,8 @@ module decoder (
 
     MACRO_DEFINE_STATES CPDR 13
 
+    MACRO_DEFINE_STATES ADD_A_r 1
+
     INC_0,
     INC_1,
     INC_2,
@@ -639,6 +641,7 @@ module decoder (
           `EX_DE_HL:  next_state = EX_DE_HL_0;
           `EX_AF_AF:  next_state = EX_AF_AF_0;
           `EXX:       next_state = EXX_0;
+          `ADD_A_r:   next_state = ADD_A_r_0;
           `INC:       next_state = INC_0;
           `EXT_INST:  next_state = EXT_INST_0;
           `IX_INST:   next_state = IX_INST_0;
@@ -865,6 +868,16 @@ module decoder (
 
       //-----------------------------------------------------------------------
       //END EXCHANGE, BLOCK TRANSFER GROUP
+      //-----------------------------------------------------------------------
+
+      //-----------------------------------------------------------------------
+      //BEGIN 8-bit arithmetic group
+      //-----------------------------------------------------------------------
+
+      MACRO_ENUM_STATES ADD_A_r 1
+
+      //-----------------------------------------------------------------------
+      //END 8-bit arithmetic group
       //-----------------------------------------------------------------------
 
       //TODO: include support for INC
@@ -2370,7 +2383,8 @@ module decoder (
 
       CPI_3, CPIR_3, CPD_3, CPDR_3: begin
         alu_op = `SUB;
-        ld_F_data = 1;
+        ld_F_data  = 1;
+        drive_TEMP = 1;
       end
 
       CPI_4, CPIR_4, CPD_4, CPDR_4: begin
@@ -2420,6 +2434,42 @@ module decoder (
 
       //-----------------------------------------------------------------------
       //END EXCHANGE, BLOCK TRANSFER GROUP
+      //-----------------------------------------------------------------------
+
+
+      //-----------------------------------------------------------------------
+      //BEGIN 8-bit arithmetic group
+      //-----------------------------------------------------------------------
+      ADD_A_r_0: begin
+
+        case(op0[2:0])
+          3'b111: begin
+            MACRO_8_ADD A
+          end
+          3'b000: begin
+            MACRO_8_ADD B
+          end
+          3'b001: begin
+            MACRO_8_ADD C
+          end
+          3'b010: begin
+            MACRO_8_ADD D
+          end
+          3'b011: begin
+            MACRO_8_ADD E
+          end
+          3'b100: begin
+            MACRO_8_ADD H
+          end
+          3'b101: begin
+            MACRO_8_ADD L
+          end
+        endcase
+
+        MACRO_RESET N
+      end
+      //-----------------------------------------------------------------------
+      //END 8-bit arithmetic group
       //-----------------------------------------------------------------------
 
     endcase
