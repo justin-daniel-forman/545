@@ -49,9 +49,11 @@
 `define CPD       8'hA9
 `define CPDR      8'hB9
 
-`define ADD_A_r   8'b10000???
-`define ADD_A_n   8'hC6
-`define ADD_A_HL  8'h86
+`define ADD_A_r     8'b10000???
+`define ADD_A_n     8'hC6
+`define ADD_A_HL    8'h86
+`define ADD_A_IX_d  8'h86
+`define ADD_A_IY_d  8'h86
 
 //flags
 `define PV_flag   2

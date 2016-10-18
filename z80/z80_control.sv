@@ -867,6 +867,30 @@ module decoder (
     ADD_A_HL_1,
     ADD_A_HL_2,
 
+    ADD_A_IX_d_0,
+    ADD_A_IX_d_1,
+    ADD_A_IX_d_2,
+    ADD_A_IX_d_3,
+    ADD_A_IX_d_4,
+    ADD_A_IX_d_5,
+    ADD_A_IX_d_6,
+    ADD_A_IX_d_7,
+    ADD_A_IX_d_8,
+    ADD_A_IX_d_9,
+    ADD_A_IX_d_10,
+
+    ADD_A_IY_d_0,
+    ADD_A_IY_d_1,
+    ADD_A_IY_d_2,
+    ADD_A_IY_d_3,
+    ADD_A_IY_d_4,
+    ADD_A_IY_d_5,
+    ADD_A_IY_d_6,
+    ADD_A_IY_d_7,
+    ADD_A_IY_d_8,
+    ADD_A_IY_d_9,
+    ADD_A_IY_d_10,
+
     INC_0,
     INC_1,
     INC_2,
@@ -1042,6 +1066,8 @@ module decoder (
           `CPDR:        next_state = CPDR_0;
           `POP_IX:      next_state = (op0[7:4] == 4'hD) ?  POP_IX_0   : POP_IY_0;
           `POP_IY:      next_state = (op0[7:4] == 4'hF) ?  POP_IY_0   : POP_IX_0;
+          `ADD_A_IX_d:  next_state = (op0[7:4] == 4'hD) ?  ADD_A_IX_d_0 : ADD_A_IY_d_0;
+          `ADD_A_IY_d:  next_state = (op0[7:4] == 4'hF) ?  ADD_A_IY_d_0 : ADD_A_IY_d_0;
           default:      next_state = FETCH_0;
         endcase
       end
@@ -1499,6 +1525,32 @@ module decoder (
       ADD_A_HL_0: next_state = ADD_A_HL_1;
       ADD_A_HL_1: next_state = ADD_A_HL_2;
       ADD_A_HL_2: next_state = FETCH_0;
+
+      //ADD_A_IX_d
+      ADD_A_IX_d_0: next_state = ADD_A_IX_d_1;
+      ADD_A_IX_d_1: next_state = ADD_A_IX_d_2;
+      ADD_A_IX_d_2: next_state = ADD_A_IX_d_3;
+      ADD_A_IX_d_3: next_state = ADD_A_IX_d_4;
+      ADD_A_IX_d_4: next_state = ADD_A_IX_d_5;
+      ADD_A_IX_d_5: next_state = ADD_A_IX_d_6;
+      ADD_A_IX_d_6: next_state = ADD_A_IX_d_7;
+      ADD_A_IX_d_7: next_state = ADD_A_IX_d_8;
+      ADD_A_IX_d_8: next_state = ADD_A_IX_d_9;
+      ADD_A_IX_d_9: next_state = ADD_A_IX_d_10;
+      ADD_A_IX_d_10: next_state = FETCH_0;
+
+      //ADD_A_IY_d
+      ADD_A_IY_d_0: next_state = ADD_A_IY_d_1;
+      ADD_A_IY_d_1: next_state = ADD_A_IY_d_2;
+      ADD_A_IY_d_2: next_state = ADD_A_IY_d_3;
+      ADD_A_IY_d_3: next_state = ADD_A_IY_d_4;
+      ADD_A_IY_d_4: next_state = ADD_A_IY_d_5;
+      ADD_A_IY_d_5: next_state = ADD_A_IY_d_6;
+      ADD_A_IY_d_6: next_state = ADD_A_IY_d_7;
+      ADD_A_IY_d_7: next_state = ADD_A_IY_d_8;
+      ADD_A_IY_d_8: next_state = ADD_A_IY_d_9;
+      ADD_A_IY_d_9: next_state = ADD_A_IY_d_10;
+      ADD_A_IY_d_10: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END 8-bit arithmetic group
@@ -3282,6 +3334,8 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN 8-bit arithmetic group
       //-----------------------------------------------------------------------
+
+      //ADD A, r
       ADD_A_r_0: begin
 
         case(op0[2:0])
@@ -3345,6 +3399,7 @@ module decoder (
         set_N = 2'b10;
       end
 
+      //ADD A, n
       ADD_A_n_0: begin
         drive_alu_addr = 1;
         alu_op = `INCR_A;
@@ -3374,6 +3429,7 @@ module decoder (
         set_N = 2'b10;
       end
 
+      //ADD A, (HL)
       ADD_A_HL_0: begin
         drive_alu_addr = 1;
         alu_op = `ALU_NOP;
@@ -3394,6 +3450,63 @@ module decoder (
       end
 
       ADD_A_HL_2: begin
+        ld_F_data      = 1;
+        drive_alu_data = 1;
+        ld_A           = 1;
+        alu_op         = `ADD;
+        set_N = 2'b10;
+      end
+
+      //ADD A, (IX+d), ADD A, (IY+d)
+      ADD_A_IX_d_0, ADD_A_IY_d_0: begin
+        drive_alu_addr = 1;
+        alu_op = `INCR_A;
+        drive_reg_addr = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        ld_PCH    = 1;
+        ld_PCL    = 1;
+        MRD_start = 1;
+        MRD_bus   = 1;
+      end
+
+      ADD_A_IX_d_1, ADD_A_IY_d_1: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        MRD_bus = 1;
+      end
+
+      ADD_A_IX_d_2, ADD_A_IY_d_2: begin
+        ld_TEMP = 1;
+      end
+
+      ADD_A_IX_d_3, ADD_A_IY_d_3: begin
+        alu_op         = `ADD;
+        drive_alu_addr = 1;
+        drive_reg_addr = 1;
+        drive_IXH      = (state == ADD_A_IX_d_3);
+        drive_IXL      = (state == ADD_A_IX_d_3);
+        drive_IYH      = (state == ADD_A_IY_d_3);
+        drive_IYL      = (state == ADD_A_IY_d_3);
+        ld_MARL        = 1;
+        ld_MARH        = 1;
+      end
+
+      ADD_A_IX_d_8, ADD_A_IY_d_8: begin
+        drive_MAR = 1;
+        MRD_start = 1;
+        MRD_bus   = 1;
+      end
+
+      ADD_A_IX_d_9, ADD_A_IY_d_9: begin
+        drive_MAR = 1;
+        MRD_bus = 1;
+      end
+
+      ADD_A_IX_d_10, ADD_A_IY_d_10: begin
         ld_F_data      = 1;
         drive_alu_data = 1;
         ld_A           = 1;
