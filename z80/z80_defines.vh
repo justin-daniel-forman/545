@@ -51,6 +51,7 @@
 
 `define ADD_A_r   8'b10000???
 `define ADD_A_n   8'hC6
+`define ADD_A_HL  8'h86
 
 //flags
 `define PV_flag   2

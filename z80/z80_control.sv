@@ -863,6 +863,10 @@ module decoder (
     ADD_A_n_1,
     ADD_A_n_2,
 
+    ADD_A_HL_0,
+    ADD_A_HL_1,
+    ADD_A_HL_2,
+
     INC_0,
     INC_1,
     INC_2,
@@ -940,7 +944,7 @@ module decoder (
           `EX_DE_HL:  next_state = EX_DE_HL_0;
           `EX_AF_AF:  next_state = EX_AF_AF_0;
           `EXX:       next_state = EXX_0;
-          `ADD_A_r:   next_state = ADD_A_r_0;
+          `ADD_A_r:   next_state = (op0[2:0] != 3'b110) ? ADD_A_r_0 : FETCH_3;
           `INC:       next_state = INC_0;
           `EXT_INST:  next_state = EXT_INST_0;
           `IX_INST:   next_state = IX_INST_0;
@@ -972,6 +976,7 @@ module decoder (
             `LD_HL_n:   next_state = LD_HL_n_0;
             `LD_dd_nn:  next_state = LD_dd_nn_0;
             `ADD_A_n:   next_state = ADD_A_n_0;
+            `ADD_A_HL:  next_state = ADD_A_HL_0;
             default:    next_state = FETCH_0;
           endcase
         end
@@ -1489,6 +1494,11 @@ module decoder (
       ADD_A_n_0: next_state = ADD_A_n_1;
       ADD_A_n_1: next_state = ADD_A_n_2;
       ADD_A_n_2: next_state = FETCH_0;
+
+      //ADD_A_HL
+      ADD_A_HL_0: next_state = ADD_A_HL_1;
+      ADD_A_HL_1: next_state = ADD_A_HL_2;
+      ADD_A_HL_2: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END 8-bit arithmetic group
@@ -3357,6 +3367,33 @@ module decoder (
       end
 
       ADD_A_n_2: begin
+        ld_F_data      = 1;
+        drive_alu_data = 1;
+        ld_A           = 1;
+        alu_op         = `ADD;
+        set_N = 2'b10;
+      end
+
+      ADD_A_HL_0: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_H = 1;
+        drive_L = 1;
+        MRD_start = 1;
+        MRD_bus   = 1;
+      end
+
+      ADD_A_HL_1: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_H = 1;
+        drive_L = 1;
+        MRD_bus = 1;
+      end
+
+      ADD_A_HL_2: begin
         ld_F_data      = 1;
         drive_alu_data = 1;
         ld_A           = 1;

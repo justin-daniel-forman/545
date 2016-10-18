@@ -570,6 +570,8 @@ module decoder (
 
     MACRO_DEFINE_STATES ADD_A_n 3
 
+    MACRO_DEFINE_STATES ADD_A_HL 3
+
     INC_0,
     INC_1,
     INC_2,
@@ -647,7 +649,7 @@ module decoder (
           `EX_DE_HL:  next_state = EX_DE_HL_0;
           `EX_AF_AF:  next_state = EX_AF_AF_0;
           `EXX:       next_state = EXX_0;
-          `ADD_A_r:   next_state = ADD_A_r_0;
+          `ADD_A_r:   next_state = (op0[2:0] != 3'b110) ? ADD_A_r_0 : FETCH_3;
           `INC:       next_state = INC_0;
           `EXT_INST:  next_state = EXT_INST_0;
           `IX_INST:   next_state = IX_INST_0;
@@ -679,6 +681,7 @@ module decoder (
             `LD_HL_n:   next_state = LD_HL_n_0;
             `LD_dd_nn:  next_state = LD_dd_nn_0;
             `ADD_A_n:   next_state = ADD_A_n_0;
+            `ADD_A_HL:  next_state = ADD_A_HL_0;
             default:    next_state = FETCH_0;
           endcase
         end
@@ -890,6 +893,8 @@ module decoder (
       MACRO_ENUM_STATES ADD_A_r 1
 
       MACRO_ENUM_STATES ADD_A_n 3
+
+      MACRO_ENUM_STATES ADD_A_HL 3
 
       //-----------------------------------------------------------------------
       //END 8-bit arithmetic group
@@ -2527,6 +2532,21 @@ module decoder (
       end
 
       ADD_A_n_2: begin
+        MACRO_8_ADD Z
+        MACRO_RESET N
+      end
+
+      ADD_A_HL_0: begin
+        MACRO_16_DRIVE HL
+        MACRO_READ_0
+      end
+
+      ADD_A_HL_1: begin
+        MACRO_16_DRIVE HL
+        MACRO_READ_1
+      end
+
+      ADD_A_HL_2: begin
         MACRO_8_ADD Z
         MACRO_RESET N
       end

@@ -17,12 +17,15 @@ section code
   add h               # A <- 21
   add l               # A <- 28
 
-  add a               # A <- 56   $38
+  ld hl, $57
+  add [hl]              # A <- 56 $38
+  ld hl, $0607
+
   add a               # A <- 112  $38 + $38 = $70, H = 1
   add a               # A <- 224  $70 + $70 = $EO, H = 0
   add $E0             # a <- 1C0  $E0 + $E0 = $1C0, H = 0, C = 1
 
 section data
-  addr0: data !0102 !BEEF
+  addr0: data !0102 !BEEF !0028 !1c00
 
 output add_test.rom $0000 $0100
