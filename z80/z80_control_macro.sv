@@ -544,6 +544,10 @@ module decoder (
 
     MACRO_DEFINE_STATES PUSH_IY 7
 
+    MACRO_DEFINE_STATES POP_IX 6
+
+    MACRO_DEFINE_STATES POP_IY 6
+
     MACRO_DEFINE_STATES EX_DE_HL 1
 
     MACRO_DEFINE_STATES EX_AF_AF 1
@@ -559,6 +563,20 @@ module decoder (
     MACRO_DEFINE_STATES LDI 8
 
     MACRO_DEFINE_STATES LDIR 13
+
+    MACRO_DEFINE_STATES LDD 8
+
+    MACRO_DEFINE_STATES LDDR 13
+
+    MACRO_DEFINE_STATES CPI 8
+
+    MACRO_DEFINE_STATES CPIR 13
+
+    MACRO_DEFINE_STATES CPD 8
+
+    MACRO_DEFINE_STATES CPDR 13
+
+    MACRO_DEFINE_STATES ADD_A_r 1
 
     INC_0,
     INC_1,
@@ -637,6 +655,7 @@ module decoder (
           `EX_DE_HL:  next_state = EX_DE_HL_0;
           `EX_AF_AF:  next_state = EX_AF_AF_0;
           `EXX:       next_state = EXX_0;
+          `ADD_A_r:   next_state = ADD_A_r_0;
           `INC:       next_state = INC_0;
           `EXT_INST:  next_state = EXT_INST_0;
           `IX_INST:   next_state = IX_INST_0;
@@ -730,6 +749,14 @@ module decoder (
           `PUSH_IY:     next_state = (op0[7:4] == 4'hF) ?  PUSH_IY_0    : PUSH_IX_0;
           `LDI:         next_state = LDI_0;
           `LDIR:        next_state = LDIR_0;
+          `LDD:         next_state = LDD_0;
+          `LDDR:        next_state = LDDR_0;
+          `CPI:         next_state = CPI_0;
+          `CPIR:        next_state = CPIR_0;
+          `CPD:         next_state = CPD_0;
+          `CPDR:        next_state = CPDR_0;
+          `POP_IX:      next_state = (op0[7:4] == 4'hD) ?  POP_IX_0   : POP_IY_0;
+          `POP_IY:      next_state = (op0[7:4] == 4'hF) ?  POP_IY_0   : POP_IX_0;
           default:      next_state = FETCH_0;
         endcase
       end
@@ -811,6 +838,10 @@ module decoder (
 
       MACRO_ENUM_STATES PUSH_IY 7
 
+      MACRO_ENUM_STATES POP_IX 6
+
+      MACRO_ENUM_STATES POP_IY 6
+
       //-----------------------------------------------------------------------
       //END 16-bit load group
       //-----------------------------------------------------------------------
@@ -841,8 +872,48 @@ module decoder (
       LDIR_11: next_state = LDIR_12;
       LDIR_12: next_state = FETCH_0;
 
+      MACRO_ENUM_STATES LDD 8
+
+      MACRO_ENUM_STATES_NR LDDR 8
+      LDDR_7: next_state  = (flags[ `PV_flag ] == 0) ? FETCH_0 : LDDR_8;
+      LDDR_8: next_state  = LDDR_9;
+      LDDR_9: next_state  = LDDR_10;
+      LDDR_10: next_state = LDDR_11;
+      LDDR_11: next_state = LDDR_12;
+      LDDR_12: next_state = FETCH_0;
+
+      MACRO_ENUM_STATES CPI 8
+
+      MACRO_ENUM_STATES_NR CPIR 8
+      CPIR_7: next_state  = (~flags[`PV_flag] == 0 | flags[`Z_flag]) ? FETCH_0 : CPIR_8;
+      CPIR_8: next_state  = CPIR_9;
+      CPIR_9: next_state  = CPIR_10;
+      CPIR_10: next_state = CPIR_11;
+      CPIR_11: next_state = CPIR_12;
+      CPIR_12: next_state = FETCH_0;
+
+      MACRO_ENUM_STATES CPD 8
+
+      MACRO_ENUM_STATES_NR CPDR 8
+      CPDR_7: next_state  = (~flags[`PV_flag] == 0 | flags[`Z_flag]) ? FETCH_0 : CPDR_8;
+      CPDR_8: next_state  = CPDR_9;
+      CPDR_9: next_state  = CPDR_10;
+      CPDR_10: next_state = CPDR_11;
+      CPDR_11: next_state = CPDR_12;
+      CPDR_12: next_state = FETCH_0;
+
       //-----------------------------------------------------------------------
       //END EXCHANGE, BLOCK TRANSFER GROUP
+      //-----------------------------------------------------------------------
+
+      //-----------------------------------------------------------------------
+      //BEGIN 8-bit arithmetic group
+      //-----------------------------------------------------------------------
+
+      MACRO_ENUM_STATES ADD_A_r 1
+
+      //-----------------------------------------------------------------------
+      //END 8-bit arithmetic group
       //-----------------------------------------------------------------------
 
       //TODO: include support for INC
@@ -2310,28 +2381,37 @@ module decoder (
         MACRO_8_DRIVE IYL
       end
 
-      //POP_qq
-      /*
-      POP_qq_0: begin
-        MACRO_READ_0
+      //POP IX, IY
+      POP_IX_0, POP_IY_0: begin
         MACRO_16_DRIVE SP
-        ld_MAR = 1;
+        MACRO_READ_0
       end
 
-      POP_qq_1: begin
+      POP_IX_1, POP_IY_1: begin
+        MACRO_16_DRIVE SP
         MACRO_READ_1
-        drive_MAR = 1;
       end
 
-      POP_qq_2: begin
-        case(op0[5:4])
-          00: ld_C = 1;
-          01: ld_E = 1;
-          10: ld_L = 1;
-          11: ld_F_data = 1;
-        endcase
+      POP_IX_2, POP_IY_2: begin
+        ld_IXL = (state == POP_IX_2) ? 1 : 0;
+        ld_IYL = (state == POP_IY_2) ? 1 : 0;
       end
-      */
+
+      POP_IX_3, POP_IY_3: begin
+        MACRO_16_INC SP
+        MACRO_READ_0
+      end
+
+      POP_IX_4, POP_IY_4: begin
+        MACRO_16_DRIVE SP
+        MACRO_READ_1
+      end
+
+      POP_IX_5, POP_IY_5: begin
+        MACRO_16_INC SP
+        ld_IXH = (state == POP_IX_5) ? 1 : 0;
+        ld_IYH = (state == POP_IY_5) ? 1 : 0;
+      end
 
       //-----------------------------------------------------------------------
       //END 16-bit load group
@@ -2503,28 +2583,28 @@ module decoder (
       end
 
       //LDI
-      LDI_0, LDIR_0: begin
+      LDI_0, LDIR_0, LDD_0, LDDR_0: begin
         MACRO_16_DRIVE HL
         MACRO_READ_0
       end
 
-      LDI_1, LDIR_1: begin
+      LDI_1, LDIR_1, LDD_1, LDDR_1: begin
         MACRO_16_DRIVE HL
         MACRO_READ_1
       end
 
-      LDI_2, LDIR_2: begin
+      LDI_2, LDIR_2, LDD_2, LDDR_2: begin
         //MDR1 <- (HL) (put contents of D_BUS into MDR1)
         ld_MDR1 = 1;
       end
 
-      LDI_3, LDIR_3: begin
+      LDI_3, LDIR_3, LDD_3, LDDR_3: begin
         MACRO_16_DRIVE DE
         MACRO_WRITE_0
         drive_MDR1 = 1;
       end
 
-      LDI_4, LDIR_4: begin
+      LDI_4, LDIR_4, LDD_4, LDDR_4: begin
         MACRO_16_DRIVE DE
         MACRO_WRITE_1
         drive_MDR1 = 1;
@@ -2541,7 +2621,18 @@ module decoder (
         alu_op = `INCR_A;
       end
 
-      LDI_6, LDIR_6: begin
+      LDD_5, LDDR_5: begin
+        //DE <- DE - 1
+        drive_D = 1;
+        drive_E = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        ld_D = 1;
+        ld_E = 1;
+        alu_op = `DECR_A;
+      end
+
+      LDI_6, LDIR_6, LDD_6, LDDR_6: begin
         //BC <- BC - 1
         drive_B = 1;
         drive_C = 1;
@@ -2569,15 +2660,127 @@ module decoder (
         alu_op = `INCR_A;
       end
 
-      LDIR_8, LDIR_9: begin
+      LDD_7, LDDR_7: begin
+        //HL <- HL - 1
+        drive_H = 1;
+        drive_L = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        ld_H = 1;
+        ld_L = 1;
+        alu_op = `DECR_A;
+      end
+
+      LDIR_8, LDIR_9, LDDR_8, LDDR_9: begin
         //Repeat the instruction if BC != 0
         if(flags[ `PV_flag ] == 1) begin
           MACRO_DEC_PC
         end
       end
 
+      CPI_0, CPIR_0, CPD_0, CPDR_0: begin
+        MACRO_16_DRIVE HL
+        MACRO_READ_0
+      end
+
+      CPI_1, CPIR_1, CPD_1, CPDR_1: begin
+        MACRO_16_DRIVE HL
+        MACRO_READ_1
+      end
+
+      CPI_2, CPIR_2, CPD_2, CPDR_2: begin
+        ld_TEMP = 1;
+      end
+
+      CPI_3, CPIR_3, CPD_3, CPDR_3: begin
+        alu_op = `SUB;
+        ld_F_data  = 1;
+        drive_TEMP = 1;
+      end
+
+      CPI_4, CPIR_4, CPD_4, CPDR_4: begin
+        //BC <- BC - 1
+        drive_B = 1;
+        drive_C = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        ld_B    = 1;
+        ld_C    = 1;
+        alu_op  = `DECR_A;
+
+        //set the P/V flag if BC-1 != 0
+        ld_F_addr = 1;
+
+        MACRO_SET N
+      end
+
+      CPI_5, CPIR_5: begin
+        //HL <- HL + 1
+        drive_H = 1;
+        drive_L = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        ld_H = 1;
+        ld_L = 1;
+        alu_op = `INCR_A;
+      end
+
+      CPD_5, CPDR_5: begin
+        //HL <- HL - 1
+        drive_H = 1;
+        drive_L = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        ld_H = 1;
+        ld_L = 1;
+        alu_op = `DECR_A;
+      end
+
+      CPIR_8, CPIR_9, CPDR_8, CPDR_9: begin
+        //Repeat the instruction if BC != 0 or if the compare succeeded
+        if(flags[`PV_flag] & ~flags[`Z_flag]) begin
+          MACRO_DEC_PC
+        end
+      end
+
       //-----------------------------------------------------------------------
       //END EXCHANGE, BLOCK TRANSFER GROUP
+      //-----------------------------------------------------------------------
+
+
+      //-----------------------------------------------------------------------
+      //BEGIN 8-bit arithmetic group
+      //-----------------------------------------------------------------------
+      ADD_A_r_0: begin
+
+        case(op0[2:0])
+          3'b111: begin
+            MACRO_8_ADD A
+          end
+          3'b000: begin
+            MACRO_8_ADD B
+          end
+          3'b001: begin
+            MACRO_8_ADD C
+          end
+          3'b010: begin
+            MACRO_8_ADD D
+          end
+          3'b011: begin
+            MACRO_8_ADD E
+          end
+          3'b100: begin
+            MACRO_8_ADD H
+          end
+          3'b101: begin
+            MACRO_8_ADD L
+          end
+        endcase
+
+        MACRO_RESET N
+      end
+      //-----------------------------------------------------------------------
+      //END 8-bit arithmetic group
       //-----------------------------------------------------------------------
 
     endcase

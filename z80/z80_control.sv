@@ -737,6 +737,20 @@ module decoder (
     PUSH_IY_5,
     PUSH_IY_6,
 
+    POP_IX_0,
+    POP_IX_1,
+    POP_IX_2,
+    POP_IX_3,
+    POP_IX_4,
+    POP_IX_5,
+
+    POP_IY_0,
+    POP_IY_1,
+    POP_IY_2,
+    POP_IY_3,
+    POP_IY_4,
+    POP_IY_5,
+
     EX_DE_HL_0,
 
     EX_AF_AF_0,
@@ -813,6 +827,77 @@ module decoder (
     LDIR_10,
     LDIR_11,
     LDIR_12,
+
+    LDD_0,
+    LDD_1,
+    LDD_2,
+    LDD_3,
+    LDD_4,
+    LDD_5,
+    LDD_6,
+    LDD_7,
+
+    LDDR_0,
+    LDDR_1,
+    LDDR_2,
+    LDDR_3,
+    LDDR_4,
+    LDDR_5,
+    LDDR_6,
+    LDDR_7,
+    LDDR_8,
+    LDDR_9,
+    LDDR_10,
+    LDDR_11,
+    LDDR_12,
+
+    CPI_0,
+    CPI_1,
+    CPI_2,
+    CPI_3,
+    CPI_4,
+    CPI_5,
+    CPI_6,
+    CPI_7,
+
+    CPIR_0,
+    CPIR_1,
+    CPIR_2,
+    CPIR_3,
+    CPIR_4,
+    CPIR_5,
+    CPIR_6,
+    CPIR_7,
+    CPIR_8,
+    CPIR_9,
+    CPIR_10,
+    CPIR_11,
+    CPIR_12,
+
+    CPD_0,
+    CPD_1,
+    CPD_2,
+    CPD_3,
+    CPD_4,
+    CPD_5,
+    CPD_6,
+    CPD_7,
+
+    CPDR_0,
+    CPDR_1,
+    CPDR_2,
+    CPDR_3,
+    CPDR_4,
+    CPDR_5,
+    CPDR_6,
+    CPDR_7,
+    CPDR_8,
+    CPDR_9,
+    CPDR_10,
+    CPDR_11,
+    CPDR_12,
+
+    ADD_A_r_0,
 
     INC_0,
     INC_1,
@@ -891,6 +976,7 @@ module decoder (
           `EX_DE_HL:  next_state = EX_DE_HL_0;
           `EX_AF_AF:  next_state = EX_AF_AF_0;
           `EXX:       next_state = EXX_0;
+          `ADD_A_r:   next_state = ADD_A_r_0;
           `INC:       next_state = INC_0;
           `EXT_INST:  next_state = EXT_INST_0;
           `IX_INST:   next_state = IX_INST_0;
@@ -984,6 +1070,14 @@ module decoder (
           `PUSH_IY:     next_state = (op0[7:4] == 4'hF) ?  PUSH_IY_0    : PUSH_IX_0;
           `LDI:         next_state = LDI_0;
           `LDIR:        next_state = LDIR_0;
+          `LDD:         next_state = LDD_0;
+          `LDDR:        next_state = LDDR_0;
+          `CPI:         next_state = CPI_0;
+          `CPIR:        next_state = CPIR_0;
+          `CPD:         next_state = CPD_0;
+          `CPDR:        next_state = CPDR_0;
+          `POP_IX:      next_state = (op0[7:4] == 4'hD) ?  POP_IX_0   : POP_IY_0;
+          `POP_IY:      next_state = (op0[7:4] == 4'hF) ?  POP_IY_0   : POP_IX_0;
           default:      next_state = FETCH_0;
         endcase
       end
@@ -1282,6 +1376,22 @@ module decoder (
       PUSH_IY_5: next_state = PUSH_IY_6;
       PUSH_IY_6: next_state = FETCH_0;
 
+      //POP_IX
+      POP_IX_0: next_state = POP_IX_1;
+      POP_IX_1: next_state = POP_IX_2;
+      POP_IX_2: next_state = POP_IX_3;
+      POP_IX_3: next_state = POP_IX_4;
+      POP_IX_4: next_state = POP_IX_5;
+      POP_IX_5: next_state = FETCH_0;
+
+      //POP_IY
+      POP_IY_0: next_state = POP_IY_1;
+      POP_IY_1: next_state = POP_IY_2;
+      POP_IY_2: next_state = POP_IY_3;
+      POP_IY_3: next_state = POP_IY_4;
+      POP_IY_4: next_state = POP_IY_5;
+      POP_IY_5: next_state = FETCH_0;
+
       //-----------------------------------------------------------------------
       //END 16-bit load group
       //-----------------------------------------------------------------------
@@ -1375,8 +1485,94 @@ module decoder (
       LDIR_11: next_state = LDIR_12;
       LDIR_12: next_state = FETCH_0;
 
+      //LDD
+      LDD_0: next_state = LDD_1;
+      LDD_1: next_state = LDD_2;
+      LDD_2: next_state = LDD_3;
+      LDD_3: next_state = LDD_4;
+      LDD_4: next_state = LDD_5;
+      LDD_5: next_state = LDD_6;
+      LDD_6: next_state = LDD_7;
+      LDD_7: next_state = FETCH_0;
+
+      //LDDR
+      LDDR_0: next_state = LDDR_1;
+      LDDR_1: next_state = LDDR_2;
+      LDDR_2: next_state = LDDR_3;
+      LDDR_3: next_state = LDDR_4;
+      LDDR_4: next_state = LDDR_5;
+      LDDR_5: next_state = LDDR_6;
+      LDDR_6: next_state = LDDR_7;
+      LDDR_7: next_state  = (flags[ `PV_flag ] == 0) ? FETCH_0 : LDDR_8;
+      LDDR_8: next_state  = LDDR_9;
+      LDDR_9: next_state  = LDDR_10;
+      LDDR_10: next_state = LDDR_11;
+      LDDR_11: next_state = LDDR_12;
+      LDDR_12: next_state = FETCH_0;
+
+      //CPI
+      CPI_0: next_state = CPI_1;
+      CPI_1: next_state = CPI_2;
+      CPI_2: next_state = CPI_3;
+      CPI_3: next_state = CPI_4;
+      CPI_4: next_state = CPI_5;
+      CPI_5: next_state = CPI_6;
+      CPI_6: next_state = CPI_7;
+      CPI_7: next_state = FETCH_0;
+
+      //CPIR
+      CPIR_0: next_state = CPIR_1;
+      CPIR_1: next_state = CPIR_2;
+      CPIR_2: next_state = CPIR_3;
+      CPIR_3: next_state = CPIR_4;
+      CPIR_4: next_state = CPIR_5;
+      CPIR_5: next_state = CPIR_6;
+      CPIR_6: next_state = CPIR_7;
+      CPIR_7: next_state  = (~flags[`PV_flag] == 0 | flags[`Z_flag]) ? FETCH_0 : CPIR_8;
+      CPIR_8: next_state  = CPIR_9;
+      CPIR_9: next_state  = CPIR_10;
+      CPIR_10: next_state = CPIR_11;
+      CPIR_11: next_state = CPIR_12;
+      CPIR_12: next_state = FETCH_0;
+
+      //CPD
+      CPD_0: next_state = CPD_1;
+      CPD_1: next_state = CPD_2;
+      CPD_2: next_state = CPD_3;
+      CPD_3: next_state = CPD_4;
+      CPD_4: next_state = CPD_5;
+      CPD_5: next_state = CPD_6;
+      CPD_6: next_state = CPD_7;
+      CPD_7: next_state = FETCH_0;
+
+      //CPDR
+      CPDR_0: next_state = CPDR_1;
+      CPDR_1: next_state = CPDR_2;
+      CPDR_2: next_state = CPDR_3;
+      CPDR_3: next_state = CPDR_4;
+      CPDR_4: next_state = CPDR_5;
+      CPDR_5: next_state = CPDR_6;
+      CPDR_6: next_state = CPDR_7;
+      CPDR_7: next_state  = (~flags[`PV_flag] == 0 | flags[`Z_flag]) ? FETCH_0 : CPDR_8;
+      CPDR_8: next_state  = CPDR_9;
+      CPDR_9: next_state  = CPDR_10;
+      CPDR_10: next_state = CPDR_11;
+      CPDR_11: next_state = CPDR_12;
+      CPDR_12: next_state = FETCH_0;
+
       //-----------------------------------------------------------------------
       //END EXCHANGE, BLOCK TRANSFER GROUP
+      //-----------------------------------------------------------------------
+
+      //-----------------------------------------------------------------------
+      //BEGIN 8-bit arithmetic group
+      //-----------------------------------------------------------------------
+
+      //ADD_A_r
+      ADD_A_r_0: next_state = FETCH_0;
+
+      //-----------------------------------------------------------------------
+      //END 8-bit arithmetic group
       //-----------------------------------------------------------------------
 
       //TODO: include support for INC
@@ -3036,33 +3232,63 @@ module decoder (
         drive_reg_data = 1;
       end
 
-      //POP_qq
-      /*
-      POP_qq_0: begin
-        MRD_start = 1;
-        MRD_bus   = 1;
+      //POP IX, IY
+      POP_IX_0, POP_IY_0: begin
         drive_alu_addr = 1;
         alu_op = `ALU_NOP;
         drive_reg_addr = 1;
         drive_SPL = 1;
         drive_SPH = 1;
-        ld_MAR = 1;
+        MRD_start = 1;
+        MRD_bus   = 1;
       end
 
-      POP_qq_1: begin
+      POP_IX_1, POP_IY_1: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
         MRD_bus = 1;
-        drive_MAR = 1;
       end
 
-      POP_qq_2: begin
-        case(op0[5:4])
-          00: ld_C = 1;
-          01: ld_E = 1;
-          10: ld_L = 1;
-          11: ld_F_data = 1;
-        endcase
+      POP_IX_2, POP_IY_2: begin
+        ld_IXL = (state == POP_IX_2) ? 1 : 0;
+        ld_IYL = (state == POP_IY_2) ? 1 : 0;
       end
-      */
+
+      POP_IX_3, POP_IY_3: begin
+        drive_alu_addr = 1;
+        alu_op = `INCR_A;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+        ld_SPH    = 1;
+        ld_SPL    = 1;
+        MRD_start = 1;
+        MRD_bus   = 1;
+      end
+
+      POP_IX_4, POP_IY_4: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+        MRD_bus = 1;
+      end
+
+      POP_IX_5, POP_IY_5: begin
+        drive_alu_addr = 1;
+        alu_op = `INCR_A;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+        ld_SPH    = 1;
+        ld_SPL    = 1;
+        ld_IXH = (state == POP_IX_5) ? 1 : 0;
+        ld_IYH = (state == POP_IY_5) ? 1 : 0;
+      end
 
       //-----------------------------------------------------------------------
       //END 16-bit load group
@@ -3262,7 +3488,7 @@ module decoder (
       end
 
       //LDI
-      LDI_0, LDIR_0: begin
+      LDI_0, LDIR_0, LDD_0, LDDR_0: begin
         drive_alu_addr = 1;
         alu_op = `ALU_NOP;
         drive_reg_addr = 1;
@@ -3272,7 +3498,7 @@ module decoder (
         MRD_bus   = 1;
       end
 
-      LDI_1, LDIR_1: begin
+      LDI_1, LDIR_1, LDD_1, LDDR_1: begin
         drive_alu_addr = 1;
         alu_op = `ALU_NOP;
         drive_reg_addr = 1;
@@ -3281,12 +3507,12 @@ module decoder (
         MRD_bus = 1;
       end
 
-      LDI_2, LDIR_2: begin
+      LDI_2, LDIR_2, LDD_2, LDDR_2: begin
         //MDR1 <- (HL) (put contents of D_BUS into MDR1)
         ld_MDR1 = 1;
       end
 
-      LDI_3, LDIR_3: begin
+      LDI_3, LDIR_3, LDD_3, LDDR_3: begin
         drive_alu_addr = 1;
         alu_op = `ALU_NOP;
         drive_reg_addr = 1;
@@ -3297,7 +3523,7 @@ module decoder (
         drive_MDR1 = 1;
       end
 
-      LDI_4, LDIR_4: begin
+      LDI_4, LDIR_4, LDD_4, LDDR_4: begin
         drive_alu_addr = 1;
         alu_op = `ALU_NOP;
         drive_reg_addr = 1;
@@ -3318,7 +3544,18 @@ module decoder (
         alu_op = `INCR_A;
       end
 
-      LDI_6, LDIR_6: begin
+      LDD_5, LDDR_5: begin
+        //DE <- DE - 1
+        drive_D = 1;
+        drive_E = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        ld_D = 1;
+        ld_E = 1;
+        alu_op = `DECR_A;
+      end
+
+      LDI_6, LDIR_6, LDD_6, LDDR_6: begin
         //BC <- BC - 1
         drive_B = 1;
         drive_C = 1;
@@ -3346,7 +3583,18 @@ module decoder (
         alu_op = `INCR_A;
       end
 
-      LDIR_8, LDIR_9: begin
+      LDD_7, LDDR_7: begin
+        //HL <- HL - 1
+        drive_H = 1;
+        drive_L = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        ld_H = 1;
+        ld_L = 1;
+        alu_op = `DECR_A;
+      end
+
+      LDIR_8, LDIR_9, LDDR_8, LDDR_9: begin
         //Repeat the instruction if BC != 0
         if(flags[ `PV_flag ] == 1) begin
           ld_PCH    = 1;
@@ -3359,8 +3607,158 @@ module decoder (
         end
       end
 
+      CPI_0, CPIR_0, CPD_0, CPDR_0: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_H = 1;
+        drive_L = 1;
+        MRD_start = 1;
+        MRD_bus   = 1;
+      end
+
+      CPI_1, CPIR_1, CPD_1, CPDR_1: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_H = 1;
+        drive_L = 1;
+        MRD_bus = 1;
+      end
+
+      CPI_2, CPIR_2, CPD_2, CPDR_2: begin
+        ld_TEMP = 1;
+      end
+
+      CPI_3, CPIR_3, CPD_3, CPDR_3: begin
+        alu_op = `SUB;
+        ld_F_data  = 1;
+        drive_TEMP = 1;
+      end
+
+      CPI_4, CPIR_4, CPD_4, CPDR_4: begin
+        //BC <- BC - 1
+        drive_B = 1;
+        drive_C = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        ld_B    = 1;
+        ld_C    = 1;
+        alu_op  = `DECR_A;
+
+        //set the P/V flag if BC-1 != 0
+        ld_F_addr = 1;
+
+        set_N = 2'b11;
+      end
+
+      CPI_5, CPIR_5: begin
+        //HL <- HL + 1
+        drive_H = 1;
+        drive_L = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        ld_H = 1;
+        ld_L = 1;
+        alu_op = `INCR_A;
+      end
+
+      CPD_5, CPDR_5: begin
+        //HL <- HL - 1
+        drive_H = 1;
+        drive_L = 1;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        ld_H = 1;
+        ld_L = 1;
+        alu_op = `DECR_A;
+      end
+
+      CPIR_8, CPIR_9, CPDR_8, CPDR_9: begin
+        //Repeat the instruction if BC != 0 or if the compare succeeded
+        if(flags[`PV_flag] & ~flags[`Z_flag]) begin
+          ld_PCH    = 1;
+          ld_PCL    = 1;
+          drive_PCH = 1;
+          drive_PCL = 1;
+          alu_op    = `DECR_A;
+          drive_reg_addr = 1;
+          drive_alu_addr = 1;
+        end
+      end
+
       //-----------------------------------------------------------------------
       //END EXCHANGE, BLOCK TRANSFER GROUP
+      //-----------------------------------------------------------------------
+
+
+      //-----------------------------------------------------------------------
+      //BEGIN 8-bit arithmetic group
+      //-----------------------------------------------------------------------
+      ADD_A_r_0: begin
+
+        case(op0[2:0])
+          3'b111: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `ADD;
+            drive_A        = 1;
+          end
+          3'b000: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `ADD;
+            drive_B        = 1;
+            drive_reg_data = 1;
+          end
+          3'b001: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `ADD;
+            drive_C        = 1;
+            drive_reg_data = 1;
+          end
+          3'b010: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `ADD;
+            drive_D        = 1;
+            drive_reg_data = 1;
+          end
+          3'b011: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `ADD;
+            drive_E        = 1;
+            drive_reg_data = 1;
+          end
+          3'b100: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `ADD;
+            drive_H        = 1;
+            drive_reg_data = 1;
+          end
+          3'b101: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `ADD;
+            drive_L        = 1;
+            drive_reg_data = 1;
+          end
+        endcase
+
+        set_N = 2'b10;
+      end
+      //-----------------------------------------------------------------------
+      //END 8-bit arithmetic group
       //-----------------------------------------------------------------------
 
     endcase

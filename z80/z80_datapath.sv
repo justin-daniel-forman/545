@@ -286,10 +286,22 @@ module datapath (
   logic [15:0]  alu_out_addr;
   logic [7:0]   alu_flag_data;
   logic [7:0]   alu_flag_addr;
+  logic [7:0]   alu_b_in;
 
+  //The hackiness continues with this line. Sometimes we will need to load
+  //in B directly from the data bus, such as when we are driving from a register.
+  //Othertimes, we want to latch the value that comes in from memory before
+  //using it.
+  //Make sure to drive TEMP when you want it to go into the ALU.
+  assign alu_b_in = (drive_TEMP) ? TEMP_out : internal_data;
+
+  //The output of this alu must directly be connected to the A register. Otherwise
+  //otherwise, the results from this would fight with the argument being driven
+  //on the data bus. There is no need to move this computation outside of the A
+  //register, so this is fine.
   alu #(8) eightBit(
     .A(A_out),
-    .B(data_in),
+    .B(alu_b_in),
     .op(alu_op),
     .C(alu_out_data),
     .F_in(F_out),
@@ -325,7 +337,20 @@ module datapath (
     end
 
     else begin
-      A_in = (swap_reg) ? reg_data_out : internal_data;
+      //These point to point connections are necessary since the A register
+      //is only hooked to the data bus. Because of this, we can only read or
+      //write to/from A in a cycle when nobody else wants the bus, which
+      //is not the case when we want to perform arithmetic operations.
+      //To this end, the output of the 8-bit alu is only connected to the A
+      //register.
+      if(swap_reg & ld_A) begin
+        A_in = reg_data_out;
+      end else if(drive_alu_data & ld_A) begin
+        A_in = alu_out_data;
+      end else begin
+        A_in = internal_data;
+      end
+
       A_en = ld_A;
 
       A_not_in = 0;
@@ -378,7 +403,7 @@ module datapath (
   logic [15:0]  drive_value_addr;
 
   assign is_driven_data = (drive_reg_data | drive_A | drive_F | drive_TEMP
-                          | drive_MDR1 | drive_MDR2 | drive_alu_data);
+                          | drive_MDR1 | drive_MDR2 );
   assign is_driven_addr = drive_MAR | drive_alu_addr;
 
   //Data Bus Arbitration
@@ -402,7 +427,6 @@ module datapath (
     else if(drive_TEMP)     drive_value_data = TEMP_out;
     else if(drive_MDR1)     drive_value_data = MDR1_out;
     else if(drive_MDR2)     drive_value_data = MDR2_out;
-    else if(drive_alu_data) drive_value_data = alu_out_data;
     else                    drive_value_data = 8'bz;
   end
 
@@ -448,6 +472,11 @@ module alu #(parameter w = 8)(
   output  logic [7:0] F_out
 );
 
+  logic [(w-1):(w/2)] lower_sum;
+  logic [(w-1):(w/2)] upper_sum;
+  logic       lower_carry_out;
+  logic       upper_carry_out;
+
   always_comb begin
 
     F_out = F_in;
@@ -465,8 +494,83 @@ module alu #(parameter w = 8)(
         F_out[2] = (C == 0) ? 0 : 1;
       end
 
+      //Make the general add width agnostic
       `ADD: begin
-        C = A + B;
+
+        //H flag is set when there is a carry from bit 3 into bit 4
+        //C flag is set when there is a carry from bit 7 into bit 8
+        //So we divide the addition into two stages in ripple carry fashion
+        {lower_carry_out, lower_sum} = A[((w-1)/2):0] + B[((w-1)/2):0];
+        {upper_carry_out, upper_sum} = A[(w-1):(w/2)] + B[(w-1):(w/2)] + lower_carry_out;
+
+        C = {upper_sum, lower_sum};
+
+        F_out[`H_flag] = (lower_carry_out) ? 1 : 0;
+        F_out[`C_flag] = (upper_carry_out) ? 1 : 0;
+
+        //S flag is set when result is negative, otherwise reset
+        F_out[`S_flag] = C[(w-1)] ? 1 : 0;
+
+        //Z flag is set when result is 0, otherwise reset
+        F_out[`Z_flag] = (C == 0) ? 1 : 0;
+
+      end
+
+      `SUB: begin
+        C = B + ~A + 1;
+
+        //if both are negative numbers
+        if(A[7] == 1 && B[7] == 1) begin
+          F_out[ `S_flag ] = (B > A) ? 1 : 0;
+        end
+
+        //a positive minus a negative is a positive
+        else if (A[7] == 1 && B[7] == 0) begin
+          F_out[ `S_flag ] = 0;
+        end
+
+        //a negative minus a pos is a negative
+        else if (A[7] == 0 && B[7] == 1) begin
+          F_out[ `S_flag ] = 1;
+        end
+
+        //both are positive
+        else begin
+          F_out[ `S_flag ] = (B > A) ? 1 : 0;
+        end
+
+        F_out[ `Z_flag ] = (C == 0) ? 1 : 0;
+
+
+        //set H flag when there is a borrow from bit 4
+        if(A[3:0] < B[3:0]) begin
+
+          //tie until the last bit
+          if(A[3:1] == B[3:1]) begin
+            F_out[`H_flag] = (~A[0] & B[0]) ? 1 : 0;
+          end
+
+          //tie until bit 1
+          else if(A[3:2] == B[3:2]) begin
+            F_out[`H_flag] = (~A[1] & B[1]) ? 1 : 0;
+          end
+
+          //tie until bit 2
+          else if(A[3] == B[3]) begin
+            F_out[`H_flag] = (~A[2] & B[2]) ? 1 : 0;
+          end
+
+          //not a tie, and A is less, so set borrow
+          else begin
+            F_out[`H_flag] = (~A[3] & B[3]) ? 1 : 0;
+          end
+
+        end
+
+        else begin
+          F_out [`H_flag] = 0;
+        end
+
       end
 
       `ALU_B: begin
@@ -908,14 +1012,25 @@ module regfile(
          |(ld_PCH & ld_PCL)
          |(ld_STRH & ld_STRL)
         ) begin
-        {B_in, C_in} = A_BUS;
-        {D_in, E_in} = A_BUS;
-        {H_in, L_in} = A_BUS;
-        {IXH_in, IXL_in} = A_BUS;
-        {IYH_in, IYL_in} = A_BUS;
-        {SPH_in, SPL_in} = A_BUS;
-        {PCH_in, PCL_in} = A_BUS;
-        {STRH_in, STRL_in} = A_BUS;
+
+        //We can load in these registers with the databus in parallel
+        //as the add bus load, or we can load them like an address
+        B_in = (ld_B & ld_C) ? A_BUS[15:8] : D_BUS;
+        C_in = (ld_B & ld_C) ? A_BUS[7:0]  : D_BUS;
+        D_in = (ld_D & ld_E) ? A_BUS[15:8] : D_BUS;
+        E_in = (ld_D & ld_E) ? A_BUS[7:0]  : D_BUS;
+        H_in = (ld_H & ld_L) ? A_BUS[15:8] : D_BUS;
+        L_in = (ld_H & ld_L) ? A_BUS[7:0]  : D_BUS;
+        IXH_in = (ld_IXH & ld_IXL) ? A_BUS[15:8] : D_BUS;
+        IXL_in = (ld_IXH & ld_IXL) ? A_BUS[7:0]  : D_BUS;
+        IYH_in = (ld_IYH & ld_IYL) ? A_BUS[15:8] : D_BUS;
+        IYL_in = (ld_IYH & ld_IYL) ? A_BUS[7:0]  : D_BUS;
+        SPH_in = (ld_SPH & ld_SPL) ? A_BUS[15:8] : D_BUS;
+        SPL_in = (ld_SPH & ld_SPL) ? A_BUS[7:0]  : D_BUS;
+        PCH_in = (ld_PCH & ld_PCL) ? A_BUS[15:8] : D_BUS;
+        PCL_in = (ld_PCH & ld_PCL) ? A_BUS[7:0]  : D_BUS;
+        STRH_in = (ld_STRH & ld_STRL) ? A_BUS[15:8] : D_BUS;
+        STRL_in = (ld_STRH & ld_STRL) ? A_BUS[7:0]  : D_BUS;
       end
 
       //data bus cases
