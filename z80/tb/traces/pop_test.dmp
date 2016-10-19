@@ -1,9 +1,9 @@
-A: 00
-F: 00
-BC: 0000
-DE: 0000
-HL: 0051
-IX: dead
-IY: beef
-SP: 0055
+A: 02
+F: 01
+BC: 0403
+DE: 0605
+HL: 0807
+IX: 0a09
+IY: 0c0b
+SP: 005d
 PC: 0051

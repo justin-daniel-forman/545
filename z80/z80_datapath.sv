@@ -593,6 +593,13 @@ module alu #(parameter w = 8)(
         C = A + { {8{B[7]}}, B};
       end
 
+      `ALU_NOP: begin
+        C = A;
+
+        //flags are loaded from the data bus
+        F_out = B;
+      end
+
       default: begin
         C = A;
       end

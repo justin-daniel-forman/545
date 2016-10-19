@@ -38,7 +38,7 @@
 `define PUSH_qq     8'b11??0101
 `define PUSH_IX     8'hE5
 `define PUSH_IY     8'hE5
-
+`define POP_qq      8'b11??0001
 `define POP_IX      8'hE1
 `define POP_IY      8'hE1
 

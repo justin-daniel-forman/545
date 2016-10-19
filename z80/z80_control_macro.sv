@@ -556,6 +556,8 @@ module decoder (
 
     MACRO_DEFINE_STATES PUSH_IY 7
 
+    MACRO_DEFINE_STATES POP_qq 6
+
     MACRO_DEFINE_STATES POP_IX 6
 
     MACRO_DEFINE_STATES POP_IY 6
@@ -695,6 +697,8 @@ module decoder (
             `LD_HL_n:   next_state = LD_HL_n_0;
             `LD_nn_A:   next_state = LD_nn_A_0;
             `LD_dd_nn:  next_state = LD_dd_nn_0;
+            `POP_qq:    next_state = POP_qq_0;
+            `PUSH_qq:   next_state = PUSH_qq_0;
             default:    next_state = FETCH_0;
           endcase
         end
@@ -726,6 +730,7 @@ module decoder (
             `LD_SP_HL:   next_state = LD_SP_HL_0;
             `EX_SP_HL:   next_state = EX_SP_HL_0;
             `PUSH_qq:    next_state = PUSH_qq_0;
+            `POP_qq:     next_state = POP_qq_0;
             default:     next_state = FETCH_0;
           endcase
         end
@@ -880,6 +885,8 @@ module decoder (
       MACRO_ENUM_STATES PUSH_IX 7
 
       MACRO_ENUM_STATES PUSH_IY 7
+
+      MACRO_ENUM_STATES POP_qq 6
 
       MACRO_ENUM_STATES POP_IX 6
 
@@ -2518,36 +2525,62 @@ module decoder (
         MACRO_8_DRIVE IYL
       end
 
-      //POP IX, IY
-      POP_IX_0, POP_IY_0: begin
+      //POP IX, IY, QQ
+      POP_IX_0, POP_IY_0, POP_qq_0: begin
         MACRO_16_DRIVE SP
         MACRO_READ_0
       end
 
-      POP_IX_1, POP_IY_1: begin
+      POP_IX_1, POP_IY_1, POP_qq_1: begin
         MACRO_16_DRIVE SP
         MACRO_READ_1
       end
 
-      POP_IX_2, POP_IY_2: begin
-        ld_IXL = (state == POP_IX_2) ? 1 : 0;
-        ld_IYL = (state == POP_IY_2) ? 1 : 0;
+      POP_IX_2: begin
+        ld_IXL = 1;
+      end
+      POP_IY_2: begin
+        ld_IYL = 1;
+      end
+      POP_qq_2: begin
+        unique case(op0[5:4])
+          2'b00: ld_C = 1;
+          2'b01: ld_E = 1;
+          2'b10: ld_L = 1;
+          2'b11: begin
+            ld_F_data = 1;
+            alu_op    = `ALU_NOP;
+          end
+        endcase
       end
 
-      POP_IX_3, POP_IY_3: begin
+      POP_IX_3, POP_IY_3, POP_qq_3: begin
         MACRO_16_INC SP
         MACRO_READ_0
       end
 
-      POP_IX_4, POP_IY_4: begin
+      POP_IX_4, POP_IY_4, POP_qq_4: begin
         MACRO_16_DRIVE SP
         MACRO_READ_1
       end
 
-      POP_IX_5, POP_IY_5: begin
+      POP_IX_5: begin
         MACRO_16_INC SP
-        ld_IXH = (state == POP_IX_5) ? 1 : 0;
-        ld_IYH = (state == POP_IY_5) ? 1 : 0;
+        ld_IXH = 1;
+      end
+      POP_IY_5: begin
+        MACRO_16_INC SP
+        ld_IYH = 1;
+      end
+      POP_qq_5: begin
+        MACRO_16_INC SP
+
+        unique case(op0[5:4])
+          2'b00: ld_B = 1;
+          2'b01: ld_D = 1;
+          2'b10: ld_H = 1;
+          2'b11: ld_A = 1;
+        endcase
       end
 
       //-----------------------------------------------------------------------
