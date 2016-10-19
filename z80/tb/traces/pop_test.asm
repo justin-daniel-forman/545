@@ -7,12 +7,13 @@ range data $0051 $0100
 section code
 
   ld sp, $5d
-  ld a, $01
-  ld bc, $0302
-  ld de, $0504
-  ld hl, $0706
-  ld st, $0908
-  ld uv, $0b0a
+  ld a, $00
+  add $0
+  ld bc, $0403
+  ld de, $0605
+  ld hl, $0807
+  ld st, $0a09
+  ld uv, $0c0b
 
   push uv #5b
   push st #59
