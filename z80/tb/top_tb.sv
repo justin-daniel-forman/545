@@ -52,7 +52,7 @@ module tb ();
       DUT.DP.data_out,
       DUT.DP.MAR_out,
       DUT.DP.TEMP_out,
-      m_DUT.Qs[81]
+      m_DUT.Qs[83]
     );
     end
 
