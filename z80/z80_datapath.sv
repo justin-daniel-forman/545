@@ -514,6 +514,10 @@ module alu #(parameter w = 8)(
         //Z flag is set when result is 0, otherwise reset
         F_out[`Z_flag] = (C == 0) ? 1 : 0;
 
+        //PV flag is set when there is overflow, which occurs when
+        //output changes the MSB of the accumulator
+        F_out[`PV_flag] = (C[7] & ~A[7]) ? 1 : 0;
+
       end
 
       `SUB: begin
