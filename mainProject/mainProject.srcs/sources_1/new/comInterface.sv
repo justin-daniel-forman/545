@@ -41,8 +41,8 @@ module comInterface(
     logic needs_double;
     logic decode_enable;
     logic [7:0] received_byte;
-        
-    assign activated = (addr == 16'hffff) && !MREQ_N && !WR_N;
+    
+    assign activated = (addr >= 16'h40 && addr <= 16'h7f) && !MREQ_N && !WR_N;
         
     regReceiver received_stored (.*);
     commandDecoder command_stored (.*);
@@ -67,6 +67,7 @@ module comInterface(
                 ns = activated ? latch : idle;
                 decode_enable = 1;
             end
+            default: ns = idle;
         endcase
     end
     
@@ -88,7 +89,9 @@ module commandDecoder(
     logic [2:0] reg_addr;
     logic double_transfer_selected;
     logic atten_selected;
+    logic valid;
     
+    assign valid = double_transfer ? first_byte[7] : received_byte[7];
     assign reg_addr = double_transfer ? first_byte[6:4] : received_byte[6:4];
     assign freq = {received_byte[5:0],first_byte[3:0]};
     assign atten_mag = received_byte[3:0];
@@ -113,7 +116,7 @@ module commandDecoder(
     always_comb begin
         atten_enable = 0;
         enable = 0;
-        if(decode_enable) begin
+        if(decode_enable && valid) begin
             if(double_transfer)
                 enable[reg_addr >> 1] = 1;
             else if(atten_selected)

@@ -120,7 +120,7 @@ module baseReg(
     always_ff @(posedge clk, posedge reset) begin
         if(reset) begin
             waveform_base <= 0;
-            atten_mag_stored <= 0;
+            atten_mag_stored <= 4'hf;
         end
         else begin
             if(waveform_valid) 
@@ -141,34 +141,34 @@ module multLookup(
         multVal = 1;
         shift = 0;
         case(atten_mag_stored)
-            0: multVal = 1;
-            1: begin
-                multVal = 5;
-                shift = 2;
-            end
-            2: begin
-                multVal = 3;
-                shift = 1;
-            end
-            3: multVal = 2;
+            0: multVal = 32;
+            1: multVal = 25;
+            2: multVal = 20;
+            3: multVal = 16;
             4: begin
-                shift = 1;
-                multVal = 5;
-            end
-            5: multVal = 3;
-            6: multVal = 4;
-            7: multVal = 5;
-            8: multVal = 6;
-            9: multVal = 8;
-            10: multVal = 10;
-            11: begin
                 multVal = 25;
                 shift = 1;
             end
-            12: multVal = 16;
-            13: multVal = 20;
-            14: multVal = 25;
-            15: multVal = 32;
+            5: multVal = 10;
+            6: multVal = 8;
+            7: multVal = 6;
+            8: multVal = 5;
+            9: multVal = 4;
+            10: multVal = 3;
+            11: begin
+                shift = 1;
+                multVal = 5;
+            end
+            12: multVal = 2;
+            13: begin
+                multVal = 3;
+                shift = 1;
+            end
+            14: begin
+                multVal = 5;
+                shift = 2;
+            end
+            15: multVal = 1;
             default: begin
                 multVal = 1;
                 shift = 0;
