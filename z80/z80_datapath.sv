@@ -90,6 +90,8 @@ module datapath (
   //temporary addr_bus registers
   input  logic         ld_MARH, //load upper byte of MAR
   input  logic         ld_MARL, //load lower byte of MAR
+  input  logic         ld_MARH_data,
+  input  logic         ld_MARL_data,
   input  logic         drive_MAR,
 
   //External bus outputs
@@ -386,10 +388,15 @@ module datapath (
     MDR2_en = ld_MDR2;
     TEMP_en = ld_TEMP;
 
-    MAR_en = ld_MARH | ld_MARL;
-    if(ld_MARH & ld_MARL)       MAR_in = internal_addr;
-    else if(ld_MARH & ~ld_MARL) MAR_in = {internal_addr[15:8], MAR_out[7:0]};
-    else if(~ld_MARH & ld_MARL) MAR_in = {MAR_out[15:8], internal_addr[7:0]};
+    //Sometimes we need to load the MAR from the databus, and other times
+    //we need to load it from the addr bus. This is a desparate change
+    //that is needed for some of the 16-bit loads.
+    MAR_en = ld_MARH | ld_MARL | ld_MARH_data | ld_MARL_data;
+    if     (ld_MARL_data & ~ld_MARH_data) MAR_in = {MAR_out[15:8], internal_data};
+    else if(ld_MARH_data & ~ld_MARL_data) MAR_in = {internal_data, MAR_out[7:0]};
+    else if(ld_MARH & ld_MARL)            MAR_in = internal_addr;
+    else if(ld_MARH & ~ld_MARL)           MAR_in = {internal_addr[15:8], MAR_out[7:0]};
+    else if(~ld_MARH & ld_MARL)           MAR_in = {MAR_out[15:8], internal_addr[7:0]};
     else MAR_in = internal_addr;
   end
 

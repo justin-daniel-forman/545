@@ -164,10 +164,13 @@ module z80(
 
   //-----------------------------------
   //temporary addr_bus registers
-  //  These registers sit on the addr bus
+  //  These registers sit on the addr bus, but can load
+  //  data from the D-Bus when necessary
   //-----------------------------------
   logic         ld_MARH; //load upper byte of MAR
   logic         ld_MARL; //load lower byte of MAR
+  logic         ld_MARH_data;
+  logic         ld_MARL_data;
   logic         drive_MAR;
 
   //External bus outputs

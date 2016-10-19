@@ -182,11 +182,14 @@ while (my $line = <$in_fh>) {
         $line .= $whitespace."drive_reg_data = 1;\n";
       } elsif( $reg eq 'IYL') {
         $line .= $whitespace."drive_IYL = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n"
+      } elsif( $reg eq 'SPH') {
+        $line .= $whitespace."drive_SPH = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      } elsif( $reg eq 'SPL') {
+        $line .= $whitespace."drive_SPL = 1;\n";
         $line .= $whitespace."drive_reg_data = 1;\n";
       }
-
-      print $line."\n\n\n";
-
     }
 
     elsif($macro =~/8_ADD (.*)\s*/) {
