@@ -2268,6 +2268,63 @@ module decoder (
         ld_MARH = 1;
       end
 
+      //LD (nn), IX and LD (nn), IY
+      LD_nn_x_IX_0, LD_nn_x_IX_3, LD_nn_x_IY_0, LD_nn_x_IY_3: begin
+        MACRO_READ_0
+        MACRO_INC_PC
+      end
+
+      LD_nn_x_IX_1, LD_nn_x_IX_4, LD_nn_x_IY_1, LD_nn_x_IY_4: begin
+        MACRO_READ_1
+        MACRO_DRIVE_PC
+      end
+
+      LD_nn_x_IX_2, LD_nn_x_IY_2: begin
+        ld_MARL_data = 1;
+        ld_STRL      = 1;
+      end
+
+      LD_nn_x_IX_5, LD_nn_x_IY_5: begin
+        ld_MARH_data = 1;
+        ld_STRH      = 1;
+      end
+
+      LD_nn_x_IX_6, LD_nn_x_IX_9, LD_nn_x_IY_6, LD_nn_x_IY_9: begin
+        MACRO_WRITE_0
+        drive_MAR = 1;
+
+        if(state == LD_nn_x_IX_6) begin
+          MACRO_8_DRIVE IXL
+        end else if(state == LD_nn_x_IY_6) begin
+          MACRO_8_DRIVE IYL
+        end else if(state == LD_nn_x_IY_9) begin
+          MACRO_8_DRIVE IYH
+        end else begin
+          MACRO_8_DRIVE IXH
+        end
+      end
+
+      LD_nn_x_IX_7, LD_nn_x_IX_10, LD_nn_x_IY_7, LD_nn_x_IY_10: begin
+        MACRO_WRITE_1
+        drive_MAR = 1;
+
+        if(state == LD_nn_x_IX_7) begin
+          MACRO_8_DRIVE IXL
+        end else if(state == LD_nn_x_IY_7) begin
+          MACRO_8_DRIVE IYL
+        end else if(state == LD_nn_x_IY_10) begin
+          MACRO_8_DRIVE IYH
+        end else begin
+          MACRO_8_DRIVE IXH
+        end
+      end
+
+      LD_nn_x_IX_8, LD_nn_x_IY_8: begin
+        MACRO_16_INC STR
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
       //LD_SP_HL
       LD_SP_HL_0: begin
         MACRO_16_DRIVE HL

@@ -3,7 +3,7 @@ F: 00
 BC: aaff
 DE: ddee
 HL: bbcc
-IX: 0000
-IY: 0000
+IX: 9911
+IY: 7766
 SP: abcd
 PC: 0051

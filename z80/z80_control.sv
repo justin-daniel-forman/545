@@ -3205,6 +3205,89 @@ module decoder (
         ld_MARH = 1;
       end
 
+      //LD (nn), IX and LD (nn), IY
+      LD_nn_x_IX_0, LD_nn_x_IX_3, LD_nn_x_IY_0, LD_nn_x_IY_3: begin
+        MRD_start = 1;
+        MRD_bus   = 1;
+        ld_PCH    = 1;
+        ld_PCL    = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        alu_op    = `INCR_A;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+      end
+
+      LD_nn_x_IX_1, LD_nn_x_IX_4, LD_nn_x_IY_1, LD_nn_x_IY_4: begin
+        MRD_bus = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        alu_op    = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+      end
+
+      LD_nn_x_IX_2, LD_nn_x_IY_2: begin
+        ld_MARL_data = 1;
+        ld_STRL      = 1;
+      end
+
+      LD_nn_x_IX_5, LD_nn_x_IY_5: begin
+        ld_MARH_data = 1;
+        ld_STRH      = 1;
+      end
+
+      LD_nn_x_IX_6, LD_nn_x_IX_9, LD_nn_x_IY_6, LD_nn_x_IY_9: begin
+        MWR_start = 1;
+        MWR_bus   = 1;
+        drive_MAR = 1;
+
+        if(state == LD_nn_x_IX_6) begin
+          drive_IXL = 1;
+          drive_reg_data = 1;
+        end else if(state == LD_nn_x_IY_6) begin
+          drive_IYL = 1;
+          drive_reg_data = 1;
+        end else if(state == LD_nn_x_IY_9) begin
+          drive_IYH = 1;
+          drive_reg_data = 1;
+        end else begin
+          drive_IXH = 1;
+          drive_reg_data = 1;
+        end
+      end
+
+      LD_nn_x_IX_7, LD_nn_x_IX_10, LD_nn_x_IY_7, LD_nn_x_IY_10: begin
+        MWR_bus = 1;
+        drive_MAR = 1;
+
+        if(state == LD_nn_x_IX_7) begin
+          drive_IXL = 1;
+          drive_reg_data = 1;
+        end else if(state == LD_nn_x_IY_7) begin
+          drive_IYL = 1;
+          drive_reg_data = 1;
+        end else if(state == LD_nn_x_IY_10) begin
+          drive_IYH = 1;
+          drive_reg_data = 1;
+        end else begin
+          drive_IXH = 1;
+          drive_reg_data = 1;
+        end
+      end
+
+      LD_nn_x_IX_8, LD_nn_x_IY_8: begin
+        drive_alu_addr = 1;
+        alu_op = `INCR_A;
+        drive_reg_addr = 1;
+        drive_STRH = 1;
+        drive_STRL = 1;
+        ld_STRH    = 1;
+        ld_STRL    = 1;
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
       //LD_SP_HL
       LD_SP_HL_0: begin
         drive_alu_addr = 1;
