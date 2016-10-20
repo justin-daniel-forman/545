@@ -1018,7 +1018,13 @@ module decoder (
     ADC_A_IY_d_10,
 
 
+    CPL_0,
+
     CCF_0,
+
+    SCF_0,
+
+    NOP_0,
 
     INC_0,
     INC_1,
@@ -1100,6 +1106,10 @@ module decoder (
           `ADD_A_r:   next_state = (op0[2:0] != 3'b110) ? ADD_A_r_0 : FETCH_3;
           `ADC_A_r:   next_state = (op0[2:0] != 3'b110) ? ADC_A_r_0 : FETCH_3;
           `INC:       next_state = INC_0;
+          `CPL:       next_state = CPL_0;
+          `CCF:       next_state = CCF_0;
+          `SCF:       next_state = SCF_0;
+          `NOP:       next_state = NOP_0;
           `EXT_INST:  next_state = EXT_INST_0;
           `IX_INST:   next_state = IX_INST_0;
           `IY_INST:   next_state = IY_INST_0;
@@ -1154,7 +1164,6 @@ module decoder (
             `EX_SP_HL:   next_state = EX_SP_HL_0;
             `PUSH_qq:    next_state = PUSH_qq_0;
             `POP_qq:     next_state = POP_qq_0;
-            `CCF:        next_state = CCF_0;
             default:     next_state = FETCH_0;
           endcase
         end
@@ -1859,8 +1868,17 @@ module decoder (
       //BEGIN General Purpose Arith and CPU Control
       //-----------------------------------------------------------------------
 
+      //CPL
+      CPL_0: next_state = FETCH_0;
+
       //CCF
       CCF_0: next_state = FETCH_0;
+
+      //SCF
+      SCF_0: next_state = FETCH_0;
+
+      //NOP
+      NOP_0: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END General Purpose Arith and CPU Control
@@ -4487,9 +4505,24 @@ module decoder (
       //BEGIN General Purpose Arith and CPU Control
       //-----------------------------------------------------------------------
 
+      CPL_0: begin
+        set_H = 2'b11;
+        set_N = 2'b11;
+        alu_op         = `ALU_CPL;
+        drive_alu_data = 1;
+        ld_A           = 1;
+        drive_A        = 1;
+      end
+
       CCF_0: begin
         ld_F_data = 1;
         alu_op    = `ALU_CCF;
+        set_N = 2'b10;
+      end
+
+      SCF_0: begin
+        set_C = 2'b11;
+        set_H = 2'b10;
         set_N = 2'b10;
       end
 

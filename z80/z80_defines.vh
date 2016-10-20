@@ -68,7 +68,10 @@
 `define ADC_A_IX_d  8'h8E
 `define ADC_A_IY_d  8'h8E
 
+`define CPL         8'h2F
 `define CCF         8'h3F
+`define SCF         8'h37
+`define NOP         8'h00
 
 //flags
 `define PV_flag   2
@@ -89,4 +92,5 @@
 `define ALU_B     4'h6
 `define SUB       4'h7
 `define ADC       4'h8
-`define ALU_CCF   4'hf
+`define ALU_CCF   4'h9
+`define ALU_CPL   4'ha

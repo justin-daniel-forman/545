@@ -608,6 +608,14 @@ module alu #(parameter w = 8)(
         C = A;
         //invert the carry bit
         F_out[`C_flag] = ~F_in[`C_flag];
+
+        //the half carry is the previous carry
+        F_out[`H_flag] = F_in[`C_flag];
+      end
+
+      `ALU_CPL: begin
+        //take the ones complement of A
+        C = ~A;
       end
 
       `ALU_NOP: begin
