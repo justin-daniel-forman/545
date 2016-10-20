@@ -62,6 +62,13 @@
 `define ADD_A_HL    8'h86
 `define ADD_A_IX_d  8'h86
 `define ADD_A_IY_d  8'h86
+`define ADC_A_r     8'b10001???
+`define ADC_A_n     8'hCE
+`define ADC_A_HL    8'h8E
+`define ADC_A_IX_d  8'h8E
+`define ADC_A_IY_d  8'h8E
+
+`define CCF         8'h3F
 
 //flags
 `define PV_flag   2
@@ -71,6 +78,8 @@
 `define S_flag    7
 `define N_flag    1
 
+//TODO: SUB MIGHT NEED TO BE SPLIT INTO CPI AND SUB
+
 //ALU commands
 `define INCR_A    4'h1
 `define DECR_A    4'h2
@@ -79,3 +88,5 @@
 `define ADD_SE_B  4'h5
 `define ALU_B     4'h6
 `define SUB       4'h7
+`define ADC       4'h8
+`define ALU_CCF   4'hf

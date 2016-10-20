@@ -983,6 +983,43 @@ module decoder (
     ADD_A_IY_d_9,
     ADD_A_IY_d_10,
 
+    ADC_A_r_0,
+
+    ADC_A_n_0,
+    ADC_A_n_1,
+    ADC_A_n_2,
+
+    ADC_A_HL_0,
+    ADC_A_HL_1,
+    ADC_A_HL_2,
+
+    ADC_A_IX_d_0,
+    ADC_A_IX_d_1,
+    ADC_A_IX_d_2,
+    ADC_A_IX_d_3,
+    ADC_A_IX_d_4,
+    ADC_A_IX_d_5,
+    ADC_A_IX_d_6,
+    ADC_A_IX_d_7,
+    ADC_A_IX_d_8,
+    ADC_A_IX_d_9,
+    ADC_A_IX_d_10,
+
+    ADC_A_IY_d_0,
+    ADC_A_IY_d_1,
+    ADC_A_IY_d_2,
+    ADC_A_IY_d_3,
+    ADC_A_IY_d_4,
+    ADC_A_IY_d_5,
+    ADC_A_IY_d_6,
+    ADC_A_IY_d_7,
+    ADC_A_IY_d_8,
+    ADC_A_IY_d_9,
+    ADC_A_IY_d_10,
+
+
+    CCF_0,
+
     INC_0,
     INC_1,
     INC_2,
@@ -1061,6 +1098,7 @@ module decoder (
           `EX_AF_AF:  next_state = EX_AF_AF_0;
           `EXX:       next_state = EXX_0;
           `ADD_A_r:   next_state = (op0[2:0] != 3'b110) ? ADD_A_r_0 : FETCH_3;
+          `ADC_A_r:   next_state = (op0[2:0] != 3'b110) ? ADC_A_r_0 : FETCH_3;
           `INC:       next_state = INC_0;
           `EXT_INST:  next_state = EXT_INST_0;
           `IX_INST:   next_state = IX_INST_0;
@@ -1095,6 +1133,8 @@ module decoder (
             `LD_dd_nn:  next_state = LD_dd_nn_0;
             `ADD_A_n:   next_state = ADD_A_n_0;
             `ADD_A_HL:  next_state = ADD_A_HL_0;
+            `ADC_A_n:   next_state = ADC_A_n_0;
+            `ADC_A_HL:  next_state = ADC_A_HL_0;
             default:    next_state = FETCH_0;
           endcase
         end
@@ -1114,6 +1154,7 @@ module decoder (
             `EX_SP_HL:   next_state = EX_SP_HL_0;
             `PUSH_qq:    next_state = PUSH_qq_0;
             `POP_qq:     next_state = POP_qq_0;
+            `CCF:        next_state = CCF_0;
             default:     next_state = FETCH_0;
           endcase
         end
@@ -1182,6 +1223,8 @@ module decoder (
           `POP_IY:      next_state = (op0[7:4] == 4'hF) ?  POP_IY_0   : POP_IX_0;
           `ADD_A_IX_d:  next_state = (op0[7:4] == 4'hD) ?  ADD_A_IX_d_0 : ADD_A_IY_d_0;
           `ADD_A_IY_d:  next_state = (op0[7:4] == 4'hF) ?  ADD_A_IY_d_0 : ADD_A_IY_d_0;
+          `ADC_A_IX_d:  next_state = (op0[7:4] == 4'hD) ?  ADC_A_IX_d_0 : ADC_A_IY_d_0;
+          `ADC_A_IY_d:  next_state = (op0[7:4] == 4'hF) ?  ADC_A_IY_d_0 : ADC_A_IY_d_0;
           default:      next_state = FETCH_0;
         endcase
       end
@@ -1761,6 +1804,45 @@ module decoder (
       ADD_A_IY_d_9: next_state = ADD_A_IY_d_10;
       ADD_A_IY_d_10: next_state = FETCH_0;
 
+      //ADC_A_r
+      ADC_A_r_0: next_state = FETCH_0;
+
+      //ADC_A_n
+      ADC_A_n_0: next_state = ADC_A_n_1;
+      ADC_A_n_1: next_state = ADC_A_n_2;
+      ADC_A_n_2: next_state = FETCH_0;
+
+      //ADC_A_HL
+      ADC_A_HL_0: next_state = ADC_A_HL_1;
+      ADC_A_HL_1: next_state = ADC_A_HL_2;
+      ADC_A_HL_2: next_state = FETCH_0;
+
+      //ADC_A_IX_d
+      ADC_A_IX_d_0: next_state = ADC_A_IX_d_1;
+      ADC_A_IX_d_1: next_state = ADC_A_IX_d_2;
+      ADC_A_IX_d_2: next_state = ADC_A_IX_d_3;
+      ADC_A_IX_d_3: next_state = ADC_A_IX_d_4;
+      ADC_A_IX_d_4: next_state = ADC_A_IX_d_5;
+      ADC_A_IX_d_5: next_state = ADC_A_IX_d_6;
+      ADC_A_IX_d_6: next_state = ADC_A_IX_d_7;
+      ADC_A_IX_d_7: next_state = ADC_A_IX_d_8;
+      ADC_A_IX_d_8: next_state = ADC_A_IX_d_9;
+      ADC_A_IX_d_9: next_state = ADC_A_IX_d_10;
+      ADC_A_IX_d_10: next_state = FETCH_0;
+
+      //ADC_A_IY_d
+      ADC_A_IY_d_0: next_state = ADC_A_IY_d_1;
+      ADC_A_IY_d_1: next_state = ADC_A_IY_d_2;
+      ADC_A_IY_d_2: next_state = ADC_A_IY_d_3;
+      ADC_A_IY_d_3: next_state = ADC_A_IY_d_4;
+      ADC_A_IY_d_4: next_state = ADC_A_IY_d_5;
+      ADC_A_IY_d_5: next_state = ADC_A_IY_d_6;
+      ADC_A_IY_d_6: next_state = ADC_A_IY_d_7;
+      ADC_A_IY_d_7: next_state = ADC_A_IY_d_8;
+      ADC_A_IY_d_8: next_state = ADC_A_IY_d_9;
+      ADC_A_IY_d_9: next_state = ADC_A_IY_d_10;
+      ADC_A_IY_d_10: next_state = FETCH_0;
+
       //-----------------------------------------------------------------------
       //END 8-bit arithmetic group
       //-----------------------------------------------------------------------
@@ -1776,6 +1858,9 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN General Purpose Arith and CPU Control
       //-----------------------------------------------------------------------
+
+      //CCF
+      CCF_0: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END General Purpose Arith and CPU Control
@@ -2099,7 +2184,7 @@ module decoder (
       LD_r_IX_d_3: begin
         //add the d from the bus to the IX register and drive that as
         //an address
-        alu_op         = `ADD;
+        alu_op         = `ADD_SE_B;
         drive_alu_addr = 1;
         drive_reg_addr = 1;
         drive_IXH      = 1;
@@ -2166,7 +2251,7 @@ module decoder (
       LD_r_IY_d_3: begin
         //add the d from the bus to the IX register and drive that as
         //an address
-        alu_op         = `ADD;
+        alu_op         = `ADD_SE_B;
         drive_alu_addr = 1;
         drive_reg_addr = 1;
         drive_IYH      = 1;
@@ -2270,7 +2355,7 @@ module decoder (
         drive_IXL = 1;
         drive_reg_addr = 1;
         drive_alu_addr = 1;
-        alu_op = `ADD;
+        alu_op = `ADD_SE_B;
         ld_MARL = 1;
         ld_MARH = 1;
       end
@@ -2398,7 +2483,7 @@ module decoder (
         drive_IXL = 1;
         drive_reg_addr = 1;
         drive_alu_addr = 1;
-        alu_op = `ADD;
+        alu_op = `ADD_SE_B;
         ld_MARL = 1;
         ld_MARH = 1;
       end
@@ -4186,7 +4271,7 @@ module decoder (
       end
 
       //ADD A, n
-      ADD_A_n_0: begin
+      ADD_A_n_0, ADC_A_n_0: begin
         drive_alu_addr = 1;
         alu_op = `INCR_A;
         drive_reg_addr = 1;
@@ -4198,7 +4283,7 @@ module decoder (
         MRD_bus   = 1;
       end
 
-      ADD_A_n_1: begin
+      ADD_A_n_1, ADC_A_n_1: begin
         drive_alu_addr = 1;
         alu_op = `ALU_NOP;
         drive_reg_addr = 1;
@@ -4207,16 +4292,23 @@ module decoder (
         MRD_bus = 1;
       end
 
-      ADD_A_n_2: begin
-        ld_F_data      = 1;
-        drive_alu_data = 1;
-        ld_A           = 1;
-        alu_op         = `ADD;
+      ADD_A_n_2, ADC_A_n_2: begin
+        if(state == ADD_A_n_2) begin
+          ld_F_data      = 1;
+          drive_alu_data = 1;
+          ld_A           = 1;
+          alu_op         = `ADD;
+        end else begin
+          ld_F_data      = 1;
+          drive_alu_data = 1;
+          ld_A           = 1;
+          alu_op         = `ADC;
+        end
         set_N = 2'b10;
       end
 
       //ADD A, (HL)
-      ADD_A_HL_0: begin
+      ADD_A_HL_0, ADC_A_HL_0: begin
         drive_alu_addr = 1;
         alu_op = `ALU_NOP;
         drive_reg_addr = 1;
@@ -4226,7 +4318,7 @@ module decoder (
         MRD_bus   = 1;
       end
 
-      ADD_A_HL_1: begin
+      ADD_A_HL_1, ADC_A_HL_1: begin
         drive_alu_addr = 1;
         alu_op = `ALU_NOP;
         drive_reg_addr = 1;
@@ -4235,16 +4327,23 @@ module decoder (
         MRD_bus = 1;
       end
 
-      ADD_A_HL_2: begin
-        ld_F_data      = 1;
-        drive_alu_data = 1;
-        ld_A           = 1;
-        alu_op         = `ADD;
+      ADD_A_HL_2, ADC_A_HL_2: begin
+        if(state == ADD_A_HL_2) begin
+          ld_F_data      = 1;
+          drive_alu_data = 1;
+          ld_A           = 1;
+          alu_op         = `ADD;
+        end else begin
+          ld_F_data      = 1;
+          drive_alu_data = 1;
+          ld_A           = 1;
+          alu_op         = `ADC;
+        end
         set_N = 2'b10;
       end
 
       //ADD A, (IX+d), ADD A, (IY+d)
-      ADD_A_IX_d_0, ADD_A_IY_d_0: begin
+      ADD_A_IX_d_0, ADD_A_IY_d_0, ADC_A_IX_d_0, ADC_A_IY_d_0: begin
         drive_alu_addr = 1;
         alu_op = `INCR_A;
         drive_reg_addr = 1;
@@ -4256,7 +4355,7 @@ module decoder (
         MRD_bus   = 1;
       end
 
-      ADD_A_IX_d_1, ADD_A_IY_d_1: begin
+      ADD_A_IX_d_1, ADD_A_IY_d_1, ADC_A_IX_d_1, ADC_A_IY_d_1: begin
         drive_alu_addr = 1;
         alu_op = `ALU_NOP;
         drive_reg_addr = 1;
@@ -4265,38 +4364,110 @@ module decoder (
         MRD_bus = 1;
       end
 
-      ADD_A_IX_d_2, ADD_A_IY_d_2: begin
+      ADD_A_IX_d_2, ADD_A_IY_d_2, ADC_A_IX_d_2, ADC_A_IY_d_2: begin
         ld_TEMP = 1;
       end
 
-      ADD_A_IX_d_3, ADD_A_IY_d_3: begin
-        alu_op         = `ADD;
+      ADD_A_IX_d_3, ADD_A_IY_d_3, ADC_A_IX_d_3, ADC_A_IY_d_3: begin
+        alu_op         = `ADD_SE_B;
         drive_alu_addr = 1;
         drive_reg_addr = 1;
-        drive_IXH      = (state == ADD_A_IX_d_3);
-        drive_IXL      = (state == ADD_A_IX_d_3);
-        drive_IYH      = (state == ADD_A_IY_d_3);
-        drive_IYL      = (state == ADD_A_IY_d_3);
+        drive_IXH      = (state == ADD_A_IX_d_3 || state == ADC_A_IX_d_3);
+        drive_IXL      = (state == ADD_A_IX_d_3 || state == ADC_A_IX_d_3);
+        drive_IYH      = (state == ADD_A_IY_d_3 || state == ADC_A_IY_d_3);
+        drive_IYL      = (state == ADD_A_IY_d_3 || state == ADC_A_IY_d_3);
         ld_MARL        = 1;
         ld_MARH        = 1;
       end
 
-      ADD_A_IX_d_8, ADD_A_IY_d_8: begin
+      ADD_A_IX_d_8, ADD_A_IY_d_8, ADC_A_IX_d_8, ADC_A_IY_d_8: begin
         drive_MAR = 1;
         MRD_start = 1;
         MRD_bus   = 1;
       end
 
-      ADD_A_IX_d_9, ADD_A_IY_d_9: begin
+      ADD_A_IX_d_9, ADD_A_IY_d_9, ADC_A_IX_d_9, ADC_A_IY_d_9: begin
         drive_MAR = 1;
         MRD_bus = 1;
       end
 
-      ADD_A_IX_d_10, ADD_A_IY_d_10: begin
-        ld_F_data      = 1;
-        drive_alu_data = 1;
-        ld_A           = 1;
-        alu_op         = `ADD;
+      ADD_A_IX_d_10, ADD_A_IY_d_10, ADC_A_IX_d_10, ADC_A_IY_d_10: begin
+        if(state == ADD_A_IX_d_10 || state == ADD_A_IY_d_10) begin
+          ld_F_data      = 1;
+          drive_alu_data = 1;
+          ld_A           = 1;
+          alu_op         = `ADD;
+        end else begin
+          ld_F_data      = 1;
+          drive_alu_data = 1;
+          ld_A           = 1;
+          alu_op         = `ADC;
+        end
+
+        set_N = 2'b10;
+      end
+
+      //ADC A, r
+      ADC_A_r_0: begin
+
+        case(op0[2:0])
+          3'b111: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `ADC;
+            drive_A        = 1;
+          end
+          3'b000: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `ADC;
+            drive_B        = 1;
+            drive_reg_data = 1;
+          end
+          3'b001: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `ADC;
+            drive_C        = 1;
+            drive_reg_data = 1;
+          end
+          3'b010: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `ADC;
+            drive_D        = 1;
+            drive_reg_data = 1;
+          end
+          3'b011: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `ADC;
+            drive_E        = 1;
+            drive_reg_data = 1;
+          end
+          3'b100: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `ADC;
+            drive_H        = 1;
+            drive_reg_data = 1;
+          end
+          3'b101: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `ADC;
+            drive_L        = 1;
+            drive_reg_data = 1;
+          end
+        endcase
+
         set_N = 2'b10;
       end
 
@@ -4315,6 +4486,12 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN General Purpose Arith and CPU Control
       //-----------------------------------------------------------------------
+
+      CCF_0: begin
+        ld_F_data = 1;
+        alu_op    = `ALU_CCF;
+        set_N = 2'b10;
+      end
 
       //-----------------------------------------------------------------------
       //END General Purpose Arith and CPU Control
