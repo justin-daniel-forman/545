@@ -137,7 +137,10 @@ while (my $line = <$in_fh>) {
         $line .= $whitespace."ld_STRL = 1;\n";
         $line .= $whitespace."ld_STRH = 1;\n";
       }
-
+      if($reg eq 'PC') {
+        $line .= $whitespace."ld_PCH = 1;\n";
+        $line .= $whitespace."ld_PCL = 1;\n";
+      }
     }
 
     elsif($macro =~ /8_DRIVE (.*)\s*/) {
@@ -189,6 +192,65 @@ while (my $line = <$in_fh>) {
       } elsif( $reg eq 'SPL') {
         $line .= $whitespace."drive_SPL = 1;\n";
         $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+    }
+
+    elsif($macro =~/16_ADD (.*)\s*/) {
+      $line = '';
+      my $reg = $1;
+
+      $line .= $whitespace."ld_F_addr      = 1;\n";
+      $line .= $whitespace."drive_alu_addr = 1;\n";
+      $line .= $whitespace."alu_op         = `ADD_SE_B;\n";
+      $line .= $whitespace."drive_reg_addr = 1;\n";
+
+      if($reg eq 'BC') {
+        $line .= $whitespace."drive_B        = 1;\n";
+        $line .= $whitespace."drive_C        = 1;\n";
+        $line .= $whitespace."ld_B           = 1;\n";
+        $line .= $whitespace."ld_C           = 1;\n";
+      }
+
+      if($reg eq 'DE') {
+        $line .= $whitespace."drive_D        = 1;\n";
+        $line .= $whitespace."drive_E        = 1;\n";
+        $line .= $whitespace."ld_D           = 1;\n";
+        $line .= $whitespace."ld_E           = 1;\n";
+      }
+
+      if($reg eq 'HL') {
+        $line .= $whitespace."drive_L        = 1;\n";
+        $line .= $whitespace."drive_H        = 1;\n";
+        $line .= $whitespace."ld_L           = 1;\n";
+        $line .= $whitespace."ld_H           = 1;\n";
+      }
+
+      if($reg eq 'SP') {
+        $line .= $whitespace."drive_SPL        = 1;\n";
+        $line .= $whitespace."drive_SPH        = 1;\n";
+        $line .= $whitespace."ld_SPL           = 1;\n";
+        $line .= $whitespace."ld_SPH           = 1;\n";
+      }
+
+      if($reg eq 'PC') {
+        $line .= $whitespace."drive_PCL        = 1;\n";
+        $line .= $whitespace."drive_PCH        = 1;\n";
+        $line .= $whitespace."ld_PCL           = 1;\n";
+        $line .= $whitespace."ld_PCH           = 1;\n";
+      }
+
+      if($reg eq 'IX') {
+        $line .= $whitespace."drive_IXL        = 1;\n";
+        $line .= $whitespace."drive_IXH        = 1;\n";
+        $line .= $whitespace."ld_IXL           = 1;\n";
+        $line .= $whitespace."ld_IXH           = 1;\n";
+      }
+
+      if($reg eq 'IY') {
+        $line .= $whitespace."drive_IYL        = 1;\n";
+        $line .= $whitespace."drive_IYH        = 1;\n";
+        $line .= $whitespace."ld_IYL           = 1;\n";
+        $line .= $whitespace."ld_IYH           = 1;\n";
       }
     }
 
