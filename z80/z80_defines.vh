@@ -1,6 +1,3 @@
-`define NOP 8'h00
-`define INC 8'b00???100
-
 `define EXT_INST    8'hED
 `define LD_HL_nn    8'h2A
 `define LD_r_r      8'b01??????
@@ -68,6 +65,8 @@
 `define ADC_A_IX_d  8'h8E
 `define ADC_A_IY_d  8'h8E
 
+`define INC_r       8'b00???100
+
 `define CPL         8'h2F
 `define CCF         8'h3F
 `define SCF         8'h37
@@ -84,13 +83,15 @@
 //TODO: SUB MIGHT NEED TO BE SPLIT INTO CPI AND SUB
 
 //ALU commands
-`define INCR_A    4'h1
-`define DECR_A    4'h2
-`define ALU_NOP   4'h3
-`define ADD       4'h4
-`define ADD_SE_B  4'h5
-`define ALU_B     4'h6
-`define SUB       4'h7
-`define ADC       4'h8
-`define ALU_CCF   4'h9
-`define ALU_CPL   4'ha
+`define INCR_A_8  4'h1
+`define INCR_B_8  4'h2
+`define INCR_A_16 4'h3
+`define DECR_A    4'h4
+`define ALU_NOP   4'h5
+`define ADD       4'h6
+`define ADD_SE_B  4'h7
+`define ALU_B     4'h8
+`define SUB       4'h9
+`define ADC       4'ha
+`define ALU_CCF   4'hb
+`define ALU_CPL   4'hc

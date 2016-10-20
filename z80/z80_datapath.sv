@@ -221,6 +221,7 @@ module datapath (
   //---------------------------------------------------------------------------
   logic [7:0]   reg_data_out;
   logic [15:0]  reg_addr_out;
+  logic [7:0]   reg_data_in;
 
   regfile RFILE(
     .clk(clk),
@@ -265,7 +266,7 @@ module datapath (
     .switch_context(switch_context),
     .swap_reg(swap_reg),
 
-    .D_BUS(internal_data),
+    .D_BUS(reg_data_in),
     .A_BUS(internal_addr),
 
     .out_single(reg_data_out),
@@ -380,6 +381,13 @@ module datapath (
 
     end
 
+    //We are including a point to point connection between the 8-bit alu and
+    //the register file because we sometimes need to increment 8-bit registers
+    //in a single clock cycle. This means the reg data has to be output onto
+    //the data bus. Therefore the 8-bit alu cannot put anything onto the dbus,
+    //but must still communicate the incremented result to the register file.
+    reg_data_in = (drive_alu_data) ? alu_out_data : internal_data;
+
     MDR1_in = internal_data;
     MDR2_in = internal_data;
     TEMP_in = internal_data;
@@ -481,8 +489,9 @@ module alu #(parameter w = 8)(
 
   logic [(w-1):(w/2)] lower_sum;
   logic [(w-1):(w/2)] upper_sum;
-  logic       lower_carry_out;
-  logic       upper_carry_out;
+  logic               lower_carry_out;
+  logic               upper_carry_out;
+  logic [(w-1):0]     T;
 
   always_comb begin
 
@@ -490,10 +499,40 @@ module alu #(parameter w = 8)(
 
     case(op)
 
-      `INCR_A: begin
+      `INCR_A_8, `INCR_B_8: begin
+
+        //choose which argument gets incremented
+        if(op == `INCR_A_8) T = A;
+        else                T = B;
+
+        //perform the increment in a ripple carry fashion
+        {lower_carry_out, lower_sum} = T[((w-1)/2):0] + 1;
+        {upper_carry_out, upper_sum} = T[(w-1):(w/2)] + lower_carry_out;
+        C = {upper_sum, lower_sum};
+
+        //H flag is set when carry from bit 3
+        F_out[`H_flag] = (lower_carry_out) ? 1 : 0;
+
+        //S flag is set when result is negative, otherwise reset
+        F_out[`S_flag] = C[(w-1)] ? 1 : 0;
+
+        //Z flag is set when result is 0, otherwise reset
+        F_out[`Z_flag] = (C == 0) ? 1 : 0;
+
+        //PV flag is set when there is overflow, which occurs when
+        //output changes the MSB of the accumulator
+        F_out[`PV_flag] = (C[w-1] & ~T[w-1]) ? 1 : 0;
+
+        //N is reset
+        F_out[`N_flag] = 0;
+      end
+
+      //TODO:
+      `INCR_A_16: begin
         C = A + 1;
       end
 
+      //TODO: Distinguish this operation from the BC decrement operation
       `DECR_A: begin
         C = A - 1;
 

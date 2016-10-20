@@ -26,7 +26,7 @@ while (my $line = <$in_fh>) {
       $line .= $whitespace."ld_PCL    = 1;\n";
       $line .= $whitespace."drive_PCH = 1;\n";
       $line .= $whitespace."drive_PCL = 1;\n";
-      $line .= $whitespace."alu_op    = `INCR_A;\n";
+      $line .= $whitespace."alu_op    = `INCR_A_16;\n";
       $line .= $whitespace."drive_reg_addr = 1;\n";
       $line .= $whitespace."drive_alu_addr = 1;\n";
     }
@@ -319,12 +319,57 @@ while (my $line = <$in_fh>) {
 
     }
 
+    elsif($macro =~/8_INC (.*)\s*/) {
+
+      $line = '';
+      my $reg = $1;
+      $line .= $whitespace."drive_reg_data = 1;\n";
+      $line .= $whitespace."drive_alu_data = 1;\n";
+
+      if($reg eq 'A') {
+        $line .= $whitespace."drive_A = 1;\n";
+        $line .= $whitespace."ld_A    = 1;\n";
+        $line .= $whitespace."alu_op  = `INCR_A_8;\n";
+      }
+      elsif($reg eq 'B') {
+        $line .= $whitespace."drive_B = 1;\n";
+        $line .= $whitespace."ld_B    = 1;\n";
+        $line .= $whitespace."alu_op  = `INCR_B_8;\n";
+      }
+      elsif($reg eq 'C') {
+        $line .= $whitespace."drive_C = 1;\n";
+        $line .= $whitespace."ld_C    = 1;\n";
+        $line .= $whitespace."alu_op  = `INCR_B_8;\n";
+      }
+      elsif($reg eq 'D') {
+        $line .= $whitespace."drive_D = 1;\n";
+        $line .= $whitespace."ld_D    = 1;\n";
+        $line .= $whitespace."alu_op  = `INCR_B_8;\n";
+      }
+      elsif($reg eq 'E') {
+        $line .= $whitespace."drive_E = 1;\n";
+        $line .= $whitespace."ld_E    = 1;\n";
+        $line .= $whitespace."alu_op  = `INCR_B_8;\n";
+      }
+      elsif($reg eq 'H') {
+        $line .= $whitespace."drive_H = 1;\n";
+        $line .= $whitespace."ld_H    = 1;\n";
+        $line .= $whitespace."alu_op  = `INCR_B_8;\n";
+      }
+      elsif($reg eq 'L') {
+        $line .= $whitespace."drive_L = 1;\n";
+        $line .= $whitespace."ld_L    = 1;\n";
+        $line .= $whitespace."alu_op  = `INCR_B_8;\n";
+      }
+    }
+
+
     elsif($macro =~/16_INC (.*)\s*/) {
 
       $line = '';
       my $reg = $1;
       $line .= $whitespace."drive_alu_addr = 1;\n";
-      $line .= $whitespace."alu_op = `INCR_A;\n";
+      $line .= $whitespace."alu_op         = `INCR_A_16;\n";
       $line .= $whitespace."drive_reg_addr = 1;\n";
 
       if($reg eq 'BC') {
