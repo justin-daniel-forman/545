@@ -4811,6 +4811,10 @@ module decoder (
         ld_PCH           = 1;
         ld_F_addr = 0;
         unique case(op0)
+          8'h38: begin
+            ld_PCH = flags[0];
+            ld_PCL = flags[0];
+          end
           8'h30: begin
             ld_PCH = !flags[0];
             ld_PCL = !flags[0];
