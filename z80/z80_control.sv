@@ -1017,6 +1017,26 @@ module decoder (
     ADC_A_IY_d_9,
     ADC_A_IY_d_10,
 
+    INC_r_0,
+
+    INC_HL_0,
+    INC_HL_1,
+    INC_HL_2,
+    INC_HL_3,
+    INC_HL_4,
+    INC_HL_5,
+    INC_HL_6,
+
+
+    CPL_0,
+
+    CCF_0,
+
+    SCF_0,
+
+    NOP_0,
+
+
     JP_nn_0,
     JP_nn_1,
     JP_nn_2,
@@ -1039,17 +1059,6 @@ module decoder (
     JR_e_5,
     JR_e_6,
     JR_e_7,
-
-    INC_r_0,
-
-
-    CPL_0,
-
-    CCF_0,
-
-    SCF_0,
-
-    NOP_0,
 
     //Multi-OCF Instructions
     //There is a difference between multi-ocf instructions and
@@ -1126,7 +1135,7 @@ module decoder (
           `EXX:       next_state = EXX_0;
           `ADD_A_r:   next_state = (op0[2:0] != 3'b110) ? ADD_A_r_0 : FETCH_3;
           `ADC_A_r:   next_state = (op0[2:0] != 3'b110) ? ADC_A_r_0 : FETCH_3;
-          `INC_r:     next_state = INC_r_0;
+          `INC_r:     next_state = (op0[5:3] != 3'b110) ? INC_r_0   : FETCH_3;
           `CPL:       next_state = CPL_0;
           `CCF:       next_state = CCF_0;
           `SCF:       next_state = SCF_0;
@@ -1151,6 +1160,7 @@ module decoder (
             `LD_dd_nn:  next_state = LD_dd_nn_0;
             `POP_qq:    next_state = POP_qq_0;
             `PUSH_qq:   next_state = PUSH_qq_0;
+            `INC_HL:    next_state = INC_HL_0;
             default:    next_state = FETCH_0;
           endcase
         end
@@ -1884,6 +1894,15 @@ module decoder (
 
       //INC_r
       INC_r_0: next_state = FETCH_0;
+
+      //INC_HL
+      INC_HL_0: next_state = INC_HL_1;
+      INC_HL_1: next_state = INC_HL_2;
+      INC_HL_2: next_state = INC_HL_3;
+      INC_HL_3: next_state = INC_HL_4;
+      INC_HL_4: next_state = INC_HL_5;
+      INC_HL_5: next_state = INC_HL_6;
+      INC_HL_6: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END 8-bit arithmetic group
@@ -4604,6 +4623,52 @@ module decoder (
             alu_op  = `INCR_B_8;
           end
         endcase
+      end
+
+      INC_HL_0: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_H = 1;
+        drive_L = 1;
+        MRD_start = 1;
+        MRD_bus   = 1;
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
+      INC_HL_1: begin
+        drive_MAR = 1;
+        MRD_bus = 1;
+      end
+
+      INC_HL_2: begin
+        ld_STRH = 1;
+      end
+
+      INC_HL_3: begin
+        ld_F_data = 1;
+        set_N = 2'b10;
+        drive_reg_data = 1;
+        drive_alu_data = 1;
+        drive_STRH = 1;
+        ld_STRH    = 1;
+        alu_op     = `INCR_B_8;
+      end
+
+      INC_HL_4: begin
+        drive_STRH = 1;
+        drive_reg_data = 1;
+        MWR_start = 1;
+        MWR_bus   = 1;
+        drive_MAR = 1;
+      end
+
+      INC_HL_5: begin
+        drive_STRH = 1;
+        drive_reg_data = 1;
+        MWR_bus = 1;
+        drive_MAR = 1;
       end
 
       //-----------------------------------------------------------------------

@@ -192,6 +192,12 @@ while (my $line = <$in_fh>) {
       } elsif( $reg eq 'SPL') {
         $line .= $whitespace."drive_SPL = 1;\n";
         $line .= $whitespace."drive_reg_data = 1;\n";
+      } elsif( $reg eq 'STRH') {
+        $line .= $whitespace."drive_STRH = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      } elsif( $reg eq 'STRL') {
+        $line .= $whitespace."drive_STRL = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
       }
     }
 
@@ -421,6 +427,16 @@ while (my $line = <$in_fh>) {
         $line .= $whitespace."drive_L = 1;\n";
         $line .= $whitespace."ld_L    = 1;\n";
         $line .= $whitespace."alu_op  = `INCR_B_8;\n";
+      }
+      elsif($reg eq 'STRH') {
+        $line .= $whitespace."drive_STRH = 1;\n";
+        $line .= $whitespace."ld_STRH    = 1;\n";
+        $line .= $whitespace."alu_op     = `INCR_B_8;\n";
+      }
+      elsif($reg eq 'STRL') {
+        $line .= $whitespace."drive_STRL = 1;\n";
+        $line .= $whitespace."ld_STRL    = 1;\n";
+        $line .= $whitespace."alu_op     = `INCR_B_8;\n";
       }
     }
 
