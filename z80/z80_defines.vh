@@ -67,6 +67,8 @@
 
 `define INC_r       8'b00???100
 `define INC_HL      8'h34
+`define INC_IX_d    8'h34
+`define INC_IY_d    8'h34
 
 `define CPL         8'h2F
 `define CCF         8'h3F
