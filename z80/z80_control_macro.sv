@@ -610,6 +610,11 @@ module decoder (
 
     MACRO_DEFINE_STATES ADC_A_IY_d 11
 
+    MACRO_DEFINE_STATES JP_nn 6
+
+    MACRO_DEFINE_STATES JP_cc_nn 6
+
+    MACRO_DEFINE_STATES JR_e 8
 
     MACRO_DEFINE_STATES INC_r 1
 
@@ -756,6 +761,14 @@ module decoder (
             `EX_SP_HL:   next_state = EX_SP_HL_0;
             `PUSH_qq:    next_state = PUSH_qq_0;
             `POP_qq:     next_state = POP_qq_0;
+
+            `JP_nn:      next_state = JP_nn_0;
+            `JP_cc_nn:   next_state = JP_cc_nn_0;
+            `JR_e:       next_state = JR_e_0;
+            `JR_C_e:     next_state = JR_e_0;
+            `JR_NC_e:    next_state = JR_e_0;
+            `JR_Z_e:     next_state = JR_e_0;
+            `JR_NZ_e:    next_state = JR_e_0;
             default:     next_state = FETCH_0;
           endcase
         end
@@ -1049,6 +1062,12 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN Jump group
       //-----------------------------------------------------------------------
+
+      MACRO_ENUM_STATES JP_nn 6
+
+      MACRO_ENUM_STATES JP_cc_nn 6
+
+      MACRO_ENUM_STATES JR_e 8
 
       //-----------------------------------------------------------------------
       //END Jump group
@@ -3244,6 +3263,128 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN Jump group
       //-----------------------------------------------------------------------
+
+      //JP_nn
+      JP_nn_0: begin
+        MACRO_READ_0
+        MACRO_16_INC PC
+      end
+
+      JP_nn_1: begin
+        MACRO_READ_1
+        MACRO_16_DRIVE PC
+      end
+
+      JP_nn_2: begin
+        MACRO_16_DRIVE PC
+        alu_op = `INCR_A_16;
+        ld_MARH = 1;
+        ld_MARL = 1;
+        ld_PCL = 1;
+      end
+
+      JP_nn_3: begin
+        MACRO_READ_0
+        drive_MAR = 1;
+      end
+
+      JP_nn_4: begin
+        MACRO_READ_1
+        drive_MAR = 1;
+      end
+
+      JP_nn_5: begin
+        ld_PCH = 1;
+      end
+
+      //JP_cc_nn
+      JP_cc_nn_0: begin
+        MACRO_READ_0
+        MACRO_16_INC PC
+      end
+
+      JP_cc_nn_1: begin
+        MACRO_READ_1
+        MACRO_16_DRIVE PC
+      end
+
+      JP_cc_nn_2: begin
+        MACRO_16_DRIVE PC
+        alu_op = `INCR_A_16;
+        ld_MARH = 1;
+        ld_MARL = 1;
+        case(op0[5:3])
+          000: ld_PCL = !flags[6];
+          001: ld_PCL = flags[6];
+          010: ld_PCL = !flags[0];
+          011: ld_PCL = flags[0];
+          100: ld_PCL = !flags[2];
+          101: ld_PCL = flags[2];
+          110: ld_PCL = !flags[7];
+          111: ld_PCL = flags[7];
+        endcase
+      end
+
+      JP_cc_nn_3: begin
+        MACRO_READ_0
+        drive_MAR = 1;
+      end
+
+      JP_cc_nn_4: begin
+        MACRO_READ_1
+        drive_MAR = 1;
+      end
+
+      JP_cc_nn_5: begin
+        case(op0[5:3])
+          000: ld_PCH = !flags[6];
+          001: ld_PCH = flags[6];
+          010: ld_PCH = !flags[0];
+          011: ld_PCH = flags[0];
+          100: ld_PCH = !flags[2];
+          101: ld_PCH = flags[2];
+          110: ld_PCH = !flags[7];
+          111: ld_PCH = flags[7];
+        endcase
+      end
+
+      //JR_e,JR_C_e,JR_NC_e,JR_Z_e,JR_NZ_e
+      JR_e_0: begin
+        MACRO_READ_0
+        MACRO_16_INC PC
+      end
+
+      JR_e_1: begin
+        MACRO_READ_1
+        MACRO_16_DRIVE PC
+      end
+
+      JR_e_2: begin
+        ld_TEMP = 1;
+      end
+
+      JR_e_3: begin
+        MACRO_16_ADD PC
+        ld_F_addr = 0;
+        unique case(op0)
+          8'h30: begin
+            ld_PCH = !flags[0];
+            ld_PCL = !flags[0];
+          end
+          8'h28: begin
+            ld_PCH = flags[6];
+            ld_PCL = flags[6];
+          end
+          8'h20: begin
+            ld_PCH = !flags[6];
+            ld_PCL = !flags[6];
+          end
+          8'h18: begin
+            ld_PCH = 1;
+            ld_PCL = 1;
+          end
+        endcase
+      end
 
       //-----------------------------------------------------------------------
       //END Jump group

@@ -1017,6 +1017,28 @@ module decoder (
     ADC_A_IY_d_9,
     ADC_A_IY_d_10,
 
+    JP_nn_0,
+    JP_nn_1,
+    JP_nn_2,
+    JP_nn_3,
+    JP_nn_4,
+    JP_nn_5,
+
+    JP_cc_nn_0,
+    JP_cc_nn_1,
+    JP_cc_nn_2,
+    JP_cc_nn_3,
+    JP_cc_nn_4,
+    JP_cc_nn_5,
+
+    JR_e_0,
+    JR_e_1,
+    JR_e_2,
+    JR_e_3,
+    JR_e_4,
+    JR_e_5,
+    JR_e_6,
+    JR_e_7,
 
     INC_r_0,
 
@@ -1163,6 +1185,14 @@ module decoder (
             `EX_SP_HL:   next_state = EX_SP_HL_0;
             `PUSH_qq:    next_state = PUSH_qq_0;
             `POP_qq:     next_state = POP_qq_0;
+
+            `JP_nn:      next_state = JP_nn_0;
+            `JP_cc_nn:   next_state = JP_cc_nn_0;
+            `JR_e:       next_state = JR_e_0;
+            `JR_C_e:     next_state = JR_e_0;
+            `JR_NC_e:    next_state = JR_e_0;
+            `JR_Z_e:     next_state = JR_e_0;
+            `JR_NZ_e:    next_state = JR_e_0;
             default:     next_state = FETCH_0;
           endcase
         end
@@ -1898,6 +1928,32 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN Jump group
       //-----------------------------------------------------------------------
+
+      //JP_nn
+      JP_nn_0: next_state = JP_nn_1;
+      JP_nn_1: next_state = JP_nn_2;
+      JP_nn_2: next_state = JP_nn_3;
+      JP_nn_3: next_state = JP_nn_4;
+      JP_nn_4: next_state = JP_nn_5;
+      JP_nn_5: next_state = FETCH_0;
+
+      //JP_cc_nn
+      JP_cc_nn_0: next_state = JP_cc_nn_1;
+      JP_cc_nn_1: next_state = JP_cc_nn_2;
+      JP_cc_nn_2: next_state = JP_cc_nn_3;
+      JP_cc_nn_3: next_state = JP_cc_nn_4;
+      JP_cc_nn_4: next_state = JP_cc_nn_5;
+      JP_cc_nn_5: next_state = FETCH_0;
+
+      //JR_e
+      JR_e_0: next_state = JR_e_1;
+      JR_e_1: next_state = JR_e_2;
+      JR_e_2: next_state = JR_e_3;
+      JR_e_3: next_state = JR_e_4;
+      JR_e_4: next_state = JR_e_5;
+      JR_e_5: next_state = JR_e_6;
+      JR_e_6: next_state = JR_e_7;
+      JR_e_7: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END Jump group
@@ -4602,6 +4658,178 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN Jump group
       //-----------------------------------------------------------------------
+
+      //JP_nn
+      JP_nn_0: begin
+        MRD_start = 1;
+        MRD_bus   = 1;
+        drive_alu_addr = 1;
+        alu_op         = `INCR_A_16;
+        drive_reg_addr = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        ld_PCH    = 1;
+        ld_PCL    = 1;
+      end
+
+      JP_nn_1: begin
+        MRD_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+      end
+
+      JP_nn_2: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        alu_op = `INCR_A_16;
+        ld_MARH = 1;
+        ld_MARL = 1;
+        ld_PCL = 1;
+      end
+
+      JP_nn_3: begin
+        MRD_start = 1;
+        MRD_bus   = 1;
+        drive_MAR = 1;
+      end
+
+      JP_nn_4: begin
+        MRD_bus = 1;
+        drive_MAR = 1;
+      end
+
+      JP_nn_5: begin
+        ld_PCH = 1;
+      end
+
+      //JP_cc_nn
+      JP_cc_nn_0: begin
+        MRD_start = 1;
+        MRD_bus   = 1;
+        drive_alu_addr = 1;
+        alu_op         = `INCR_A_16;
+        drive_reg_addr = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        ld_PCH    = 1;
+        ld_PCL    = 1;
+      end
+
+      JP_cc_nn_1: begin
+        MRD_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+      end
+
+      JP_cc_nn_2: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        alu_op = `INCR_A_16;
+        ld_MARH = 1;
+        ld_MARL = 1;
+        case(op0[5:3])
+          000: ld_PCL = !flags[6];
+          001: ld_PCL = flags[6];
+          010: ld_PCL = !flags[0];
+          011: ld_PCL = flags[0];
+          100: ld_PCL = !flags[2];
+          101: ld_PCL = flags[2];
+          110: ld_PCL = !flags[7];
+          111: ld_PCL = flags[7];
+        endcase
+      end
+
+      JP_cc_nn_3: begin
+        MRD_start = 1;
+        MRD_bus   = 1;
+        drive_MAR = 1;
+      end
+
+      JP_cc_nn_4: begin
+        MRD_bus = 1;
+        drive_MAR = 1;
+      end
+
+      JP_cc_nn_5: begin
+        case(op0[5:3])
+          000: ld_PCH = !flags[6];
+          001: ld_PCH = flags[6];
+          010: ld_PCH = !flags[0];
+          011: ld_PCH = flags[0];
+          100: ld_PCH = !flags[2];
+          101: ld_PCH = flags[2];
+          110: ld_PCH = !flags[7];
+          111: ld_PCH = flags[7];
+        endcase
+      end
+
+      //JR_e,JR_C_e,JR_NC_e,JR_Z_e,JR_NZ_e
+      JR_e_0: begin
+        MRD_start = 1;
+        MRD_bus   = 1;
+        drive_alu_addr = 1;
+        alu_op         = `INCR_A_16;
+        drive_reg_addr = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        ld_PCH    = 1;
+        ld_PCL    = 1;
+      end
+
+      JR_e_1: begin
+        MRD_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+      end
+
+      JR_e_2: begin
+        ld_TEMP = 1;
+      end
+
+      JR_e_3: begin
+        ld_F_addr      = 1;
+        drive_alu_addr = 1;
+        alu_op         = `ADD_SE_B;
+        drive_reg_addr = 1;
+        drive_PCL        = 1;
+        drive_PCH        = 1;
+        ld_PCL           = 1;
+        ld_PCH           = 1;
+        ld_F_addr = 0;
+        unique case(op0)
+          8'h30: begin
+            ld_PCH = !flags[0];
+            ld_PCL = !flags[0];
+          end
+          8'h28: begin
+            ld_PCH = flags[6];
+            ld_PCL = flags[6];
+          end
+          8'h20: begin
+            ld_PCH = !flags[6];
+            ld_PCL = !flags[6];
+          end
+          8'h18: begin
+            ld_PCH = 1;
+            ld_PCL = 1;
+          end
+        endcase
+      end
 
       //-----------------------------------------------------------------------
       //END Jump group

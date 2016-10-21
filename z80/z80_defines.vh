@@ -72,6 +72,14 @@
 `define SCF         8'h37
 `define NOP         8'h00
 
+`define JP_nn       8'hC3
+`define JP_cc_nn    8'b11???010
+`define JR_e        8'h18
+`define JR_C_e      8'h38
+`define JR_NC_e     8'h30
+`define JR_Z_e      8'h28
+`define JR_NZ_e     8'h20
+
 //flags
 `define PV_flag   2
 `define C_flag    0
