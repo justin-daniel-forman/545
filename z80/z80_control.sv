@@ -4802,7 +4802,6 @@ module decoder (
       end
 
       JR_e_3: begin
-        ld_F_addr      = 1;
         drive_alu_addr = 1;
         alu_op         = `ADD_SE_B;
         drive_reg_addr = 1;

@@ -3364,7 +3364,7 @@ module decoder (
       end
 
       JR_e_3: begin
-        MACRO_16_ADD PC
+        MACRO_16_ADD_SE_B PC
         ld_F_addr = 0;
         unique case(op0)
           8'h30: begin

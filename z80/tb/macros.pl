@@ -195,11 +195,10 @@ while (my $line = <$in_fh>) {
       }
     }
 
-    elsif($macro =~/16_ADD (.*)\s*/) {
+    elsif($macro =~/16_ADD_SE_B (.*)\s*/) {
       $line = '';
       my $reg = $1;
 
-      $line .= $whitespace."ld_F_addr      = 1;\n";
       $line .= $whitespace."drive_alu_addr = 1;\n";
       $line .= $whitespace."alu_op         = `ADD_SE_B;\n";
       $line .= $whitespace."drive_reg_addr = 1;\n";
