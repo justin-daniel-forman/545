@@ -85,7 +85,7 @@ module control_logic (
 
   output  logic         drive_A,
   output  logic         drive_F,
-  output  logic [3:0]   alu_op,
+  output  logic [4:0]   alu_op,
   output  logic         drive_alu_data, //8bit drive
   output  logic         drive_alu_addr, //16bit drive
 
@@ -429,7 +429,7 @@ module decoder (
   output  logic         ld_F_addr,      //16bit load
   output  logic         drive_A,
   output  logic         drive_F,
-  output  logic [3:0]   alu_op,
+  output  logic [4:0]   alu_op,
   output  logic         drive_alu_data, //8bit drive
   output  logic         drive_alu_addr, //16bit drive
   output  logic [1:0]   set_S,

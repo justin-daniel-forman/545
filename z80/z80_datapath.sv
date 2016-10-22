@@ -71,7 +71,7 @@ module datapath (
   input  logic         drive_F,
 
   //ALU drives and controls
-  input  logic [3:0]   alu_op,
+  input  logic [4:0]   alu_op,
   input  logic         drive_alu_data, //8bit drive
   input  logic         drive_alu_addr, //16bit drive
 
@@ -483,7 +483,7 @@ module alu #(parameter w = 8)(
   //---------------------------------------------------------------------------
   input   logic [w-1:0] A,
   input   logic [w-1:0] B, //B stands for Bus
-  input   logic [3:0] op,
+  input   logic [4:0] op,
   input   logic [7:0] F_in,
   output  logic [w-1:0] C,
   output  logic [7:0] F_out

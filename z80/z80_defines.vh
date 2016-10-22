@@ -110,17 +110,17 @@
 //TODO: SUB MIGHT NEED TO BE SPLIT INTO CPI AND SUB
 
 //ALU commands
-`define INCR_A_8  4'h1
-`define INCR_B_8  4'h2
-`define INCR_A_16 4'h3
-`define DECR_A    4'h4
-`define ALU_NOP   4'h5
-`define ADD       4'h6
-`define ADD_SE_B  4'h7
-`define ALU_B     4'h8
-`define SUB       4'h9
-`define ADC       4'ha
-`define ALU_CCF   4'hb
-`define ALU_CPL   4'hc
-`define AND       4'hd
-`define OR        4'he
+`define INCR_A_8  5'h1
+`define INCR_B_8  5'h2
+`define INCR_A_16 5'h3
+`define DECR_A    5'h4
+`define ALU_NOP   5'h5
+`define ADD       5'h6
+`define ADD_SE_B  5'h7
+`define ALU_B     5'h8
+`define SUB       5'h9
+`define ADC       5'ha
+`define ALU_CCF   5'hb
+`define ALU_CPL   5'hc
+`define AND       5'hd
+`define OR        5'he
