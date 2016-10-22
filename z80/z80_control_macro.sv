@@ -610,21 +610,17 @@ module decoder (
 
     MACRO_DEFINE_STATES ADC_A_IY_d 11
 
-    MACRO_DEFINE_STATES JP_nn 6
 
-    MACRO_DEFINE_STATES JP_cc_nn 6
+    MACRO_DEFINE_STATES AND_r 1
 
-    MACRO_DEFINE_STATES JR_e 8
-
-    MACRO_DEFINE_STATES CALL_nn 13
-
-    MACRO_DEFINE_STATES CALL_cc_nn 13
-
-    MACRO_DEFINE_STATES RET 6
-
-    MACRO_DEFINE_STATES RET_cc 7
-
+    
     MACRO_DEFINE_STATES INC_r 1
+
+    MACRO_DEFINE_STATES INC_HL 7
+
+    MACRO_DEFINE_STATES INC_IX_d 15
+
+    MACRO_DEFINE_STATES INC_IY_d 15
 
     MACRO_DEFINE_STATES CPL 1
 
@@ -634,7 +630,23 @@ module decoder (
 
     MACRO_DEFINE_STATES NOP 1
 
-    //Multi-OCF Instructions
+
+    MACRO_DEFINE_STATES JP_nn 6
+
+    MACRO_DEFINE_STATES JP_cc_nn 6
+
+    MACRO_DEFINE_STATES JR_e 8
+
+
+    MACRO_DEFINE_STATES CALL_nn 13
+
+    MACRO_DEFINE_STATES CALL_cc_nn 13
+
+    MACRO_DEFINE_STATES RET 6
+
+    MACRO_DEFINE_STATES RET_cc 7
+
+    //Mult-OCF Instructions
     //There is a difference between multi-ocf instructions and
     //instructions that require an operand data fetch. In an
     //odf, the fetched byte encodes parameters, not the instruction
@@ -709,7 +721,8 @@ module decoder (
           `EXX:       next_state = EXX_0;
           `ADD_A_r:   next_state = (op0[2:0] != 3'b110) ? ADD_A_r_0 : FETCH_3;
           `ADC_A_r:   next_state = (op0[2:0] != 3'b110) ? ADC_A_r_0 : FETCH_3;
-          `INC_r:     next_state = INC_r_0;
+          `AND_r:     next_state = (op0[2:0] != 3'b110) ? AND_r_0   : FETCH_3;
+          `INC_r:     next_state = (op0[5:3] != 3'b110) ? INC_r_0   : FETCH_3;
           `CPL:       next_state = CPL_0;
           `CCF:       next_state = CCF_0;
           `SCF:       next_state = SCF_0;
@@ -734,6 +747,7 @@ module decoder (
             `LD_dd_nn:  next_state = LD_dd_nn_0;
             `POP_qq:    next_state = POP_qq_0;
             `PUSH_qq:   next_state = PUSH_qq_0;
+            `INC_HL:    next_state = INC_HL_0;
             default:    next_state = FETCH_0;
           endcase
         end
@@ -846,10 +860,14 @@ module decoder (
           `POP_IX:      next_state = (op0[7:4] == 4'hD) ?  POP_IX_0   : POP_IY_0;
           `POP_IY:      next_state = (op0[7:4] == 4'hF) ?  POP_IY_0   : POP_IX_0;
           `ADD_A_IX_d:  next_state = (op0[7:4] == 4'hD) ?  ADD_A_IX_d_0 : ADD_A_IY_d_0;
-          `ADD_A_IY_d:  next_state = (op0[7:4] == 4'hF) ?  ADD_A_IY_d_0 : ADD_A_IY_d_0;
+          `ADD_A_IY_d:  next_state = (op0[7:4] == 4'hF) ?  ADD_A_IY_d_0 : ADD_A_IX_d_0;
           `ADC_A_IX_d:  next_state = (op0[7:4] == 4'hD) ?  ADC_A_IX_d_0 : ADC_A_IY_d_0;
-          `ADC_A_IY_d:  next_state = (op0[7:4] == 4'hF) ?  ADC_A_IY_d_0 : ADC_A_IY_d_0;
-          default:      next_state = FETCH_0;
+          `ADC_A_IY_d:  next_state = (op0[7:4] == 4'hF) ?  ADC_A_IY_d_0 : ADC_A_IX_d_0;
+
+          `INC_IX_d:    next_state = (op0[7:4] == 4'hD) ?  INC_IX_d_0 : INC_IY_d_0;
+          `INC_IY_d:    next_state = (op0[7:4] == 4'hF) ?  INC_IY_d_0 : INC_IX_d_0;
+
+           default:      next_state = FETCH_0;
         endcase
       end
 
@@ -1031,7 +1049,16 @@ module decoder (
       MACRO_ENUM_STATES ADC_A_IY_d 11
 
 
+      MACRO_ENUM_STATES AND_r 1
+
+
       MACRO_ENUM_STATES INC_r 1
+
+      MACRO_ENUM_STATES INC_HL 7
+
+      MACRO_ENUM_STATES INC_IX_d 15
+
+      MACRO_ENUM_STATES INC_IY_d 15
 
       //-----------------------------------------------------------------------
       //END 8-bit arithmetic group
@@ -3238,6 +3265,39 @@ module decoder (
         MACRO_RESET N
       end
 
+      //AND r
+      AND_r_0: begin
+        ld_F_data = 1;
+        MACRO_SET H
+        MACRO_RESET N
+        MACRO_RESET C
+
+        unique case(op0[2:0])
+          3'b111: begin
+            MACRO_8_AND A
+          end
+          3'b000: begin
+            MACRO_8_AND B
+          end
+          3'b001: begin
+            MACRO_8_AND C
+          end
+          3'b010: begin
+            MACRO_8_AND D
+          end
+          3'b011: begin
+            MACRO_8_AND E
+          end
+          3'b100: begin
+            MACRO_8_AND H
+          end
+          3'b101: begin
+            MACRO_8_AND L
+          end
+
+        endcase
+      end
+
       //INC r
       INC_r_0: begin
         ld_F_data = 1;
@@ -3266,6 +3326,99 @@ module decoder (
             MACRO_8_INC L
           end
         endcase
+      end
+
+      INC_HL_0: begin
+        MACRO_16_DRIVE HL
+        MACRO_READ_0
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
+      INC_HL_1: begin
+        drive_MAR = 1;
+        MACRO_READ_1
+      end
+
+      INC_HL_2: begin
+        ld_STRH = 1;
+      end
+
+      INC_HL_3: begin
+        ld_F_data = 1;
+        MACRO_RESET N
+        MACRO_8_INC STRH
+      end
+
+      INC_HL_4: begin
+        MACRO_8_DRIVE STRH
+        MACRO_WRITE_0
+        drive_MAR = 1;
+      end
+
+      INC_HL_5: begin
+        MACRO_8_DRIVE STRH
+        MACRO_WRITE_1
+        drive_MAR = 1;
+      end
+
+      //INC (IX+d), INC (IY+d)
+      INC_IX_d_0, INC_IY_d_0: begin
+        MACRO_READ_0
+        MACRO_16_INC PC
+      end
+
+      INC_IX_d_1, INC_IY_d_1: begin
+        MACRO_READ_1
+        MACRO_16_DRIVE PC
+      end
+
+      INC_IX_d_2, INC_IY_d_2: begin
+        ld_TEMP = 1;
+      end
+
+      INC_IX_d_3, INC_IY_d_3: begin
+        alu_op = `ADD_SE_B;
+        drive_IXH = (state == INC_IX_d_3);
+        drive_IXL = (state == INC_IX_d_3);
+        drive_IYH = (state == INC_IY_d_3);
+        drive_IYL = (state == INC_IY_d_3);
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        ld_MARH = 1;
+        ld_MARL = 1;
+      end
+
+      INC_IX_d_8, INC_IY_d_8: begin
+        drive_MAR = 1;
+        MACRO_READ_0
+      end
+
+      INC_IX_d_9, INC_IY_d_9: begin
+        drive_MAR = 1;
+        MACRO_READ_1
+      end
+
+      INC_IX_d_10, INC_IY_d_10: begin
+        ld_STRH = 1;
+      end
+
+      INC_IX_d_11, INC_IY_d_11: begin
+        ld_F_data = 1;
+        MACRO_RESET N
+        MACRO_8_INC STRH
+      end
+
+      INC_IX_d_12, INC_IY_d_12: begin
+        MACRO_8_DRIVE STRH
+        MACRO_WRITE_0
+        drive_MAR = 1;
+      end
+
+      INC_IX_d_13, INC_IY_d_13: begin
+        MACRO_8_DRIVE STRH
+        MACRO_WRITE_1
+        drive_MAR = 1;
       end
 
       //-----------------------------------------------------------------------
