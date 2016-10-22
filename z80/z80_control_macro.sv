@@ -610,6 +610,10 @@ module decoder (
 
     MACRO_DEFINE_STATES ADC_A_IY_d 11
 
+
+    MACRO_DEFINE_STATES AND_r 1
+
+
     MACRO_DEFINE_STATES INC_r 1
 
     MACRO_DEFINE_STATES INC_HL 7
@@ -709,6 +713,7 @@ module decoder (
           `EXX:       next_state = EXX_0;
           `ADD_A_r:   next_state = (op0[2:0] != 3'b110) ? ADD_A_r_0 : FETCH_3;
           `ADC_A_r:   next_state = (op0[2:0] != 3'b110) ? ADC_A_r_0 : FETCH_3;
+          `AND_r:     next_state = (op0[2:0] != 3'b110) ? AND_r_0   : FETCH_3;
           `INC_r:     next_state = (op0[5:3] != 3'b110) ? INC_r_0   : FETCH_3;
           `CPL:       next_state = CPL_0;
           `CCF:       next_state = CCF_0;
@@ -1031,6 +1036,9 @@ module decoder (
       MACRO_ENUM_STATES ADC_A_IX_d 11
 
       MACRO_ENUM_STATES ADC_A_IY_d 11
+
+
+      MACRO_ENUM_STATES AND_r 1
 
 
       MACRO_ENUM_STATES INC_r 1
@@ -3197,6 +3205,39 @@ module decoder (
         endcase
 
         MACRO_RESET N
+      end
+
+      //AND r
+      AND_r_0: begin
+        ld_F_data = 1;
+        MACRO_SET H
+        MACRO_RESET N
+        MACRO_RESET C
+
+        unique case(op0[2:0])
+          3'b111: begin
+            MACRO_8_AND A
+          end
+          3'b000: begin
+            MACRO_8_AND B
+          end
+          3'b001: begin
+            MACRO_8_AND C
+          end
+          3'b010: begin
+            MACRO_8_AND D
+          end
+          3'b011: begin
+            MACRO_8_AND E
+          end
+          3'b100: begin
+            MACRO_8_AND H
+          end
+          3'b101: begin
+            MACRO_8_AND L
+          end
+
+        endcase
       end
 
       //INC r

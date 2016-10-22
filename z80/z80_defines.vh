@@ -65,6 +65,8 @@
 `define ADC_A_IX_d  8'h8E
 `define ADC_A_IY_d  8'h8E
 
+`define AND_r       8'b10100???
+
 `define INC_r       8'b00???100
 `define INC_HL      8'h34
 `define INC_IX_d    8'h34
@@ -106,3 +108,4 @@
 `define ADC       4'ha
 `define ALU_CCF   4'hb
 `define ALU_CPL   4'hc
+`define AND       4'hd

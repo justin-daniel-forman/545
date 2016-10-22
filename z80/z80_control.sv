@@ -1017,6 +1017,10 @@ module decoder (
     ADC_A_IY_d_9,
     ADC_A_IY_d_10,
 
+
+    AND_r_0,
+
+
     INC_r_0,
 
     INC_HL_0,
@@ -1167,6 +1171,7 @@ module decoder (
           `EXX:       next_state = EXX_0;
           `ADD_A_r:   next_state = (op0[2:0] != 3'b110) ? ADD_A_r_0 : FETCH_3;
           `ADC_A_r:   next_state = (op0[2:0] != 3'b110) ? ADC_A_r_0 : FETCH_3;
+          `AND_r:     next_state = (op0[2:0] != 3'b110) ? AND_r_0   : FETCH_3;
           `INC_r:     next_state = (op0[5:3] != 3'b110) ? INC_r_0   : FETCH_3;
           `CPL:       next_state = CPL_0;
           `CCF:       next_state = CCF_0;
@@ -1926,6 +1931,10 @@ module decoder (
       ADC_A_IY_d_8: next_state = ADC_A_IY_d_9;
       ADC_A_IY_d_9: next_state = ADC_A_IY_d_10;
       ADC_A_IY_d_10: next_state = FETCH_0;
+
+
+      //AND_r
+      AND_r_0: next_state = FETCH_0;
 
 
       //INC_r
@@ -4635,6 +4644,73 @@ module decoder (
         endcase
 
         set_N = 2'b10;
+      end
+
+      //AND r
+      AND_r_0: begin
+        ld_F_data = 1;
+        set_H = 2'b11;
+        set_N = 2'b10;
+        set_C = 2'b10;
+
+        unique case(op0[2:0])
+          3'b111: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `AND;
+            drive_A        = 1;
+          end
+          3'b000: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `AND;
+            drive_B        = 1;
+            drive_reg_data = 1;
+          end
+          3'b001: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `AND;
+            drive_C        = 1;
+            drive_reg_data = 1;
+          end
+          3'b010: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `AND;
+            drive_D        = 1;
+            drive_reg_data = 1;
+          end
+          3'b011: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `AND;
+            drive_E        = 1;
+            drive_reg_data = 1;
+          end
+          3'b100: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `AND;
+            drive_H        = 1;
+            drive_reg_data = 1;
+          end
+          3'b101: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `AND;
+            drive_L        = 1;
+            drive_reg_data = 1;
+          end
+
+        endcase
       end
 
       //INC r
