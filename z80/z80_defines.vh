@@ -95,6 +95,9 @@
 `define JR_NZ_e     8'h20
 
 `define CALL_nn		8'hCD
+`define CALL_cc_nn  8'b11???100
+`define RET			8'hC9
+`define RET_cc		8'b11???000
 
 //flags
 `define PV_flag   2

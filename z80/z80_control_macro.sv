@@ -641,7 +641,6 @@ module decoder (
 
     MACRO_DEFINE_STATES INC_IY_d 15
 
-
     MACRO_DEFINE_STATES CPL 1
 
     MACRO_DEFINE_STATES CCF 1
@@ -660,7 +659,13 @@ module decoder (
 
     MACRO_DEFINE_STATES CALL_nn 13
 
-    //Multi-OCF Instructions
+    MACRO_DEFINE_STATES CALL_cc_nn 13
+
+    MACRO_DEFINE_STATES RET 6
+
+    MACRO_DEFINE_STATES RET_cc 7
+
+    //Mult-OCF Instructions
     //There is a difference between multi-ocf instructions and
     //instructions that require an operand data fetch. In an
     //odf, the fetched byte encodes parameters, not the instruction
@@ -811,6 +816,9 @@ module decoder (
             `JR_Z_e:     next_state = JR_e_0;
             `JR_NZ_e:    next_state = JR_e_0;
             `CALL_nn:    next_state = CALL_nn_0;
+            `CALL_cc_nn: next_state = CALL_cc_nn_0;
+            `RET:        next_state = RET_0;
+            `RET_cc:     next_state = RET_cc_0;
             default:     next_state = FETCH_0;
           endcase
         end
@@ -1157,6 +1165,51 @@ module decoder (
       //-----------------------------------------------------------------------
 
       MACRO_ENUM_STATES CALL_nn 13
+
+      MACRO_ENUM_STATES_NR CALL_cc_nn 6
+
+      CALL_cc_nn_5: begin
+        unique case(op0[5:3])
+          3'b000: next_state = !flags[6] ? CALL_cc_nn_6 : FETCH_0;
+          3'b001: next_state =  flags[6] ? CALL_cc_nn_6 : FETCH_0;
+          3'b010: next_state = !flags[0] ? CALL_cc_nn_6 : FETCH_0;
+          3'b011: next_state =  flags[0] ? CALL_cc_nn_6 : FETCH_0;
+          3'b100: next_state = !flags[2] ? CALL_cc_nn_6 : FETCH_0;
+          3'b101: next_state =  flags[2] ? CALL_cc_nn_6 : FETCH_0;
+          3'b110: next_state = !flags[7] ? CALL_cc_nn_6 : FETCH_0;
+          3'b111: next_state =  flags[7] ? CALL_cc_nn_6 : FETCH_0;
+        endcase
+      end
+
+      CALL_cc_nn_6: next_state = CALL_cc_nn_7;
+      CALL_cc_nn_7: next_state = CALL_cc_nn_8;
+      CALL_cc_nn_8: next_state = CALL_cc_nn_9;
+      CALL_cc_nn_9: next_state = CALL_cc_nn_10;
+      CALL_cc_nn_10: next_state = CALL_cc_nn_11;
+      CALL_cc_nn_11: next_state = CALL_cc_nn_12;
+      CALL_cc_nn_12: next_state = FETCH_0;
+
+      MACRO_ENUM_STATES RET 6
+
+      RET_cc_0: begin
+        unique case(op0[5:3])
+          3'b000: next_state = !flags[6] ? RET_cc_1 : FETCH_0;
+          3'b001: next_state =  flags[6] ? RET_cc_1 : FETCH_0;
+          3'b010: next_state = !flags[0] ? RET_cc_1 : FETCH_0;
+          3'b011: next_state =  flags[0] ? RET_cc_1 : FETCH_0;
+          3'b100: next_state = !flags[2] ? RET_cc_1 : FETCH_0;
+          3'b101: next_state =  flags[2] ? RET_cc_1 : FETCH_0;
+          3'b110: next_state = !flags[7] ? RET_cc_1 : FETCH_0;
+          3'b111: next_state =  flags[7] ? RET_cc_1 : FETCH_0;
+        endcase
+      end
+
+      RET_cc_1: next_state = RET_cc_2;
+      RET_cc_2: next_state = RET_cc_3;
+      RET_cc_3: next_state = RET_cc_4;
+      RET_cc_4: next_state = RET_cc_5;
+      RET_cc_5: next_state = RET_cc_6;
+      RET_cc_6: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END Call and Return group
@@ -3872,6 +3925,134 @@ module decoder (
       CALL_nn_12: begin
         ld_PCL = 1;
         drive_MDR1 = 1;
+      end
+
+      //CALL_cc_nn
+      CALL_cc_nn_0,CALL_cc_nn_3: begin
+        MACRO_READ_0
+        MACRO_INC_PC
+      end
+
+      CALL_cc_nn_1,CALL_cc_nn_4: begin
+        MACRO_READ_1
+        MACRO_DRIVE_PC
+      end
+
+      CALL_cc_nn_2: begin
+        ld_MDR1 = 1;
+      end
+
+      CALL_cc_nn_5: begin
+        ld_MDR2 = 1;
+        if(next_state == CALL_cc_nn_6) begin
+          MACRO_16_DRIVE SP
+          alu_op = `DECR_A;
+          MACRO_16_LOAD SP
+          ld_MARH = 1;
+          ld_MARL = 1;
+        end
+      end
+
+      CALL_cc_nn_6: begin
+        drive_MAR = 1;
+        MACRO_WRITE_0
+        MACRO_8_DRIVE PCH
+      end
+
+      CALL_cc_nn_7: begin
+        drive_MAR = 1;
+        MACRO_WRITE_1
+        MACRO_8_DRIVE PCH
+      end
+
+      CALL_cc_nn_8: begin
+        ld_PCH = 1;
+        drive_MDR2 = 1;
+      end
+
+      CALL_cc_nn_9: begin
+        MACRO_16_DRIVE SP
+        alu_op = `DECR_A;
+        MACRO_16_LOAD SP
+        ld_MARH = 1;
+        ld_MARL = 1;
+      end
+
+      CALL_cc_nn_10: begin
+        MACRO_WRITE_0
+        MACRO_8_DRIVE PCL
+        drive_MAR = 1;
+      end
+
+      CALL_cc_nn_11: begin
+        MACRO_WRITE_1
+        MACRO_8_DRIVE PCL
+        drive_MAR = 1;
+      end
+
+      CALL_cc_nn_12: begin
+        ld_PCL = 1;
+        drive_MDR1 = 1;
+      end
+
+      //RET
+      RET_0: begin
+        MACRO_READ_0
+        MACRO_16_DRIVE SP
+      end
+
+      RET_1: begin
+        MACRO_READ_1
+        MACRO_16_DRIVE SP
+      end
+
+      RET_2: begin
+        ld_PCL = 1;
+      end
+
+      RET_3: begin
+        MACRO_READ_0
+        MACRO_16_INC SP
+      end
+
+      RET_4: begin
+        MACRO_READ_1
+        MACRO_16_DRIVE SP
+      end
+
+      RET_5: begin
+        ld_PCH = 1;
+        MACRO_16_INC SP
+      end
+
+      //RET_cc
+      RET_cc_1: begin
+        MACRO_READ_0
+        MACRO_16_DRIVE SP
+      end
+
+      RET_cc_2: begin
+        MACRO_READ_1
+        MACRO_16_DRIVE SP
+      end
+
+      RET_cc_3: begin
+        ld_PCL = 1;
+      end
+
+      RET_cc_4: begin
+        MACRO_READ_0
+        MACRO_16_INC SP
+      end
+
+      RET_cc_5: begin
+        MACRO_READ_1
+        MACRO_16_DRIVE SP
+      end
+
+      RET_cc_6: begin
+        ld_PCH = 1;
+        MACRO_16_INC SP
       end
 
       //-----------------------------------------------------------------------
