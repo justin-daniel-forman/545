@@ -1054,6 +1054,35 @@ module decoder (
     CALL_nn_11,
     CALL_nn_12,
 
+    CALL_cc_nn_0,
+    CALL_cc_nn_1,
+    CALL_cc_nn_2,
+    CALL_cc_nn_3,
+    CALL_cc_nn_4,
+    CALL_cc_nn_5,
+    CALL_cc_nn_6,
+    CALL_cc_nn_7,
+    CALL_cc_nn_8,
+    CALL_cc_nn_9,
+    CALL_cc_nn_10,
+    CALL_cc_nn_11,
+    CALL_cc_nn_12,
+
+    RET_0,
+    RET_1,
+    RET_2,
+    RET_3,
+    RET_4,
+    RET_5,
+
+    RET_cc_0,
+    RET_cc_1,
+    RET_cc_2,
+    RET_cc_3,
+    RET_cc_4,
+    RET_cc_5,
+    RET_cc_6,
+
     INC_r_0,
 
     CPL_0,
@@ -1206,6 +1235,9 @@ module decoder (
             `JR_Z_e:     next_state = JR_e_0;
             `JR_NZ_e:    next_state = JR_e_0;
             `CALL_nn:    next_state = CALL_nn_0;
+            `CALL_cc_nn: next_state = CALL_cc_nn_0;
+            `RET:        next_state = RET_0;
+            `RET_cc:     next_state = RET_cc_0;
             default:     next_state = FETCH_0;
           endcase
         end
@@ -1990,6 +2022,62 @@ module decoder (
       CALL_nn_10: next_state = CALL_nn_11;
       CALL_nn_11: next_state = CALL_nn_12;
       CALL_nn_12: next_state = FETCH_0;
+
+      //CALL_cc_nn
+      CALL_cc_nn_0: next_state = CALL_cc_nn_1;
+      CALL_cc_nn_1: next_state = CALL_cc_nn_2;
+      CALL_cc_nn_2: next_state = CALL_cc_nn_3;
+      CALL_cc_nn_3: next_state = CALL_cc_nn_4;
+      CALL_cc_nn_4: next_state = CALL_cc_nn_5;
+
+      CALL_cc_nn_5: begin
+        unique case(op0[5:3])
+          3'b000: next_state = !flags[6] ? CALL_cc_nn_6 : FETCH_0;
+          3'b001: next_state =  flags[6] ? CALL_cc_nn_6 : FETCH_0;
+          3'b010: next_state = !flags[0] ? CALL_cc_nn_6 : FETCH_0;
+          3'b011: next_state =  flags[0] ? CALL_cc_nn_6 : FETCH_0;
+          3'b100: next_state = !flags[2] ? CALL_cc_nn_6 : FETCH_0;
+          3'b101: next_state =  flags[2] ? CALL_cc_nn_6 : FETCH_0;
+          3'b110: next_state = !flags[7] ? CALL_cc_nn_6 : FETCH_0;
+          3'b111: next_state =  flags[7] ? CALL_cc_nn_6 : FETCH_0;
+        endcase
+      end
+
+      CALL_cc_nn_6: next_state = CALL_cc_nn_7;
+      CALL_cc_nn_7: next_state = CALL_cc_nn_8;
+      CALL_cc_nn_8: next_state = CALL_cc_nn_9;
+      CALL_cc_nn_9: next_state = CALL_cc_nn_10;
+      CALL_cc_nn_10: next_state = CALL_cc_nn_11;
+      CALL_cc_nn_11: next_state = CALL_cc_nn_12;
+      CALL_cc_nn_12: next_state = FETCH_0;
+
+      //RET
+      RET_0: next_state = RET_1;
+      RET_1: next_state = RET_2;
+      RET_2: next_state = RET_3;
+      RET_3: next_state = RET_4;
+      RET_4: next_state = RET_5;
+      RET_5: next_state = FETCH_0;
+
+      RET_cc_0: begin
+        unique case(op0[5:3])
+          3'b000: next_state = !flags[6] ? RET_cc_1 : FETCH_0;
+          3'b001: next_state =  flags[6] ? RET_cc_1 : FETCH_0;
+          3'b010: next_state = !flags[0] ? RET_cc_1 : FETCH_0;
+          3'b011: next_state =  flags[0] ? RET_cc_1 : FETCH_0;
+          3'b100: next_state = !flags[2] ? RET_cc_1 : FETCH_0;
+          3'b101: next_state =  flags[2] ? RET_cc_1 : FETCH_0;
+          3'b110: next_state = !flags[7] ? RET_cc_1 : FETCH_0;
+          3'b111: next_state =  flags[7] ? RET_cc_1 : FETCH_0;
+        endcase
+      end
+
+      RET_cc_1: next_state = RET_cc_2;
+      RET_cc_2: next_state = RET_cc_3;
+      RET_cc_3: next_state = RET_cc_4;
+      RET_cc_4: next_state = RET_cc_5;
+      RET_cc_5: next_state = RET_cc_6;
+      RET_cc_6: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END Call and Return group
@@ -4961,6 +5049,213 @@ module decoder (
       CALL_nn_12: begin
         ld_PCL = 1;
         drive_MDR1 = 1;
+      end
+
+      //CALL_cc_nn
+      CALL_cc_nn_0,CALL_cc_nn_3: begin
+        MRD_start = 1;
+        MRD_bus   = 1;
+        ld_PCH    = 1;
+        ld_PCL    = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        alu_op    = `INCR_A_16;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+      end
+
+      CALL_cc_nn_1,CALL_cc_nn_4: begin
+        MRD_bus = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        alu_op    = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+      end
+
+      CALL_cc_nn_2: begin
+        ld_MDR1 = 1;
+      end
+
+      CALL_cc_nn_5: begin
+        ld_MDR2 = 1;
+        if(next_state == CALL_cc_nn_6) begin
+          drive_alu_addr = 1;
+          alu_op = `ALU_NOP;
+          drive_reg_addr = 1;
+          drive_SPL = 1;
+          drive_SPH = 1;
+          alu_op = `DECR_A;
+          ld_SPL = 1;
+          ld_SPH = 1;
+          ld_MARH = 1;
+          ld_MARL = 1;
+        end
+      end
+
+      CALL_cc_nn_6: begin
+        drive_MAR = 1;
+        MWR_start = 1;
+        MWR_bus   = 1;
+        drive_PCH = 1;
+        drive_reg_data = 1;
+      end
+
+      CALL_cc_nn_7: begin
+        drive_MAR = 1;
+        MWR_bus = 1;
+        drive_PCH = 1;
+        drive_reg_data = 1;
+      end
+
+      CALL_cc_nn_8: begin
+        ld_PCH = 1;
+        drive_MDR2 = 1;
+      end
+
+      CALL_cc_nn_9: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+        alu_op = `DECR_A;
+        ld_SPL = 1;
+        ld_SPH = 1;
+        ld_MARH = 1;
+        ld_MARL = 1;
+      end
+
+      CALL_cc_nn_10: begin
+        MWR_start = 1;
+        MWR_bus   = 1;
+        drive_PCL = 1;
+        drive_reg_data = 1;
+        drive_MAR = 1;
+      end
+
+      CALL_cc_nn_11: begin
+        MWR_bus = 1;
+        drive_PCL = 1;
+        drive_reg_data = 1;
+        drive_MAR = 1;
+      end
+
+      CALL_cc_nn_12: begin
+        ld_PCL = 1;
+        drive_MDR1 = 1;
+      end
+
+      //RET
+      RET_0: begin
+        MRD_start = 1;
+        MRD_bus   = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+      end
+
+      RET_1: begin
+        MRD_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+      end
+
+      RET_2: begin
+        ld_PCL = 1;
+      end
+
+      RET_3: begin
+        MRD_start = 1;
+        MRD_bus   = 1;
+        drive_alu_addr = 1;
+        alu_op         = `INCR_A_16;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+        ld_SPH    = 1;
+        ld_SPL    = 1;
+      end
+
+      RET_4: begin
+        MRD_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+      end
+
+      RET_5: begin
+        ld_PCH = 1;
+        drive_alu_addr = 1;
+        alu_op         = `INCR_A_16;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+        ld_SPH    = 1;
+        ld_SPL    = 1;
+      end
+
+      //RET_cc
+      RET_cc_1: begin
+        MRD_start = 1;
+        MRD_bus   = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+      end
+
+      RET_cc_2: begin
+        MRD_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+      end
+
+      RET_cc_3: begin
+        ld_PCL = 1;
+      end
+
+      RET_cc_4: begin
+        MRD_start = 1;
+        MRD_bus   = 1;
+        drive_alu_addr = 1;
+        alu_op         = `INCR_A_16;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+        ld_SPH    = 1;
+        ld_SPL    = 1;
+      end
+
+      RET_cc_5: begin
+        MRD_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+      end
+
+      RET_cc_6: begin
+        ld_PCH = 1;
+        drive_alu_addr = 1;
+        alu_op         = `INCR_A_16;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+        ld_SPH    = 1;
+        ld_SPL    = 1;
       end
 
       //-----------------------------------------------------------------------
