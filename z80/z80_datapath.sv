@@ -644,6 +644,20 @@ module alu #(parameter w = 8)(
 
       end
 
+      `OR: begin
+        C = A | B;
+
+        //set s flag when negative
+        F_out[`S_flag] = C[w-1];
+
+        //set z flag when zero
+        F_out[`Z_flag] = (C == 0);
+
+        //set PV flag when overflow
+        F_out[`PV_flag] = (C[7] & ~A[7]) ? 1 : 0;
+
+      end
+
       `ALU_B: begin
         C = B;
       end

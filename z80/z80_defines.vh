@@ -70,6 +70,11 @@
 `define AND_HL      8'hA6
 `define AND_IX_d    8'hA6
 `define AND_IY_d    8'hA6
+`define OR_r        8'b10110???
+`define OR_n        8'hF6
+`define OR_HL       8'hB6
+`define OR_IX_d     8'hB6
+`define OR_IY_d     8'hB6
 
 `define INC_r       8'b00???100
 `define INC_HL      8'h34
@@ -115,3 +120,4 @@
 `define ALU_CCF   4'hb
 `define ALU_CPL   4'hc
 `define AND       4'hd
+`define OR        4'he
