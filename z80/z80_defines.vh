@@ -85,6 +85,8 @@
 `define JR_Z_e      8'h28
 `define JR_NZ_e     8'h20
 
+`define CALL_nn		8'hCD
+
 //flags
 `define PV_flag   2
 `define C_flag    0

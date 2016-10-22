@@ -437,6 +437,8 @@ module datapath (
     else if(drive_IYL & ~drive_reg_addr) drive_value_data = reg_data_out;
     else if(drive_SPH & ~drive_reg_addr) drive_value_data = reg_data_out;
     else if(drive_SPL & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_PCH & ~drive_reg_addr) drive_value_data = reg_data_out;
+    else if(drive_PCL & ~drive_reg_addr) drive_value_data = reg_data_out;
     else if(drive_STRH & ~drive_reg_addr) drive_value_data = reg_data_out;
     else if(drive_STRL & ~drive_reg_addr) drive_value_data = reg_data_out;
     else if(drive_TEMP)     drive_value_data = TEMP_out;

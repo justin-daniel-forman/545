@@ -198,6 +198,12 @@ while (my $line = <$in_fh>) {
       } elsif( $reg eq 'STRL') {
         $line .= $whitespace."drive_STRL = 1;\n";
         $line .= $whitespace."drive_reg_data = 1;\n";
+      } elsif( $reg eq 'PCH') {
+        $line .= $whitespace."drive_PCH = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      } elsif( $reg eq 'PCL') {
+        $line .= $whitespace."drive_PCL = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
       }
     }
 
