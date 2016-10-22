@@ -646,6 +646,8 @@ module decoder (
 
     MACRO_DEFINE_STATES RET_cc 7
 
+    MACRO_DEFINE_STATES RST_p 7
+
     //Mult-OCF Instructions
     //There is a difference between multi-ocf instructions and
     //instructions that require an operand data fetch. In an
@@ -793,6 +795,7 @@ module decoder (
             `CALL_cc_nn: next_state = CALL_cc_nn_0;
             `RET:        next_state = RET_0;
             `RET_cc:     next_state = RET_cc_0;
+            `RST_p:      next_state = RST_p_0;
             default:     next_state = FETCH_0;
           endcase
         end
@@ -1161,6 +1164,8 @@ module decoder (
       RET_cc_5: next_state = RET_cc_6;
       RET_cc_6: next_state = FETCH_0;
 
+      MACRO_ENUM_STATES RS
+
       //-----------------------------------------------------------------------
       //END Call and Return group
       //-----------------------------------------------------------------------
@@ -1333,6 +1338,7 @@ module decoder (
 
       FETCH_2, FETCH_6: begin
         OCF_bus = 1;
+        ld_TEMP = 1; //See RST p command. Need opcode in ALU for that command
       end
 
       FETCH_3, FETCH_7: begin
@@ -3800,6 +3806,53 @@ module decoder (
       RET_cc_6: begin
         ld_PCH = 1;
         MACRO_16_INC SP
+      end
+
+      RST_p_0: begin
+        MACRO_16_DRIVE SP
+        MACRO_16_LOAD SP
+        alu_op = `DECR_A;
+        ld_MARH = 1;
+        ld_MARL = 1;
+      end
+
+      RST_p_1: begin
+        MACRO_WRITE_0
+        drive_MAR = 1;
+        MACRO_8_DRIVE PCH
+      end
+
+      RST_p_2: begin
+        MACRO_WRITE_1
+        drive_MAR = 1;
+        MACRO_8_DRIVE PCH
+      end
+
+      RST_p_3: begin
+        MACRO_16_DRIVE SP
+        MACRO_16_LOAD SP
+        alu_op = `DECR_A;
+        ld_MARH = 1;
+        ld_MARL = 1;
+      end
+
+      RST_p_4: begin
+        MACRO_WRITE_0
+        drive_MAR = 1;
+        MACRO_8_DRIVE PCL
+      end
+
+      RST_p_5: begin
+        MACRO_WRITE_1
+        drive_MAR = 1;
+        MACRO_8_DRIVE PCL
+      end
+
+      RST_p_6: begin
+        MACRO_16_DRIVE PC
+        MACRO_16_LOAD PC
+        drive_TEMP = 1;
+        alu_op = `ALU_RST;
       end
 
       //-----------------------------------------------------------------------

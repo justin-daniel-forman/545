@@ -680,6 +680,19 @@ module alu #(parameter w = 8)(
         F_out = B;
       end
 
+      `ALU_RST: begin
+        unique case(B[5:3])
+          3'b000: C = 16'h0000;
+          3'b001: C = 16'h0008;
+          3'b010: C = 16'h0010;
+          3'b011: C = 16'h0018;
+          3'b100: C = 16'h0020;
+          3'b101: C = 16'h0028;
+          3'b110: C = 16'h0030;
+          3'b111: C = 16'h0038;
+        endcase
+      end
+
       default: begin
         C = A;
       end

@@ -1139,6 +1139,14 @@ module decoder (
     RET_cc_5,
     RET_cc_6,
 
+    RST_p_0,
+    RST_p_1,
+    RST_p_2,
+    RST_p_3,
+    RST_p_4,
+    RST_p_5,
+    RST_p_6,
+
     //Mult-OCF Instructions
     //There is a difference between multi-ocf instructions and
     //instructions that require an operand data fetch. In an
@@ -1286,6 +1294,7 @@ module decoder (
             `CALL_cc_nn: next_state = CALL_cc_nn_0;
             `RET:        next_state = RET_0;
             `RET_cc:     next_state = RET_cc_0;
+            `RST_p:      next_state = RST_p_0;
             default:     next_state = FETCH_0;
           endcase
         end
@@ -2178,6 +2187,15 @@ module decoder (
       RET_cc_5: next_state = RET_cc_6;
       RET_cc_6: next_state = FETCH_0;
 
+      //RST_p
+      RST_p_0: next_state = RST_p_1;
+      RST_p_1: next_state = RST_p_2;
+      RST_p_2: next_state = RST_p_3;
+      RST_p_3: next_state = RST_p_4;
+      RST_p_4: next_state = RST_p_5;
+      RST_p_5: next_state = RST_p_6;
+      RST_p_6: next_state = FETCH_0;
+
       //-----------------------------------------------------------------------
       //END Call and Return group
       //-----------------------------------------------------------------------
@@ -2350,6 +2368,7 @@ module decoder (
 
       FETCH_2, FETCH_6: begin
         OCF_bus = 1;
+        ld_TEMP = 1; //See RST p command. Need opcode in ALU for that command
       end
 
       FETCH_3, FETCH_7: begin
@@ -5546,6 +5565,74 @@ module decoder (
         drive_SPH = 1;
         ld_SPH    = 1;
         ld_SPL    = 1;
+      end
+
+      RST_p_0: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+        ld_SPL = 1;
+        ld_SPH = 1;
+        alu_op = `DECR_A;
+        ld_MARH = 1;
+        ld_MARL = 1;
+      end
+
+      RST_p_1: begin
+        MWR_start = 1;
+        MWR_bus   = 1;
+        drive_MAR = 1;
+        drive_PCH = 1;
+        drive_reg_data = 1;
+      end
+
+      RST_p_2: begin
+        MWR_bus = 1;
+        drive_MAR = 1;
+        drive_PCH = 1;
+        drive_reg_data = 1;
+      end
+
+      RST_p_3: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+        ld_SPL = 1;
+        ld_SPH = 1;
+        alu_op = `DECR_A;
+        ld_MARH = 1;
+        ld_MARL = 1;
+      end
+
+      RST_p_4: begin
+        MWR_start = 1;
+        MWR_bus   = 1;
+        drive_MAR = 1;
+        drive_PCL = 1;
+        drive_reg_data = 1;
+      end
+
+      RST_p_5: begin
+        MWR_bus = 1;
+        drive_MAR = 1;
+        drive_PCL = 1;
+        drive_reg_data = 1;
+      end
+
+      RST_p_6: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        ld_PCH = 1;
+        ld_PCL = 1;
+        drive_TEMP = 1;
+        alu_op = `ALU_RST;
       end
 
       //-----------------------------------------------------------------------
