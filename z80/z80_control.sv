@@ -1040,8 +1040,21 @@ module decoder (
     JR_e_6,
     JR_e_7,
 
-    INC_r_0,
+    CALL_nn_0,
+    CALL_nn_1,
+    CALL_nn_2,
+    CALL_nn_3,
+    CALL_nn_4,
+    CALL_nn_5,
+    CALL_nn_6,
+    CALL_nn_7,
+    CALL_nn_8,
+    CALL_nn_9,
+    CALL_nn_10,
+    CALL_nn_11,
+    CALL_nn_12,
 
+    INC_r_0,
 
     CPL_0,
 
@@ -1185,7 +1198,6 @@ module decoder (
             `EX_SP_HL:   next_state = EX_SP_HL_0;
             `PUSH_qq:    next_state = PUSH_qq_0;
             `POP_qq:     next_state = POP_qq_0;
-
             `JP_nn:      next_state = JP_nn_0;
             `JP_cc_nn:   next_state = JP_cc_nn_0;
             `JR_e:       next_state = JR_e_0;
@@ -1193,6 +1205,7 @@ module decoder (
             `JR_NC_e:    next_state = JR_e_0;
             `JR_Z_e:     next_state = JR_e_0;
             `JR_NZ_e:    next_state = JR_e_0;
+            `CALL_nn:    next_state = CALL_nn_0;
             default:     next_state = FETCH_0;
           endcase
         end
@@ -1962,6 +1975,21 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN Call and Return group
       //-----------------------------------------------------------------------
+
+      //CALL_nn
+      CALL_nn_0: next_state = CALL_nn_1;
+      CALL_nn_1: next_state = CALL_nn_2;
+      CALL_nn_2: next_state = CALL_nn_3;
+      CALL_nn_3: next_state = CALL_nn_4;
+      CALL_nn_4: next_state = CALL_nn_5;
+      CALL_nn_5: next_state = CALL_nn_6;
+      CALL_nn_6: next_state = CALL_nn_7;
+      CALL_nn_7: next_state = CALL_nn_8;
+      CALL_nn_8: next_state = CALL_nn_9;
+      CALL_nn_9: next_state = CALL_nn_10;
+      CALL_nn_10: next_state = CALL_nn_11;
+      CALL_nn_11: next_state = CALL_nn_12;
+      CALL_nn_12: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END Call and Return group
@@ -4841,6 +4869,99 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN Call and Return group
       //-----------------------------------------------------------------------
+
+      //CALL_nn
+      CALL_nn_0,CALL_nn_3: begin
+        MRD_start = 1;
+        MRD_bus   = 1;
+        ld_PCH    = 1;
+        ld_PCL    = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        alu_op    = `INCR_A_16;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+      end
+
+      CALL_nn_1,CALL_nn_4: begin
+        MRD_bus = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        alu_op    = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+      end
+
+      CALL_nn_2: begin
+        ld_MDR1 = 1;
+      end
+
+      CALL_nn_5: begin
+        ld_MDR2 = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+        alu_op = `DECR_A;
+        ld_SPL = 1;
+        ld_SPH = 1;
+        ld_MARH = 1;
+        ld_MARL = 1;
+      end
+
+      CALL_nn_6: begin
+        drive_MAR = 1;
+        MWR_start = 1;
+        MWR_bus   = 1;
+        drive_PCH = 1;
+        drive_reg_data = 1;
+      end
+
+      CALL_nn_7: begin
+        drive_MAR = 1;
+        MWR_bus = 1;
+        drive_PCH = 1;
+        drive_reg_data = 1;
+      end
+
+      CALL_nn_8: begin
+        ld_PCH = 1;
+        drive_MDR2 = 1;
+      end
+
+      CALL_nn_9: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+        alu_op = `DECR_A;
+        ld_SPL = 1;
+        ld_SPH = 1;
+        ld_MARH = 1;
+        ld_MARL = 1;
+      end
+
+      CALL_nn_10: begin
+        MWR_start = 1;
+        MWR_bus   = 1;
+        drive_PCL = 1;
+        drive_reg_data = 1;
+        drive_MAR = 1;
+      end
+
+      CALL_nn_11: begin
+        MWR_bus = 1;
+        drive_PCL = 1;
+        drive_reg_data = 1;
+        drive_MAR = 1;
+      end
+
+      CALL_nn_12: begin
+        ld_PCL = 1;
+        drive_MDR1 = 1;
+      end
 
       //-----------------------------------------------------------------------
       //END Call and Return group

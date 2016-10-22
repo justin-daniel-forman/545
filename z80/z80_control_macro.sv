@@ -616,8 +616,9 @@ module decoder (
 
     MACRO_DEFINE_STATES JR_e 8
 
-    MACRO_DEFINE_STATES INC_r 1
+    MACRO_DEFINE_STATES CALL_nn 13
 
+    MACRO_DEFINE_STATES INC_r 1
 
     MACRO_DEFINE_STATES CPL 1
 
@@ -761,7 +762,6 @@ module decoder (
             `EX_SP_HL:   next_state = EX_SP_HL_0;
             `PUSH_qq:    next_state = PUSH_qq_0;
             `POP_qq:     next_state = POP_qq_0;
-
             `JP_nn:      next_state = JP_nn_0;
             `JP_cc_nn:   next_state = JP_cc_nn_0;
             `JR_e:       next_state = JR_e_0;
@@ -769,6 +769,7 @@ module decoder (
             `JR_NC_e:    next_state = JR_e_0;
             `JR_Z_e:     next_state = JR_e_0;
             `JR_NZ_e:    next_state = JR_e_0;
+            `CALL_nn:    next_state = CALL_nn_0;
             default:     next_state = FETCH_0;
           endcase
         end
@@ -1076,6 +1077,8 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN Call and Return group
       //-----------------------------------------------------------------------
+
+      MACRO_ENUM_STATES CALL_nn 13
 
       //-----------------------------------------------------------------------
       //END Call and Return group
@@ -3397,6 +3400,72 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN Call and Return group
       //-----------------------------------------------------------------------
+
+      //CALL_nn
+      CALL_nn_0,CALL_nn_3: begin
+        MACRO_READ_0
+        MACRO_INC_PC
+      end
+
+      CALL_nn_1,CALL_nn_4: begin
+        MACRO_READ_1
+        MACRO_DRIVE_PC
+      end
+
+      CALL_nn_2: begin
+        ld_MDR1 = 1;
+      end
+
+      CALL_nn_5: begin
+        ld_MDR2 = 1;
+        MACRO_16_DRIVE SP
+        alu_op = `DECR_A;
+        MACRO_16_LOAD SP
+        ld_MARH = 1;
+        ld_MARL = 1;
+      end
+
+      CALL_nn_6: begin
+        drive_MAR = 1;
+        MACRO_WRITE_0
+        MACRO_8_DRIVE PCH
+      end
+
+      CALL_nn_7: begin
+        drive_MAR = 1;
+        MACRO_WRITE_1
+        MACRO_8_DRIVE PCH
+      end
+
+      CALL_nn_8: begin
+        ld_PCH = 1;
+        drive_MDR2 = 1;
+      end
+
+      CALL_nn_9: begin
+        MACRO_16_DRIVE SP
+        alu_op = `DECR_A;
+        MACRO_16_LOAD SP
+        ld_MARH = 1;
+        ld_MARL = 1;
+      end
+
+      CALL_nn_10: begin
+        MACRO_WRITE_0
+        MACRO_8_DRIVE PCL
+        drive_MAR = 1;
+      end
+
+      CALL_nn_11: begin
+        MACRO_WRITE_1
+        MACRO_8_DRIVE PCL
+        drive_MAR = 1;
+      end
+
+      CALL_nn_12: begin
+        ld_PCL = 1;
+        drive_MDR1 = 1;
+      end
 
       //-----------------------------------------------------------------------
       //END Call and Return group
