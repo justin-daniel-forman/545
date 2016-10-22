@@ -66,6 +66,10 @@
 `define ADC_A_IY_d  8'h8E
 
 `define AND_r       8'b10100???
+`define AND_n       8'hE6
+`define AND_HL      8'hA6
+`define AND_IX_d    8'hA6
+`define AND_IY_d    8'hA6
 
 `define INC_r       8'b00???100
 `define INC_HL      8'h34
