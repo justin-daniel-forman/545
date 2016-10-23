@@ -104,6 +104,8 @@ module vdp_top (
 
   /******* VGA Interface *******/
 
+  logic [2:0] disp_state;
+
   vdp_disp_interface DISP_INTERFACE(
     .clk(clk_25), 
     .rst_L,
@@ -116,7 +118,8 @@ module vdp_top (
     .CRAM_VGA_addr,
     .VGA_R, 
     .VGA_G, 
-    .VGA_B
+    .VGA_B,
+    .disp_state
   );
 
   vga VGA(
@@ -194,7 +197,7 @@ module vdp_top (
     .probe12(VRAM_VGA_data_out[4]), 
     .probe13(VRAM_VGA_data_out[5]),                  
     .probe14({VGA_R, VGA_G, VGA_B}),
-    .probe15()
+    .probe15({5'd0, disp_state})
   );
 
 endmodule: vdp_top
@@ -214,7 +217,8 @@ module vdp_disp_interface(
   input  logic      [8:0]  row,
   output logic [7:0][13:0] VRAM_VGA_addr,
   output logic      [4:0]  CRAM_VGA_addr,
-  output logic      [3:0]  VGA_R, VGA_G, VGA_B
+  output logic      [3:0]  VGA_R, VGA_G, VGA_B,
+  output logic      [2:0]  disp_state
 );
 
   logic       patSelLatch_en; // Set in disp_fsm
@@ -322,11 +326,14 @@ module vdp_disp_interface(
 
   /******* Disp FSM *******/
 
+  logic [2:0] disp_state;
+
   disp_fsm DISP_FSM(
     .*,
     .bgSel_en,
     .patSelLatch_en,
-    .colorLatch_en
+    .colorLatch_en,
+    .cs(disp_state)
   );
 
 endmodule
@@ -335,7 +342,8 @@ endmodule
 module disp_fsm(
   input  logic       clk, rst_L,
   input  logic [9:0] col,
-  output logic       bgSel_en, patSelLatch_en, colorLatch_en
+  output logic       bgSel_en, patSelLatch_en, colorLatch_en,
+  output logic [2:0] cs
 );
 
   enum logic [2:0] {PosFetch, WaitForPos, PatFetch, WaitForPat, RowLoad, Wait} cs, ns;
