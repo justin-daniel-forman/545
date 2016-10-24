@@ -1,0 +1,9 @@
+A: ff
+F: 97
+BC: fffe
+DE: ffff
+HL: ff00
+IX: 0053
+IY: 0052
+SP: 0000
+PC: 0051
