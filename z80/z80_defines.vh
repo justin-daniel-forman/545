@@ -100,6 +100,8 @@
 `define SCF         8'h37
 `define NOP         8'h00
 
+`define BIT_b_r		8'hCB
+
 `define JP_nn       8'hC3
 `define JP_cc_nn    8'b11???010
 `define JR_e        8'h18
@@ -140,7 +142,18 @@
 `define ALU_CCF   5'hd
 `define ALU_CPL   5'he
 `define AND       5'hf
-`define OR        5'h10
-`define XOR       5'h11
-`define ALU_RST   5'h12
-`define DECR_BC   5'h13
+
+//TODO: Update all of these as necessary
+`define OR        5'h18
+`define XOR       5'h19
+`define ALU_RST   5'h1a
+`define DECR_BC   5'h1b
+
+`define BIT_TEST_0  5'h10
+`define BIT_TEST_1  5'h11
+`define BIT_TEST_2  5'h12
+`define BIT_TEST_3  5'h13
+`define BIT_TEST_4  5'h14
+`define BIT_TEST_5  5'h15
+`define BIT_TEST_6  5'h16
+`define BIT_TEST_7  5'h17

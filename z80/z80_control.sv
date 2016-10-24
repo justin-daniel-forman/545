@@ -1239,6 +1239,17 @@ module decoder (
     NOP_0,
 
 
+    BIT_b_r_0,
+    BIT_b_r_1,
+    BIT_b_r_2,
+    BIT_b_r_3,
+
+    BIT_b_HL_x_0,
+    BIT_b_HL_x_1,
+    BIT_b_HL_x_2,
+    BIT_b_HL_x_3,
+
+
     JP_nn_0,
     JP_nn_1,
     JP_nn_2,
@@ -1352,6 +1363,7 @@ module decoder (
     case(state)
       FETCH_1: op0 <= data_in;
       FETCH_5: op1 <= data_in;
+      BIT_b_r_2: op1 <= data_in;
     endcase
   end
 
@@ -1467,6 +1479,7 @@ module decoder (
             `EX_SP_HL:   next_state = EX_SP_HL_0;
             `PUSH_qq:    next_state = PUSH_qq_0;
             `POP_qq:     next_state = POP_qq_0;
+            `BIT_b_r:    next_state = BIT_b_r_0;
             `JP_nn:      next_state = JP_nn_0;
             `JP_cc_nn:   next_state = JP_cc_nn_0;
             `JR_e:       next_state = JR_e_0;
@@ -2458,6 +2471,19 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN Bit Set, Rst, and Test group
       //-----------------------------------------------------------------------
+
+      //BIT_b_r
+      BIT_b_r_0: next_state = BIT_b_r_1;
+      BIT_b_r_1: next_state = BIT_b_r_2;
+      BIT_b_r_2: next_state = BIT_b_r_3;
+
+      BIT_b_r_3: next_state = ((op1[2:0] == 3'b110) ? BIT_b_HL_x_0 : FETCH_0);
+
+      //BIT_b_HL_x
+      BIT_b_HL_x_0: next_state = BIT_b_HL_x_1;
+      BIT_b_HL_x_1: next_state = BIT_b_HL_x_2;
+      BIT_b_HL_x_2: next_state = BIT_b_HL_x_3;
+      BIT_b_HL_x_3: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END Bit Set, Rst, and Test group
@@ -6134,6 +6160,91 @@ module decoder (
       //BEGIN Bit Set, Rst, and Test group
       //-----------------------------------------------------------------------
 
+      //BIT_b_r
+      BIT_b_r_0: begin
+        MRD_start = 1;
+        MRD_bus   = 1;
+        drive_alu_addr = 1;
+        alu_op         = `INCR_A_16;
+        drive_reg_addr = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        ld_PCH    = 1;
+        ld_PCL    = 1;
+      end
+
+      BIT_b_r_1: begin
+        MRD_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+      end
+
+      BIT_b_r_3: begin
+        drive_alu_data = 1;
+        alu_op = {2'b10,op1[5:3]};
+        ld_F_data = 1;
+        unique case(op1[2:0])
+          3'b000: begin
+            drive_B = 1;
+            drive_reg_data = 1;
+          end
+          3'b001: begin
+            drive_C = 1;
+            drive_reg_data = 1;
+          end
+          3'b010: begin
+            drive_D = 1;
+            drive_reg_data = 1;
+          end
+          3'b011: begin
+            drive_E = 1;
+            drive_reg_data = 1;
+          end
+          3'b100: begin
+            drive_H = 1;
+            drive_reg_data = 1;
+          end
+          3'b101: begin
+            drive_L = 1;
+            drive_reg_data = 1;
+          end
+          3'b110: begin
+            drive_alu_data = 0;
+            alu_op = `ALU_NOP;
+            ld_F_data = 0;
+            drive_alu_addr = 1;
+            alu_op = `ALU_NOP;
+            drive_reg_addr = 1;
+            drive_H = 1;
+            drive_L = 1;
+            MRD_start = 1;
+            MRD_bus   = 1;
+          end
+          3'b111: begin
+            drive_A = 1;
+            drive_reg_data = 1;
+          end
+        endcase
+      end
+
+      //BIT_b_HL_x
+      BIT_b_HL_x_0: begin
+        MRD_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_H = 1;
+        drive_L = 1;
+      end
+
+      BIT_b_HL_x_1: begin
+        alu_op = {2'b10,op1[5:3]};
+        ld_F_data = 1;
+      end
+
       //-----------------------------------------------------------------------
       //END Bit Set, Rst, and Test group
       //-----------------------------------------------------------------------
@@ -6222,15 +6333,15 @@ module decoder (
         alu_op = `INCR_A_16;
         ld_MARH = 1;
         ld_MARL = 1;
-        case(op0[5:3])
-          000: ld_PCL = !flags[6];
-          001: ld_PCL = flags[6];
-          010: ld_PCL = !flags[0];
-          011: ld_PCL = flags[0];
-          100: ld_PCL = !flags[2];
-          101: ld_PCL = flags[2];
-          110: ld_PCL = !flags[7];
-          111: ld_PCL = flags[7];
+        unique case(op0[5:3])
+          3'b000: ld_PCL = !flags[6];
+          3'b001: ld_PCL = flags[6];
+          3'b010: ld_PCL = !flags[0];
+          3'b011: ld_PCL = flags[0];
+          3'b100: ld_PCL = !flags[2];
+          3'b101: ld_PCL = flags[2];
+          3'b110: ld_PCL = !flags[7];
+          3'b111: ld_PCL = flags[7];
         endcase
       end
 
@@ -6246,15 +6357,15 @@ module decoder (
       end
 
       JP_cc_nn_5: begin
-        case(op0[5:3])
-          000: ld_PCH = !flags[6];
-          001: ld_PCH = flags[6];
-          010: ld_PCH = !flags[0];
-          011: ld_PCH = flags[0];
-          100: ld_PCH = !flags[2];
-          101: ld_PCH = flags[2];
-          110: ld_PCH = !flags[7];
-          111: ld_PCH = flags[7];
+        unique case(op0[5:3])
+          3'b000: ld_PCH = !flags[6];
+          3'b001: ld_PCH = flags[6];
+          3'b010: ld_PCH = !flags[0];
+          3'b011: ld_PCH = flags[0];
+          3'b100: ld_PCH = !flags[2];
+          3'b101: ld_PCH = flags[2];
+          3'b110: ld_PCH = !flags[7];
+          3'b111: ld_PCH = flags[7];
         endcase
       end
 

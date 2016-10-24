@@ -694,6 +694,62 @@ module alu #(parameter w = 8)(
         endcase
       end
 
+      `BIT_TEST_0: begin
+        F_out[`H_flag] = 1;
+        F_out[`N_flag] = 0;
+        F_out[`Z_flag] = !B[0];
+        C = A;
+      end
+
+      `BIT_TEST_1: begin
+        F_out[`H_flag] = 1;
+        F_out[`N_flag] = 0;
+        F_out[`Z_flag] = !B[1];
+        C = A;
+      end
+
+      `BIT_TEST_2: begin
+        F_out[`H_flag] = 1;
+        F_out[`N_flag] = 0;
+        F_out[`Z_flag] = !B[2];
+        C = A;
+      end
+
+      `BIT_TEST_3: begin
+        F_out[`H_flag] = 1;
+        F_out[`N_flag] = 0;
+        F_out[`Z_flag] = !B[3];
+        C = A;
+      end
+
+      `BIT_TEST_4: begin
+        F_out[`H_flag] = 1;
+        F_out[`N_flag] = 0;
+        F_out[`Z_flag] = !B[4];
+        C = A;
+      end
+
+      `BIT_TEST_5: begin
+        F_out[`H_flag] = 1;
+        F_out[`N_flag] = 0;
+        F_out[`Z_flag] = !B[5];
+        C = A;
+      end
+
+      `BIT_TEST_6: begin
+        F_out[`H_flag] = 1;
+        F_out[`N_flag] = 0;
+        F_out[`Z_flag] = !B[6];
+        C = A;
+      end
+
+     `BIT_TEST_7: begin
+        F_out[`H_flag] = 1;
+        F_out[`N_flag] = 0;
+        F_out[`Z_flag] = !B[7];
+        C = A;
+      end
+
       default: begin
         C = A;
       end
