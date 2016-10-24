@@ -1051,6 +1051,39 @@ module decoder (
     SUB_IY_d_9,
     SUB_IY_d_10,
 
+    SBC_r_0,
+
+    SBC_n_0,
+    SBC_n_1,
+    SBC_n_2,
+
+    SBC_HL_0,
+    SBC_HL_1,
+    SBC_HL_2,
+
+    SBC_IX_d_0,
+    SBC_IX_d_1,
+    SBC_IX_d_2,
+    SBC_IX_d_3,
+    SBC_IX_d_4,
+    SBC_IX_d_5,
+    SBC_IX_d_6,
+    SBC_IX_d_7,
+    SBC_IX_d_8,
+    SBC_IX_d_9,
+    SBC_IX_d_10,
+
+    SBC_IY_d_0,
+    SBC_IY_d_1,
+    SBC_IY_d_2,
+    SBC_IY_d_3,
+    SBC_IY_d_4,
+    SBC_IY_d_5,
+    SBC_IY_d_6,
+    SBC_IY_d_7,
+    SBC_IY_d_8,
+    SBC_IY_d_9,
+    SBC_IY_d_10,
 
     AND_r_0,
 
@@ -1085,7 +1118,6 @@ module decoder (
     AND_IY_d_8,
     AND_IY_d_9,
     AND_IY_d_10,
-
 
     OR_r_0,
 
@@ -1323,7 +1355,8 @@ module decoder (
           `EXX:       next_state = EXX_0;
           `ADD_A_r:   next_state = (op0[2:0] != 3'b110) ? ADD_A_r_0 : FETCH_3;
           `ADC_A_r:   next_state = (op0[2:0] != 3'b110) ? ADC_A_r_0 : FETCH_3;
-          `SUB_r:   next_state = (op0[2:0] != 3'b110) ? SUB_r_0   : FETCH_3;
+          `SUB_r:     next_state = (op0[2:0] != 3'b110) ? SUB_r_0   : FETCH_3;
+          `SBC_r:     next_state = (op0[2:0] != 3'b110) ? SBC_r_0   : FETCH_3;
           `AND_r:     next_state = (op0[2:0] != 3'b110) ? AND_r_0   : FETCH_3;
           `OR_r:      next_state = (op0[2:0] != 3'b110) ? OR_r_0    : FETCH_3;
           `INC_r:     next_state = (op0[5:3] != 3'b110) ? INC_r_0   : FETCH_3;
@@ -1371,6 +1404,8 @@ module decoder (
             `ADC_A_HL:  next_state = ADC_A_HL_0;
             `SUB_n:     next_state = SUB_n_0;
             `SUB_HL:    next_state = SUB_HL_0;
+            `SBC_n:     next_state = SBC_n_0;
+            `SBC_HL:    next_state = SBC_HL_0;
             `AND_n:     next_state = AND_n_0;
             `AND_HL:    next_state = AND_HL_0;
             `OR_n:      next_state = OR_n_0;
@@ -1478,7 +1513,8 @@ module decoder (
           `ADC_A_IY_d:  next_state = (op0[7:4] == 4'hF) ?  ADC_A_IY_d_0 : ADC_A_IX_d_0;
           `SUB_IX_d:    next_state = (op0[7:4] == 4'hD) ?  SUB_IX_d_0   : SUB_IY_d_0;
           `SUB_IY_d:    next_state = (op0[7:4] == 4'hF) ?  SUB_IY_d_0   : SUB_IX_d_0;
-
+          `SBC_IX_d:    next_state = (op0[7:4] == 4'hD) ?  SBC_IX_d_0   : SBC_IY_d_0;
+          `SBC_IY_d:    next_state = (op0[7:4] == 4'hF) ?  SBC_IY_d_0   : SBC_IX_d_0;
           `AND_IX_d:  next_state = (op0[7:4] == 4'hD) ?  AND_IX_d_0 : AND_IY_d_0;
           `AND_IY_d:  next_state = (op0[7:4] == 4'hF) ?  AND_IY_d_0 : AND_IX_d_0;
           `OR_IX_d:   next_state = (op0[7:4] == 4'hD) ?  OR_IX_d_0 : OR_IY_d_0;
@@ -2144,6 +2180,44 @@ module decoder (
       SUB_IY_d_9: next_state = SUB_IY_d_10;
       SUB_IY_d_10: next_state = FETCH_0;
 
+      //SBC_r
+      SBC_r_0: next_state = FETCH_0;
+
+      //SBC_n
+      SBC_n_0: next_state = SBC_n_1;
+      SBC_n_1: next_state = SBC_n_2;
+      SBC_n_2: next_state = FETCH_0;
+
+      //SBC_HL
+      SBC_HL_0: next_state = SBC_HL_1;
+      SBC_HL_1: next_state = SBC_HL_2;
+      SBC_HL_2: next_state = FETCH_0;
+
+      //SBC_IX_d
+      SBC_IX_d_0: next_state = SBC_IX_d_1;
+      SBC_IX_d_1: next_state = SBC_IX_d_2;
+      SBC_IX_d_2: next_state = SBC_IX_d_3;
+      SBC_IX_d_3: next_state = SBC_IX_d_4;
+      SBC_IX_d_4: next_state = SBC_IX_d_5;
+      SBC_IX_d_5: next_state = SBC_IX_d_6;
+      SBC_IX_d_6: next_state = SBC_IX_d_7;
+      SBC_IX_d_7: next_state = SBC_IX_d_8;
+      SBC_IX_d_8: next_state = SBC_IX_d_9;
+      SBC_IX_d_9: next_state = SBC_IX_d_10;
+      SBC_IX_d_10: next_state = FETCH_0;
+
+      //SBC_IY_d
+      SBC_IY_d_0: next_state = SBC_IY_d_1;
+      SBC_IY_d_1: next_state = SBC_IY_d_2;
+      SBC_IY_d_2: next_state = SBC_IY_d_3;
+      SBC_IY_d_3: next_state = SBC_IY_d_4;
+      SBC_IY_d_4: next_state = SBC_IY_d_5;
+      SBC_IY_d_5: next_state = SBC_IY_d_6;
+      SBC_IY_d_6: next_state = SBC_IY_d_7;
+      SBC_IY_d_7: next_state = SBC_IY_d_8;
+      SBC_IY_d_8: next_state = SBC_IY_d_9;
+      SBC_IY_d_9: next_state = SBC_IY_d_10;
+      SBC_IY_d_10: next_state = FETCH_0;
 
       //AND_r
       AND_r_0: next_state = FETCH_0;
@@ -2183,7 +2257,6 @@ module decoder (
       AND_IY_d_8: next_state = AND_IY_d_9;
       AND_IY_d_9: next_state = AND_IY_d_10;
       AND_IY_d_10: next_state = FETCH_0;
-
 
       //OR_r
       OR_r_0: next_state = FETCH_0;
@@ -4685,7 +4758,7 @@ module decoder (
       end
 
       CPI_3, CPIR_3, CPD_3, CPDR_3: begin
-        alu_op = `SUB;
+        alu_op = `SUB_EX;
         ld_F_data  = 1;
         drive_TEMP = 1;
       end
@@ -5080,8 +5153,73 @@ module decoder (
 
       end
 
+      //SBC r
+      SBC_r_0: begin
+        ld_F_data = 1;
+        set_N = 2'b11;
+
+        unique case(op0[2:0])
+          3'b111: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `SBC;
+            drive_A        = 1;
+          end
+          3'b000: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `SBC;
+            drive_B        = 1;
+            drive_reg_data = 1;
+          end
+          3'b001: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `SBC;
+            drive_C        = 1;
+            drive_reg_data = 1;
+          end
+          3'b010: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `SBC;
+            drive_D        = 1;
+            drive_reg_data = 1;
+          end
+          3'b011: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `SBC;
+            drive_E        = 1;
+            drive_reg_data = 1;
+          end
+          3'b100: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `SBC;
+            drive_H        = 1;
+            drive_reg_data = 1;
+          end
+          3'b101: begin
+            ld_F_data      = 1;
+            drive_alu_data = 1;
+            ld_A           = 1;
+            alu_op         = `SBC;
+            drive_L        = 1;
+            drive_reg_data = 1;
+          end
+        endcase
+
+      end
+
       //SUB n
-      SUB_n_0: begin
+      SUB_n_0, SBC_n_0: begin
         MRD_start = 1;
         MRD_bus   = 1;
         drive_alu_addr = 1;
@@ -5095,22 +5233,30 @@ module decoder (
         ld_MARH = 1;
       end
 
-      SUB_n_1: begin
+      SUB_n_1, SBC_n_1: begin
         MRD_bus = 1;
         drive_MAR = 1;
       end
 
-      SUB_n_2: begin
+      SUB_n_2, SBC_n_2: begin
         ld_F_data = 1;
         set_N = 2'b11;
-        ld_F_data      = 1;
-        drive_alu_data = 1;
-        ld_A           = 1;
-        alu_op         = `SUB;
+
+        if(state == SUB_n_2) begin
+          ld_F_data      = 1;
+          drive_alu_data = 1;
+          ld_A           = 1;
+          alu_op         = `SUB;
+        end else begin
+          ld_F_data      = 1;
+          drive_alu_data = 1;
+          ld_A           = 1;
+          alu_op         = `SBC;
+        end
       end
 
       //SUB (HL)
-      SUB_HL_0: begin
+      SUB_HL_0, SBC_HL_0: begin
         drive_alu_addr = 1;
         alu_op = `ALU_NOP;
         drive_reg_addr = 1;
@@ -5120,7 +5266,7 @@ module decoder (
         MRD_bus   = 1;
       end
 
-      SUB_HL_1: begin
+      SUB_HL_1, SBC_HL_1: begin
         drive_alu_addr = 1;
         alu_op = `ALU_NOP;
         drive_reg_addr = 1;
@@ -5129,17 +5275,25 @@ module decoder (
         MRD_bus = 1;
       end
 
-      SUB_HL_2: begin
+      SUB_HL_2, SBC_HL_2: begin
         ld_F_data = 1;
         set_N = 2'b11;
-        ld_F_data      = 1;
-        drive_alu_data = 1;
-        ld_A           = 1;
-        alu_op         = `SUB;
+
+        if(state == SUB_HL_2) begin
+          ld_F_data      = 1;
+          drive_alu_data = 1;
+          ld_A           = 1;
+          alu_op         = `SUB;
+        end else begin
+          ld_F_data      = 1;
+          drive_alu_data = 1;
+          ld_A           = 1;
+          alu_op         = `SBC;
+        end
       end
 
       //SUB (IX+d) SUB (IY+d)
-      SUB_IX_d_0, SUB_IY_d_0: begin
+      SUB_IX_d_0, SUB_IY_d_0, SBC_IX_d_0, SBC_IY_d_0: begin
         MRD_start = 1;
         MRD_bus   = 1;
         drive_alu_addr = 1;
@@ -5151,7 +5305,7 @@ module decoder (
         ld_PCL    = 1;
       end
 
-      SUB_IX_d_1, SUB_IY_d_1: begin
+      SUB_IX_d_1, SUB_IY_d_1, SBC_IX_d_1, SBC_IY_d_1: begin
         MRD_bus = 1;
         drive_alu_addr = 1;
         alu_op = `ALU_NOP;
@@ -5160,40 +5314,48 @@ module decoder (
         drive_PCL = 1;
       end
 
-      SUB_IX_d_2, SUB_IY_d_2: begin
+      SUB_IX_d_2, SUB_IY_d_2, SBC_IX_d_2, SBC_IY_d_2: begin
         ld_TEMP = 1;
       end
 
-      SUB_IX_d_3, SUB_IY_d_3: begin
+      SUB_IX_d_3, SUB_IY_d_3, SBC_IX_d_3, SBC_IY_d_3: begin
         alu_op = `ADD_SE_B;
-        drive_IXH = (state == SUB_IX_d_3);
-        drive_IXL = (state == SUB_IX_d_3);
-        drive_IYH = (state == SUB_IY_d_3);
-        drive_IYL = (state == SUB_IY_d_3);
+        drive_IXH = (op0[7:4] == 4'hD);
+        drive_IXL = (op0[7:4] == 4'hD);
+        drive_IYH = (op0[7:4] == 4'hF);
+        drive_IYL = (op0[7:4] == 4'hF);
         drive_reg_addr = 1;
         drive_alu_addr = 1;
         ld_MARH = 1;
         ld_MARL = 1;
       end
 
-      SUB_IX_d_8, SUB_IY_d_8: begin
+      SUB_IX_d_8, SUB_IY_d_8, SBC_IX_d_8, SBC_IY_d_8: begin
         drive_MAR = 1;
         MRD_start = 1;
         MRD_bus   = 1;
       end
 
-      SUB_IX_d_9, SUB_IY_d_9: begin
+      SUB_IX_d_9, SUB_IY_d_9, SBC_IX_d_9, SBC_IY_d_9: begin
         drive_MAR = 1;
         MRD_bus = 1;
       end
 
-      SUB_IX_d_10, SUB_IY_d_10: begin
+      SUB_IX_d_10, SUB_IY_d_10, SBC_IX_d_10, SBC_IY_d_10: begin
         ld_F_data = 1;
         set_N = 2'b11;
-        ld_F_data      = 1;
-        drive_alu_data = 1;
-        ld_A           = 1;
-        alu_op         = `SUB;
+
+        if(state == SUB_IX_d_10 || state == SUB_IY_d_10) begin
+          ld_F_data      = 1;
+          drive_alu_data = 1;
+          ld_A           = 1;
+          alu_op         = `SUB;
+        end else begin
+          ld_F_data      = 1;
+          drive_alu_data = 1;
+          ld_A           = 1;
+          alu_op         = `SBC;
+        end
       end
 
       //AND r

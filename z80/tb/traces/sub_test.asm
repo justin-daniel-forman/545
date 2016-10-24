@@ -18,7 +18,6 @@ section code
   sub c
   sub d
   sub e
-  
   sub [hl]
   sub [st]
   sub [uv]

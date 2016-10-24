@@ -489,8 +489,8 @@ module alu #(parameter w = 8)(
   output  logic [7:0] F_out
 );
 
-  logic [(w-1):(w/2)] lower_sum;
-  logic [(w-1):(w/2)] upper_sum;
+  logic [(w-1)/2:0] lower_sum;
+  logic [(w-1)/2:0] upper_sum;
   logic               lower_carry_out;
   logic               upper_carry_out;
   logic [(w-1):0]     T;
@@ -578,48 +578,29 @@ module alu #(parameter w = 8)(
 
       end
 
-      `SUB: begin
-        //TODO: Figure out the flags for this
+      `SUB, `SBC, `SUB_EX: begin
 
-        C = A + ~B + 1;
+        if(op != `SBC) begin
+          {upper_carry_out, C} = A[7:0] + {~B[7], ~B[6], ~B[5], ~B[4], ~B[3], ~B[2], ~B[1], ~B[0]} + 4'h1;
+          {lower_carry_out, lower_sum} = A[3:0] + {~B[3], ~B[2], ~B[1], ~B[0]} + 4'h1;
+        end else begin
+          {upper_carry_out, C} = A[7:0] + {~B[7], ~B[6], ~B[5], ~B[4], ~B[3], ~B[2], ~B[1], ~B[0]} + 4'h1 - F_in[`C_flag];
+          {lower_carry_out, lower_sum} = A[3:0] + {~B[3], ~B[2], ~B[1], ~B[0]} + 4'h1 - F_in[`C_flag];
+        end
+
+        F_out[`H_flag] = ~lower_carry_out;
+
+        //We dont affect the carry flag for Exchange group instructions,
+        //so leave the carry flag alone
+        if(op != `SUB_EX) begin
+          F_out[`C_flag] = (~upper_carry_out);
+        end
 
         //S flag is set when result is negative, otherwise reset
         F_out[`S_flag] = C[(w-1)] ? 1 : 0;
 
         //Z flag is set when result is 0, otherwise reset
         F_out[`Z_flag] = (C == 0) ? 1 : 0;
-
-        //set H flag when there is a borrow from bit 4
-        if(A[3:0] < B[3:0]) begin
-
-          //tie until the last bit
-          if(A[3:1] == B[3:1]) begin
-            F_out[`H_flag] = (~A[0] & B[0]) ? 1 : 0;
-          end
-
-          //tie until bit 1
-          else if(A[3:2] == B[3:2]) begin
-            F_out[`H_flag] = (~A[1] & B[1]) ? 1 : 0;
-          end
-
-          //tie until bit 2
-          else if(A[3] == B[3]) begin
-            F_out[`H_flag] = (~A[2] & B[2]) ? 1 : 0;
-          end
-
-          //not a tie, and A is less, so set borrow
-          else begin
-            F_out[`H_flag] = (~A[3] & B[3]) ? 1 : 0;
-          end
-
-        end
-
-        else begin
-          F_out [`H_flag] = 0;
-        end
-
-        //set C flag when there is a borrow from bit 7
-        F_out[`C_flag] = A < B;
 
         //PV flag is set when there is overflow, which occurs when
         //output changes the MSB of the accumulator
