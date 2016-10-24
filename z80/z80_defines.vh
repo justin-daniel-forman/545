@@ -86,7 +86,7 @@
 `define SCF         8'h37
 `define NOP         8'h00
 
-`define BIT_b_r		8'hCB
+`define BIT_b		8'hCB
 
 `define JP_nn       8'hC3
 `define JP_cc_nn    8'b11???010

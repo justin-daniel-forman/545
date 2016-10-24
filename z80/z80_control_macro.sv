@@ -654,6 +654,10 @@ module decoder (
 
     MACRO_DEFINE_STATES BIT_b_HL_x 4
 
+    MACRO_DEFINE_STATES BIT_b_IX_d_x 12
+
+    MACRO_DEFINE_STATES BIT_b_IY_d_x 12
+
 
     MACRO_DEFINE_STATES JP_nn 6
 
@@ -711,6 +715,8 @@ module decoder (
       FETCH_1: op0 <= data_in;
       FETCH_5: op1 <= data_in;
       BIT_b_r_2: op1 <= data_in;
+      BIT_b_IX_d_x_5: op1 <= data_in;
+      BIT_b_IY_d_x_5: op1 <= data_in;
     endcase
   end
 
@@ -816,7 +822,7 @@ module decoder (
             `EX_SP_HL:   next_state = EX_SP_HL_0;
             `PUSH_qq:    next_state = PUSH_qq_0;
             `POP_qq:     next_state = POP_qq_0;
-            `BIT_b_r:    next_state = BIT_b_r_0;
+            `BIT_b:    next_state = BIT_b_r_0;
             `JP_nn:      next_state = JP_nn_0;
             `JP_cc_nn:   next_state = JP_cc_nn_0;
             `JR_e:       next_state = JR_e_0;
@@ -900,15 +906,17 @@ module decoder (
           `ADC_A_IX_d:  next_state = (op0[7:4] == 4'hD) ?  ADC_A_IX_d_0 : ADC_A_IY_d_0;
           `ADC_A_IY_d:  next_state = (op0[7:4] == 4'hF) ?  ADC_A_IY_d_0 : ADC_A_IX_d_0;
 
-          `AND_IX_d:  next_state = (op0[7:4] == 4'hD) ?  AND_IX_d_0 : AND_IY_d_0;
-          `AND_IY_d:  next_state = (op0[7:4] == 4'hF) ?  AND_IY_d_0 : AND_IX_d_0;
-          `OR_IX_d:   next_state = (op0[7:4] == 4'hD) ?  OR_IX_d_0 : OR_IY_d_0;
-          `OR_IY_d:   next_state = (op0[7:4] == 4'hF) ?  OR_IY_d_0 : OR_IX_d_0;
+          `AND_IX_d:    next_state = (op0[7:4] == 4'hD) ?  AND_IX_d_0 : AND_IY_d_0;
+          `AND_IY_d:    next_state = (op0[7:4] == 4'hF) ?  AND_IY_d_0 : AND_IX_d_0;
+          `OR_IX_d:     next_state = (op0[7:4] == 4'hD) ?  OR_IX_d_0 : OR_IY_d_0;
+          `OR_IY_d:     next_state = (op0[7:4] == 4'hF) ?  OR_IY_d_0 : OR_IX_d_0;
 
           `INC_IX_d:    next_state = (op0[7:4] == 4'hD) ?  INC_IX_d_0 : INC_IY_d_0;
           `INC_IY_d:    next_state = (op0[7:4] == 4'hF) ?  INC_IY_d_0 : INC_IX_d_0;
 
-           default:      next_state = FETCH_0;
+          `BIT_b:       next_state = (op0[7:4] == 4'hD) ?  BIT_b_IX_d_x_0 : BIT_b_IY_d_x_0;
+
+           default:     next_state = FETCH_0;
         endcase
       end
 
@@ -1157,6 +1165,10 @@ module decoder (
       BIT_b_r_3: next_state = ((op1[2:0] == 3'b110) ? BIT_b_HL_x_0 : FETCH_0);
 
       MACRO_ENUM_STATES BIT_b_HL_x 4
+
+      MACRO_ENUM_STATES BIT_b_IX_d_x 12
+
+      MACRO_ENUM_STATES BIT_b_IY_d_x 12
 
       //-----------------------------------------------------------------------
       //END Bit Set, Rst, and Test group
@@ -3792,6 +3804,76 @@ module decoder (
       end
 
       BIT_b_HL_x_1: begin
+        alu_op = {2'b10,op1[5:3]};
+        ld_F_data = 1;
+      end
+
+      //BIT_b_IX_d_x
+      BIT_b_IX_d_x_0,BIT_b_IX_d_x_3: begin
+        MACRO_READ_0
+        MACRO_16_INC PC
+      end
+
+      BIT_b_IX_d_x_1,BIT_b_IX_d_x_4: begin
+        MACRO_READ_1
+        MACRO_16_DRIVE PC
+      end
+
+      BIT_b_IX_d_x_2: begin
+        ld_TEMP = 1;
+      end
+
+      BIT_b_IX_d_x_6: begin
+        drive_TEMP = 1;
+        MACRO_16_ADD_SE_B IX
+        ld_IXH = 0;
+        ld_IXL = 0;
+        ld_MARL = 1;
+        ld_MARH = 1;
+        MACRO_READ_0
+      end
+
+      BIT_b_IX_d_x_7: begin
+        MACRO_READ_1
+        drive_MAR = 1;
+      end
+
+      BIT_b_IX_d_x_8: begin
+        alu_op = {2'b10,op1[5:3]};
+        ld_F_data = 1;
+      end
+    
+      //BIT_b_IY_d_x
+      BIT_b_IY_d_x_0,BIT_b_IY_d_x_3: begin
+        MACRO_READ_0
+        MACRO_16_INC PC
+      end
+
+      BIT_b_IY_d_x_1,BIT_b_IY_d_x_4: begin
+        MACRO_READ_1
+        MACRO_16_DRIVE PC
+      end
+
+      BIT_b_IY_d_x_2: begin
+        ld_TEMP = 1;
+      end
+
+      BIT_b_IY_d_x_6: begin
+        drive_TEMP = 1;
+        MACRO_16_ADD_SE_B IY
+        ld_IYH = 0;
+        ld_IYL = 0;
+        ld_MARL = 1;
+        ld_MARH = 1;
+        MACRO_READ_0
+      end
+
+      BIT_b_IY_d_x_7: begin
+        MACRO_READ_1
+        drive_MAR = 1;
+      end
+
+      BIT_b_IY_d_x_8: begin
         alu_op = {2'b10,op1[5:3]};
         ld_F_data = 1;
       end
