@@ -27,7 +27,8 @@ module vdp_top (
   //Board output interface
   //---------------------------------------------------------------------------
   output logic       VGA_HS, VGA_VS,
-  output logic [3:0] VGA_R, VGA_B, VGA_G
+  output logic [3:0] VGA_R, VGA_B, VGA_G,
+  input  logic [7:0] SW
 );
 
   // Decoder logic
@@ -78,6 +79,8 @@ module vdp_top (
 
   /******* z80 I/O Logic *******/
   
+  logic VRAM_go, VRAM_go_VGA, VGA_go_io;
+  
   vdp_io IO_LOGIC(
     .clk(clk_4),
     .reset_L(rst_L),
@@ -99,19 +102,23 @@ module vdp_top (
     .rf_addr,
     .rf_en,
     .VRAM_io_addr,
-    .CRAM_io_addr
+    .CRAM_io_addr,
+    .VRAM_go(VRAM_go_io)
   );
 
   /******* VGA Interface *******/
 
   logic [2:0] disp_state;
+  logic [3:0] bitSliceSel;
+  logic [3:0][7:0] colorLatch_out;
 
+  /*
   vdp_disp_interface DISP_INTERFACE(
-    .clk(clk_25), 
+    .clk_25,
+    .clk_100, 
     .rst_L,
     .VRAM_VGA_data_out,
     .CRAM_VGA_data_out(CRAM_VGA_data_out[5:0]),
-    .R2(), // Used for offset into screen map in VRAM
     .col(pixel_col),
     .row(pixel_row),
     .VRAM_VGA_addr,
@@ -119,9 +126,32 @@ module vdp_top (
     .VGA_R, 
     .VGA_G, 
     .VGA_B,
-    .disp_state
-  );
-
+    .VRAM_go(VRAM_go_VGA)
+  );*/
+  
+  vdp_disp_interface_old DISP_INTERFACE(
+      //.clk_25,
+      //.clk_100,
+      .clk(clk_25), 
+      .rst_L,
+      .VRAM_VGA_data_out,
+      .CRAM_VGA_data_out(CRAM_VGA_data_out[5:0]),
+      .col(pixel_col),
+      .row(pixel_row),
+      .VRAM_VGA_addr,
+      .CRAM_VGA_addr,
+      .VGA_R, 
+      .VGA_G, 
+      .VGA_B,
+      .disp_state,
+      .colorLatch_out,
+      .bitSliceSel,
+      .VRAM_go(VRAM_go_VGA),
+      .waitTime1(SW[7:4]),
+      .waitTime2(SW[3:0]),
+      .R2()
+    );
+  
   vga VGA(
     .clk(clk_25),
     .rst_L,
@@ -143,6 +173,8 @@ module vdp_top (
   );
  
   /******** VRAM & CRAM ********/  
+
+  assign VRAM_go = VRAM_go_VGA || VRAM_go_io;
 
   blk_mem_gen_1 CRAM(
     .clka(clk_4),
@@ -167,7 +199,8 @@ module vdp_top (
     .io_re(VRAM_io_re),
     .vga_re(VRAM_VGA_re),
     .io_data_out(VRAM_io_data_out),
-    .vga_data_out(VRAM_VGA_data_out)
+    .vga_data_out(VRAM_VGA_data_out),
+    .VRAM_go(VRAM_go)
   );
 
   assign VRAM_VGA_re = 8'hFF;
@@ -197,222 +230,15 @@ module vdp_top (
     .probe12(VRAM_VGA_data_out[4]), 
     .probe13(VRAM_VGA_data_out[5]),                  
     .probe14({VGA_R, VGA_G, VGA_B}),
-    .probe15({5'd0, disp_state})
+    .probe15({bitSliceSel[3:1], CRAM_VGA_addr}),
+    .probe16({5'd0, disp_state}),
+    .probe17(colorLatch_out[0]),
+    .probe18(colorLatch_out[1]),
+    .probe19(colorLatch_out[2]),
+    .probe20(colorLatch_out[3])
   );
 
 endmodule: vdp_top
-
-/* vdp_disp_interface
- * Description: Interfaces between VRAM and the VGA output on the board.
- *              Specifically controls what pixel we should process and 
- *              outputs the corresponding colors depending on what the 
- *              screen looks like.
- */
-module vdp_disp_interface(
-  input  logic             clk, rst_L, // 25 MHz clock
-  input  logic [7:0][7:0]  VRAM_VGA_data_out,
-  input  logic      [5:0]  CRAM_VGA_data_out,
-  input  logic      [7:0]  R2, // Used for offset into screen map in VRAM
-  input  logic      [9:0]  col,
-  input  logic      [8:0]  row,
-  output logic [7:0][13:0] VRAM_VGA_addr,
-  output logic      [4:0]  CRAM_VGA_addr,
-  output logic      [3:0]  VGA_R, VGA_G, VGA_B,
-  output logic      [2:0]  disp_state
-);
-
-  logic       patSelLatch_en; // Set in disp_fsm
-  logic [7:0] patSelLatch1_in, patSelLatch1_out, patSelLatch2_in, patSelLatch2_out;
-
-  // Determines where the screen should be blank, since 256x192 doesn't divide 640x480 evenly
-  logic       blank;
-  assign blank = ((col < 64) || (col > 575)) || ((row < 48) || (row > 431));
-
-  // Screen Map Pattern Parsing
-  logic [13:0] charPatternAddr;
-  logic        paletteSel, horizFlip, vertFlip, patInBg;
-
-  // Background Select Logic
-  logic [13:0] bgSel_in, bgSel_out;
-  logic        bgSel_en; // Set in disp_fsm
-
-  // Color Latch Logic
-  logic [3:0][7:0] colorLatch_out;
-  logic            colorLatch_en;
-
-  // Misc stuff
-  logic [5:0] colorToDisplay;
-
-  /******** Background Select Register ********/
- 
-  register #(14) bgSelReg(
-    .clk, 
-    .rst_L,
-    .D(bgSel_in),
-    .Q(bgSel_out),
-    .en(bgSel_en)
-  );
-
-  logic [8:0] pixelRow;
-  logic [9:0] pixelCol;
-
-  assign pixelRow = row - 9'd48;
-  assign pixelCol = col - 9'd64 + 9'd1; // Add 1 to pre-fetch pixel data
-
-  // Each pixel position is 2 bytes, so ----------------------------------|
-  assign bgSel_in = (~blank) ? (14'h3800 + {pixelRow[8:4], pixelCol[8:4], 1'b0}) : 14'h3800; // Either blank screen or iterating
-
-  assign VRAM_VGA_addr[0] = bgSel_out;
-  assign VRAM_VGA_addr[1] = bgSel_out + 14'd1;
-
-  assign VRAM_VGA_addr[2] = charPatternAddr;
-  assign VRAM_VGA_addr[3] = VRAM_VGA_addr[2] + 1;  
-  assign VRAM_VGA_addr[4] = VRAM_VGA_addr[2] + 2; // Pixel colors are stored across 4 bytes each.
-  assign VRAM_VGA_addr[5] = VRAM_VGA_addr[2] + 3;
-
-  /******** Pattern Selection Latches ********/
-
-  register #(8) patSelLatch1(
-    .clk,
-    .rst_L,
-    .D(patSelLatch1_in),
-    .Q(patSelLatch1_out),
-    .en(patSelLatch_en)
-  );
-
-  register #(8) patSelLatch2(
-    .clk,
-    .rst_L,
-    .D(patSelLatch2_in),
-    .Q(patSelLatch2_out),
-    .en(patSelLatch_en)
-  );
-
-  assign patSelLatch1_in = VRAM_VGA_data_out[1];
-  assign patSelLatch2_in = VRAM_VGA_data_out[0]; // Little Endian, MSB goes in first
-
-  /******** patSel Parsing ********/
-  
-  assign charPatternAddr = {patSelLatch1_out[0], patSelLatch2_out, row[3:1], 2'd0}; // 14-bit signal to differentiate 512 patterns of 32 bytes each
-  assign horizFlip =       patSelLatch1_out[1];
-  assign vertFlip =        patSelLatch1_out[2];
-  assign paletteSel =      patSelLatch1_out[3];
-  assign patInBg =         patSelLatch1_out[4];
-  
-  /******** Color Latches ********/
-
-  register #(8) colorLatch [3:0] (
-    .clk,
-    .rst_L,
-    .D(VRAM_VGA_data_out[5:2]), // Again, little endian
-    .Q(colorLatch_out[3:0]),
-    .en(colorLatch_en)
-  );  
-  
-  assign CRAM_VGA_addr = {
-    paletteSel,
-    colorLatch_out[0][col[3:1]], 
-    colorLatch_out[1][col[3:1]],
-    colorLatch_out[2][col[3:1]],
-    colorLatch_out[3][col[3:1]]
-  };
-
-  /******* RGB Generation *******/
-
-  assign colorToDisplay = (blank) ? 6'd0 : CRAM_VGA_data_out;
-  colorGen c1(colorToDisplay[1:0], VGA_R);
-  colorGen c2(colorToDisplay[3:2], VGA_G); 
-  colorGen c3(colorToDisplay[5:4], VGA_B);
-
-  /******* Disp FSM *******/
-
-  logic [2:0] disp_state;
-
-  disp_fsm DISP_FSM(
-    .*,
-    .bgSel_en,
-    .patSelLatch_en,
-    .colorLatch_en,
-    .cs(disp_state)
-  );
-
-endmodule
-
-// FSM for vdp_disp_interface
-module disp_fsm(
-  input  logic       clk, rst_L,
-  input  logic [9:0] col,
-  output logic       bgSel_en, patSelLatch_en, colorLatch_en,
-  output logic [2:0] cs
-);
-
-  enum logic [2:0] {PosFetch, WaitForPos, PatFetch, WaitForPat, RowLoad, Wait} cs, ns;
-
-  logic [3:0] waitCount;
-  logic       waitEn, waitClear;
-
-  always_ff @(posedge clk, negedge rst_L) begin
-    if (~rst_L)         waitCount <= 0;
-    else if (waitClear) waitCount <= 0;
-    else if (waitEn)    waitCount <= (waitCount < 4'd10) ? waitCount + 5'd1 : 5'd0;
-  end
-
-  // Next State Logic
-  always_comb begin
-    case(cs)
-      PosFetch:   ns = WaitForPos;
-      WaitForPos: ns = PatFetch;
-      PatFetch:   ns = WaitForPat;
-      WaitForPat: ns = RowLoad;
-      RowLoad:    ns = Wait;
-      Wait:       ns = (waitCount == 4'd10 || col[3:0] == 4'd10) ? PosFetch : Wait;
-      default:    ns = Wait;
-    endcase
-  end
-
-  // Output Logic
-  always_comb begin
-    colorLatch_en = 0;
-    bgSel_en = 0;
-    patSelLatch_en = 0;
-    waitEn = 0;
-    waitClear = 0;
-    case(cs)
-      PosFetch: begin
-        bgSel_en = 1; 
-        waitClear = 1;
-      end
-      WaitForPos: begin
-        // No outputs
-      end
-      PatFetch: begin
-        patSelLatch_en = 1; 
-      end
-      WaitForPat: begin
-        // No outputs
-      end
-      RowLoad: begin
-        colorLatch_en = 1;
-      end
-      Wait: begin
-        waitEn = 1;
-      end
-      default: begin
-        colorLatch_en = 0;
-        bgSel_en = 0;
-        waitEn = 0;
-        patSelLatch_en = 0;
-        waitClear = 0;
-      end
-    endcase
-  end
-
-  always_ff @(posedge clk, negedge rst_L) begin
-    if (~rst_L) cs <= Wait;
-    else        cs <= ns;
-  end
-
-endmodule
 
 // Helper Module to translate 2-bit to 4-bit color
 module colorGen(
@@ -556,7 +382,8 @@ module vdp_io(
   output  logic [13:0] VRAM_io_addr,
   output  logic [4:0] CRAM_io_addr,
   output  logic [7:0] rf_data_in,
-  output  logic [3:0] rf_addr
+  output  logic [3:0] rf_addr,
+  output  logic       VRAM_go
 );
 
   logic [7:0] cmd_port_in_1, cmd_port_out_1, cmd_port_in_2, cmd_port_out_2;
@@ -602,7 +429,8 @@ module vdp_io(
     .VRAM_re(VRAM_io_re), 
     .VRAM_we(VRAM_io_we),
     .CRAM_re(CRAM_io_re),
-    .CRAM_we(CRAM_io_we)
+    .CRAM_we(CRAM_io_we),
+    .VRAM_go(VRAM_go)
   );
 
   /******** Data Bus Interfacing ********/ 
@@ -661,7 +489,8 @@ module vdp_io_fsm(
   output logic       wr_cmd_1, wr_cmd_2, rf_en,
   output logic       wr_addr_sel, wr_addr_en, stat_en,
   output logic       data_in_sel, VRAM_re, VRAM_we, 
-  output logic       CRAM_re, CRAM_we
+  output logic       CRAM_re, CRAM_we,
+  output logic       VRAM_go
 );
 
   enum logic [3:0] {Load_addr_1,
@@ -735,6 +564,7 @@ module vdp_io_fsm(
     VRAM_we = 0;
     CRAM_re = 0;
     CRAM_we = 0;
+    VRAM_go = 0;
     case(cs) 
       Load_addr_1: begin
         wr_cmd_1 = 1;
@@ -755,6 +585,8 @@ module vdp_io_fsm(
       end
       VRAM_read_data: begin
         wr_addr_en = 1; // Autoincrement address in case of sequential read
+        VRAM_go = 1;
+        // We need to wait 1 more clock cycle here!
       end
       VRAM_write_addr: begin
         wr_addr_sel = 1;
@@ -766,6 +598,8 @@ module vdp_io_fsm(
       VRAM_write_data: begin
         VRAM_we = 1;
         wr_addr_en = 1; // Autoincrement address in case of sequential write
+        VRAM_go = 1;
+        // We need to wait 1 more clock cycle here!
       end
       RF_write: begin
         rf_en = 1;
@@ -793,6 +627,7 @@ module vdp_io_fsm(
         VRAM_we = 0;
         CRAM_re = 0;
         CRAM_we = 0;
+        VRAM_go = 0;
       end
     endcase
   end
@@ -846,6 +681,7 @@ module vram(
   input  logic             io_we,
   input  logic             io_re,
   input  logic      [7:0]  vga_re,
+  input  logic             VRAM_go,
   output logic      [7:0]  io_data_out,
   output logic [7:0][7:0]  vga_data_out);
   
@@ -867,7 +703,7 @@ module vram(
         addr_a = ~(io_re | io_we) ? vga_addr[0] : io_addr;
         addr_b = vga_addr[4];
         we = io_we;
-        ns = R0;
+        ns = (VRAM_go) ? R0 : WOrInit; // Waits for a go signal from either the io or VGA interfaces
       end
       R0: begin
         addr_a = vga_addr[1];
@@ -946,3 +782,239 @@ module vram(
   end
   
 endmodule
+
+/****** Old stuff ********/
+
+/* vdp_disp_interface
+ * Description: Interfaces between VRAM and the VGA output on the board.
+ *              Specifically controls what pixel we should process and 
+ *              outputs the corresponding colors depending on what the 
+ *              screen looks like.
+ */
+module vdp_disp_interface_old(
+  input  logic             clk, rst_L, // 25 MHz clock
+  input  logic [7:0][7:0]  VRAM_VGA_data_out,
+  input  logic      [5:0]  CRAM_VGA_data_out,
+  input  logic      [7:0]  R2, // Used for offset into screen map in VRAM
+  input  logic      [9:0]  col,
+  input  logic      [8:0]  row,
+  input  logic      [3:0]  waitTime1,
+  input  logic      [3:0]  waitTime2,
+  output logic [7:0][13:0] VRAM_VGA_addr,
+  output logic      [4:0]  CRAM_VGA_addr,
+  output logic      [3:0]  VGA_R, VGA_G, VGA_B,
+  output logic      [2:0]  disp_state,
+  output logic             VRAM_go,
+  output logic      [3:0]  bitSliceSel,
+  output logic [3:0][7:0]  colorLatch_out
+);
+
+  logic       patSelLatch_en; // Set in disp_fsm
+  logic [7:0] patSelLatch1_in, patSelLatch1_out, patSelLatch2_in, patSelLatch2_out;
+
+  // Determines where the screen should be blank, since 256x192 doesn't divide 640x480 evenly
+  logic       blank;
+  assign blank = ((col < 10'd64) || (col > 10'd575)) || ((row < 10'd48) || (row > 10'd431));
+
+  // Screen Map Pattern Parsing
+  logic [13:0] charPatternAddr;
+  logic        paletteSel, horizFlip, vertFlip, patInBg;
+
+  // Background Select Logic
+  logic [13:0] bgSel_in, bgSel_out;
+  logic        bgSel_en; // Set in disp_fsm
+
+  // Color Latch Logic
+  //logic [3:0][7:0] colorLatch_out;
+  logic            colorLatch_en;
+
+  // Misc stuff
+  logic [5:0] colorToDisplay;
+
+  /******** Background Select Register ********/
+ 
+  register #(14) bgSelReg(
+    .clk, 
+    .rst_L,
+    .D(bgSel_in),
+    .Q(bgSel_out),
+    .en(bgSel_en)
+  );
+
+  logic [8:0] pixelRow;
+  logic [9:0] pixelCol;
+
+  assign pixelRow = row - 9'd48;
+  assign pixelCol = col - 10'd64 + 10'd7; // Add 3 to pre-fetch pixel data for the pipeline (maybe even 4???)
+
+  // Each pixel position is 2 bytes, so -------------------|
+  assign bgSel_in = {3'b111, pixelRow[7:3], pixelCol[8:4], 1'b0}; // Either blank screen or iterating
+  // 7:3 and 8:4 worked for some reason... .coe files may be written incorrectly
+
+  assign VRAM_VGA_addr[0] = bgSel_out;
+  assign VRAM_VGA_addr[1] = bgSel_out + 14'd1;
+
+  assign VRAM_VGA_addr[2] = charPatternAddr;
+  assign VRAM_VGA_addr[3] = VRAM_VGA_addr[2] + 2'd1;  
+  assign VRAM_VGA_addr[4] = VRAM_VGA_addr[2] + 2'd2; // Pixel colors are stored across 4 bytes each.
+  assign VRAM_VGA_addr[5] = VRAM_VGA_addr[2] + 2'd3;
+
+  /******** Pattern Selection Latches ********/
+
+  register #(8) patSelLatch1(
+    .clk,
+    .rst_L,
+    .D(patSelLatch1_in),
+    .Q(patSelLatch1_out),
+    .en(patSelLatch_en)
+  );
+
+  register #(8) patSelLatch2(
+    .clk,
+    .rst_L,
+    .D(patSelLatch2_in),
+    .Q(patSelLatch2_out),
+    .en(patSelLatch_en)
+  );
+
+  assign patSelLatch1_in = VRAM_VGA_data_out[1];
+  assign patSelLatch2_in = VRAM_VGA_data_out[0]; // Little Endian, MSB goes in first
+
+  /******** patSel Parsing ********/
+  
+  assign charPatternAddr = {patSelLatch1_out[0], patSelLatch2_out, pixelRow[3:1], 2'd0}; // 14-bit signal to differentiate 512 patterns of 32 bytes each
+  assign horizFlip =       patSelLatch1_out[1];
+  assign vertFlip =        patSelLatch1_out[2];
+  assign paletteSel =      patSelLatch1_out[3];
+  assign patInBg =         patSelLatch1_out[4];
+  
+  /******** Color Latches ********/
+
+  register #(8) colorLatch [3:0] (
+    .clk,
+    .rst_L,
+    .D(VRAM_VGA_data_out[5:2]), // Again, little endian
+    .Q(colorLatch_out[3:0]),
+    .en(colorLatch_en)
+  );  
+  
+  assign CRAM_VGA_addr = {
+    paletteSel,
+    colorLatch_out[0][bitSliceSel[3:1]], 
+    colorLatch_out[1][bitSliceSel[3:1]],
+    colorLatch_out[2][bitSliceSel[3:1]],
+    colorLatch_out[3][bitSliceSel[3:1]]
+  };
+
+  /******* RGB Generation *******/
+
+  assign colorToDisplay = (blank) ? 6'd0 : CRAM_VGA_data_out;
+  colorGen c1(colorToDisplay[1:0], VGA_R);
+  colorGen c2(colorToDisplay[3:2], VGA_G); 
+  colorGen c3(colorToDisplay[5:4], VGA_B);
+
+  /******* Disp FSM *******/
+
+  logic [2:0] disp_state;
+
+  disp_fsm_old DISP_FSM(
+    .*,
+    .col(pixelCol),
+    .waitTime1(waitTime1),
+    .waitTime2(waitTime2),
+    .bgSel_en,
+    .patSelLatch_en,
+    .colorLatch_en,
+    .cs(disp_state),
+    .bitSliceSel(bitSliceSel),
+    .VRAM_go(VRAM_go)
+  );
+
+endmodule
+
+// FSM for vdp_disp_interface
+module disp_fsm_old(
+  input  logic       clk, rst_L,
+  input  logic [9:0] col,
+  input  logic [3:0] waitTime1,
+  input  logic [3:0] waitTime2,
+  output logic       bgSel_en, patSelLatch_en, colorLatch_en,
+  output logic [2:0] cs,
+  output logic [3:0] bitSliceSel,
+  output logic       VRAM_go // Read from VRAM signal
+);
+
+  enum logic [2:0] {PosFetch, WaitForPos, PatFetch, WaitForPat, RowLoad, Wait} cs, ns;
+
+  logic [3:0] waitCount;
+  logic       waitEn, waitClear;
+  
+  assign bitSliceSel = waitCount;
+
+  always_ff @(posedge clk, negedge rst_L) begin
+    if (~rst_L)         waitCount <= 0;
+    else if (waitClear) waitCount <= 0;
+    else if (waitEn)    waitCount <= waitCount + 5'd1;
+  end
+
+  // Next State Logic
+  always_comb begin
+    case(cs)
+      PosFetch:   ns = WaitForPos;
+      WaitForPos: ns = PatFetch;
+      PatFetch:   ns = WaitForPat;
+      WaitForPat: ns = RowLoad;
+      RowLoad:    ns = Wait;
+      Wait:       ns = (col[3:0] == waitTime2) ? PosFetch : Wait;
+      default:    ns = Wait;
+    endcase
+  end
+
+  // Output Logic
+  always_comb begin
+    VRAM_go = 0;
+    colorLatch_en = 0;
+    bgSel_en = 0;
+    patSelLatch_en = 0;
+    waitEn = 0;
+    waitClear = 0;
+    case(cs)
+      PosFetch: begin
+        bgSel_en = 1; 
+        waitClear = 1;
+      end
+      WaitForPos: begin
+        VRAM_go = 1;
+        // No outputs
+      end
+      PatFetch: begin
+        patSelLatch_en = 1; 
+      end
+      WaitForPat: begin
+        VRAM_go = 1;
+        // No outputs
+      end
+      RowLoad: begin
+        colorLatch_en = 1;
+      end
+      Wait: begin
+        waitEn = 1;
+      end
+      default: begin
+        colorLatch_en = 0;
+        bgSel_en = 0;
+        waitEn = 0;
+        patSelLatch_en = 0;
+        waitClear = 0;
+      end
+    endcase
+  end
+
+  always_ff @(posedge clk, negedge rst_L) begin
+    if (~rst_L) cs <= Wait;
+    else        cs <= ns;
+  end
+
+endmodule
+
+
