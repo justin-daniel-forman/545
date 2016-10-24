@@ -1,7 +1,7 @@
 module vdp_top (
 
-  input logic       clk_4, clk_100, // Need both clocks
-  input logic       reset_L,
+  input logic       clk_4, clk_25, clk_100, // Need both clocks
+  input logic       rst_L,
 
   //---------------------------------------------------------------------------
   //Bus Interface
@@ -11,11 +11,11 @@ module vdp_top (
   //  - RD_L:     Main CPU is ready for memory data to be placed onto data bus
   //  - WR_L:     Main CPU is placing valid data onto bus for write
   //---------------------------------------------------------------------------
-  inout wire  [7:0]   data_bus,
-  inout wire  [15:0]  addr_bus,
-  input logic         IORQ_L,
-  input logic         RD_L,
-  input logic         WR_L,
+  inout wire  [7:0] data_bus,
+  inout wire  [7:0] addr_bus,
+  input logic       IORQ_L,
+  input logic       RD_L,
+  input logic       WR_L,
 
   //---------------------------------------------------------------------------
   //Interrupt output interface
@@ -26,7 +26,7 @@ module vdp_top (
   //---------------------------------------------------------------------------
   //Board output interface
   //---------------------------------------------------------------------------
-  output logic VGA_HS, VGA_VS,
+  output logic       VGA_HS, VGA_VS,
   output logic [3:0] VGA_R, VGA_B, VGA_G
 );
 
@@ -56,13 +56,12 @@ module vdp_top (
   // VGA logic
   logic [9:0] pixel_col;
   logic [8:0] pixel_row;
-  logic       HSync, VSync;
 
   /******* Decoder *******/
 
   vdp_port_decoder DECODER(
     .clk(clk_4),
-    .reset_L(reset_L),
+    .reset_L(rst_L),
     .addr_in(addr_bus),
     .data_in(data_bus),
     .IORQ_L(IORQ_L),
@@ -81,7 +80,7 @@ module vdp_top (
   
   vdp_io IO_LOGIC(
     .clk(clk_4),
-    .reset_L(reset_L),
+    .reset_L(rst_L),
     .MODE(MODE),
     .CSR_L(CSR_L),
     .CSW_L(CSW_L),
@@ -105,26 +104,35 @@ module vdp_top (
 
   /******* VGA Interface *******/
 
-  /*
   vdp_disp_interface DISP_INTERFACE(
-    // Already implemented, but need to modularize a bit
+    .clk(clk_25), 
+    .rst_L,
+    .VRAM_VGA_data_out,
+    .CRAM_VGA_data_out(CRAM_VGA_data_out[5:0]),
+    .R2(), // Used for offset into screen map in VRAM
+    .col(pixel_col),
+    .row(pixel_row),
+    .VRAM_VGA_addr,
+    .CRAM_VGA_addr,
+    .VGA_R, 
+    .VGA_G, 
+    .VGA_B
   );
-  */
 
   vga VGA(
-    .clk(clk_100),
-    .rst_L(reset_L),
-    .HSync,
-    .VSync,
+    .clk(clk_25),
+    .rst_L,
+    .HSync(VGA_HS),
+    .VSync(VGA_VS),
     .row(pixel_row),
     .col(pixel_col)
   );
 
   /******* Register File *******/ 
 	 
-  regFile rf(
+  regFile RF(
     .clk(clk_4),
-    .rst_L(reset_L),
+    .rst_L,
     .data_in(rf_data_in),
     .addr(rf_addr),
     .en(rf_en),
@@ -132,34 +140,34 @@ module vdp_top (
   );
  
   /******** VRAM & CRAM ********/  
- 
-  mem #(8, 14, 8) VRAM(
-    .a_clk(clk_4),
-    .b_clk(clk_100),
-    .rst_L(reset_L),
-    .data_in(VRAM_io_data_in),
-    .a_addr(VRAM_io_addr),
-    .b_addr(VRAM_VGA_addr),
-    .a_we(VRAM_io_we),
-    .a_re(VRAM_io_re),
-    .b_re(VRAM_VGA_re),
-    .a_data_out(VRAM_io_data_out),
-    .b_data_out(VRAM_VGA_data_out)
+
+  blk_mem_gen_1 CRAM(
+    .clka(clk_4),
+    .wea(CRAM_io_we), 
+    .addra(CRAM_io_addr),
+    .dina(CRAM_io_data_in), 
+    .douta(CRAM_io_data_out),
+    .clkb(clk_25), 
+    .web(1'b0), 
+    .addrb(CRAM_VGA_addr), 
+    .dinb('bz), 
+    .doutb(CRAM_VGA_data_out) 
   );
 
-  mem #(8, 5, 1) CRAM(
-    .a_clk(clk_4),
-    .b_clk(clk_100),
-    .rst_L(reset_L),
-    .data_in(CRAM_io_data_in),
-    .a_addr(CRAM_io_addr),
-    .b_addr(CRAM_VGA_addr),
-    .a_we(CRAM_io_we),
-    .a_re(CRAM_io_re),
-    .b_re(CRAM_VGA_re),
-    .a_data_out(CRAM_io_data_out),
-    .b_data_out(CRAM_VGA_data_out)
-  ); 
+  vram VRAM( 
+    .clk_100, 
+    .rst_L,
+    .data_in(VRAM_io_data_in),
+    .io_addr(VRAM_io_addr), 
+    .vga_addr(VRAM_VGA_addr),
+    .io_we(VRAM_io_we),
+    .io_re(VRAM_io_re),
+    .vga_re(VRAM_VGA_re),
+    .io_data_out(VRAM_io_data_out),
+    .vga_data_out(VRAM_VGA_data_out)
+  );
+
+  assign VRAM_VGA_re = 8'hFF;
 
   /******* Top Level I/O Interface *******/
 
@@ -168,6 +176,26 @@ module vdp_top (
                     (stat_reg_out) : (
                     (~MODE & ~CSR_L) ? data_port_out : 8'bz 
                     );
+
+  ila_1 LOGIC_ANALYZER(
+    .clk(clk_100),
+    .probe0(VRAM_VGA_addr[0]), // 14 bits
+    .probe1(VRAM_VGA_addr[1]), // 14 bits
+    .probe2(VRAM_VGA_addr[2]), // 14 bits
+    .probe3(VRAM_VGA_addr[3]), // 14 bits
+    .probe4(VRAM_VGA_addr[4]), // 14 bits
+    .probe5(VRAM_VGA_addr[5]), // 14 bits
+    .probe6(pixel_col), 
+    .probe7(pixel_row), 
+    .probe8(VRAM_VGA_data_out[0]), 
+    .probe9(VRAM_VGA_data_out[1]), 
+    .probe10(VRAM_VGA_data_out[2]),  
+    .probe11(VRAM_VGA_data_out[3]), 
+    .probe12(VRAM_VGA_data_out[4]), 
+    .probe13(VRAM_VGA_data_out[5]),                  
+    .probe14({VGA_R, VGA_G, VGA_B}),
+    .probe15()
+  );
 
 endmodule: vdp_top
 
@@ -178,7 +206,7 @@ endmodule: vdp_top
  *              screen looks like.
  */
 module vdp_disp_interface(
-  input  logic             clk, rst_L, // 100 MHz clock
+  input  logic             clk, rst_L, // 25 MHz clock
   input  logic [7:0][7:0]  VRAM_VGA_data_out,
   input  logic      [5:0]  CRAM_VGA_data_out,
   input  logic      [7:0]  R2, // Used for offset into screen map in VRAM
@@ -227,7 +255,8 @@ module vdp_disp_interface(
   assign pixelRow = row - 9'd48;
   assign pixelCol = col - 9'd64 + 9'd1; // Add 1 to pre-fetch pixel data
 
-  assign bgSel_in = (~blank) ? (14'h3800 + {pixelRow[7:3], pixelCol[7:3]}) : 14'h3800; // Either blank screen or iterating
+  // Each pixel position is 2 bytes, so ----------------------------------|
+  assign bgSel_in = (~blank) ? (14'h3800 + {pixelRow[8:4], pixelCol[8:4], 1'b0}) : 14'h3800; // Either blank screen or iterating
 
   assign VRAM_VGA_addr[0] = bgSel_out;
   assign VRAM_VGA_addr[1] = bgSel_out + 14'd1;
@@ -260,11 +289,11 @@ module vdp_disp_interface(
 
   /******** patSel Parsing ********/
   
-  assign charPatternAddr = {patSelLatch2_out[0], patSelLatch1_out, row[2:0], 2'd0}; // 14-bit signal to differentiate 512 patterns of 32 bytes each
-  assign horizFlip =       patSelLatch2_out[1];
-  assign vertFlip =        patSelLatch2_out[2];
-  assign paletteSel =      patSelLatch2_out[3];
-  assign patInBg =         patSelLatch2_out[4];
+  assign charPatternAddr = {patSelLatch1_out[0], patSelLatch2_out, row[3:1], 2'd0}; // 14-bit signal to differentiate 512 patterns of 32 bytes each
+  assign horizFlip =       patSelLatch1_out[1];
+  assign vertFlip =        patSelLatch1_out[2];
+  assign paletteSel =      patSelLatch1_out[3];
+  assign patInBg =         patSelLatch1_out[4];
   
   /******** Color Latches ********/
 
@@ -278,10 +307,10 @@ module vdp_disp_interface(
   
   assign CRAM_VGA_addr = {
     paletteSel,
-    colorLatch_out[0][col[2:0]], 
-    colorLatch_out[1][col[2:0]],
-    colorLatch_out[2][col[2:0]],
-    colorLatch_out[3][col[2:0]]
+    colorLatch_out[0][col[3:1]], 
+    colorLatch_out[1][col[3:1]],
+    colorLatch_out[2][col[3:1]],
+    colorLatch_out[3][col[3:1]]
   };
 
   /******* RGB Generation *******/
@@ -303,24 +332,33 @@ module vdp_disp_interface(
 endmodule
 
 // FSM for vdp_disp_interface
-// NOTE: Assumes lockstep from reset, maybe wrong?
 module disp_fsm(
   input  logic       clk, rst_L,
+  input  logic [9:0] col,
   output logic       bgSel_en, patSelLatch_en, colorLatch_en
 );
 
-  enum logic [1:0] {PosFetch, PatFetch, RowLoad, Wait} cs, ns;
+  enum logic [2:0] {PosFetch, WaitForPos, PatFetch, WaitForPat, RowLoad, Wait} cs, ns;
 
-  logic [4:0] patWidthCount;
-  logic       patWidthCount_en;
+  logic [3:0] waitCount;
+  logic       waitEn, waitClear;
+
+  always_ff @(posedge clk, negedge rst_L) begin
+    if (~rst_L)         waitCount <= 0;
+    else if (waitClear) waitCount <= 0;
+    else if (waitEn)    waitCount <= (waitCount < 4'd10) ? waitCount + 5'd1 : 5'd0;
+  end
 
   // Next State Logic
   always_comb begin
     case(cs)
-      PosFetch: ns = PatFetch;
-      PatFetch: ns = RowLoad;
-      RowLoad:  ns = Wait;
-      Wait:     ns = (patWidthCount == 5'd28) ? PosFetch : Wait;
+      PosFetch:   ns = WaitForPos;
+      WaitForPos: ns = PatFetch;
+      PatFetch:   ns = WaitForPat;
+      WaitForPat: ns = RowLoad;
+      RowLoad:    ns = Wait;
+      Wait:       ns = (waitCount == 4'd10 || col[3:0] == 4'd10) ? PosFetch : Wait;
+      default:    ns = Wait;
     endcase
   end
 
@@ -329,19 +367,34 @@ module disp_fsm(
     colorLatch_en = 0;
     bgSel_en = 0;
     patSelLatch_en = 0;
-    patWidthCount_en = 0;
+    waitEn = 0;
+    waitClear = 0;
     case(cs)
       PosFetch: begin
-        bgSel_en = 1;
+        bgSel_en = 1; 
+        waitClear = 1;
+      end
+      WaitForPos: begin
+        // No outputs
       end
       PatFetch: begin
-        patSelLatch_en = 1;
+        patSelLatch_en = 1; 
+      end
+      WaitForPat: begin
+        // No outputs
       end
       RowLoad: begin
         colorLatch_en = 1;
       end
       Wait: begin
-        patWidthCount_en = 1;
+        waitEn = 1;
+      end
+      default: begin
+        colorLatch_en = 0;
+        bgSel_en = 0;
+        waitEn = 0;
+        patSelLatch_en = 0;
+        waitClear = 0;
       end
     endcase
   end
@@ -350,15 +403,6 @@ module disp_fsm(
     if (~rst_L) cs <= Wait;
     else        cs <= ns;
   end
-
-  // Used to wait 28 cc's (4 cc's * 8 pixel/pattern not including 3 fetch states)
-  counter #(5) PatWidthCount (
-    .clk, 
-    .rst_L,
-    .clear(patWidthCount == 5'd28),
-    .en(patWidthCount_en),
-    .count(patWidthCount)
-  );
 
 endmodule
 
@@ -374,6 +418,7 @@ module colorGen(
       1: RGBVal = 4'd5;
       2: RGBVal = 4'd10;
       3: RGBVal = 4'd15;
+      default: RGBVal = 4'd0;
     endcase
   end
 
@@ -393,7 +438,7 @@ module vdp_port_decoder(
   //---------------------------------------------------------------------------
   input  logic clk,
   input  logic reset_L,
-  input  logic [15:0] addr_in,
+  input  logic [7:0] addr_in,
   input  logic [7:0]  data_in,
 
   //---------------------------------------------------------------------------
@@ -423,43 +468,34 @@ module vdp_port_decoder(
   } state, next_state;
 
   always @(posedge clk) begin
-    if(~reset_L) begin
-      state <= WAIT;
-    end
-
-    else begin
-      state <= next_state;
-    end
+    if(~reset_L) state <= WAIT;
+    else state <= next_state;
   end
 
   always_comb begin
     // intialization
     vdp_go = 0;
+    MODE   = 0; //Command port -> 1, data port -> 0
+    CSR_L  = 1;
+    CSW_L  = 1;
      
     // next state logic
     case (state)
-
       WAIT: begin
         if(~IORQ_L & ~WR_L) begin
           next_state = WR0;
         end
-
         else if (~IORQ_L & ~RD_L) begin
           next_state = RD0;
-        end
+        end else next_state = WAIT;
       end
-
       WR0: next_state = WR1;
-
       WR1: next_state = WAIT;
-
       RD0: next_state = RD1;
-
       RD1: next_state = WAIT;
-
       default: next_state = WAIT;
     endcase
-
+    
     // output logic
     case (state)
       WAIT: begin
@@ -467,23 +503,25 @@ module vdp_port_decoder(
         CSR_L    = 1;
         CSW_L    = 1;
       end
-
       RD0, RD1: begin
-        MODE  = (addr_in[7:0] == 8'hBF); //Command port -> 1, data port -> 0
+        MODE  = (addr_in == 8'hBF); //Command port -> 1, data port -> 0
         CSR_L = 0;
         CSW_L = 1;
         vdp_go = 1;
       end
-
       WR0, WR1: begin
-        MODE  = (addr_in[7:0] == 8'hBF); //Command port -> 1, data port -> 0
+        MODE  = (addr_in == 8'hBF); //Command port -> 1, data port -> 0
         CSR_L = 1;
         CSW_L = 0; 
-	vdp_go = 1; 
+	    vdp_go = 1; 
       end
-
+      default: begin
+        vdp_go = 0;
+        MODE   = 0; //Command port -> 1, data port -> 0
+        CSR_L  = 1;
+        CSW_L  = 1;
+      end
     endcase
-
   end
 
 endmodule: vdp_port_decoder
@@ -637,6 +675,7 @@ module vdp_io_fsm(
 
   // NS logic
   always_comb begin
+    ns = Load_addr_1;
     case(cs) 
       Load_addr_1: ns = (go) ? Load_addr_1_wait : Load_addr_1;
       Load_addr_1_wait: ns = (~go) ? Load_addr_2 : Load_addr_1_wait;
@@ -671,6 +710,7 @@ module vdp_io_fsm(
              ) : CRAM_write_wait;
       end
       CRAM_write_data: ns = CRAM_write_wait;
+      default: ns = Load_addr_1;
     endcase
   end
 
@@ -733,6 +773,19 @@ module vdp_io_fsm(
         CRAM_we = 1;
         wr_addr_en = 1; // Autoincrement address in case of sequential write
       end
+      default: begin
+        wr_cmd_1 = 0;
+        wr_cmd_2 = 0;
+        rf_en = 0;
+        wr_addr_sel = 0;
+        wr_addr_en = 0;
+        stat_en = 0;
+        data_in_sel = 0;
+        VRAM_re = 0;
+        VRAM_we = 0;
+        CRAM_re = 0;
+        CRAM_we = 0;
+      end
     endcase
   end
 
@@ -743,17 +796,6 @@ module vdp_io_fsm(
   end 
 
 endmodule
-
-/* command_decoder
- * Description: Interprets the two byte command written to the command port
- *              to generate the appropriate control signals for the specified
- *              read/write sequence
- */
-module command_decoder (
-);
-
-
-endmodule: command_decoder
 
 module regFile (
   input  logic clk,
@@ -782,4 +824,117 @@ module regFile (
     end
   endgenerate
 
+endmodule
+
+// Overclocked RAM, 2 ports:
+//   - Read/Write Port
+//   - Read Port
+// Read latency is 2 clock cycles, writes are 1.
+module vram(
+  input  logic             clk_100, rst_L,
+  input  logic      [7:0]  data_in,
+  input  logic      [13:0] io_addr, 
+  input  logic [7:0][13:0] vga_addr,
+  input  logic             io_we,
+  input  logic             io_re,
+  input  logic      [7:0]  vga_re,
+  output logic      [7:0]  io_data_out,
+  output logic [7:0][7:0]  vga_data_out);
+  
+  logic [13:0] addr_a, addr_b;
+  logic [7:0]  data_out_a, data_out_b;
+  
+  logic       we;
+  enum logic [2:0] {WOrInit, R0, R1, R2, R3, Wait0, Wait1, Wait2} cs, ns;
+  logic [7:0] en;
+
+  // Output and State Logic
+  always_comb begin
+    addr_a = 0;
+    addr_b = 0;
+    en = 0;
+    we = 0;
+    case (cs)
+      WOrInit: begin // If both io_re and io_we are low, vga_addr[0]. 
+        addr_a = ~(io_re | io_we) ? vga_addr[0] : io_addr;
+        addr_b = vga_addr[4];
+        we = io_we;
+        ns = R0;
+      end
+      R0: begin
+        addr_a = vga_addr[1];
+        addr_b = vga_addr[5];
+        en = 8'h11;
+        ns = R1;
+      end
+      R1: begin
+        addr_a = vga_addr[2];
+        addr_b = vga_addr[6];
+        en = 8'h22;
+        ns = R2;
+      end
+      R2: begin
+        addr_a = vga_addr[3];
+        addr_b = vga_addr[7];
+        en = 8'h44;
+        ns = R3;
+      end
+      R3: begin
+        addr_a = vga_addr[3];
+        addr_b = vga_addr[7];
+        en = 8'h88;
+        ns = Wait0;
+      end
+      Wait0: ns = Wait1;
+      Wait1: ns = Wait2;
+      Wait2: ns = WOrInit;
+      default: begin
+        ns = WOrInit;
+        addr_a = 0;
+        addr_b = 0;
+        en = 0;
+        we = 0;
+      end
+    endcase
+  end
+ 
+  // 3:0
+  register #(8) data_out_latches_A [3:0] (
+    .clk(clk_100),
+    .rst_L,
+    .D(data_out_a),
+    .en(en[3:0]),
+    .Q(vga_data_out[3:0])
+  );
+
+  // 7:4
+  register #(8) data_out_latches_B [3:0] (
+    .clk(clk_100),
+    .rst_L,
+    .D(data_out_b),
+    .en(en[7:4]),
+    .Q(vga_data_out[7:4])
+  );
+ 
+  assign io_data_out = io_re ? vga_data_out[0] : 'bz;
+ 
+  // Memory
+  blk_mem_gen_0 cp(
+    .clka(clk_100), // A-port is for io writes and VGA reads
+    .wea(we),
+    .addra(addr_a),
+    .dina(data_in),
+    .douta(data_out_a),
+    .clkb(clk_100), // B-port is for VGA reads
+    .web(1'b0),
+    .addrb(addr_b),
+    .dinb('bz),
+    .doutb(data_out_b)
+  );
+  
+  always_ff @(posedge clk_100, negedge rst_L) begin
+    if (~rst_L) cs <= WOrInit;
+    else        cs <= ns;
+  end
+  
 endmodule
