@@ -1,75 +1,104 @@
 module VGA_test(
   input  logic  GCLK, // Pin Y9
   input  logic  BTNC, // Active High
+  input  logic [7:0] SW,
   output logic [3:0] VGA_R, VGA_G, VGA_B,
   output logic  VGA_HS, VGA_VS);
 
-  logic  rst_L, clk;
-  logic [8:0] row;
-  logic [9:0] col;
-  logic  HSync, VSync;
-  logic [3:0] VGA_R, VGA_G, VGA_B;
-  logic [20:0] i;
+  logic        clk_4, clk_25, clk_100, rst_L;
+  logic [8:0]  row;
+  logic [9:0]  col;
+  
+  logic       clkDiv_25;
+  logic [3:0] clkDiv_4;
+
+  /*
+  clk_wiz_0 CLK25(
+    .clk_in1(GCLK),
+    .clk_out1(clk_25),
+    .reset(BTNC),
+    .locked()
+  );
+  
+  clk_wiz_0 CLK10(
+    .clk_in1(GCLK),
+    .clk_out1(clk_4),
+    .reset(BTNC),
+    .locked()
+  );
+  */
 
   logic [7:0][7:0]  VRAM_VGA_data_out;
   logic [7:0][13:0] VRAM_VGA_addr;
-  logic [7:0]  CRAM_VGA_data_out;
-  logic [4:0]  CRAM_VGA_addr;
+  logic [7:0]       CRAM_VGA_data_out;
+  logic [4:0]       CRAM_VGA_addr;
+    
+  wire [7:0]  data_bus, addr_bus;
+  logic       IORQ_L, RD_L, WR_L;
+ 
+  assign rst_L = ~BTNC;
+  assign clk_100 = GCLK;
+  assign IORQ_L = 1;
+  assign RD_L = 1;
+  assign WR_L = 1;
+ 
+  //vga VGA(.clk(clk_25), .rst_L, .HSync(VGA_HS), .VSync(VGA_VS), .row, .col);
+  vdp_top vdp(.*);
 
-  always_comb begin
-    clk = GCLK;
-    rst_L = ~BTNC;
-    VGA_HS = HSync;
-    VGA_VS = VSync;
-  end
-
-  vga VGA(.*); 
-  vdp_disp_interface INTERFACE(
-    .*,
-    .VRAM_VGA_data_out,
-    .CRAM_VGA_data_out(CRAM_VGA_data_out[5:0]),
-    .R2(),
-    .col,
-    .row,
-    .VRAM_VGA_addr,
-    .CRAM_VGA_addr,
-    .VGA_R, 
-    .VGA_G, 
-    .VGA_B 
-  );
-  mem #(8, 14, 8) VRAM(
-    .b_clk(clk),
-    .rst_L,
-    .b_addr(VRAM_VGA_addr),
-    .b_re(8'hFF),
-    .b_data_out(VRAM_VGA_data_out)
-  );
-  mem #(8, 5, 1) CRAM(
-    .b_clk(clk),
-    .rst_L,
-    .b_addr(CRAM_VGA_addr),
-    .b_re(1'b1),
-    .b_data_out(CRAM_VGA_data_out)
-  );
-
-  /*
+  /* 
   initial begin
-    clk = 1;
-    forever #1 clk = ~clk;
+    clk_100 = 0;
+    forever #1 clk_100 = ~clk_100;
+  end
+  
+  logic [20:0] i;
+
+  initial begin
+    rst_L = 0;
+    @(posedge clk_100);
+    rst_L <= 1;
+    for (i = 0; i < 21'h1FFFFF; i++) @(posedge clk_100);
+    $finish;
   end
   */
 
-  initial begin
-    $readmemb("../../CRAM.bin", CRAM.memory);
-    $readmemb("../../VRAM.bin", VRAM.memory);
-    /*
-    rst_L = 0;
-    @(posedge clk);
-    rst_L <= 1;
-    for (i = 0; i < 1680000; i++) // Should be enough to do one full frame
-      @(posedge clk);
-    #10 $finish;
-    */
+  // Divide the 100 MHz clk to get 25 MHz clk and 4 MHz clk
+  always_ff @(posedge clk_100, negedge rst_L) begin
+    if (~rst_L) begin 
+      clkDiv_4 <= 0;
+      clkDiv_25 <= 0;
+      clk_4 <= 0;
+      clk_25 <= 0;
+    end
+    else begin
+      clkDiv_4 <= (clkDiv_4 == 4'd9) ? 4'd0 : clkDiv_4 + 4'd1;
+      clkDiv_25 <= clkDiv_25 + 2'd1;
+      clk_4 <= (clkDiv_4 == 4'd9) ? ~clk_4 : clk_4;
+      clk_25 <= (clkDiv_25 == 1'd1) ? ~clk_25 : clk_25;
+    end
+  end  
+
+  /*
+  logic red_on;
+  logic green_on;
+  logic blue_on;
+  
+  assign red_on = ((col >= 10'd320 && col < 10'd576) || (col == 10'd64)) &&
+                   (row >= 48 && row < 432);
+  assign green_on = ((col >= 10'd192 && col < 10'd320) || 
+                     (col >= 10'd448 && col < 10'd576) || (col == 10'd64)) &&
+                     (row >= 48 && row < 432);
+  assign blue_on = ((col >= 10'd128 && col < 10'd192) || 
+                    (col >= 10'd256 && col < 10'd320) ||
+                    (col >= 10'd384 && col < 10'd448) || 
+                    (col >= 10'd512 && col < 10'd576) || (col == 10'd64)) &&
+                    (row >= 48 && row < 432);
+
+  always_comb begin
+    VGA_R = red_on ? 4'hF : 4'h0;
+    VGA_G = green_on ? 4'hF : 4'h0;
+    VGA_B = blue_on ? 4'hF : 4'h0;    
   end
+  */
 
 endmodule

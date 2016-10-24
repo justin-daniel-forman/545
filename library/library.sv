@@ -1,41 +1,38 @@
 module register #(parameter w = 8) (
-  input logic      clk,
-  input logic      rst_L,
-  input logic [w]  D,
-  input logic      en,
-  output logic [w] Q);
+  input logic          clk,
+  input logic          rst_L,
+  input logic [w-1:0]  D,
+  input logic          en,
+  output logic [w-1:0] Q);
 
-  logic [w] value;
+  logic [w-1:0] value;
 
   assign Q = value;
-
-  always @(posedge clk) begin
+  
+  always @(posedge clk, negedge rst_L) begin
     if(~rst_L) begin
       value <= 0;
     end
-
     else if(en) begin
       value <= D;
     end
-
     else begin
       value <= value;
     end
-
   end
 
 endmodule
 
 module register_def #(parameter w = 8) (
-  input   logic     clk,
-  input   logic     rst_L,
-  input   logic [w] D,
-  input   logic     en,
-  input   logic [w] def,
-  output  logic [w] Q
+  input   logic         clk,
+  input   logic         rst_L,
+  input   logic [w-1:0] D,
+  input   logic         en,
+  input   logic [w-1:0] def,
+  output  logic [w-1:0] Q
 );
 
-  logic [w] value;
+  logic [w-1:0] value;
 
   assign Q = value;
 
@@ -76,6 +73,7 @@ module counter #(parameter W = 8) (
 
 endmodule
 
+/*
 // A memory with 2 ports:
 // 1 port clocked at 4MHz to interface with z80:
 //   -- 1 Write Port
@@ -95,16 +93,13 @@ module mem #(parameter DATA = 8, ADDR = 16, NUMREAD = 8)(
 
   logic [DATA-1:0] memory [2**ADDR-1:0];
 
-  /*
   // A-port
   always_ff @(posedge b_clk, negedge rst_L) begin // Change clk back later!
-    /* Removing write port for testing
+    //Removing write port for testing
     if (a_we) memory[a_addr] <= data_in;
-    /
     if (a_re) a_data_out <= memory[a_addr];
     else      a_data_out <= 'bz;
   end
-  */
 
   // B-port
   generate
@@ -118,3 +113,4 @@ module mem #(parameter DATA = 8, ADDR = 16, NUMREAD = 8)(
   endgenerate
 
 endmodule
+*/
