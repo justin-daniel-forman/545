@@ -650,6 +650,16 @@ module decoder (
 
     MACRO_DEFINE_STATES OR_IY_d 11
 
+    MACRO_DEFINE_STATES XOR_r 1
+
+    MACRO_DEFINE_STATES XOR_n 3
+
+    MACRO_DEFINE_STATES XOR_HL 3
+
+    MACRO_DEFINE_STATES XOR_IX_d 11
+
+    MACRO_DEFINE_STATES XOR_IY_d 11
+
 
     MACRO_DEFINE_STATES INC_r 1
 
@@ -764,6 +774,7 @@ module decoder (
           `SBC_r:     next_state = (op0[2:0] != 3'b110) ? SBC_r_0   : FETCH_3;
           `AND_r:     next_state = (op0[2:0] != 3'b110) ? AND_r_0   : FETCH_3;
           `OR_r:      next_state = (op0[2:0] != 3'b110) ? OR_r_0    : FETCH_3;
+          `XOR_r:     next_state = (op0[2:0] != 3'b110) ? XOR_r_0   : FETCH_3;
           `INC_r:     next_state = (op0[5:3] != 3'b110) ? INC_r_0   : FETCH_3;
           `CPL:       next_state = CPL_0;
           `CCF:       next_state = CCF_0;
@@ -815,6 +826,9 @@ module decoder (
             `AND_HL:    next_state = AND_HL_0;
             `OR_n:      next_state = OR_n_0;
             `OR_HL:     next_state = OR_HL_0;
+            `XOR_n:     next_state = XOR_n_0;
+            `XOR_HL:    next_state = XOR_HL_0;
+
             default:    next_state = FETCH_0;
           endcase
         end
@@ -920,10 +934,12 @@ module decoder (
           `SUB_IY_d:    next_state = (op0[7:4] == 4'hF) ?  SUB_IY_d_0   : SUB_IX_d_0;
           `SBC_IX_d:    next_state = (op0[7:4] == 4'hD) ?  SBC_IX_d_0   : SBC_IY_d_0;
           `SBC_IY_d:    next_state = (op0[7:4] == 4'hF) ?  SBC_IY_d_0   : SBC_IX_d_0;
-          `AND_IX_d:  next_state = (op0[7:4] == 4'hD) ?  AND_IX_d_0 : AND_IY_d_0;
-          `AND_IY_d:  next_state = (op0[7:4] == 4'hF) ?  AND_IY_d_0 : AND_IX_d_0;
-          `OR_IX_d:   next_state = (op0[7:4] == 4'hD) ?  OR_IX_d_0 : OR_IY_d_0;
-          `OR_IY_d:   next_state = (op0[7:4] == 4'hF) ?  OR_IY_d_0 : OR_IX_d_0;
+          `AND_IX_d:    next_state = (op0[7:4] == 4'hD) ?  AND_IX_d_0 : AND_IY_d_0;
+          `AND_IY_d:    next_state = (op0[7:4] == 4'hF) ?  AND_IY_d_0 : AND_IX_d_0;
+          `OR_IX_d:     next_state = (op0[7:4] == 4'hD) ?  OR_IX_d_0  : OR_IY_d_0;
+          `OR_IY_d:     next_state = (op0[7:4] == 4'hF) ?  OR_IY_d_0  : OR_IX_d_0;
+          `XOR_IX_d:    next_state = (op0[7:4] == 4'hD) ?  XOR_IX_d_0 : XOR_IY_d_0;
+          `XOR_IY_d:    next_state = (op0[7:4] == 4'hF) ?  XOR_IY_d_0 : XOR_IX_d_0;
 
           `INC_IX_d:    next_state = (op0[7:4] == 4'hD) ?  INC_IX_d_0 : INC_IY_d_0;
           `INC_IY_d:    next_state = (op0[7:4] == 4'hF) ?  INC_IY_d_0 : INC_IX_d_0;
@@ -1148,6 +1164,16 @@ module decoder (
       MACRO_ENUM_STATES OR_IX_d 11
 
       MACRO_ENUM_STATES OR_IY_d 11
+
+      MACRO_ENUM_STATES XOR_r 1
+
+      MACRO_ENUM_STATES XOR_n 3
+
+      MACRO_ENUM_STATES XOR_HL 3
+
+      MACRO_ENUM_STATES XOR_IX_d 11
+
+      MACRO_ENUM_STATES XOR_IY_d 11
 
 
       MACRO_ENUM_STATES INC_r 1
@@ -3673,89 +3699,137 @@ module decoder (
         endcase
       end
 
-      //OR n
-      OR_n_0: begin
+      //XOR r
+      XOR_r_0: begin
+        ld_F_data = 1;
+        MACRO_RESET H
+        MACRO_RESET N
+        MACRO_RESET C
+
+        unique case(op0[2:0])
+          3'b111: begin
+            MACRO_8_XOR A
+          end
+          3'b000: begin
+            MACRO_8_XOR B
+          end
+          3'b001: begin
+            MACRO_8_XOR C
+          end
+          3'b010: begin
+            MACRO_8_XOR D
+          end
+          3'b011: begin
+            MACRO_8_XOR E
+          end
+          3'b100: begin
+            MACRO_8_XOR H
+          end
+          3'b101: begin
+            MACRO_8_XOR L
+          end
+
+        endcase
+      end
+
+      //OR n, XOR n
+      OR_n_0, XOR_n_0: begin
         MACRO_READ_0
         MACRO_16_INC PC
         ld_MARL = 1;
         ld_MARH = 1;
       end
 
-      OR_n_1: begin
+      OR_n_1, XOR_n_1: begin
         MACRO_READ_1
         drive_MAR = 1;
       end
 
-      OR_n_2: begin
+      OR_n_2, XOR_n_2: begin
         ld_F_data = 1;
         MACRO_RESET H
         MACRO_RESET N
         MACRO_RESET C
-        MACRO_8_OR Z
+
+        if(state == OR_n_2) begin
+          MACRO_8_OR Z
+        end else begin
+          MACRO_8_XOR Z
+        end
       end
 
-      //OR (HL)
-      OR_HL_0: begin
+      //OR (HL), XOR (HL)
+      OR_HL_0, XOR_HL_0: begin
         MACRO_16_DRIVE HL
         MACRO_READ_0
       end
 
-      OR_HL_1: begin
+      OR_HL_1, XOR_HL_1: begin
         MACRO_16_DRIVE HL
         MACRO_READ_1
       end
 
-      OR_HL_2: begin
+      OR_HL_2, XOR_HL_2: begin
         ld_F_data = 1;
         MACRO_RESET H
         MACRO_RESET N
         MACRO_RESET C
-        MACRO_8_OR Z
+
+        if(state == OR_HL_2) begin
+          MACRO_8_OR Z
+        end else begin
+          MACRO_8_XOR Z
+        end
       end
 
-      //OR (IX+d) OR (IY+d)
-      OR_IX_d_0, OR_IY_d_0: begin
+      //OR (IX+d) OR (IY+d) XOR (IX+d) XOR (IY+d)
+      OR_IX_d_0, OR_IY_d_0, XOR_IX_d_0, XOR_IY_d_0: begin
         MACRO_READ_0
         MACRO_16_INC PC
       end
 
-      OR_IX_d_1, OR_IY_d_1: begin
+      OR_IX_d_1, OR_IY_d_1, XOR_IX_d_1, XOR_IY_d_1: begin
         MACRO_READ_1
         MACRO_16_DRIVE PC
       end
 
-      OR_IX_d_2, OR_IY_d_2: begin
+      OR_IX_d_2, OR_IY_d_2, XOR_IX_d_2, XOR_IY_d_2: begin
         ld_TEMP = 1;
       end
 
-      OR_IX_d_3, OR_IY_d_3: begin
+      OR_IX_d_3, OR_IY_d_3, XOR_IX_d_3, XOR_IY_d_3: begin
         alu_op = `ADD_SE_B;
-        drive_IXH = (state == OR_IX_d_3);
-        drive_IXL = (state == OR_IX_d_3);
-        drive_IYH = (state == OR_IY_d_3);
-        drive_IYL = (state == OR_IY_d_3);
+        drive_IXH = (op0[7:4] == 4'hD);
+        drive_IXL = (op0[7:4] == 4'hD);
+        drive_IYH = (op0[7:4] == 4'hF);
+        drive_IYL = (op0[7:4] == 4'hF);
         drive_reg_addr = 1;
         drive_alu_addr = 1;
         ld_MARH = 1;
         ld_MARL = 1;
       end
 
-      OR_IX_d_8, OR_IY_d_8: begin
+      OR_IX_d_8, OR_IY_d_8, XOR_IX_d_8, XOR_IY_d_8: begin
         drive_MAR = 1;
         MACRO_READ_0
       end
 
-      OR_IX_d_9, OR_IY_d_9: begin
+      OR_IX_d_9, OR_IY_d_9, XOR_IX_d_9, XOR_IY_d_9: begin
         drive_MAR = 1;
         MACRO_READ_1
       end
 
-      OR_IX_d_10, OR_IY_d_10: begin
+      OR_IX_d_10, OR_IY_d_10, XOR_IX_d_10, XOR_IY_d_10: begin
         ld_F_data = 1;
         MACRO_RESET H
         MACRO_RESET N
         MACRO_RESET C
-        MACRO_8_OR Z
+
+        if(state == OR_IX_d_10 || state == OR_IY_d_10) begin
+          MACRO_8_OR Z
+        end else begin
+          MACRO_8_XOR Z
+        end
       end
 
       //INC r

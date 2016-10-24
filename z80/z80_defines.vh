@@ -84,6 +84,11 @@
 `define OR_HL       8'hB6
 `define OR_IX_d     8'hB6
 `define OR_IY_d     8'hB6
+`define XOR_r       8'b10101???
+`define XOR_n       8'hEE
+`define XOR_HL      8'hAE
+`define XOR_IX_d    8'hAE
+`define XOR_IY_d    8'hAE
 
 `define INC_r       8'b00???100
 `define INC_HL      8'h34
@@ -136,5 +141,6 @@
 `define ALU_CPL   5'he
 `define AND       5'hf
 `define OR        5'h10
-`define ALU_RST   5'h11
-`define DECR_BC   5'h12
+`define XOR       5'h11
+`define ALU_RST   5'h12
+`define DECR_BC   5'h13

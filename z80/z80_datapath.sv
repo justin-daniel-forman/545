@@ -622,8 +622,12 @@ module alu #(parameter w = 8)(
 
       end
 
-      `OR: begin
-        C = A | B;
+      `OR, `XOR: begin
+        if(op == `OR) begin
+          C = A | B;
+        end else begin
+          C = A ^ B;
+        end
 
         //set s flag when negative
         F_out[`S_flag] = C[w-1];
@@ -631,9 +635,14 @@ module alu #(parameter w = 8)(
         //set z flag when zero
         F_out[`Z_flag] = (C == 0);
 
-        //set PV flag when overflow
-        F_out[`PV_flag] = (C[7] & ~A[7]) ? 1 : 0;
+        //set PV flag when overflow for OR
+        if(op == `OR) begin
+          F_out[`PV_flag] = (C[7] & ~A[7]) ? 1 : 0;
 
+        //set PV flag for parity for xor
+        end else begin
+          F_out[`PV_flag] = C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0];
+        end
       end
 
       `ALU_B: begin
