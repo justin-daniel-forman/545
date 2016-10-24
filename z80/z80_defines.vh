@@ -64,7 +64,16 @@
 `define ADC_A_HL    8'h8E
 `define ADC_A_IX_d  8'h8E
 `define ADC_A_IY_d  8'h8E
-
+`define SUB_r       8'b10010???
+`define SUB_n       8'hD6
+`define SUB_HL      8'h96
+`define SUB_IX_d    8'h96
+`define SUB_IY_d    8'h96
+`define SBC_r       8'b10011???
+`define SBC_n       8'hDE
+`define SBC_HL      8'h9E
+`define SBC_IX_d    8'h9E
+`define SBC_IY_d    8'h9E
 `define AND_r       8'b10100???
 `define AND_n       8'hE6
 `define AND_HL      8'hA6
@@ -75,6 +84,11 @@
 `define OR_HL       8'hB6
 `define OR_IX_d     8'hB6
 `define OR_IY_d     8'hB6
+`define XOR_r       8'b10101???
+`define XOR_n       8'hEE
+`define XOR_HL      8'hAE
+`define XOR_IX_d    8'hAE
+`define XOR_IY_d    8'hAE
 
 `define INC_r       8'b00???100
 `define INC_HL      8'h34
@@ -119,15 +133,22 @@
 `define DECR_A    5'h4
 `define ALU_NOP   5'h5
 `define ADD       5'h6
-`define ADD_SE_B  5'h7
-`define ALU_B     5'h8
-`define SUB       5'h9
-`define ADC       5'ha
-`define ALU_CCF   5'hb
-`define ALU_CPL   5'hc
-`define AND       5'hd
-`define OR        5'he
-`define ALU_RST   5'hf
+`define ADC       5'h7
+`define ADD_SE_B  5'h8
+`define ALU_B     5'h9
+`define SUB       5'ha
+`define SBC       5'hb
+`define SUB_EX    5'hc
+`define ALU_CCF   5'hd
+`define ALU_CPL   5'he
+`define AND       5'hf
+
+//TODO: Update all of these as necessary
+`define OR        5'h18
+`define XOR       5'h19
+`define ALU_RST   5'h1a
+`define DECR_BC   5'h1b
+
 `define BIT_TEST_0  5'h10
 `define BIT_TEST_1  5'h11
 `define BIT_TEST_2  5'h12
