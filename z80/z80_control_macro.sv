@@ -650,6 +650,11 @@ module decoder (
     MACRO_DEFINE_STATES NOP 1
 
 
+    MACRO_DEFINE_STATES BIT_b_r 4
+
+    MACRO_DEFINE_STATES BIT_b_HL_x 4
+
+
     MACRO_DEFINE_STATES JP_nn 6
 
     MACRO_DEFINE_STATES JP_cc_nn 6
@@ -705,6 +710,7 @@ module decoder (
     case(state)
       FETCH_1: op0 <= data_in;
       FETCH_5: op1 <= data_in;
+      BIT_b_r_2: op1 <= data_in;
     endcase
   end
 
@@ -810,6 +816,7 @@ module decoder (
             `EX_SP_HL:   next_state = EX_SP_HL_0;
             `PUSH_qq:    next_state = PUSH_qq_0;
             `POP_qq:     next_state = POP_qq_0;
+            `BIT_b_r:    next_state = BIT_b_r_0;
             `JP_nn:      next_state = JP_nn_0;
             `JP_cc_nn:   next_state = JP_cc_nn_0;
             `JR_e:       next_state = JR_e_0;
@@ -1144,6 +1151,12 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN Bit Set, Rst, and Test group
       //-----------------------------------------------------------------------
+
+      MACRO_ENUM_STATES_NR BIT_b_r 4
+
+      BIT_b_r_3: next_state = ((op1[2:0] == 3'b110) ? BIT_b_HL_x_0 : FETCH_0);
+
+      MACRO_ENUM_STATES BIT_b_HL_x 4
 
       //-----------------------------------------------------------------------
       //END Bit Set, Rst, and Test group
@@ -3725,6 +3738,64 @@ module decoder (
       //BEGIN Bit Set, Rst, and Test group
       //-----------------------------------------------------------------------
 
+      //BIT_b_r
+      BIT_b_r_0: begin
+        MACRO_READ_0
+        MACRO_16_INC PC
+      end
+
+      BIT_b_r_1: begin
+        MACRO_READ_1
+        MACRO_16_DRIVE PC
+      end
+
+      BIT_b_r_3: begin
+        drive_alu_data = 1;
+        alu_op = {2'b10,op1[5:3]};
+        ld_F_data = 1;
+        unique case(op1[2:0])
+          3'b000: begin
+            MACRO_8_DRIVE B
+          end
+          3'b001: begin
+            MACRO_8_DRIVE C
+          end
+          3'b010: begin
+            MACRO_8_DRIVE D
+          end
+          3'b011: begin
+            MACRO_8_DRIVE E
+          end
+          3'b100: begin
+            MACRO_8_DRIVE H
+          end
+          3'b101: begin
+            MACRO_8_DRIVE L
+          end
+          3'b110: begin
+            drive_alu_data = 0;
+            alu_op = `ALU_NOP;
+            ld_F_data = 0;
+            MACRO_16_DRIVE HL
+            MACRO_READ_0
+          end
+          3'b111: begin
+            MACRO_8_DRIVE A
+          end
+        endcase
+      end
+
+      //BIT_b_HL_x
+      BIT_b_HL_x_0: begin
+        MACRO_READ_1
+        MACRO_16_DRIVE HL
+      end
+
+      BIT_b_HL_x_1: begin
+        alu_op = {2'b10,op1[5:3]};
+        ld_F_data = 1;
+      end
+
       //-----------------------------------------------------------------------
       //END Bit Set, Rst, and Test group
       //-----------------------------------------------------------------------
@@ -3782,15 +3853,15 @@ module decoder (
         alu_op = `INCR_A_16;
         ld_MARH = 1;
         ld_MARL = 1;
-        case(op0[5:3])
-          000: ld_PCL = !flags[6];
-          001: ld_PCL = flags[6];
-          010: ld_PCL = !flags[0];
-          011: ld_PCL = flags[0];
-          100: ld_PCL = !flags[2];
-          101: ld_PCL = flags[2];
-          110: ld_PCL = !flags[7];
-          111: ld_PCL = flags[7];
+        unique case(op0[5:3])
+          3'b000: ld_PCL = !flags[6];
+          3'b001: ld_PCL = flags[6];
+          3'b010: ld_PCL = !flags[0];
+          3'b011: ld_PCL = flags[0];
+          3'b100: ld_PCL = !flags[2];
+          3'b101: ld_PCL = flags[2];
+          3'b110: ld_PCL = !flags[7];
+          3'b111: ld_PCL = flags[7];
         endcase
       end
 
@@ -3805,15 +3876,15 @@ module decoder (
       end
 
       JP_cc_nn_5: begin
-        case(op0[5:3])
-          000: ld_PCH = !flags[6];
-          001: ld_PCH = flags[6];
-          010: ld_PCH = !flags[0];
-          011: ld_PCH = flags[0];
-          100: ld_PCH = !flags[2];
-          101: ld_PCH = flags[2];
-          110: ld_PCH = !flags[7];
-          111: ld_PCH = flags[7];
+        unique case(op0[5:3])
+          3'b000: ld_PCH = !flags[6];
+          3'b001: ld_PCH = flags[6];
+          3'b010: ld_PCH = !flags[0];
+          3'b011: ld_PCH = flags[0];
+          3'b100: ld_PCH = !flags[2];
+          3'b101: ld_PCH = flags[2];
+          3'b110: ld_PCH = !flags[7];
+          3'b111: ld_PCH = flags[7];
         endcase
       end
 

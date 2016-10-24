@@ -263,7 +263,7 @@ while (my $line = <$in_fh>) {
         $line .= $whitespace."ld_IYL           = 1;\n";
         $line .= $whitespace."ld_IYH           = 1;\n";
       }
-    }
+    } 
 
     elsif($macro =~/8_ADD (.*)\s*/) {
       $line = '';
