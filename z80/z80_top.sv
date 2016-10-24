@@ -129,7 +129,7 @@ module z80(
   logic         ld_F_addr;      //16bit load
   logic         drive_A;
   logic         drive_F;
-  logic [3:0]   alu_op;
+  logic [4:0]   alu_op;
   logic         drive_alu_data; //8bit drive
   logic         drive_alu_addr; //16bit drive
   logic [1:0]   set_S;
@@ -164,10 +164,13 @@ module z80(
 
   //-----------------------------------
   //temporary addr_bus registers
-  //  These registers sit on the addr bus
+  //  These registers sit on the addr bus, but can load
+  //  data from the D-Bus when necessary
   //-----------------------------------
   logic         ld_MARH; //load upper byte of MAR
   logic         ld_MARL; //load lower byte of MAR
+  logic         ld_MARH_data;
+  logic         ld_MARL_data;
   logic         drive_MAR;
 
   //External bus outputs

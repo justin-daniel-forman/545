@@ -26,7 +26,7 @@ while (my $line = <$in_fh>) {
       $line .= $whitespace."ld_PCL    = 1;\n";
       $line .= $whitespace."drive_PCH = 1;\n";
       $line .= $whitespace."drive_PCL = 1;\n";
-      $line .= $whitespace."alu_op    = `INCR_A;\n";
+      $line .= $whitespace."alu_op    = `INCR_A_16;\n";
       $line .= $whitespace."drive_reg_addr = 1;\n";
       $line .= $whitespace."drive_alu_addr = 1;\n";
     }
@@ -137,7 +137,10 @@ while (my $line = <$in_fh>) {
         $line .= $whitespace."ld_STRL = 1;\n";
         $line .= $whitespace."ld_STRH = 1;\n";
       }
-
+      if($reg eq 'PC') {
+        $line .= $whitespace."ld_PCH = 1;\n";
+        $line .= $whitespace."ld_PCL = 1;\n";
+      }
     }
 
     elsif($macro =~ /8_DRIVE (.*)\s*/) {
@@ -146,6 +149,12 @@ while (my $line = <$in_fh>) {
       $line = '';
       if($reg eq 'A') {
         $line .= $whitespace."drive_A = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      } elsif( $reg eq 'F') {
+        $line .= $whitespace."drive_F = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      } elsif( $reg eq 'B') {
+        $line .= $whitespace."drive_B = 1;\n";
         $line .= $whitespace."drive_reg_data = 1;\n";
       } elsif( $reg eq 'B') {
         $line .= $whitespace."drive_B = 1;\n";
@@ -176,9 +185,252 @@ while (my $line = <$in_fh>) {
         $line .= $whitespace."drive_reg_data = 1;\n";
       } elsif( $reg eq 'IYL') {
         $line .= $whitespace."drive_IYL = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n"
+      } elsif( $reg eq 'SPH') {
+        $line .= $whitespace."drive_SPH = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      } elsif( $reg eq 'SPL') {
+        $line .= $whitespace."drive_SPL = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      } elsif( $reg eq 'STRH') {
+        $line .= $whitespace."drive_STRH = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      } elsif( $reg eq 'STRL') {
+        $line .= $whitespace."drive_STRL = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      } elsif( $reg eq 'PCH') {
+        $line .= $whitespace."drive_PCH = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      } elsif( $reg eq 'PCL') {
+        $line .= $whitespace."drive_PCL = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+    }
+
+    elsif($macro =~/16_ADD_SE_B (.*)\s*/) {
+      $line = '';
+      my $reg = $1;
+
+      $line .= $whitespace."drive_alu_addr = 1;\n";
+      $line .= $whitespace."alu_op         = `ADD_SE_B;\n";
+      $line .= $whitespace."drive_reg_addr = 1;\n";
+
+      if($reg eq 'BC') {
+        $line .= $whitespace."drive_B        = 1;\n";
+        $line .= $whitespace."drive_C        = 1;\n";
+        $line .= $whitespace."ld_B           = 1;\n";
+        $line .= $whitespace."ld_C           = 1;\n";
+      }
+
+      if($reg eq 'DE') {
+        $line .= $whitespace."drive_D        = 1;\n";
+        $line .= $whitespace."drive_E        = 1;\n";
+        $line .= $whitespace."ld_D           = 1;\n";
+        $line .= $whitespace."ld_E           = 1;\n";
+      }
+
+      if($reg eq 'HL') {
+        $line .= $whitespace."drive_L        = 1;\n";
+        $line .= $whitespace."drive_H        = 1;\n";
+        $line .= $whitespace."ld_L           = 1;\n";
+        $line .= $whitespace."ld_H           = 1;\n";
+      }
+
+      if($reg eq 'SP') {
+        $line .= $whitespace."drive_SPL        = 1;\n";
+        $line .= $whitespace."drive_SPH        = 1;\n";
+        $line .= $whitespace."ld_SPL           = 1;\n";
+        $line .= $whitespace."ld_SPH           = 1;\n";
+      }
+
+      if($reg eq 'PC') {
+        $line .= $whitespace."drive_PCL        = 1;\n";
+        $line .= $whitespace."drive_PCH        = 1;\n";
+        $line .= $whitespace."ld_PCL           = 1;\n";
+        $line .= $whitespace."ld_PCH           = 1;\n";
+      }
+
+      if($reg eq 'IX') {
+        $line .= $whitespace."drive_IXL        = 1;\n";
+        $line .= $whitespace."drive_IXH        = 1;\n";
+        $line .= $whitespace."ld_IXL           = 1;\n";
+        $line .= $whitespace."ld_IXH           = 1;\n";
+      }
+
+      if($reg eq 'IY') {
+        $line .= $whitespace."drive_IYL        = 1;\n";
+        $line .= $whitespace."drive_IYH        = 1;\n";
+        $line .= $whitespace."ld_IYL           = 1;\n";
+        $line .= $whitespace."ld_IYH           = 1;\n";
+      }
+    }
+
+    elsif($macro =~/8_ADD (.*)\s*/) {
+      $line = '';
+      my $reg = $1;
+
+      $line .= $whitespace."ld_F_data      = 1;\n";
+      $line .= $whitespace."drive_alu_data = 1;\n";
+      $line .= $whitespace."ld_A           = 1;\n";
+      $line .= $whitespace."alu_op         = `ADD;\n";
+
+      if($reg eq 'A') {
+        $line .= $whitespace."drive_A        = 1;\n";
+      }
+      if($reg eq 'B') {
+        $line .= $whitespace."drive_B        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+      if($reg eq 'C') {
+        $line .= $whitespace."drive_C        = 1;\n";
         $line .= $whitespace."drive_reg_data = 1;\n";
       }
 
+      if($reg eq 'D') {
+        $line .= $whitespace."drive_D        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+
+      if($reg eq 'E') {
+        $line .= $whitespace."drive_E        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+
+      if($reg eq 'H') {
+        $line .= $whitespace."drive_H        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+
+      if($reg eq 'L') {
+        $line .= $whitespace."drive_L        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+    }
+
+    elsif($macro =~/8_ADC (.*)\s*/) {
+      $line = '';
+      my $reg = $1;
+
+      $line .= $whitespace."ld_F_data      = 1;\n";
+      $line .= $whitespace."drive_alu_data = 1;\n";
+      $line .= $whitespace."ld_A           = 1;\n";
+      $line .= $whitespace."alu_op         = `ADC;\n";
+
+      if($reg eq 'A') {
+        $line .= $whitespace."drive_A        = 1;\n";
+      }
+      if($reg eq 'B') {
+        $line .= $whitespace."drive_B        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+      if($reg eq 'C') {
+        $line .= $whitespace."drive_C        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+
+      if($reg eq 'D') {
+        $line .= $whitespace."drive_D        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+
+      if($reg eq 'E') {
+        $line .= $whitespace."drive_E        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+
+      if($reg eq 'H') {
+        $line .= $whitespace."drive_H        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+
+      if($reg eq 'L') {
+        $line .= $whitespace."drive_L        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+    }
+
+    elsif($macro =~/8_AND (.*)\s*/) {
+      $line = '';
+      my $reg = $1;
+
+      $line .= $whitespace."ld_F_data      = 1;\n";
+      $line .= $whitespace."drive_alu_data = 1;\n";
+      $line .= $whitespace."ld_A           = 1;\n";
+      $line .= $whitespace."alu_op         = `AND;\n";
+
+      if($reg eq 'A') {
+        $line .= $whitespace."drive_A        = 1;\n";
+      }
+      if($reg eq 'B') {
+        $line .= $whitespace."drive_B        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+      if($reg eq 'C') {
+        $line .= $whitespace."drive_C        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+
+      if($reg eq 'D') {
+        $line .= $whitespace."drive_D        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+
+      if($reg eq 'E') {
+        $line .= $whitespace."drive_E        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+
+      if($reg eq 'H') {
+        $line .= $whitespace."drive_H        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+
+      if($reg eq 'L') {
+        $line .= $whitespace."drive_L        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+    }
+
+    elsif($macro =~/8_OR (.*)\s*/) {
+      $line = '';
+      my $reg = $1;
+
+      $line .= $whitespace."ld_F_data      = 1;\n";
+      $line .= $whitespace."drive_alu_data = 1;\n";
+      $line .= $whitespace."ld_A           = 1;\n";
+      $line .= $whitespace."alu_op         = `OR;\n";
+
+      if($reg eq 'A') {
+        $line .= $whitespace."drive_A        = 1;\n";
+      }
+      if($reg eq 'B') {
+        $line .= $whitespace."drive_B        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+      if($reg eq 'C') {
+        $line .= $whitespace."drive_C        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+
+      if($reg eq 'D') {
+        $line .= $whitespace."drive_D        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+
+      if($reg eq 'E') {
+        $line .= $whitespace."drive_E        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+
+      if($reg eq 'H') {
+        $line .= $whitespace."drive_H        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+
+      if($reg eq 'L') {
+        $line .= $whitespace."drive_L        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
     }
 
     elsif($macro =~/16_DRIVE (.*)\s*/) {
@@ -217,6 +469,125 @@ while (my $line = <$in_fh>) {
         $line .= $whitespace."drive_STRH = 1;\n";
         $line .= $whitespace."drive_STRL = 1;\n";
       }
+      if($reg eq 'PC') {
+        $line .= $whitespace."drive_PCH = 1;\n";
+        $line .= $whitespace."drive_PCL = 1;\n";
+      }
+
+    }
+
+    elsif($macro =~/8_INC (.*)\s*/) {
+
+      $line = '';
+      my $reg = $1;
+      $line .= $whitespace."drive_reg_data = 1;\n";
+      $line .= $whitespace."drive_alu_data = 1;\n";
+
+      if($reg eq 'A') {
+        $line .= $whitespace."drive_A = 1;\n";
+        $line .= $whitespace."ld_A    = 1;\n";
+        $line .= $whitespace."alu_op  = `INCR_A_8;\n";
+      }
+      elsif($reg eq 'B') {
+        $line .= $whitespace."drive_B = 1;\n";
+        $line .= $whitespace."ld_B    = 1;\n";
+        $line .= $whitespace."alu_op  = `INCR_B_8;\n";
+      }
+      elsif($reg eq 'C') {
+        $line .= $whitespace."drive_C = 1;\n";
+        $line .= $whitespace."ld_C    = 1;\n";
+        $line .= $whitespace."alu_op  = `INCR_B_8;\n";
+      }
+      elsif($reg eq 'D') {
+        $line .= $whitespace."drive_D = 1;\n";
+        $line .= $whitespace."ld_D    = 1;\n";
+        $line .= $whitespace."alu_op  = `INCR_B_8;\n";
+      }
+      elsif($reg eq 'E') {
+        $line .= $whitespace."drive_E = 1;\n";
+        $line .= $whitespace."ld_E    = 1;\n";
+        $line .= $whitespace."alu_op  = `INCR_B_8;\n";
+      }
+      elsif($reg eq 'H') {
+        $line .= $whitespace."drive_H = 1;\n";
+        $line .= $whitespace."ld_H    = 1;\n";
+        $line .= $whitespace."alu_op  = `INCR_B_8;\n";
+      }
+      elsif($reg eq 'L') {
+        $line .= $whitespace."drive_L = 1;\n";
+        $line .= $whitespace."ld_L    = 1;\n";
+        $line .= $whitespace."alu_op  = `INCR_B_8;\n";
+      }
+      elsif($reg eq 'STRH') {
+        $line .= $whitespace."drive_STRH = 1;\n";
+        $line .= $whitespace."ld_STRH    = 1;\n";
+        $line .= $whitespace."alu_op     = `INCR_B_8;\n";
+      }
+      elsif($reg eq 'STRL') {
+        $line .= $whitespace."drive_STRL = 1;\n";
+        $line .= $whitespace."ld_STRL    = 1;\n";
+        $line .= $whitespace."alu_op     = `INCR_B_8;\n";
+      }
+    }
+
+
+    elsif($macro =~/16_INC (.*)\s*/) {
+
+      $line = '';
+      my $reg = $1;
+      $line .= $whitespace."drive_alu_addr = 1;\n";
+      $line .= $whitespace."alu_op         = `INCR_A_16;\n";
+      $line .= $whitespace."drive_reg_addr = 1;\n";
+
+      if($reg eq 'BC') {
+        $line .= $whitespace."drive_B = 1;\n";
+        $line .= $whitespace."drive_C = 1;\n";
+        $line .= $whitespace."ld_B    = 1;\n";
+        $line .= $whitespace."ld_C    = 1;\n";
+      }
+      if($reg eq 'DE') {
+        $line .= $whitespace."drive_D = 1;\n";
+        $line .= $whitespace."drive_E = 1;\n";
+        $line .= $whitespace."ld_D    = 1;\n";
+        $line .= $whitespace."ld_E    = 1;\n";
+      }
+      if($reg eq 'HL') {
+        $line .= $whitespace."drive_H = 1;\n";
+        $line .= $whitespace."drive_L = 1;\n";
+        $line .= $whitespace."ld_H    = 1;\n";
+        $line .= $whitespace."ld_L    = 1;\n";
+      }
+      if($reg eq 'SP') {
+        $line .= $whitespace."drive_SPL = 1;\n";
+        $line .= $whitespace."drive_SPH = 1;\n";
+        $line .= $whitespace."ld_SPH    = 1;\n";
+        $line .= $whitespace."ld_SPL    = 1;\n";
+      }
+      if($reg eq 'IX') {
+        $line .= $whitespace."drive_IXL = 1;\n";
+        $line .= $whitespace."drive_IXH = 1;\n";
+        $line .= $whitespace."ld_IXL    = 1;\n";
+        $line .= $whitespace."ld_IXH    = 1;\n";
+      }
+      if($reg eq 'IY') {
+        $line .= $whitespace."drive_IYL = 1;\n";
+        $line .= $whitespace."drive_IYH = 1;\n";
+        $line .= $whitespace."ld_IYL    = 1;\n";
+        $line .= $whitespace."ld_IYH    = 1;\n";
+      }
+      if($reg eq 'STR') {
+        $line .= $whitespace."drive_STRH = 1;\n";
+        $line .= $whitespace."drive_STRL = 1;\n";
+        $line .= $whitespace."ld_STRH    = 1;\n";
+        $line .= $whitespace."ld_STRL    = 1;\n";
+      }
+      if($reg eq 'PC') {
+        $line .= $whitespace."drive_PCH = 1;\n";
+        $line .= $whitespace."drive_PCL = 1;\n";
+        $line .= $whitespace."ld_PCH    = 1;\n";
+        $line .= $whitespace."ld_PCL    = 1;\n";
+      }
+
     }
 
     elsif($macro =~ /^SET (.*)\s*/) {

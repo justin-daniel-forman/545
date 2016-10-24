@@ -37,7 +37,7 @@ module tb ();
   initial begin
 
     if($test$plusargs("DEBUG")) begin
-    $monitor($stime,, "addr bus: %h, data bus: %h, state: %s, A: %h, F: %h, DE: %h, HL: %h, BC: %h, IX: %h,SP: %h, m_data:%h, z80_data: %h, MAR: %h, TEMP: %h, MEM_VAL: %h",
+    $monitor($stime,, "addr bus: %h, data bus: %h, state: %s, A: %h, F: %h, DE: %h, HL: %h, BC: %h, IX: %h, IY: %h, SP: %h, m_data:%h, z80_data: %h, A_not: %h, MEM_VAL: %h, foo: %h",
       addr_bus,
       data_bus,
       DUT.CTRL.DECODE.state.name,
@@ -47,12 +47,15 @@ module tb ();
       {DUT.DP.RFILE.H_out, DUT.DP.RFILE.L_out},
       {DUT.DP.RFILE.B_out, DUT.DP.RFILE.C_out},
       {DUT.DP.RFILE.IXH_out, DUT.DP.RFILE.IXL_out},
+      {DUT.DP.RFILE.IYH_out, DUT.DP.RFILE.IYL_out},
       {DUT.DP.RFILE.SPH_out, DUT.DP.RFILE.SPL_out},
       m_DUT.out_value,
       DUT.DP.data_out,
-      DUT.DP.MAR_out,
-      DUT.DP.TEMP_out,
-      m_DUT.Qs[81]
+      //DUT.DP.MAR_out,
+      //DUT.DP.TEMP_out,
+      DUT.DP.A_not_out,
+      m_DUT.Qs[97], 
+      DUT.DP.alu_out_data
     );
     end
 
