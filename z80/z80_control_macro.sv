@@ -610,6 +610,16 @@ module decoder (
 
     MACRO_DEFINE_STATES ADC_A_IY_d 11
 
+    MACRO_DEFINE_STATES SUB_r 1
+
+    MACRO_DEFINE_STATES SUB_n 3
+
+    MACRO_DEFINE_STATES SUB_HL 3
+
+    MACRO_DEFINE_STATES SUB_IX_d 11
+
+    MACRO_DEFINE_STATES SUB_IY_d 11
+
 
     MACRO_DEFINE_STATES AND_r 1
 
@@ -742,6 +752,7 @@ module decoder (
           `EXX:       next_state = EXX_0;
           `ADD_A_r:   next_state = (op0[2:0] != 3'b110) ? ADD_A_r_0 : FETCH_3;
           `ADC_A_r:   next_state = (op0[2:0] != 3'b110) ? ADC_A_r_0 : FETCH_3;
+          `SUB_r:   next_state = (op0[2:0] != 3'b110) ? SUB_r_0   : FETCH_3;
           `AND_r:     next_state = (op0[2:0] != 3'b110) ? AND_r_0   : FETCH_3;
           `OR_r:      next_state = (op0[2:0] != 3'b110) ? OR_r_0    : FETCH_3;
           `INC_r:     next_state = (op0[5:3] != 3'b110) ? INC_r_0   : FETCH_3;
@@ -787,6 +798,8 @@ module decoder (
             `ADD_A_HL:  next_state = ADD_A_HL_0;
             `ADC_A_n:   next_state = ADC_A_n_0;
             `ADC_A_HL:  next_state = ADC_A_HL_0;
+            `SUB_n:     next_state = SUB_n_0;
+            `SUB_HL:    next_state = SUB_HL_0;
             `AND_n:     next_state = AND_n_0;
             `AND_HL:    next_state = AND_HL_0;
             `OR_n:      next_state = OR_n_0;
@@ -892,6 +905,8 @@ module decoder (
           `ADD_A_IY_d:  next_state = (op0[7:4] == 4'hF) ?  ADD_A_IY_d_0 : ADD_A_IX_d_0;
           `ADC_A_IX_d:  next_state = (op0[7:4] == 4'hD) ?  ADC_A_IX_d_0 : ADC_A_IY_d_0;
           `ADC_A_IY_d:  next_state = (op0[7:4] == 4'hF) ?  ADC_A_IY_d_0 : ADC_A_IX_d_0;
+          `SUB_IX_d:    next_state = (op0[7:4] == 4'hD) ?  SUB_IX_d_0   : SUB_IY_d_0;
+          `SUB_IY_d:    next_state = (op0[7:4] == 4'hF) ?  SUB_IY_d_0   : SUB_IX_d_0;
 
           `AND_IX_d:  next_state = (op0[7:4] == 4'hD) ?  AND_IX_d_0 : AND_IY_d_0;
           `AND_IY_d:  next_state = (op0[7:4] == 4'hF) ?  AND_IY_d_0 : AND_IX_d_0;
@@ -1081,6 +1096,16 @@ module decoder (
       MACRO_ENUM_STATES ADC_A_IX_d 11
 
       MACRO_ENUM_STATES ADC_A_IY_d 11
+
+      MACRO_ENUM_STATES SUB_r 1
+
+      MACRO_ENUM_STATES SUB_n 3
+
+      MACRO_ENUM_STATES SUB_HL 3
+
+      MACRO_ENUM_STATES SUB_IX_d 11
+
+      MACRO_ENUM_STATES SUB_IY_d 11
 
 
       MACRO_ENUM_STATES AND_r 1
@@ -3062,7 +3087,7 @@ module decoder (
         drive_alu_addr = 1;
         ld_B    = 1;
         ld_C    = 1;
-        alu_op  = `DECR_A;
+        alu_op  = `DECR_BC;
 
         //set the P/V flag if BC-1 != 0
         ld_F_addr = 1;
@@ -3128,7 +3153,7 @@ module decoder (
         drive_alu_addr = 1;
         ld_B    = 1;
         ld_C    = 1;
-        alu_op  = `DECR_A;
+        alu_op  = `DECR_BC;
 
         //set the P/V flag if BC-1 != 0
         ld_F_addr = 1;
@@ -3321,6 +3346,116 @@ module decoder (
         MACRO_RESET N
       end
 
+      //SUB r
+      SUB_r_0: begin
+        ld_F_data = 1;
+        MACRO_SET N
+
+        unique case(op0[2:0])
+          3'b111: begin
+            MACRO_8_SUB A
+          end
+          3'b000: begin
+            MACRO_8_SUB B
+          end
+          3'b001: begin
+            MACRO_8_SUB C
+          end
+          3'b010: begin
+            MACRO_8_SUB D
+          end
+          3'b011: begin
+            MACRO_8_SUB E
+          end
+          3'b100: begin
+            MACRO_8_SUB H
+          end
+          3'b101: begin
+            MACRO_8_SUB L
+          end
+        endcase
+
+      end
+
+      //SUB n
+      SUB_n_0: begin
+        MACRO_READ_0
+        MACRO_16_INC PC
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
+      SUB_n_1: begin
+        MACRO_READ_1
+        drive_MAR = 1;
+      end
+
+      SUB_n_2: begin
+        ld_F_data = 1;
+        MACRO_SET N
+        MACRO_8_SUB Z
+      end
+
+      //SUB (HL)
+      SUB_HL_0: begin
+        MACRO_16_DRIVE HL
+        MACRO_READ_0
+      end
+
+      SUB_HL_1: begin
+        MACRO_16_DRIVE HL
+        MACRO_READ_1
+      end
+
+      SUB_HL_2: begin
+        ld_F_data = 1;
+        MACRO_SET N
+        MACRO_8_SUB Z
+      end
+
+      //SUB (IX+d) SUB (IY+d)
+      SUB_IX_d_0, SUB_IY_d_0: begin
+        MACRO_READ_0
+        MACRO_16_INC PC
+      end
+
+      SUB_IX_d_1, SUB_IY_d_1: begin
+        MACRO_READ_1
+        MACRO_16_DRIVE PC
+      end
+
+      SUB_IX_d_2, SUB_IY_d_2: begin
+        ld_TEMP = 1;
+      end
+
+      SUB_IX_d_3, SUB_IY_d_3: begin
+        alu_op = `ADD_SE_B;
+        drive_IXH = (state == SUB_IX_d_3);
+        drive_IXL = (state == SUB_IX_d_3);
+        drive_IYH = (state == SUB_IY_d_3);
+        drive_IYL = (state == SUB_IY_d_3);
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+        ld_MARH = 1;
+        ld_MARL = 1;
+      end
+
+      SUB_IX_d_8, SUB_IY_d_8: begin
+        drive_MAR = 1;
+        MACRO_READ_0
+      end
+
+      SUB_IX_d_9, SUB_IY_d_9: begin
+        drive_MAR = 1;
+        MACRO_READ_1
+      end
+
+      SUB_IX_d_10, SUB_IY_d_10: begin
+        ld_F_data = 1;
+        MACRO_SET N
+        MACRO_8_SUB Z
+      end
+
       //AND r
       AND_r_0: begin
         ld_F_data = 1;
@@ -3437,36 +3572,6 @@ module decoder (
         MACRO_RESET N
         MACRO_RESET C
         MACRO_8_AND Z
-      end
-
-      //INC r
-      INC_r_0: begin
-        ld_F_data = 1;
-        MACRO_RESET N
-
-        unique case(op0[5:3])
-          3'b111: begin
-            MACRO_8_INC A
-          end
-          3'b000: begin
-            MACRO_8_INC B
-          end
-          3'b001: begin
-            MACRO_8_INC C
-          end
-          3'b010: begin
-            MACRO_8_INC D
-          end
-          3'b011: begin
-            MACRO_8_INC E
-          end
-          3'b100: begin
-            MACRO_8_INC H
-          end
-          3'b101: begin
-            MACRO_8_INC L
-          end
-        endcase
       end
 
       //OR r
@@ -3587,6 +3692,37 @@ module decoder (
         MACRO_8_OR Z
       end
 
+      //INC r
+      INC_r_0: begin
+        ld_F_data = 1;
+        MACRO_RESET N
+
+        unique case(op0[5:3])
+          3'b111: begin
+            MACRO_8_INC A
+          end
+          3'b000: begin
+            MACRO_8_INC B
+          end
+          3'b001: begin
+            MACRO_8_INC C
+          end
+          3'b010: begin
+            MACRO_8_INC D
+          end
+          3'b011: begin
+            MACRO_8_INC E
+          end
+          3'b100: begin
+            MACRO_8_INC H
+          end
+          3'b101: begin
+            MACRO_8_INC L
+          end
+        endcase
+      end
+
+      //INC (HL)
       INC_HL_0: begin
         MACRO_16_DRIVE HL
         MACRO_READ_0

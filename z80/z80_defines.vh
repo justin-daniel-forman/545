@@ -64,6 +64,11 @@
 `define ADC_A_HL    8'h8E
 `define ADC_A_IX_d  8'h8E
 `define ADC_A_IY_d  8'h8E
+`define SUB_r       8'b10010???
+`define SUB_n       8'hD6
+`define SUB_HL      8'h96
+`define SUB_IX_d    8'h96
+`define SUB_IY_d    8'h96
 
 `define AND_r       8'b10100???
 `define AND_n       8'hE6
@@ -126,3 +131,4 @@
 `define AND       5'hd
 `define OR        5'he
 `define ALU_RST   5'hf
+`define DECR_BC    5'h10

@@ -349,6 +349,48 @@ while (my $line = <$in_fh>) {
       }
     }
 
+    elsif($macro =~/8_SUB (.*)\s*/) {
+      $line = '';
+      my $reg = $1;
+
+      $line .= $whitespace."ld_F_data      = 1;\n";
+      $line .= $whitespace."drive_alu_data = 1;\n";
+      $line .= $whitespace."ld_A           = 1;\n";
+      $line .= $whitespace."alu_op         = `SUB;\n";
+
+      if($reg eq 'A') {
+        $line .= $whitespace."drive_A        = 1;\n";
+      }
+      if($reg eq 'B') {
+        $line .= $whitespace."drive_B        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+      if($reg eq 'C') {
+        $line .= $whitespace."drive_C        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+
+      if($reg eq 'D') {
+        $line .= $whitespace."drive_D        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+
+      if($reg eq 'E') {
+        $line .= $whitespace."drive_E        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+
+      if($reg eq 'H') {
+        $line .= $whitespace."drive_H        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+
+      if($reg eq 'L') {
+        $line .= $whitespace."drive_L        = 1;\n";
+        $line .= $whitespace."drive_reg_data = 1;\n";
+      }
+    }
+
     elsif($macro =~/8_AND (.*)\s*/) {
       $line = '';
       my $reg = $1;

@@ -537,9 +537,14 @@ module alu #(parameter w = 8)(
       //TODO: Distinguish this operation from the BC decrement operation
       `DECR_A: begin
         C = A - 1;
+      end
+
+      `DECR_BC: begin
+        C = A - 1;
 
         //set the PV flag when ARG_A - 1 != 0, otherwise reset
-        F_out[2] = (C == 0) ? 0 : 1;
+        F_out[`PV_flag] = (C == 0) ? 0 : 1;
+
       end
 
       //Make the general add width agnostic
@@ -574,30 +579,15 @@ module alu #(parameter w = 8)(
       end
 
       `SUB: begin
-        C = B + ~A + 1;
+        //TODO: Figure out the flags for this
 
-        //if both are negative numbers
-        if(A[7] == 1 && B[7] == 1) begin
-          F_out[ `S_flag ] = (B > A) ? 1 : 0;
-        end
+        C = A + ~B + 1;
 
-        //a positive minus a negative is a positive
-        else if (A[7] == 1 && B[7] == 0) begin
-          F_out[ `S_flag ] = 0;
-        end
+        //S flag is set when result is negative, otherwise reset
+        F_out[`S_flag] = C[(w-1)] ? 1 : 0;
 
-        //a negative minus a pos is a negative
-        else if (A[7] == 0 && B[7] == 1) begin
-          F_out[ `S_flag ] = 1;
-        end
-
-        //both are positive
-        else begin
-          F_out[ `S_flag ] = (B > A) ? 1 : 0;
-        end
-
-        F_out[ `Z_flag ] = (C == 0) ? 1 : 0;
-
+        //Z flag is set when result is 0, otherwise reset
+        F_out[`Z_flag] = (C == 0) ? 1 : 0;
 
         //set H flag when there is a borrow from bit 4
         if(A[3:0] < B[3:0]) begin
@@ -627,6 +617,13 @@ module alu #(parameter w = 8)(
         else begin
           F_out [`H_flag] = 0;
         end
+
+        //set C flag when there is a borrow from bit 7
+        F_out[`C_flag] = A < B;
+
+        //PV flag is set when there is overflow, which occurs when
+        //output changes the MSB of the accumulator
+        F_out[`PV_flag] = (C[7] & ~A[7]) ? 1 : 0;
 
       end
 
