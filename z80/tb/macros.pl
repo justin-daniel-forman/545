@@ -118,6 +118,19 @@ while (my $line = <$in_fh>) {
       $line =  $whitespace."IN_bus = 1;\n";
     }
 
+    elsif($macro =~ /OUT_0\s*/) {
+      $line =  $whitespace."OUT_start = 1;\n";
+      $line .=  $whitespace."OUT_bus = 1;\n";
+    }
+
+    elsif($macro =~ /OUT_1\s*/) {
+      $line =  $whitespace."OUT_bus = 1;\n";
+    }
+
+    elsif($macro =~ /OUT_2\s*/) {
+      $line =  $whitespace."OUT_bus = 1;\n";
+    }
+
     elsif($macro =~ /16_LOAD (.*)\s*/) {
       $line = '';
       my $reg = $1;

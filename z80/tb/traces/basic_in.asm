@@ -7,6 +7,9 @@ range data $0051 $0100
 section code
 
   ld a, $e
+  out $f
+
+  ld a, $a
   in $f
 
 section data
