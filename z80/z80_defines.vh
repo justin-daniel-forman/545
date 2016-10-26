@@ -89,7 +89,11 @@
 `define XOR_HL      8'hAE
 `define XOR_IX_d    8'hAE
 `define XOR_IY_d    8'hAE
-
+`define CP_r        8'b10111???
+`define CP_n        8'hFE
+`define CP_HL       8'hBE
+`define CP_IX_d     8'hBE
+`define CP_IY_d     8'hBE
 `define INC_r       8'b00???100
 `define INC_HL      8'h34
 `define INC_IX_d    8'h34
