@@ -129,7 +129,7 @@ module z80(
   logic         ld_F_addr;      //16bit load
   logic         drive_A;
   logic         drive_F;
-  logic [4:0]   alu_op;
+  logic [5:0]   alu_op;
   logic         drive_alu_data; //8bit drive
   logic         drive_alu_addr; //16bit drive
   logic [1:0]   set_S;

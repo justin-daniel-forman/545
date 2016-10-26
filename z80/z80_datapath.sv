@@ -71,7 +71,7 @@ module datapath (
   input  logic         drive_F,
 
   //ALU drives and controls
-  input  logic [4:0]   alu_op,
+  input  logic [5:0]   alu_op,
   input  logic         drive_alu_data, //8bit drive
   input  logic         drive_alu_addr, //16bit drive
 
@@ -483,14 +483,14 @@ module alu #(parameter w = 8)(
   //---------------------------------------------------------------------------
   input   logic [w-1:0] A,
   input   logic [w-1:0] B, //B stands for Bus
-  input   logic [4:0] op,
+  input   logic [5:0] op,
   input   logic [7:0] F_in,
   output  logic [w-1:0] C,
   output  logic [7:0] F_out
 );
 
-  logic [(w-1)/2:0] lower_sum;
-  logic [(w-1)/2:0] upper_sum;
+  logic [(w-1):(w/2)] lower_sum;
+  logic [(w-1):(w/2)] upper_sum;
   logic               lower_carry_out;
   logic               upper_carry_out;
   logic [(w-1):0]     T;
@@ -748,6 +748,70 @@ module alu #(parameter w = 8)(
         F_out[`N_flag] = 0;
         F_out[`Z_flag] = !B[7];
         C = A;
+      end
+
+      `BIT_SET_0: begin
+        C = B | 8'h1;
+      end
+
+      `BIT_SET_1: begin
+        C = B | 8'h2;
+      end
+
+      `BIT_SET_2: begin
+        C = B | 8'h4;
+      end
+
+      `BIT_SET_3: begin
+        C = B | 8'h8;
+      end
+
+      `BIT_SET_4: begin
+        C = B | 8'h10;
+      end
+
+      `BIT_SET_5: begin
+        C = B | 8'h20;
+      end
+
+      `BIT_SET_6: begin
+        C = B | 8'h40;
+      end
+
+      `BIT_SET_7: begin
+        C = B | 8'h80;
+      end
+
+      `BIT_RES_0: begin
+        C = B & 8'hfe;
+      end
+
+      `BIT_RES_1: begin
+        C = B & 8'hfd;
+      end
+
+      `BIT_RES_2: begin
+        C = B & 8'hfb;
+      end
+
+      `BIT_RES_3: begin
+        C = B & 8'hf7;
+      end
+
+      `BIT_RES_4: begin
+        C = B & 8'hef;
+      end
+
+      `BIT_RES_5: begin
+        C = B & 8'hdf;
+      end
+
+      `BIT_RES_6: begin
+        C = B & 8'hbf;
+      end
+
+      `BIT_RES_7: begin
+        C = B & 8'h7f;
       end
 
       default: begin
