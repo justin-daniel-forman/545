@@ -213,6 +213,7 @@ module vdp_top (
                     (~MODE & ~CSR_L) ? data_port_out : 8'bz 
                     );
 
+  /*
   ila_1 LOGIC_ANALYZER(
     .clk(clk_100),
     .probe0(VRAM_VGA_addr[0]), // 14 bits
@@ -236,7 +237,7 @@ module vdp_top (
     .probe18(colorLatch_out[1]),
     .probe19(colorLatch_out[2]),
     .probe20(colorLatch_out[3])
-  );
+  );*/
 
 endmodule: vdp_top
 
@@ -845,10 +846,10 @@ module vdp_disp_interface_old(
   logic [9:0] pixelCol;
 
   assign pixelRow = row - 9'd48;
-  assign pixelCol = col - 10'd64 + 10'd7; // Add 3 to pre-fetch pixel data for the pipeline (maybe even 4???)
+  assign pixelCol = col - 10'd64 + 10'd6; // Add 3 to pre-fetch pixel data for the pipeline (maybe even 4???)
 
   // Each pixel position is 2 bytes, so -------------------|
-  assign bgSel_in = {3'b111, pixelRow[7:3], pixelCol[8:4], 1'b0}; // Either blank screen or iterating
+  assign bgSel_in = {3'b111, pixelRow[8:4], pixelCol[8:4], 1'b0}; // Either blank screen or iterating
   // 7:3 and 8:4 worked for some reason... .coe files may be written incorrectly
 
   assign VRAM_VGA_addr[0] = bgSel_out;
@@ -898,12 +899,15 @@ module vdp_disp_interface_old(
     .en(colorLatch_en)
   );  
   
+  logic [9:0] colorLatchIndex; 
+  assign colorLatchIndex = col + 1;
+  
   assign CRAM_VGA_addr = {
     paletteSel,
-    colorLatch_out[0][bitSliceSel[3:1]], 
-    colorLatch_out[1][bitSliceSel[3:1]],
-    colorLatch_out[2][bitSliceSel[3:1]],
-    colorLatch_out[3][bitSliceSel[3:1]]
+    colorLatch_out[0][colorLatchIndex[3:1]], 
+    colorLatch_out[1][colorLatchIndex[3:1]],
+    colorLatch_out[2][colorLatchIndex[3:1]],
+    colorLatch_out[3][colorLatchIndex[3:1]]
   };
 
   /******* RGB Generation *******/
@@ -919,7 +923,7 @@ module vdp_disp_interface_old(
 
   disp_fsm_old DISP_FSM(
     .*,
-    .col(pixelCol),
+    .col(colorLatchIndex),
     .waitTime1(waitTime1),
     .waitTime2(waitTime2),
     .bgSel_en,
