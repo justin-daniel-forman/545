@@ -127,33 +127,54 @@
 //TODO: SUB MIGHT NEED TO BE SPLIT INTO CPI AND SUB
 
 //ALU commands
-`define INCR_A_8  5'h1
-`define INCR_B_8  5'h2
-`define INCR_A_16 5'h3
-`define DECR_A    5'h4
-`define ALU_NOP   5'h5
-`define ADD       5'h6
-`define ADC       5'h7
-`define ADD_SE_B  5'h8
-`define ALU_B     5'h9
-`define SUB       5'ha
-`define SBC       5'hb
-`define SUB_EX    5'hc
-`define ALU_CCF   5'hd
-`define ALU_CPL   5'he
-`define AND       5'hf
+`define INCR_A_8  6'h1
+`define INCR_B_8  6'h2
+`define INCR_A_16 6'h3
+`define DECR_A    6'h4
+`define ALU_NOP   6'h5
+`define ADD       6'h6
+`define ADC       6'h7
+`define ADD_SE_B  6'h8
+`define ALU_B     6'h9
+`define SUB       6'ha
+`define SBC       6'hb
+`define SUB_EX    6'hc
+`define ALU_CCF   6'hd
+`define ALU_CPL   6'he
+`define AND       6'hf
 
 //TODO: Update all of these as necessary
-`define OR        5'h18
-`define XOR       5'h19
-`define ALU_RST   5'h1a
-`define DECR_BC   5'h1b
+`define OR        6'h18
+`define XOR       6'h19
+`define ALU_RST   6'h1a
+`define DECR_BC   6'h1b
 
-`define BIT_TEST_0  5'h10
-`define BIT_TEST_1  5'h11
-`define BIT_TEST_2  5'h12
-`define BIT_TEST_3  5'h13
-`define BIT_TEST_4  5'h14
-`define BIT_TEST_5  5'h15
-`define BIT_TEST_6  5'h16
-`define BIT_TEST_7  5'h17
+
+//DO NOT CHANGE WHAT'S BELOW UNLESS YOU'RE
+//EXTENDING THE LENGTH OF THE BITCODES
+`define BIT_TEST_0  6'h10
+`define BIT_TEST_1  6'h11
+`define BIT_TEST_2  6'h12
+`define BIT_TEST_3  6'h13
+`define BIT_TEST_4  6'h14
+`define BIT_TEST_5  6'h15
+`define BIT_TEST_6  6'h16
+`define BIT_TEST_7  6'h17
+
+`define BIT_RES_0	6'h20
+`define BIT_RES_1	6'h21
+`define BIT_RES_2	6'h22
+`define BIT_RES_3 	6'h23
+`define BIT_RES_4 	6'h24
+`define BIT_RES_5 	6'h25
+`define BIT_RES_6 	6'h26
+`define BIT_RES_7 	6'h27
+
+`define BIT_SET_0 	6'h30
+`define BIT_SET_1 	6'h31
+`define BIT_SET_2 	6'h32
+`define BIT_SET_3 	6'h33
+`define BIT_SET_4 	6'h34
+`define BIT_SET_5 	6'h35
+`define BIT_SET_6 	6'h36
+`define BIT_SET_7 	6'h37
