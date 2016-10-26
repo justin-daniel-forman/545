@@ -105,6 +105,19 @@ while (my $line = <$in_fh>) {
       $line = $whitespace."MWR_bus = 1;\n";
     }
 
+    elsif($macro =~ /IN_0\s*/) {
+      $line =  $whitespace."IN_start = 1;\n";
+      $line .=  $whitespace."IN_bus = 1;\n";
+    }
+
+    elsif($macro =~ /IN_1\s*/) {
+      $line =  $whitespace."IN_bus = 1;\n";
+    }
+
+    elsif($macro =~ /IN_2\s*/) {
+      $line =  $whitespace."IN_bus = 1;\n";
+    }
+
     elsif($macro =~ /16_LOAD (.*)\s*/) {
       $line = '';
       my $reg = $1;
@@ -149,7 +162,6 @@ while (my $line = <$in_fh>) {
       $line = '';
       if($reg eq 'A') {
         $line .= $whitespace."drive_A = 1;\n";
-        $line .= $whitespace."drive_reg_data = 1;\n";
       } elsif( $reg eq 'F') {
         $line .= $whitespace."drive_F = 1;\n";
         $line .= $whitespace."drive_reg_data = 1;\n";
@@ -263,7 +275,7 @@ while (my $line = <$in_fh>) {
         $line .= $whitespace."ld_IYL           = 1;\n";
         $line .= $whitespace."ld_IYH           = 1;\n";
       }
-    } 
+    }
 
     elsif($macro =~/8_ADD (.*)\s*/) {
       $line = '';

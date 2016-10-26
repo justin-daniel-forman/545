@@ -20,6 +20,7 @@ module tb ();
 
   z80 DUT(.*);
   memory m_DUT(.*);
+  ports  p_DUT(.*);
 
   //generate clock
   initial begin
@@ -29,15 +30,12 @@ module tb ();
     end
   end
 
-  logic [7:0] data_val;
-  //assign data_bus = data_val;
-
   //test bench
   logic [31:0] i;
   initial begin
 
     if($test$plusargs("DEBUG")) begin
-    $monitor($stime,, "addr bus: %h, data bus: %h, state: %s, A: %h, F: %h, DE: %h, HL: %h, BC: %h, IX: %h, IY: %h, SP: %h, m_data:%h, z80_data: %h, A_not: %h, MEM_VAL: %h, foo: %h",
+    $monitor($stime,, "addr bus: %h, data bus: %h, state: %s, A: %h, F: %h, DE: %h, HL: %h, BC: %h, IX: %h, IY: %h, SP: %h, m_data:%h, z80_data: %h, MEM_VAL: %h, foo: %h",
       addr_bus,
       data_bus,
       DUT.CTRL.DECODE.state.name,
@@ -51,11 +49,8 @@ module tb ();
       {DUT.DP.RFILE.SPH_out, DUT.DP.RFILE.SPL_out},
       m_DUT.out_value,
       DUT.DP.data_out,
-      //DUT.DP.MAR_out,
-      //DUT.DP.TEMP_out,
-      DUT.DP.A_not_out,
-      m_DUT.Qs[97], 
-      DUT.DP.alu_out_data
+      m_DUT.Qs[97],
+      DUT.CTRL.IN_start
     );
     end
 
@@ -66,45 +61,6 @@ module tb ();
     rst_L <= 1;
 
     //START OF T1
-    data_val = 8'bz;
-    @(posedge clk);
-
-    //T2
-    #5 data_val = `EXT_INST;
-    @(posedge clk);
-
-    //T3
-    #5 data_val = 8'bz;
-    @(posedge clk);
-
-    //T4
-    @(posedge clk);
-
-    //T5
-    @(posedge clk);
-
-    //T6
-    #5 data_val = `LDI;
-    @(posedge clk);
-
-    //T7
-    #5 data_val = 8'bz;
-    @(posedge clk);
-
-    //T8
-    @(posedge clk);
-
-    //T1
-
-    //T2
-    #5 data_val = 8'hff;
-    @(posedge clk);
-
-    //T3
-    #5 data_val = 8'bz;
-    @(posedge clk);
-
-    //T4
     @(posedge clk);
 
     //currently our range for assembly programs is $51

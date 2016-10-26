@@ -175,6 +175,11 @@ module control_logic (
   logic MWR_WR_L;
   logic MWR_bus;
 
+  logic IN_start;
+  logic IN_IORQ_L;
+  logic IN_RD_L;
+  logic IN_bus;
+
   OCF_fsm machine_fetch(
     .clk(clk),
     .rst_L(rst_L),
@@ -205,6 +210,16 @@ module control_logic (
     .WAIT_L,
     .MWR_MREQ_L,
     .MWR_WR_L
+  );
+
+  IN_fsm port_in(
+    .clk,
+    .rst_L,
+    .IN_start,
+
+    .WAIT_L,
+    .IN_IORQ_L,
+    .IN_RD_L
   );
 
   //---------------------------------------------------------------------------
@@ -300,7 +315,9 @@ module control_logic (
     .MWR_start,
     .MWR_bus,
     .MRD_start,
-    .MRD_bus
+    .MRD_bus,
+    .IN_start,
+    .IN_bus
   );
 
   //---------------------------------------------------------------------------
@@ -334,6 +351,11 @@ module control_logic (
     else if(MWR_bus) begin
       MREQ_L = MWR_MREQ_L;
       WR_L   = MWR_WR_L;
+    end
+
+    else if(IN_bus) begin
+      RD_L   = IN_RD_L;
+      IORQ_L = IN_IORQ_L;
     end
 
   end
@@ -480,7 +502,9 @@ module decoder (
   output logic      MRD_start,
   output logic      MRD_bus,
   output logic      MWR_start,
-  output logic      MWR_bus
+  output logic      MWR_bus,
+  output logic      IN_start,
+  output logic      IN_bus
 );
 
   enum logic [31:0] {
@@ -1396,6 +1420,15 @@ module decoder (
     RST_p_5,
     RST_p_6,
 
+
+    IN_A_n_0,
+    IN_A_n_1,
+    IN_A_n_2,
+    IN_A_n_3,
+    IN_A_n_4,
+    IN_A_n_5,
+    IN_A_n_6,
+
     //Mult-OCF Instructions
     //There is a difference between multi-ocf instructions and
     //instructions that require an operand data fetch. In an
@@ -1567,6 +1600,7 @@ module decoder (
             `RET:        next_state = RET_0;
             `RET_cc:     next_state = RET_cc_0;
             `RST_p:      next_state = RST_p_0;
+            `IN_A_n:     next_state = IN_A_n_0;
             default:     next_state = FETCH_0;
           endcase
         end
@@ -2776,6 +2810,14 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN Input and Output group
       //-----------------------------------------------------------------------
+      //IN_A_n
+      IN_A_n_0: next_state = IN_A_n_1;
+      IN_A_n_1: next_state = IN_A_n_2;
+      IN_A_n_2: next_state = IN_A_n_3;
+      IN_A_n_3: next_state = IN_A_n_4;
+      IN_A_n_4: next_state = IN_A_n_5;
+      IN_A_n_5: next_state = IN_A_n_6;
+      IN_A_n_6: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END Input and Output group
@@ -2823,6 +2865,8 @@ module decoder (
     MRD_bus   = 0;
     MWR_start = 0;
     MWR_bus   = 0;
+    IN_start  = 0;
+    IN_bus    = 0;
 
     //Regfile loads
     ld_B = 0;
@@ -4386,7 +4430,6 @@ module decoder (
           end
           2'b11: begin
             drive_A = 1;
-            drive_reg_data = 1;
           end
         endcase
       end
@@ -4409,7 +4452,6 @@ module decoder (
           end
           2'b11: begin
             drive_A = 1;
-            drive_reg_data = 1;
           end
         endcase
       end
@@ -6556,7 +6598,6 @@ module decoder (
           end
           3'b111: begin
             drive_A = 1;
-            drive_reg_data = 1;
             ld_A = (op1[7:6] != 2'b01);
           end
         endcase
@@ -6602,7 +6643,7 @@ module decoder (
         drive_MAR = 1;
         ld_H = 1;
         ld_L = 1;
-      end 
+      end
 
       //BIT_b_IX_d_x
       BIT_b_IX_d_x_0,BIT_b_IX_d_x_3: begin
@@ -6673,7 +6714,7 @@ module decoder (
         drive_MAR = 1;
         MWR_bus = 1;
       end
-    
+
       //BIT_b_IY_d_x
       BIT_b_IY_d_x_0,BIT_b_IY_d_x_3: begin
         MRD_start = 1;
@@ -7310,6 +7351,67 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN Input and Output group
       //-----------------------------------------------------------------------
+      IN_A_n_0: begin
+        MRD_start = 1;
+        MRD_bus   = 1;
+        drive_alu_addr = 1;
+        alu_op         = `INCR_A_16;
+        drive_reg_addr = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        ld_PCH    = 1;
+        ld_PCL    = 1;
+
+        //Start constructing an address with A as the high byte
+        drive_A = 1;
+        ld_STRH = 1;
+      end
+
+      IN_A_n_1: begin
+        MRD_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+      end
+
+      IN_A_n_2: begin
+        //Finish constructing an address with the odf byte as the low byte
+        ld_STRL = 1;
+      end
+
+      IN_A_n_3: begin
+        IN_start = 1;
+        IN_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_STRH = 1;
+        drive_STRL = 1;
+      end
+
+      IN_A_n_4: begin
+        IN_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_STRH = 1;
+        drive_STRL = 1;
+      end
+
+      IN_A_n_5: begin
+        IN_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_STRH = 1;
+        drive_STRL = 1;
+      end
+
+      IN_A_n_6: begin
+        ld_A = 1;
+      end
 
       //-----------------------------------------------------------------------
       //END Input and Output group
@@ -7667,3 +7769,77 @@ module OCF_fsm(
   end
 
 endmodule: OCF_fsm
+
+//-----------------------------------------------------------------------------
+//IN_fsm
+//  This module generates the relevant bus signals for the IN
+//  macro state.
+//-----------------------------------------------------------------------------
+module IN_fsm(
+  input   logic clk,
+  input   logic rst_L,
+
+  input   logic WAIT_L,
+  input   logic IN_start,
+  output  logic IN_IORQ_L,
+  output  logic IN_RD_L
+);
+
+  enum logic [1:0] {
+    T1,
+    T2,
+    TW,
+    T3
+  } state, next_state;
+
+  always @(posedge clk) begin
+    if(~rst_L) begin
+      state <= T1;
+    end
+
+    else begin
+      state <= next_state;
+    end
+  end
+
+  //next state logic
+  always_comb begin
+    case(state)
+      T1: next_state = (IN_start) ?  T2 : T1;
+      T2: next_state = TW;
+      TW: next_state = T3;
+      T3: next_state = T1;
+    endcase
+  end
+
+  //output logic
+  always_comb begin
+    IN_IORQ_L = 1;
+    IN_RD_L   = 1;
+
+    case(state)
+      //TODO: Wait_L timing
+
+      T1: begin
+        if(IN_start) begin
+          IN_IORQ_L = 0;
+          IN_RD_L   = 0;
+        end
+      end
+
+      T2: begin
+        IN_IORQ_L = 0;
+        IN_RD_L   = 0;
+      end
+
+      TW: begin
+        IN_IORQ_L = 0;
+        IN_RD_L   = 0;
+      end
+
+    endcase
+  end
+
+endmodule: IN_fsm
+
+

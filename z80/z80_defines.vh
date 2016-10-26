@@ -120,6 +120,8 @@
 `define RET_cc		8'b11???000
 `define RST_p		8'b11???111
 
+`define IN_A_n      8'hDB
+
 //flags
 `define PV_flag   2
 `define C_flag    0
