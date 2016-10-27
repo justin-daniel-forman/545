@@ -641,12 +641,21 @@ module alu #(parameter w = 8)(
 
         //set PV flag for parity for xor
         end else begin
-          F_out[`PV_flag] = C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0];
+          F_out[`PV_flag] = ~(C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0]);
         end
       end
 
       `ALU_B: begin
         C = B;
+
+        //set s flag for negative
+        F_out[`S_flag] = C[w-1];
+
+        //set z flag when zero
+        F_out[`Z_flag] = (C == 0);
+
+        //set PV flag for parity for xor
+        F_out[`PV_flag] = ~(C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0]);
       end
 
       `ADD_SE_B: begin

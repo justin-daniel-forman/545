@@ -1453,6 +1453,11 @@ module decoder (
     IN_A_n_5,
     IN_A_n_6,
 
+    IN_r_C_0,
+    IN_r_C_1,
+    IN_r_C_2,
+    IN_r_C_3,
+
     OUT_n_A_0,
     OUT_n_A_1,
     OUT_n_A_2,
@@ -1460,6 +1465,11 @@ module decoder (
     OUT_n_A_4,
     OUT_n_A_5,
     OUT_n_A_6,
+
+    OUT_C_r_0,
+    OUT_C_r_1,
+    OUT_C_r_2,
+    OUT_C_r_3,
 
     //Mult-OCF Instructions
     //There is a difference between multi-ocf instructions and
@@ -1718,9 +1728,9 @@ module decoder (
           `CP_IY_d:     next_state = (op0[7:4] == 4'hF) ?  CP_IY_d_0 : CP_IX_d_0;
           `INC_IX_d:    next_state = (op0[7:4] == 4'hD) ?  INC_IX_d_0 : INC_IY_d_0;
           `INC_IY_d:    next_state = (op0[7:4] == 4'hF) ?  INC_IY_d_0 : INC_IX_d_0;
-
-          `BIT_b:       next_state = (op0[7:4] == 4'hD) ?  BIT_b_IX_d_x_0 : BIT_b_IY_d_x_0;
-
+          `BIT_b:       next_state = (op0[7:4] == 4'hD) ?  BIT_b_IX_d_x_0 :BIT_b_IY_d_x_0;
+          `IN_r_C:      next_state = IN_r_C_0;
+          `OUT_C_r:     next_state = OUT_C_r_0;
            default:     next_state = FETCH_0;
         endcase
       end
@@ -2852,6 +2862,12 @@ module decoder (
       IN_A_n_5: next_state = IN_A_n_6;
       IN_A_n_6: next_state = FETCH_0;
 
+      //IN_r_C
+      IN_r_C_0: next_state = IN_r_C_1;
+      IN_r_C_1: next_state = IN_r_C_2;
+      IN_r_C_2: next_state = IN_r_C_3;
+      IN_r_C_3: next_state = FETCH_0;
+
       //OUT_n_A
       OUT_n_A_0: next_state = OUT_n_A_1;
       OUT_n_A_1: next_state = OUT_n_A_2;
@@ -2860,6 +2876,12 @@ module decoder (
       OUT_n_A_4: next_state = OUT_n_A_5;
       OUT_n_A_5: next_state = OUT_n_A_6;
       OUT_n_A_6: next_state = FETCH_0;
+
+      //OUT_C_r
+      OUT_C_r_0: next_state = OUT_C_r_1;
+      OUT_C_r_1: next_state = OUT_C_r_2;
+      OUT_C_r_2: next_state = OUT_C_r_3;
+      OUT_C_r_3: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END Input and Output group
@@ -7395,6 +7417,8 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN Input and Output group
       //-----------------------------------------------------------------------
+
+      //BASIC IN AND OUT
       IN_A_n_0, OUT_n_A_0: begin
         MRD_start = 1;
         MRD_bus   = 1;
@@ -7467,6 +7491,94 @@ module decoder (
         drive_STRH = 1;
         drive_STRL = 1;
         drive_A = 1;
+      end
+
+      //IN r (C)
+      IN_r_C_0: begin
+        IN_start = 1;
+        IN_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_B = 1;
+        drive_C = 1;
+      end
+
+      IN_r_C_1, IN_r_C_2: begin
+        IN_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_B = 1;
+        drive_C = 1;
+      end
+
+      IN_r_C_3: begin
+        //send the data through the 8-bit alu from the bus
+        ld_F_data    = 1;
+        alu_op       = `ALU_B;
+
+        set_H = 2'b10;
+        set_N = 2'b10;
+
+        unique case(op1[5:3])
+          3'b111: ld_A = 1;
+          3'b000: ld_B = 1;
+          3'b001: ld_C = 1;
+          3'b010: ld_D = 1;
+          3'b011: ld_E = 1;
+          3'b100: ld_H = 1;
+          3'b101: ld_L = 1;
+        endcase
+      end
+
+      //OUT (C), r
+      OUT_C_r_0: begin
+        OUT_start = 1;
+        OUT_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_B = 1;
+        drive_C = 1;
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
+      OUT_C_r_1, OUT_C_r_2: begin
+
+        OUT_bus = 1;
+        drive_MAR = 1;
+
+        unique case(op1[5:3])
+          3'b000: begin
+            drive_B = 1;
+            drive_reg_data = 1;
+          end
+          3'b001: begin
+            drive_C = 1;
+            drive_reg_data = 1;
+          end
+          3'b010: begin
+            drive_D = 1;
+            drive_reg_data = 1;
+          end
+          3'b011: begin
+            drive_E = 1;
+            drive_reg_data = 1;
+          end
+          3'b100: begin
+            drive_H = 1;
+            drive_reg_data = 1;
+          end
+          3'b101: begin
+            drive_L = 1;
+            drive_reg_data = 1;
+          end
+          3'b111: begin
+            drive_A = 1;
+          end
+        endcase
       end
 
       //-----------------------------------------------------------------------

@@ -121,7 +121,9 @@
 `define RST_p		8'b11???111
 
 `define IN_A_n      8'hDB
+`define IN_r_C      8'b01???000
 `define OUT_n_A     8'hD3
+`define OUT_C_r     8'b01???001
 
 //flags
 `define PV_flag   2

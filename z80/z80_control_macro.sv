@@ -770,7 +770,11 @@ module decoder (
 
     MACRO_DEFINE_STATES IN_A_n 7
 
+    MACRO_DEFINE_STATES IN_r_C 4
+
     MACRO_DEFINE_STATES OUT_n_A 7
+
+    MACRO_DEFINE_STATES OUT_C_r 4
 
     //Mult-OCF Instructions
     //There is a difference between multi-ocf instructions and
@@ -1029,9 +1033,9 @@ module decoder (
           `CP_IY_d:     next_state = (op0[7:4] == 4'hF) ?  CP_IY_d_0 : CP_IX_d_0;
           `INC_IX_d:    next_state = (op0[7:4] == 4'hD) ?  INC_IX_d_0 : INC_IY_d_0;
           `INC_IY_d:    next_state = (op0[7:4] == 4'hF) ?  INC_IY_d_0 : INC_IX_d_0;
-
-          `BIT_b:       next_state = (op0[7:4] == 4'hD) ?  BIT_b_IX_d_x_0 : BIT_b_IY_d_x_0;
-
+          `BIT_b:       next_state = (op0[7:4] == 4'hD) ?  BIT_b_IX_d_x_0 :BIT_b_IY_d_x_0;
+          `IN_r_C:      next_state = IN_r_C_0;
+          `OUT_C_r:     next_state = OUT_C_r_0;
            default:     next_state = FETCH_0;
         endcase
       end
@@ -1415,7 +1419,11 @@ module decoder (
       //-----------------------------------------------------------------------
       MACRO_ENUM_STATES IN_A_n 7
 
+      MACRO_ENUM_STATES IN_r_C 4
+
       MACRO_ENUM_STATES OUT_n_A 7
+
+      MACRO_ENUM_STATES OUT_C_r 4
 
       //-----------------------------------------------------------------------
       //END Input and Output group
@@ -4815,6 +4823,8 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN Input and Output group
       //-----------------------------------------------------------------------
+
+      //BASIC IN AND OUT
       IN_A_n_0, OUT_n_A_0: begin
         MACRO_READ_0
         MACRO_16_INC PC
@@ -4858,6 +4868,74 @@ module decoder (
         MACRO_OUT_1
         MACRO_16_DRIVE STR
         drive_A = 1;
+      end
+
+      //IN r (C)
+      IN_r_C_0: begin
+        MACRO_IN_0
+        MACRO_16_DRIVE BC
+      end
+
+      IN_r_C_1, IN_r_C_2: begin
+        MACRO_IN_1
+        MACRO_16_DRIVE BC
+      end
+
+      IN_r_C_3: begin
+        //send the data through the 8-bit alu from the bus
+        ld_F_data    = 1;
+        alu_op       = `ALU_B;
+
+        MACRO_RESET H
+        MACRO_RESET N
+
+        unique case(op1[5:3])
+          3'b111: ld_A = 1;
+          3'b000: ld_B = 1;
+          3'b001: ld_C = 1;
+          3'b010: ld_D = 1;
+          3'b011: ld_E = 1;
+          3'b100: ld_H = 1;
+          3'b101: ld_L = 1;
+        endcase
+      end
+
+      //OUT (C), r
+      OUT_C_r_0: begin
+        MACRO_OUT_0
+        MACRO_16_DRIVE BC
+        ld_MARL = 1;
+        ld_MARH = 1;
+      end
+
+      OUT_C_r_1, OUT_C_r_2: begin
+
+        MACRO_OUT_1
+        drive_MAR = 1;
+
+        unique case(op1[5:3])
+          3'b000: begin
+            MACRO_8_DRIVE B
+          end
+          3'b001: begin
+            MACRO_8_DRIVE C
+          end
+          3'b010: begin
+            MACRO_8_DRIVE D
+          end
+          3'b011: begin
+            MACRO_8_DRIVE E
+          end
+          3'b100: begin
+            MACRO_8_DRIVE H
+          end
+          3'b101: begin
+            MACRO_8_DRIVE L
+          end
+          3'b111: begin
+            MACRO_8_DRIVE A
+          end
+        endcase
       end
 
       //-----------------------------------------------------------------------
