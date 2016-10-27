@@ -726,6 +726,15 @@ module decoder (
 
     MACRO_DEFINE_STATES INC_IY_d 15
 
+    MACRO_DEFINE_STATES DEC_r 1
+
+    MACRO_DEFINE_STATES DEC_HL 7
+
+    MACRO_DEFINE_STATES DEC_IX_d 15
+
+    MACRO_DEFINE_STATES DEC_IY_d 15
+
+
     MACRO_DEFINE_STATES CPL 1
 
     MACRO_DEFINE_STATES CCF 1
@@ -861,6 +870,7 @@ module decoder (
           `XOR_r:     next_state = (op0[2:0] != 3'b110) ? XOR_r_0   : FETCH_3;
           `CP_r:      next_state = (op0[2:0] != 3'b110) ? CP_r_0    : FETCH_3;
           `INC_r:     next_state = (op0[5:3] != 3'b110) ? INC_r_0   : FETCH_3;
+          `DEC_r:     next_state = (op0[5:3] != 3'b110) ? DEC_r_0   : FETCH_3;
           `CPL:       next_state = CPL_0;
           `CCF:       next_state = CCF_0;
           `SCF:       next_state = SCF_0;
@@ -888,6 +898,7 @@ module decoder (
             `OR_n:      next_state = OR_n_0;
             `OR_HL:     next_state = OR_HL_0;
             `INC_HL:    next_state = INC_HL_0;
+            `DEC_HL:    next_state = DEC_HL_0;
             default:    next_state = FETCH_0;
           endcase
         end
@@ -1033,6 +1044,8 @@ module decoder (
           `CP_IY_d:     next_state = (op0[7:4] == 4'hF) ?  CP_IY_d_0 : CP_IX_d_0;
           `INC_IX_d:    next_state = (op0[7:4] == 4'hD) ?  INC_IX_d_0 : INC_IY_d_0;
           `INC_IY_d:    next_state = (op0[7:4] == 4'hF) ?  INC_IY_d_0 : INC_IX_d_0;
+          `DEC_IX_d:    next_state = (op0[7:4] == 4'hD) ?  DEC_IX_d_0 : DEC_IY_d_0;
+          `DEC_IY_d:    next_state = (op0[7:4] == 4'hF) ?  DEC_IY_d_0 : DEC_IX_d_0;
           `BIT_b:       next_state = (op0[7:4] == 4'hD) ?  BIT_b_IX_d_x_0 :BIT_b_IY_d_x_0;
           `IN_r_C:      next_state = IN_r_C_0;
           `OUT_C_r:     next_state = OUT_C_r_0;
@@ -1284,6 +1297,14 @@ module decoder (
       MACRO_ENUM_STATES INC_IX_d 15
 
       MACRO_ENUM_STATES INC_IY_d 15
+
+      MACRO_ENUM_STATES DEC_r 1
+
+      MACRO_ENUM_STATES DEC_HL 7
+
+      MACRO_ENUM_STATES DEC_IX_d 15
+
+      MACRO_ENUM_STATES DEC_IY_d 15
 
       //-----------------------------------------------------------------------
       //END 8-bit arithmetic group
@@ -2813,7 +2834,7 @@ module decoder (
         MACRO_16_LOAD SP
         ld_MARH = 1;
         ld_MARL = 1;
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
       end
 
       PUSH_qq_1: begin
@@ -2859,7 +2880,7 @@ module decoder (
         MACRO_16_LOAD SP
         ld_MARH = 1;
         ld_MARL = 1;
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
       end
 
       PUSH_qq_4: begin
@@ -2906,7 +2927,7 @@ module decoder (
         MACRO_16_LOAD SP
         ld_MARH = 1;
         ld_MARL = 1;
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
       end
 
       PUSH_IX_1: begin
@@ -2926,7 +2947,7 @@ module decoder (
         MACRO_16_LOAD SP
         ld_MARH = 1;
         ld_MARL = 1;
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
       end
 
       PUSH_IX_4: begin
@@ -2947,7 +2968,7 @@ module decoder (
         MACRO_16_LOAD SP
         ld_MARH = 1;
         ld_MARL = 1;
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
       end
 
       PUSH_IY_1: begin
@@ -2967,7 +2988,7 @@ module decoder (
         MACRO_16_LOAD SP
         ld_MARH = 1;
         ld_MARL = 1;
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
       end
 
       PUSH_IY_4: begin
@@ -3256,7 +3277,7 @@ module decoder (
         drive_alu_addr = 1;
         ld_D = 1;
         ld_E = 1;
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
       end
 
       LDI_6, LDIR_6, LDD_6, LDDR_6: begin
@@ -3295,7 +3316,7 @@ module decoder (
         drive_alu_addr = 1;
         ld_H = 1;
         ld_L = 1;
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
       end
 
       LDIR_8, LDIR_9, LDDR_8, LDDR_9: begin
@@ -3360,7 +3381,7 @@ module decoder (
         drive_alu_addr = 1;
         ld_H = 1;
         ld_L = 1;
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
       end
 
       CPIR_8, CPIR_9, CPDR_8, CPDR_9: begin
@@ -4106,89 +4127,132 @@ module decoder (
         endcase
       end
 
+      //DEC r
+      DEC_r_0: begin
+        ld_F_data = 1;
+        MACRO_SET N
+
+        unique case(op0[5:3])
+          3'b111: begin
+            MACRO_8_DEC A
+          end
+          3'b000: begin
+            MACRO_8_DEC B
+          end
+          3'b001: begin
+            MACRO_8_DEC C
+          end
+          3'b010: begin
+            MACRO_8_DEC D
+          end
+          3'b011: begin
+            MACRO_8_DEC E
+          end
+          3'b100: begin
+            MACRO_8_DEC H
+          end
+          3'b101: begin
+            MACRO_8_DEC L
+          end
+        endcase
+      end
+
+
+
       //INC (HL)
-      INC_HL_0: begin
+      INC_HL_0, DEC_HL_0: begin
         MACRO_16_DRIVE HL
         MACRO_READ_0
         ld_MARL = 1;
         ld_MARH = 1;
       end
 
-      INC_HL_1: begin
+      INC_HL_1, DEC_HL_1: begin
         drive_MAR = 1;
         MACRO_READ_1
       end
 
-      INC_HL_2: begin
+      INC_HL_2, DEC_HL_2: begin
         ld_STRH = 1;
       end
 
-      INC_HL_3: begin
+      INC_HL_3, DEC_HL_3: begin
         ld_F_data = 1;
-        MACRO_RESET N
-        MACRO_8_INC STRH
+
+        if(state == INC_HL_3) begin
+          MACRO_RESET N
+          MACRO_8_INC STRH
+        end else begin
+          MACRO_SET N
+          MACRO_8_DEC STRH
+        end
       end
 
-      INC_HL_4: begin
+      INC_HL_4, DEC_HL_4: begin
         MACRO_8_DRIVE STRH
         MACRO_WRITE_0
         drive_MAR = 1;
       end
 
-      INC_HL_5: begin
+      INC_HL_5, DEC_HL_5: begin
         MACRO_8_DRIVE STRH
         MACRO_WRITE_1
         drive_MAR = 1;
       end
 
       //INC (IX+d), INC (IY+d)
-      INC_IX_d_0, INC_IY_d_0: begin
+      INC_IX_d_0, INC_IY_d_0, DEC_IX_d_0, DEC_IY_d_0: begin
         MACRO_READ_0
         MACRO_16_INC PC
       end
 
-      INC_IX_d_1, INC_IY_d_1: begin
+      INC_IX_d_1, INC_IY_d_1, DEC_IX_d_1, DEC_IY_d_1: begin
         MACRO_READ_1
         MACRO_16_DRIVE PC
       end
 
-      INC_IX_d_2, INC_IY_d_2: begin
+      INC_IX_d_2, INC_IY_d_2, DEC_IX_d_2, DEC_IY_d_2: begin
         ld_TEMP = 1;
       end
 
-      INC_IX_d_3, INC_IY_d_3: begin
+      INC_IX_d_3, INC_IY_d_3, DEC_IX_d_3, DEC_IY_d_3: begin
         alu_op = `ADD_SE_B;
-        drive_IXH = (state == INC_IX_d_3);
-        drive_IXL = (state == INC_IX_d_3);
-        drive_IYH = (state == INC_IY_d_3);
-        drive_IYL = (state == INC_IY_d_3);
+        drive_IXH = (op0[7:4] == 4'hd);
+        drive_IXL = (op0[7:4] == 4'hd);
+        drive_IYH = (op0[7:4] == 4'hf);
+        drive_IYL = (op0[7:4] == 4'hf);
         drive_reg_addr = 1;
         drive_alu_addr = 1;
         ld_MARH = 1;
         ld_MARL = 1;
       end
 
-      INC_IX_d_8, INC_IY_d_8: begin
+      INC_IX_d_8, INC_IY_d_8, DEC_IX_d_8, DEC_IY_d_8: begin
         drive_MAR = 1;
         MACRO_READ_0
       end
 
-      INC_IX_d_9, INC_IY_d_9: begin
+      INC_IX_d_9, INC_IY_d_9, DEC_IX_d_9, DEC_IY_d_9: begin
         drive_MAR = 1;
         MACRO_READ_1
       end
 
-      INC_IX_d_10, INC_IY_d_10: begin
+      INC_IX_d_10, INC_IY_d_10, DEC_IX_d_10, DEC_IY_d_10: begin
         ld_STRH = 1;
       end
 
-      INC_IX_d_11, INC_IY_d_11: begin
+      INC_IX_d_11, INC_IY_d_11, DEC_IX_d_11, DEC_IY_d_11: begin
         ld_F_data = 1;
-        MACRO_RESET N
-        MACRO_8_INC STRH
+        if(state == INC_IX_d_11 || state == INC_IY_d_11) begin
+          MACRO_RESET N
+          MACRO_8_INC STRH
+        end else begin
+          MACRO_SET N
+          MACRO_8_DEC STRH
+        end
       end
 
-      INC_IX_d_12, INC_IY_d_12: begin
+      INC_IX_d_12, INC_IY_d_12, DEC_IX_d_12, DEC_IY_d_12: begin
         MACRO_8_DRIVE STRH
         MACRO_WRITE_0
         drive_MAR = 1;
@@ -4593,7 +4657,7 @@ module decoder (
       CALL_nn_5: begin
         ld_MDR2 = 1;
         MACRO_16_DRIVE SP
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
         MACRO_16_LOAD SP
         ld_MARH = 1;
         ld_MARL = 1;
@@ -4618,7 +4682,7 @@ module decoder (
 
       CALL_nn_9: begin
         MACRO_16_DRIVE SP
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
         MACRO_16_LOAD SP
         ld_MARH = 1;
         ld_MARL = 1;
@@ -4660,7 +4724,7 @@ module decoder (
         ld_MDR2 = 1;
         if(next_state == CALL_cc_nn_6) begin
           MACRO_16_DRIVE SP
-          alu_op = `DECR_A;
+          alu_op = `DECR_A_16;
           MACRO_16_LOAD SP
           ld_MARH = 1;
           ld_MARL = 1;
@@ -4686,7 +4750,7 @@ module decoder (
 
       CALL_cc_nn_9: begin
         MACRO_16_DRIVE SP
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
         MACRO_16_LOAD SP
         ld_MARH = 1;
         ld_MARL = 1;
@@ -4772,7 +4836,7 @@ module decoder (
       RST_p_0: begin
         MACRO_16_DRIVE SP
         MACRO_16_LOAD SP
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
         ld_MARH = 1;
         ld_MARL = 1;
       end
@@ -4792,7 +4856,7 @@ module decoder (
       RST_p_3: begin
         MACRO_16_DRIVE SP
         MACRO_16_LOAD SP
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
         ld_MARH = 1;
         ld_MARL = 1;
       end

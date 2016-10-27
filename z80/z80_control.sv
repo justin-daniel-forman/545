@@ -1311,6 +1311,49 @@ module decoder (
     INC_IY_d_13,
     INC_IY_d_14,
 
+    DEC_r_0,
+
+    DEC_HL_0,
+    DEC_HL_1,
+    DEC_HL_2,
+    DEC_HL_3,
+    DEC_HL_4,
+    DEC_HL_5,
+    DEC_HL_6,
+
+    DEC_IX_d_0,
+    DEC_IX_d_1,
+    DEC_IX_d_2,
+    DEC_IX_d_3,
+    DEC_IX_d_4,
+    DEC_IX_d_5,
+    DEC_IX_d_6,
+    DEC_IX_d_7,
+    DEC_IX_d_8,
+    DEC_IX_d_9,
+    DEC_IX_d_10,
+    DEC_IX_d_11,
+    DEC_IX_d_12,
+    DEC_IX_d_13,
+    DEC_IX_d_14,
+
+    DEC_IY_d_0,
+    DEC_IY_d_1,
+    DEC_IY_d_2,
+    DEC_IY_d_3,
+    DEC_IY_d_4,
+    DEC_IY_d_5,
+    DEC_IY_d_6,
+    DEC_IY_d_7,
+    DEC_IY_d_8,
+    DEC_IY_d_9,
+    DEC_IY_d_10,
+    DEC_IY_d_11,
+    DEC_IY_d_12,
+    DEC_IY_d_13,
+    DEC_IY_d_14,
+
+
     CPL_0,
 
     CCF_0,
@@ -1556,6 +1599,7 @@ module decoder (
           `XOR_r:     next_state = (op0[2:0] != 3'b110) ? XOR_r_0   : FETCH_3;
           `CP_r:      next_state = (op0[2:0] != 3'b110) ? CP_r_0    : FETCH_3;
           `INC_r:     next_state = (op0[5:3] != 3'b110) ? INC_r_0   : FETCH_3;
+          `DEC_r:     next_state = (op0[5:3] != 3'b110) ? DEC_r_0   : FETCH_3;
           `CPL:       next_state = CPL_0;
           `CCF:       next_state = CCF_0;
           `SCF:       next_state = SCF_0;
@@ -1583,6 +1627,7 @@ module decoder (
             `OR_n:      next_state = OR_n_0;
             `OR_HL:     next_state = OR_HL_0;
             `INC_HL:    next_state = INC_HL_0;
+            `DEC_HL:    next_state = DEC_HL_0;
             default:    next_state = FETCH_0;
           endcase
         end
@@ -1728,6 +1773,8 @@ module decoder (
           `CP_IY_d:     next_state = (op0[7:4] == 4'hF) ?  CP_IY_d_0 : CP_IX_d_0;
           `INC_IX_d:    next_state = (op0[7:4] == 4'hD) ?  INC_IX_d_0 : INC_IY_d_0;
           `INC_IY_d:    next_state = (op0[7:4] == 4'hF) ?  INC_IY_d_0 : INC_IX_d_0;
+          `DEC_IX_d:    next_state = (op0[7:4] == 4'hD) ?  DEC_IX_d_0 : DEC_IY_d_0;
+          `DEC_IY_d:    next_state = (op0[7:4] == 4'hF) ?  DEC_IY_d_0 : DEC_IX_d_0;
           `BIT_b:       next_state = (op0[7:4] == 4'hD) ?  BIT_b_IX_d_x_0 :BIT_b_IY_d_x_0;
           `IN_r_C:      next_state = IN_r_C_0;
           `OUT_C_r:     next_state = OUT_C_r_0;
@@ -2628,6 +2675,52 @@ module decoder (
       INC_IY_d_12: next_state = INC_IY_d_13;
       INC_IY_d_13: next_state = INC_IY_d_14;
       INC_IY_d_14: next_state = FETCH_0;
+
+      //DEC_r
+      DEC_r_0: next_state = FETCH_0;
+
+      //DEC_HL
+      DEC_HL_0: next_state = DEC_HL_1;
+      DEC_HL_1: next_state = DEC_HL_2;
+      DEC_HL_2: next_state = DEC_HL_3;
+      DEC_HL_3: next_state = DEC_HL_4;
+      DEC_HL_4: next_state = DEC_HL_5;
+      DEC_HL_5: next_state = DEC_HL_6;
+      DEC_HL_6: next_state = FETCH_0;
+
+      //DEC_IX_d
+      DEC_IX_d_0: next_state = DEC_IX_d_1;
+      DEC_IX_d_1: next_state = DEC_IX_d_2;
+      DEC_IX_d_2: next_state = DEC_IX_d_3;
+      DEC_IX_d_3: next_state = DEC_IX_d_4;
+      DEC_IX_d_4: next_state = DEC_IX_d_5;
+      DEC_IX_d_5: next_state = DEC_IX_d_6;
+      DEC_IX_d_6: next_state = DEC_IX_d_7;
+      DEC_IX_d_7: next_state = DEC_IX_d_8;
+      DEC_IX_d_8: next_state = DEC_IX_d_9;
+      DEC_IX_d_9: next_state = DEC_IX_d_10;
+      DEC_IX_d_10: next_state = DEC_IX_d_11;
+      DEC_IX_d_11: next_state = DEC_IX_d_12;
+      DEC_IX_d_12: next_state = DEC_IX_d_13;
+      DEC_IX_d_13: next_state = DEC_IX_d_14;
+      DEC_IX_d_14: next_state = FETCH_0;
+
+      //DEC_IY_d
+      DEC_IY_d_0: next_state = DEC_IY_d_1;
+      DEC_IY_d_1: next_state = DEC_IY_d_2;
+      DEC_IY_d_2: next_state = DEC_IY_d_3;
+      DEC_IY_d_3: next_state = DEC_IY_d_4;
+      DEC_IY_d_4: next_state = DEC_IY_d_5;
+      DEC_IY_d_5: next_state = DEC_IY_d_6;
+      DEC_IY_d_6: next_state = DEC_IY_d_7;
+      DEC_IY_d_7: next_state = DEC_IY_d_8;
+      DEC_IY_d_8: next_state = DEC_IY_d_9;
+      DEC_IY_d_9: next_state = DEC_IY_d_10;
+      DEC_IY_d_10: next_state = DEC_IY_d_11;
+      DEC_IY_d_11: next_state = DEC_IY_d_12;
+      DEC_IY_d_12: next_state = DEC_IY_d_13;
+      DEC_IY_d_13: next_state = DEC_IY_d_14;
+      DEC_IY_d_14: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END 8-bit arithmetic group
@@ -4474,7 +4567,7 @@ module decoder (
         ld_SPH = 1;
         ld_MARH = 1;
         ld_MARL = 1;
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
       end
 
       PUSH_qq_1: begin
@@ -4532,7 +4625,7 @@ module decoder (
         ld_SPH = 1;
         ld_MARH = 1;
         ld_MARL = 1;
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
       end
 
       PUSH_qq_4: begin
@@ -4593,7 +4686,7 @@ module decoder (
         ld_SPH = 1;
         ld_MARH = 1;
         ld_MARL = 1;
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
       end
 
       PUSH_IX_1: begin
@@ -4621,7 +4714,7 @@ module decoder (
         ld_SPH = 1;
         ld_MARH = 1;
         ld_MARL = 1;
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
       end
 
       PUSH_IX_4: begin
@@ -4650,7 +4743,7 @@ module decoder (
         ld_SPH = 1;
         ld_MARH = 1;
         ld_MARL = 1;
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
       end
 
       PUSH_IY_1: begin
@@ -4678,7 +4771,7 @@ module decoder (
         ld_SPH = 1;
         ld_MARH = 1;
         ld_MARL = 1;
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
       end
 
       PUSH_IY_4: begin
@@ -5054,7 +5147,7 @@ module decoder (
         drive_alu_addr = 1;
         ld_D = 1;
         ld_E = 1;
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
       end
 
       LDI_6, LDIR_6, LDD_6, LDDR_6: begin
@@ -5093,7 +5186,7 @@ module decoder (
         drive_alu_addr = 1;
         ld_H = 1;
         ld_L = 1;
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
       end
 
       LDIR_8, LDIR_9, LDDR_8, LDDR_9: begin
@@ -5103,7 +5196,7 @@ module decoder (
           ld_PCL    = 1;
           drive_PCH = 1;
           drive_PCL = 1;
-          alu_op    = `DECR_A;
+          alu_op    = `DECR_A_16;
           drive_reg_addr = 1;
           drive_alu_addr = 1;
         end
@@ -5173,7 +5266,7 @@ module decoder (
         drive_alu_addr = 1;
         ld_H = 1;
         ld_L = 1;
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
       end
 
       CPIR_8, CPIR_9, CPDR_8, CPDR_9: begin
@@ -5183,7 +5276,7 @@ module decoder (
           ld_PCL    = 1;
           drive_PCH = 1;
           drive_PCL = 1;
-          alu_op    = `DECR_A;
+          alu_op    = `DECR_A_16;
           drive_reg_addr = 1;
           drive_alu_addr = 1;
         end
@@ -6421,8 +6514,68 @@ module decoder (
         endcase
       end
 
+      //DEC r
+      DEC_r_0: begin
+        ld_F_data = 1;
+        set_N = 2'b11;
+
+        unique case(op0[5:3])
+          3'b111: begin
+            drive_reg_data = 1;
+            drive_alu_data = 1;
+            drive_A = 1;
+            ld_A    = 1;
+            alu_op  = `DECR_A_8;
+          end
+          3'b000: begin
+            drive_reg_data = 1;
+            drive_alu_data = 1;
+            drive_B = 1;
+            ld_B    = 1;
+            alu_op  = `DECR_B_8;
+          end
+          3'b001: begin
+            drive_reg_data = 1;
+            drive_alu_data = 1;
+            drive_C = 1;
+            ld_C    = 1;
+            alu_op  = `DECR_B_8;
+          end
+          3'b010: begin
+            drive_reg_data = 1;
+            drive_alu_data = 1;
+            drive_D = 1;
+            ld_D    = 1;
+            alu_op  = `DECR_B_8;
+          end
+          3'b011: begin
+            drive_reg_data = 1;
+            drive_alu_data = 1;
+            drive_E = 1;
+            ld_E    = 1;
+            alu_op  = `DECR_B_8;
+          end
+          3'b100: begin
+            drive_reg_data = 1;
+            drive_alu_data = 1;
+            drive_H = 1;
+            ld_H    = 1;
+            alu_op  = `DECR_B_8;
+          end
+          3'b101: begin
+            drive_reg_data = 1;
+            drive_alu_data = 1;
+            drive_L = 1;
+            ld_L    = 1;
+            alu_op  = `DECR_B_8;
+          end
+        endcase
+      end
+
+
+
       //INC (HL)
-      INC_HL_0: begin
+      INC_HL_0, DEC_HL_0: begin
         drive_alu_addr = 1;
         alu_op = `ALU_NOP;
         drive_reg_addr = 1;
@@ -6434,26 +6587,36 @@ module decoder (
         ld_MARH = 1;
       end
 
-      INC_HL_1: begin
+      INC_HL_1, DEC_HL_1: begin
         drive_MAR = 1;
         MRD_bus = 1;
       end
 
-      INC_HL_2: begin
+      INC_HL_2, DEC_HL_2: begin
         ld_STRH = 1;
       end
 
-      INC_HL_3: begin
+      INC_HL_3, DEC_HL_3: begin
         ld_F_data = 1;
-        set_N = 2'b10;
-        drive_reg_data = 1;
-        drive_alu_data = 1;
-        drive_STRH = 1;
-        ld_STRH    = 1;
-        alu_op     = `INCR_B_8;
+
+        if(state == INC_HL_3) begin
+          set_N = 2'b10;
+          drive_reg_data = 1;
+          drive_alu_data = 1;
+          drive_STRH = 1;
+          ld_STRH    = 1;
+          alu_op     = `INCR_B_8;
+        end else begin
+          set_N = 2'b11;
+          drive_reg_data = 1;
+          drive_alu_data = 1;
+          drive_STRH = 1;
+          ld_STRH    = 1;
+          alu_op     = `DECR_B_8;
+        end
       end
 
-      INC_HL_4: begin
+      INC_HL_4, DEC_HL_4: begin
         drive_STRH = 1;
         drive_reg_data = 1;
         MWR_start = 1;
@@ -6461,7 +6624,7 @@ module decoder (
         drive_MAR = 1;
       end
 
-      INC_HL_5: begin
+      INC_HL_5, DEC_HL_5: begin
         drive_STRH = 1;
         drive_reg_data = 1;
         MWR_bus = 1;
@@ -6469,7 +6632,7 @@ module decoder (
       end
 
       //INC (IX+d), INC (IY+d)
-      INC_IX_d_0, INC_IY_d_0: begin
+      INC_IX_d_0, INC_IY_d_0, DEC_IX_d_0, DEC_IY_d_0: begin
         MRD_start = 1;
         MRD_bus   = 1;
         drive_alu_addr = 1;
@@ -6481,7 +6644,7 @@ module decoder (
         ld_PCL    = 1;
       end
 
-      INC_IX_d_1, INC_IY_d_1: begin
+      INC_IX_d_1, INC_IY_d_1, DEC_IX_d_1, DEC_IY_d_1: begin
         MRD_bus = 1;
         drive_alu_addr = 1;
         alu_op = `ALU_NOP;
@@ -6490,48 +6653,57 @@ module decoder (
         drive_PCL = 1;
       end
 
-      INC_IX_d_2, INC_IY_d_2: begin
+      INC_IX_d_2, INC_IY_d_2, DEC_IX_d_2, DEC_IY_d_2: begin
         ld_TEMP = 1;
       end
 
-      INC_IX_d_3, INC_IY_d_3: begin
+      INC_IX_d_3, INC_IY_d_3, DEC_IX_d_3, DEC_IY_d_3: begin
         alu_op = `ADD_SE_B;
-        drive_IXH = (state == INC_IX_d_3);
-        drive_IXL = (state == INC_IX_d_3);
-        drive_IYH = (state == INC_IY_d_3);
-        drive_IYL = (state == INC_IY_d_3);
+        drive_IXH = (op0[7:4] == 4'hd);
+        drive_IXL = (op0[7:4] == 4'hd);
+        drive_IYH = (op0[7:4] == 4'hf);
+        drive_IYL = (op0[7:4] == 4'hf);
         drive_reg_addr = 1;
         drive_alu_addr = 1;
         ld_MARH = 1;
         ld_MARL = 1;
       end
 
-      INC_IX_d_8, INC_IY_d_8: begin
+      INC_IX_d_8, INC_IY_d_8, DEC_IX_d_8, DEC_IY_d_8: begin
         drive_MAR = 1;
         MRD_start = 1;
         MRD_bus   = 1;
       end
 
-      INC_IX_d_9, INC_IY_d_9: begin
+      INC_IX_d_9, INC_IY_d_9, DEC_IX_d_9, DEC_IY_d_9: begin
         drive_MAR = 1;
         MRD_bus = 1;
       end
 
-      INC_IX_d_10, INC_IY_d_10: begin
+      INC_IX_d_10, INC_IY_d_10, DEC_IX_d_10, DEC_IY_d_10: begin
         ld_STRH = 1;
       end
 
-      INC_IX_d_11, INC_IY_d_11: begin
+      INC_IX_d_11, INC_IY_d_11, DEC_IX_d_11, DEC_IY_d_11: begin
         ld_F_data = 1;
-        set_N = 2'b10;
-        drive_reg_data = 1;
-        drive_alu_data = 1;
-        drive_STRH = 1;
-        ld_STRH    = 1;
-        alu_op     = `INCR_B_8;
+        if(state == INC_IX_d_11 || state == INC_IY_d_11) begin
+          set_N = 2'b10;
+          drive_reg_data = 1;
+          drive_alu_data = 1;
+          drive_STRH = 1;
+          ld_STRH    = 1;
+          alu_op     = `INCR_B_8;
+        end else begin
+          set_N = 2'b11;
+          drive_reg_data = 1;
+          drive_alu_data = 1;
+          drive_STRH = 1;
+          ld_STRH    = 1;
+          alu_op     = `DECR_B_8;
+        end
       end
 
-      INC_IX_d_12, INC_IY_d_12: begin
+      INC_IX_d_12, INC_IY_d_12, DEC_IX_d_12, DEC_IY_d_12: begin
         drive_STRH = 1;
         drive_reg_data = 1;
         MWR_start = 1;
@@ -7075,7 +7247,7 @@ module decoder (
         drive_reg_addr = 1;
         drive_SPL = 1;
         drive_SPH = 1;
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
         ld_SPL = 1;
         ld_SPH = 1;
         ld_MARH = 1;
@@ -7108,7 +7280,7 @@ module decoder (
         drive_reg_addr = 1;
         drive_SPL = 1;
         drive_SPH = 1;
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
         ld_SPL = 1;
         ld_SPH = 1;
         ld_MARH = 1;
@@ -7169,7 +7341,7 @@ module decoder (
           drive_reg_addr = 1;
           drive_SPL = 1;
           drive_SPH = 1;
-          alu_op = `DECR_A;
+          alu_op = `DECR_A_16;
           ld_SPL = 1;
           ld_SPH = 1;
           ld_MARH = 1;
@@ -7203,7 +7375,7 @@ module decoder (
         drive_reg_addr = 1;
         drive_SPL = 1;
         drive_SPH = 1;
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
         ld_SPL = 1;
         ld_SPH = 1;
         ld_MARH = 1;
@@ -7350,7 +7522,7 @@ module decoder (
         drive_SPH = 1;
         ld_SPL = 1;
         ld_SPH = 1;
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
         ld_MARH = 1;
         ld_MARL = 1;
       end
@@ -7378,7 +7550,7 @@ module decoder (
         drive_SPH = 1;
         ld_SPL = 1;
         ld_SPH = 1;
-        alu_op = `DECR_A;
+        alu_op = `DECR_A_16;
         ld_MARH = 1;
         ld_MARL = 1;
       end
