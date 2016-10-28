@@ -698,56 +698,56 @@ module alu #(parameter w = 8)(
         F_out[`H_flag] = 1;
         F_out[`N_flag] = 0;
         F_out[`Z_flag] = !B[0];
-        C = A;
+        C = B;
       end
 
       `BIT_TEST_1: begin
         F_out[`H_flag] = 1;
         F_out[`N_flag] = 0;
         F_out[`Z_flag] = !B[1];
-        C = A;
+        C = B;
       end
 
       `BIT_TEST_2: begin
         F_out[`H_flag] = 1;
         F_out[`N_flag] = 0;
         F_out[`Z_flag] = !B[2];
-        C = A;
+        C = B;
       end
 
       `BIT_TEST_3: begin
         F_out[`H_flag] = 1;
         F_out[`N_flag] = 0;
         F_out[`Z_flag] = !B[3];
-        C = A;
+        C = B;
       end
 
       `BIT_TEST_4: begin
         F_out[`H_flag] = 1;
         F_out[`N_flag] = 0;
         F_out[`Z_flag] = !B[4];
-        C = A;
+        C = B;
       end
 
       `BIT_TEST_5: begin
         F_out[`H_flag] = 1;
         F_out[`N_flag] = 0;
         F_out[`Z_flag] = !B[5];
-        C = A;
+        C = B;
       end
 
       `BIT_TEST_6: begin
         F_out[`H_flag] = 1;
         F_out[`N_flag] = 0;
         F_out[`Z_flag] = !B[6];
-        C = A;
+        C = B;
       end
 
      `BIT_TEST_7: begin
         F_out[`H_flag] = 1;
         F_out[`N_flag] = 0;
         F_out[`Z_flag] = !B[7];
-        C = A;
+        C = B;
       end
 
       `BIT_SET_0: begin
@@ -812,6 +812,90 @@ module alu #(parameter w = 8)(
 
       `BIT_RES_7: begin
         C = B & 8'h7f;
+      end
+
+      `RLC: begin
+        F_out[`N_flag] = 0;
+        F_out[`C_flag] = B[7];
+        F_out[`H_flag] = 0;
+        C = {B[6:0],B[7]};
+      end
+
+      `RL: begin
+        F_out[`N_flag] = 0;
+        F_out[`C_flag] = B[7];
+        F_out[`H_flag] = 0;
+        C = {B[6:0],F_in[`C_flag]};
+      end
+
+      `RRC: begin
+        F_out[`N_flag] = 0;
+        F_out[`C_flag] = B[0];
+        F_out[`H_flag] = 0;
+        C = {B[0],B[7:1]};
+      end
+
+      `RR: begin
+        F_out[`N_flag] = 0;
+        F_out[`C_flag] = B[0];
+        F_out[`H_flag] = 0;
+        C = {F_in[`C_flag],B[7:1]};
+      end
+
+      `SLA: begin
+        C = {B[6:0],1'b0};
+        F_out[`C_flag] = B[7];
+        F_out[`N_flag] = 0;
+        F_out[`S_flag] = B[6];
+        F_out[`Z_flag] = (C == 0);
+        F_out[`H_flag] = 0;
+        F_out[`PV_flag] = !(C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0]);
+      end
+
+      `SRA: begin
+        C = {B[7],B[7:1]};
+        F_out[`C_flag] = B[0];
+        F_out[`N_flag] = 0;
+        F_out[`S_flag] = B[6];
+        F_out[`Z_flag] = (C == 0);
+        F_out[`H_flag] = 0;
+        F_out[`PV_flag] = !(C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0]);
+      end
+
+      `SRL: begin
+        C = {1'b0,B[7:1]};
+        F_out[`C_flag] = B[0];
+        F_out[`N_flag] = 0;
+        F_out[`S_flag] = 0;
+        F_out[`Z_flag] = (C == 0);
+        F_out[`H_flag] = 0;
+        F_out[`PV_flag] = !(C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0]);
+      end
+
+      `ALU_RLD: begin
+        C = {B[3:0],A[3:0]};
+      end
+
+      `ALU_RLD_ACC: begin
+        C = {A[7:4],B[7:4]};
+        F_out[`N_flag] = 0;
+        F_out[`H_flag] = 0;
+        F_out[`S_flag] = C[7];
+        F_out[`Z_flag] = !C;
+        F_out[`PV_flag] = !(C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0]);
+      end
+
+      `ALU_RRD: begin
+        C = {A[3:0],B[7:4]};
+      end
+
+      `ALU_RRD_ACC: begin
+        C = {A[7:4],B[3:0]};
+        F_out[`N_flag] = 0;
+        F_out[`H_flag] = 0;
+        F_out[`S_flag] = C[7];
+        F_out[`Z_flag] = !C;
+        F_out[`PV_flag] = !(C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0]);
       end
 
       default: begin

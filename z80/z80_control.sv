@@ -1239,6 +1239,29 @@ module decoder (
     NOP_0,
 
 
+    RLD_0,
+    RLD_1,
+    RLD_2,
+    RLD_3,
+    RLD_4,
+    RLD_5,
+    RLD_6,
+    RLD_7,
+    RLD_8,
+    RLD_9,
+
+    RRD_0,
+    RRD_1,
+    RRD_2,
+    RRD_3,
+    RRD_4,
+    RRD_5,
+    RRD_6,
+    RRD_7,
+    RRD_8,
+    RRD_9,
+
+
     BIT_b_r_0,
     BIT_b_r_1,
     BIT_b_r_2,
@@ -1400,6 +1423,7 @@ module decoder (
     //Latch values on the clock edge for opcode and operand fetches
     case(state)
       FETCH_1: op0 <= data_in;
+      FETCH_2: op1 <= op0;
       FETCH_5: op1 <= data_in;
       BIT_b_r_2: op1 <= data_in;
       BIT_b_IX_d_x_5: op1 <= data_in;
@@ -1454,6 +1478,7 @@ module decoder (
           `EXT_INST:  next_state = EXT_INST_0;
           `IX_INST:   next_state = IX_INST_0;
           `IY_INST:   next_state = IY_INST_0;
+          `RS_A:      next_state = BIT_b_r_3;
           default:    next_state = FETCH_3;
         endcase
       end
@@ -1617,6 +1642,9 @@ module decoder (
           `INC_IY_d:    next_state = (op0[7:4] == 4'hF) ?  INC_IY_d_0 : INC_IX_d_0;
 
           `BIT_b:       next_state = (op0[7:4] == 4'hD) ?  BIT_b_IX_d_x_0 : BIT_b_IY_d_x_0;
+
+          `RLD:       next_state = RLD_0;
+          `RRD:       next_state = RRD_0;
 
            default:     next_state = FETCH_0;
         endcase
@@ -2508,6 +2536,38 @@ module decoder (
 
       //-----------------------------------------------------------------------
       //END General Purpose Arith and CPU Control
+      //-----------------------------------------------------------------------
+
+      //-----------------------------------------------------------------------
+      //BEGIN Rotate and Shift Group
+      //-----------------------------------------------------------------------
+
+      //RLD
+      RLD_0: next_state = RLD_1;
+      RLD_1: next_state = RLD_2;
+      RLD_2: next_state = RLD_3;
+      RLD_3: next_state = RLD_4;
+      RLD_4: next_state = RLD_5;
+      RLD_5: next_state = RLD_6;
+      RLD_6: next_state = RLD_7;
+      RLD_7: next_state = RLD_8;
+      RLD_8: next_state = RLD_9;
+      RLD_9: next_state = FETCH_0;
+
+      //RRD
+      RRD_0: next_state = RRD_1;
+      RRD_1: next_state = RRD_2;
+      RRD_2: next_state = RRD_3;
+      RRD_3: next_state = RRD_4;
+      RRD_4: next_state = RRD_5;
+      RRD_5: next_state = RRD_6;
+      RRD_6: next_state = RRD_7;
+      RRD_7: next_state = RRD_8;
+      RRD_8: next_state = RRD_9;
+      RRD_9: next_state = FETCH_0;
+
+      //-----------------------------------------------------------------------
+      //END Rotate and Shift Group
       //-----------------------------------------------------------------------
 
       //-----------------------------------------------------------------------
@@ -6272,38 +6332,47 @@ module decoder (
 
       BIT_b_r_3: begin
         drive_alu_data = 1;
-        alu_op = {op1[7:6],1'b0,op1[5:3]};
-        ld_F_data = (op1[7:6] == 2'b01);
+        case(op1[7:3])
+          `RLC_op: alu_op = `RLC;
+          `RL_op:  alu_op = `RL;
+          `RRC_op: alu_op = `RRC;
+          `RR_op:  alu_op = `RR;
+          `SLA_op: alu_op = `SLA;
+          `SRA_op: alu_op = `SRA;
+          `SRL_op: alu_op = `SRL;
+          default: alu_op = {op1[7:6],1'b0,op1[5:3]};
+        endcase
+        ld_F_data = 1;
         unique case(op1[2:0])
           3'b000: begin
             drive_B = 1;
             drive_reg_data = 1;
-            ld_B = (op1[7:6] != 2'b01);
+            ld_B = 1;
           end
           3'b001: begin
             drive_C = 1;
             drive_reg_data = 1;
-            ld_C = (op1[7:6] != 2'b01);
+            ld_C = 1;
           end
           3'b010: begin
             drive_D = 1;
             drive_reg_data = 1;
-            ld_D = (op1[7:6] != 2'b01);
+            ld_D = 1;
           end
           3'b011: begin
             drive_E = 1;
             drive_reg_data = 1;
-            ld_E = (op1[7:6] != 2'b01);
+            ld_E = 1;
           end
           3'b100: begin
             drive_H = 1;
             drive_reg_data = 1;
-            ld_H = (op1[7:6] != 2'b01);
+            ld_H = 1;
           end
           3'b101: begin
             drive_L = 1;
             drive_reg_data = 1;
-            ld_L = (op1[7:6] != 2'b01);
+            ld_L = 1;
           end
           3'b110: begin
             drive_alu_data = 0;
@@ -6322,7 +6391,7 @@ module decoder (
           3'b111: begin
             drive_A = 1;
             drive_reg_data = 1;
-            ld_A = (op1[7:6] != 2'b01);
+            ld_A = 1;
           end
         endcase
       end
@@ -6338,9 +6407,18 @@ module decoder (
       end
 
       BIT_b_HL_x_1: begin
-        alu_op = {op1[7:6],1'b0,op1[5:3]};
-        drive_alu_data = (op1[7:6] != 2'b01);
-        ld_F_data = (op1[7:6] == 2'b01);
+        case(op1[7:3])
+          `RLC_op: alu_op = `RLC;
+          `RL_op:  alu_op = `RL;
+          `RRC_op: alu_op = `RRC;
+          `RR_op:  alu_op = `RR;
+          `SLA_op: alu_op = `SLA;
+          `SRA_op: alu_op = `SRA;
+          `SRL_op: alu_op = `SRL;
+          default: alu_op = {op1[7:6],1'b0,op1[5:3]};
+        endcase
+        drive_alu_data = 1;
+        ld_F_data = 1;
         ld_L = (op1[7:6] != 2'b01);
       end
 
@@ -6418,10 +6496,19 @@ module decoder (
       end
 
       BIT_b_IX_d_x_8: begin
-        alu_op = {op1[7:6],1'b0,op1[5:3]};
-        drive_alu_data = (op1[7:6] != 2'b01);
-        ld_F_data = (op1[7:6] == 2'b01);
-        ld_STRL = (op1[7:6] != 2'b01);
+        case(op1[7:3])
+          `RLC_op: alu_op = `RLC;
+          `RL_op:  alu_op = `RL;
+          `RRC_op: alu_op = `RRC;
+          `RR_op:  alu_op = `RR;
+          `SLA_op: alu_op = `SLA;
+          `SRA_op: alu_op = `SRA;
+          `SRL_op: alu_op = `SRL;
+          default: alu_op = {op1[7:6],1'b0,op1[5:3]};
+        endcase
+        drive_alu_data = 1;
+        ld_F_data = 1;
+        ld_STRL = 1;
       end
 
       SET_b_IX_d_x_0: begin
@@ -6488,10 +6575,19 @@ module decoder (
       end
 
       BIT_b_IY_d_x_8: begin
-        alu_op = {2'b10,op1[5:3]};
-        drive_alu_data = (op1[7:6] != 2'b01);
-        ld_F_data = (op1[7:6] == 2'b01);
-        ld_STRL = (op1[7:6] != 2'b01);
+        case(op1[7:3])
+          `RLC_op: alu_op = `RLC;
+          `RL_op:  alu_op = `RL;
+          `RRC_op: alu_op = `RRC;
+          `RR_op:  alu_op = `RR;
+          `SLA_op: alu_op = `SLA;
+          `SRA_op: alu_op = `SRA;
+          `SRL_op: alu_op = `SRL;
+          default: alu_op = {op1[7:6],1'b0,op1[5:3]};
+        endcase
+        drive_alu_data = 1;
+        ld_F_data = 1;
+        ld_STRL = 1;
       end
 
       SET_b_IY_d_x_0: begin
@@ -6507,6 +6603,110 @@ module decoder (
         drive_reg_data = 1;
         drive_MAR = 1;
         MWR_bus = 1;
+      end
+
+      RLD_0: begin
+        MRD_start = 1;
+        MRD_bus   = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_H = 1;
+        drive_L = 1;
+        ld_MARH = 1;
+        ld_MARL = 1;
+      end
+
+      //RLD
+      RLD_1: begin
+        MRD_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_H = 1;
+        drive_L = 1;
+      end
+
+      RLD_2: begin
+        alu_op = `ALU_RLD;
+        drive_alu_data = 1;
+        ld_STRL = 1;
+        ld_MDR1 = 1;
+      end
+
+      RLD_3: begin
+        MWR_start = 1;
+        MWR_bus   = 1;
+        drive_MAR = 1;
+        drive_STRL = 1;
+        drive_reg_data = 1;
+      end
+
+      RLD_4: begin
+        MWR_bus = 1;
+        drive_MAR = 1;
+        drive_STRL = 1;
+        drive_reg_data = 1;
+      end
+
+      RLD_5: begin
+        drive_MDR1 = 1;
+        alu_op = `ALU_RLD_ACC;
+        ld_F_data = 1;
+        drive_alu_data = 1;
+        ld_A = 1;
+      end
+
+      //RRD
+      RRD_0: begin
+        MRD_start = 1;
+        MRD_bus   = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_H = 1;
+        drive_L = 1;
+        ld_MARH = 1;
+        ld_MARL = 1;
+      end
+
+      RRD_1: begin
+        MRD_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_H = 1;
+        drive_L = 1;
+      end
+
+      RRD_2: begin
+        alu_op = `ALU_RRD;
+        drive_alu_data = 1;
+        ld_STRL = 1;
+        ld_MDR1 = 1;
+      end
+
+      RRD_3: begin
+        MWR_start = 1;
+        MWR_bus   = 1;
+        drive_MAR = 1;
+        drive_STRL = 1;
+        drive_reg_data = 1;
+      end
+
+      RRD_4: begin
+        MWR_bus = 1;
+        drive_MAR = 1;
+        drive_STRL = 1;
+        drive_reg_data = 1;
+      end
+
+      RRD_5: begin
+        drive_MDR1 = 1;
+        alu_op = `ALU_RRD_ACC;
+        ld_F_data = 1;
+        drive_alu_data = 1;
+        ld_A = 1;
       end
 
       //-----------------------------------------------------------------------

@@ -100,6 +100,10 @@
 `define SCF         8'h37
 `define NOP         8'h00
 
+`define RS_A		8'b000??111
+`define RLD			8'h6F
+`define RRD			8'h67
+
 `define BIT_b		8'hCB
 
 `define JP_nn       8'hC3
@@ -178,3 +182,25 @@
 `define BIT_SET_5 	6'h35
 `define BIT_SET_6 	6'h36
 `define BIT_SET_7 	6'h37
+
+`define RLC			6'h28
+`define RL 			6'h29
+`define RRC 		6'h2A
+`define RR 			6'h2B
+`define SLA 		6'h2C
+`define SRA 		6'h2D
+`define SRL 		6'h2E
+
+`define ALU_RLD 	  6'h38
+`define ALU_RLD_ACC	6'h39
+`define ALU_RRD     6'h3A
+`define ALU_RRD_ACC 6'h3B
+
+//Bit operations definition
+`define RLC_op		5'h00
+`define RL_op 		5'h02
+`define RRC_op 		5'h01
+`define RR_op 		5'h03
+`define SLA_op 		5'h04
+`define SRA_op		5'h05
+`define SRL_op		5'h07
