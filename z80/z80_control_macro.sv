@@ -744,6 +744,21 @@ module decoder (
     MACRO_DEFINE_STATES NOP 1
 
 
+    MACRO_DEFINE_STATES ADD_HL_ss 7
+
+    MACRO_DEFINE_STATES INC_ss 2
+
+    MACRO_DEFINE_STATES INC_IX 2
+
+    MACRO_DEFINE_STATES INC_IY 2
+
+    MACRO_DEFINE_STATES DEC_ss 2
+
+    MACRO_DEFINE_STATES DEC_IX 2
+
+    MACRO_DEFINE_STATES DEC_IY 2
+
+
     MACRO_DEFINE_STATES BIT_b_r 4
 
     MACRO_DEFINE_STATES BIT_b_HL_x 4
@@ -915,6 +930,8 @@ module decoder (
             `OR_HL:     next_state = OR_HL_0;
             `INC_HL:    next_state = INC_HL_0;
             `DEC_HL:    next_state = DEC_HL_0;
+            `INC_ss:    next_state = INC_ss_0;
+            `DEC_ss:    next_state = DEC_ss_0;
             default:    next_state = FETCH_0;
           endcase
         end
@@ -961,7 +978,9 @@ module decoder (
             `EX_SP_HL:   next_state = EX_SP_HL_0;
             `PUSH_qq:    next_state = PUSH_qq_0;
             `POP_qq:     next_state = POP_qq_0;
-            `BIT_b:    next_state = BIT_b_r_0;
+            `INC_ss:     next_state = INC_ss_0;
+            `DEC_ss:     next_state = DEC_ss_0;
+            `BIT_b:      next_state = BIT_b_r_0;
             `JP_nn:      next_state = JP_nn_0;
             `JP_cc_nn:   next_state = JP_cc_nn_0;
             `JR_e:       next_state = JR_e_0;
@@ -1062,6 +1081,10 @@ module decoder (
           `INC_IY_d:    next_state = (op0[7:4] == 4'hF) ?  INC_IY_d_0 : INC_IX_d_0;
           `DEC_IX_d:    next_state = (op0[7:4] == 4'hD) ?  DEC_IX_d_0 : DEC_IY_d_0;
           `DEC_IY_d:    next_state = (op0[7:4] == 4'hF) ?  DEC_IY_d_0 : DEC_IX_d_0;
+          `INC_IX:      next_state = (op0[7:4] == 4'hD) ?  INC_IX_0   : INC_IY_0;
+          `INC_IY:      next_state = (op0[7:4] == 4'hF) ?  INC_IY_0   : INC_IX_0;
+          `DEC_IX:      next_state = (op0[7:4] == 4'hD) ?  DEC_IX_0   : DEC_IY_0;
+          `DEC_IY:      next_state = (op0[7:4] == 4'hF) ?  DEC_IY_0   : DEC_IX_0;
           `BIT_b:       next_state = (op0[7:4] == 4'hD) ?  BIT_b_IX_d_x_0 :BIT_b_IY_d_x_0;
           `IN_r_C:      next_state = IN_r_C_0;
           `OUT_C_r:     next_state = OUT_C_r_0;
@@ -1337,6 +1360,20 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN 16-bit arithmetic group
       //-----------------------------------------------------------------------
+
+      MACRO_ENUM_STATES ADD_HL_ss 7
+
+      MACRO_ENUM_STATES INC_ss 2
+
+      MACRO_ENUM_STATES INC_IX 2
+
+      MACRO_ENUM_STATES INC_IY 2
+
+      MACRO_ENUM_STATES DEC_ss 2
+
+      MACRO_ENUM_STATES DEC_IX 2
+
+      MACRO_ENUM_STATES DEC_IY 2
 
       //-----------------------------------------------------------------------
       //END 16-bit arithmetic group
@@ -4335,6 +4372,56 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN 16-bit arithmetic group
       //-----------------------------------------------------------------------
+
+      INC_ss_0: begin
+        unique case(op0[5:4])
+          2'b00: begin
+            MACRO_16_INC BC
+          end
+          2'b01: begin
+            MACRO_16_INC DE
+          end
+          2'b10: begin
+            MACRO_16_INC HL
+          end
+          2'b11: begin
+            MACRO_16_INC SP
+          end
+        endcase
+      end
+
+      INC_IX_0: begin
+        MACRO_16_INC IX
+      end
+
+      INC_IY_0: begin
+        MACRO_16_INC IY
+      end
+
+      DEC_ss_0: begin
+        unique case(op0[5:4])
+          2'b00: begin
+            MACRO_16_DEC BC
+          end
+          2'b01: begin
+            MACRO_16_DEC DE
+          end
+          2'b10: begin
+            MACRO_16_DEC HL
+          end
+          2'b11: begin
+            MACRO_16_DEC SP
+          end
+        endcase
+      end
+
+      DEC_IX_0: begin
+        MACRO_16_DEC IX
+      end
+
+      DEC_IY_0: begin
+        MACRO_16_DEC IY
+      end
 
       //-----------------------------------------------------------------------
       //END 16-bit arithmetic group

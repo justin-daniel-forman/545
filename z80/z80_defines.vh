@@ -108,6 +108,13 @@
 `define SCF         8'h37
 `define NOP         8'h00
 
+`define INC_ss      8'b00??0011
+`define INC_IX      8'h23
+`define INC_IY      8'h23
+`define DEC_ss      8'b00??1011
+`define DEC_IX      8'h2B
+`define DEC_IY      8'h2B
+
 `define BIT_b		8'hCB
 
 `define JP_nn       8'hC3
