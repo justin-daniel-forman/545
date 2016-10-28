@@ -126,6 +126,10 @@
 
 `define IN_A_n      8'hDB
 `define IN_r_C      8'b01???000
+`define INI         8'hA2
+`define INIR        8'hB2
+`define IND         8'hAA
+`define INDR        8'hBA
 `define OUT_n_A     8'hD3
 `define OUT_C_r     8'b01???001
 

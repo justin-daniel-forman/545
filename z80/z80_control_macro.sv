@@ -781,6 +781,14 @@ module decoder (
 
     MACRO_DEFINE_STATES IN_r_C 4
 
+    MACRO_DEFINE_STATES INI 12
+
+    MACRO_DEFINE_STATES INIR 17
+
+    MACRO_DEFINE_STATES IND 12
+
+    MACRO_DEFINE_STATES INDR 17
+
     MACRO_DEFINE_STATES OUT_n_A 7
 
     MACRO_DEFINE_STATES OUT_C_r 4
@@ -1049,6 +1057,10 @@ module decoder (
           `BIT_b:       next_state = (op0[7:4] == 4'hD) ?  BIT_b_IX_d_x_0 :BIT_b_IY_d_x_0;
           `IN_r_C:      next_state = IN_r_C_0;
           `OUT_C_r:     next_state = OUT_C_r_0;
+          `INI:         next_state = INI_0;
+          `INIR:        next_state = INIR_0;
+          `IND:         next_state = IND_0;
+          `INDR:        next_state = INDR_0;
            default:     next_state = FETCH_0;
         endcase
       end
@@ -1441,6 +1453,26 @@ module decoder (
       MACRO_ENUM_STATES IN_A_n 7
 
       MACRO_ENUM_STATES IN_r_C 4
+
+      MACRO_ENUM_STATES INI 8
+
+      MACRO_ENUM_STATES_NR INIR 8
+      INIR_7: next_state = (flags[`Z_flag]) ? FETCH_0 : INIR_8;
+      INIR_8: next_state = INIR_9;
+      INIR_9: next_state = INIR_10;
+      INIR_10: next_state = INIR_11;
+      INIR_11: next_state = INIR_12;
+      INIR_12: next_state = FETCH_0;
+
+      MACRO_ENUM_STATES IND 8
+
+      MACRO_ENUM_STATES_NR INDR 8
+      INDR_7: next_state = (flags[`Z_flag]) ? FETCH_0 : INDR_8;
+      INDR_8: next_state = INDR_9;
+      INDR_9: next_state = INDR_10;
+      INDR_10: next_state = INDR_11;
+      INDR_11: next_state = INDR_12;
+      INDR_12: next_state = FETCH_0;
 
       MACRO_ENUM_STATES OUT_n_A 7
 
@@ -5000,6 +5032,55 @@ module decoder (
             MACRO_8_DRIVE A
           end
         endcase
+      end
+
+      INI_0, INIR_0, IND_0, INDR_0: begin
+        MACRO_IN_0
+        MACRO_16_DRIVE BC
+      end
+
+      INI_1, INI_2, INIR_1, INIR_2, IND_1, IND_2, INDR_1, INDR_2: begin
+        MACRO_IN_1
+        MACRO_16_DRIVE BC
+      end
+
+      INI_3, INIR_3, IND_3, INDR_3: begin
+        //load the byte from the I/O port
+        ld_MDR1 = 1;
+      end
+
+      INI_4, INIR_4, IND_4, INDR_4: begin
+        MACRO_WRITE_0
+        MACRO_16_DRIVE HL
+        drive_MDR1 = 1;
+      end
+
+      INI_5, INIR_5, IND_5, INDR_5: begin
+        MACRO_WRITE_1
+        MACRO_16_DRIVE HL
+        drive_MDR1 = 1;
+      end
+
+      INI_6, INIR_6, IND_6, INDR_6: begin
+        ld_F_data = 1;
+        MACRO_8_DEC B
+        MACRO_SET N
+      end
+
+      INI_7, INIR_7, IND_7, INDR_7: begin
+        if(state == INI_7 || state == INIR_7) begin
+          MACRO_16_INC HL
+        end else begin
+          MACRO_16_DEC HL
+        end
+      end
+
+      INIR_8, INDR_8: begin
+        MACRO_DEC_PC
+      end
+
+      INIR_9, INDR_9: begin
+        MACRO_DEC_PC
       end
 
       //-----------------------------------------------------------------------

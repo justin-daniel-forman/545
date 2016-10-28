@@ -1501,6 +1501,68 @@ module decoder (
     IN_r_C_2,
     IN_r_C_3,
 
+    INI_0,
+    INI_1,
+    INI_2,
+    INI_3,
+    INI_4,
+    INI_5,
+    INI_6,
+    INI_7,
+    INI_8,
+    INI_9,
+    INI_10,
+    INI_11,
+
+    INIR_0,
+    INIR_1,
+    INIR_2,
+    INIR_3,
+    INIR_4,
+    INIR_5,
+    INIR_6,
+    INIR_7,
+    INIR_8,
+    INIR_9,
+    INIR_10,
+    INIR_11,
+    INIR_12,
+    INIR_13,
+    INIR_14,
+    INIR_15,
+    INIR_16,
+
+    IND_0,
+    IND_1,
+    IND_2,
+    IND_3,
+    IND_4,
+    IND_5,
+    IND_6,
+    IND_7,
+    IND_8,
+    IND_9,
+    IND_10,
+    IND_11,
+
+    INDR_0,
+    INDR_1,
+    INDR_2,
+    INDR_3,
+    INDR_4,
+    INDR_5,
+    INDR_6,
+    INDR_7,
+    INDR_8,
+    INDR_9,
+    INDR_10,
+    INDR_11,
+    INDR_12,
+    INDR_13,
+    INDR_14,
+    INDR_15,
+    INDR_16,
+
     OUT_n_A_0,
     OUT_n_A_1,
     OUT_n_A_2,
@@ -1778,6 +1840,10 @@ module decoder (
           `BIT_b:       next_state = (op0[7:4] == 4'hD) ?  BIT_b_IX_d_x_0 :BIT_b_IY_d_x_0;
           `IN_r_C:      next_state = IN_r_C_0;
           `OUT_C_r:     next_state = OUT_C_r_0;
+          `INI:         next_state = INI_0;
+          `INIR:        next_state = INIR_0;
+          `IND:         next_state = IND_0;
+          `INDR:        next_state = INDR_0;
            default:     next_state = FETCH_0;
         endcase
       end
@@ -2960,6 +3026,56 @@ module decoder (
       IN_r_C_1: next_state = IN_r_C_2;
       IN_r_C_2: next_state = IN_r_C_3;
       IN_r_C_3: next_state = FETCH_0;
+
+      //INI
+      INI_0: next_state = INI_1;
+      INI_1: next_state = INI_2;
+      INI_2: next_state = INI_3;
+      INI_3: next_state = INI_4;
+      INI_4: next_state = INI_5;
+      INI_5: next_state = INI_6;
+      INI_6: next_state = INI_7;
+      INI_7: next_state = FETCH_0;
+
+      //INIR
+      INIR_0: next_state = INIR_1;
+      INIR_1: next_state = INIR_2;
+      INIR_2: next_state = INIR_3;
+      INIR_3: next_state = INIR_4;
+      INIR_4: next_state = INIR_5;
+      INIR_5: next_state = INIR_6;
+      INIR_6: next_state = INIR_7;
+      INIR_7: next_state = (flags[`Z_flag]) ? FETCH_0 : INIR_8;
+      INIR_8: next_state = INIR_9;
+      INIR_9: next_state = INIR_10;
+      INIR_10: next_state = INIR_11;
+      INIR_11: next_state = INIR_12;
+      INIR_12: next_state = FETCH_0;
+
+      //IND
+      IND_0: next_state = IND_1;
+      IND_1: next_state = IND_2;
+      IND_2: next_state = IND_3;
+      IND_3: next_state = IND_4;
+      IND_4: next_state = IND_5;
+      IND_5: next_state = IND_6;
+      IND_6: next_state = IND_7;
+      IND_7: next_state = FETCH_0;
+
+      //INDR
+      INDR_0: next_state = INDR_1;
+      INDR_1: next_state = INDR_2;
+      INDR_2: next_state = INDR_3;
+      INDR_3: next_state = INDR_4;
+      INDR_4: next_state = INDR_5;
+      INDR_5: next_state = INDR_6;
+      INDR_6: next_state = INDR_7;
+      INDR_7: next_state = (flags[`Z_flag]) ? FETCH_0 : INDR_8;
+      INDR_8: next_state = INDR_9;
+      INDR_9: next_state = INDR_10;
+      INDR_10: next_state = INDR_11;
+      INDR_11: next_state = INDR_12;
+      INDR_12: next_state = FETCH_0;
 
       //OUT_n_A
       OUT_n_A_0: next_state = OUT_n_A_1;
@@ -7751,6 +7867,101 @@ module decoder (
             drive_A = 1;
           end
         endcase
+      end
+
+      INI_0, INIR_0, IND_0, INDR_0: begin
+        IN_start = 1;
+        IN_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_B = 1;
+        drive_C = 1;
+      end
+
+      INI_1, INI_2, INIR_1, INIR_2, IND_1, IND_2, INDR_1, INDR_2: begin
+        IN_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_B = 1;
+        drive_C = 1;
+      end
+
+      INI_3, INIR_3, IND_3, INDR_3: begin
+        //load the byte from the I/O port
+        ld_MDR1 = 1;
+      end
+
+      INI_4, INIR_4, IND_4, INDR_4: begin
+        MWR_start = 1;
+        MWR_bus   = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_H = 1;
+        drive_L = 1;
+        drive_MDR1 = 1;
+      end
+
+      INI_5, INIR_5, IND_5, INDR_5: begin
+        MWR_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_H = 1;
+        drive_L = 1;
+        drive_MDR1 = 1;
+      end
+
+      INI_6, INIR_6, IND_6, INDR_6: begin
+        ld_F_data = 1;
+        drive_reg_data = 1;
+        drive_alu_data = 1;
+        drive_B = 1;
+        ld_B    = 1;
+        alu_op  = `DECR_B_8;
+        set_N = 2'b11;
+      end
+
+      INI_7, INIR_7, IND_7, INDR_7: begin
+        if(state == INI_7 || state == INIR_7) begin
+          drive_alu_addr = 1;
+          alu_op         = `INCR_A_16;
+          drive_reg_addr = 1;
+          drive_H = 1;
+          drive_L = 1;
+          ld_H    = 1;
+          ld_L    = 1;
+        end else begin
+          drive_alu_addr = 1;
+          alu_op         = `DECR_A_16;
+          drive_reg_addr = 1;
+          drive_H = 1;
+          drive_L = 1;
+          ld_H    = 1;
+          ld_L    = 1;
+        end
+      end
+
+      INIR_8, INDR_8: begin
+        ld_PCH    = 1;
+        ld_PCL    = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        alu_op    = `DECR_A_16;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+      end
+
+      INIR_9, INDR_9: begin
+        ld_PCH    = 1;
+        ld_PCL    = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        alu_op    = `DECR_A_16;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
       end
 
       //-----------------------------------------------------------------------
