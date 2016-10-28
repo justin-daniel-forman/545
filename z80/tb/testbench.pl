@@ -77,7 +77,7 @@ foreach my $fileroot (@asm_files) {
     $SP = $8;
     $PC = $9;
 
-    open (my $fh_d, '<', "traces/$fileroot.dmp") or die $!;
+    open (my $fh_d, '<', "traces/$fileroot.dmp") or die "$! $fileroot";
     $dump = '';
     while(my $line = <$fh_d>) {$dump .= $line;}
 

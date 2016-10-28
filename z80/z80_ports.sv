@@ -1,30 +1,24 @@
-module memory (
+module ports (
   input logic clk,
   input logic rst_L,
-  input logic MREQ_L,
+  input logic IORQ_L,
   input logic RD_L,
   input logic WR_L,
   inout wire  [7:0]   data_bus,
   inout wire  [15:0]  addr_bus
 );
 
-  logic [1000:0] ens;
-  logic [1000:0] [7:0] Qs, defs;
-
-  //Read out our memory contents from a textfile
-  logic [7:0] memory [150:0];
-  logic [50:0] j;
-  initial begin
-    $readmemb("traces/DUT.raw", memory);
-  end
+  logic [255:0] ens;
+  logic [255:0] [7:0] Qs, defs;
 
   //Put out the memory contents into our "register interpretation" of memory
+  //Each IO port will originally contain the data that is its address
   genvar i;
   generate
-    for(i = 0; i < 150; i++) begin
+    for(i = 0; i < 256; i++) begin
       register_def #(8) foo (.clk, .rst_L, .D(data_bus), .Q(Qs[i]),
         .en(ens[i]),
-        .def(memory[i])
+        .def(i[7:0])
       );
     end
   endgenerate
@@ -41,13 +35,13 @@ module memory (
     end
 
     //reads appear at the next clock cycle
-    if(~RD_L & ~MREQ_L) begin
-      out_value <= Qs[addr_bus];
+    if(~RD_L & ~IORQ_L) begin
+      out_value <= Qs[addr_bus[7:0]];
     end
 
     //writes take the present value on the data bus
-    else if(~WR_L & ~MREQ_L) begin
-      ens[addr_bus] = 1;
+    else if(~WR_L & ~IORQ_L) begin
+      ens[addr_bus[7:0]] = 1;
     end
 
     else begin
@@ -57,4 +51,4 @@ module memory (
 
   end
 
-endmodule: memory
+endmodule: ports

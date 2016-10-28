@@ -529,13 +529,37 @@ module alu #(parameter w = 8)(
         F_out[`N_flag] = 0;
       end
 
+      `DECR_A_8, `DECR_B_8: begin
+
+        //choose which argument gets decremented
+        if(op == `DECR_A_8) T = A;
+        else                T = B;
+
+        //perform the decrement in a ripple carry fashion
+        {upper_carry_out, C} = T[7:0] + 8'hff;
+        {lower_carry_out, lower_sum} = T[3:0] + 8'hf;
+
+        //H flag set when borrow from bit 4
+        F_out[`H_flag] = (lower_carry_out) ? 1 : 0;
+
+        //S flag is set when result is negative, otherwise reset
+        F_out[`S_flag] = C[(w-1)] ? 1 : 0;
+
+        //Z flag is set when result is 0, otherwise reset
+        F_out[`Z_flag] = (C == 0) ? 1 : 0;
+
+        //set PV when m was 80 before operation
+        F_out[`PV_flag] = (T == 8'h80);
+
+      end
+
       //TODO:
       `INCR_A_16: begin
         C = A + 1;
       end
 
       //TODO: Distinguish this operation from the BC decrement operation
-      `DECR_A: begin
+      `DECR_A_16: begin
         C = A - 1;
       end
 
@@ -641,12 +665,21 @@ module alu #(parameter w = 8)(
 
         //set PV flag for parity for xor
         end else begin
-          F_out[`PV_flag] = C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0];
+          F_out[`PV_flag] = ~(C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0]);
         end
       end
 
       `ALU_B: begin
         C = B;
+
+        //set s flag for negative
+        F_out[`S_flag] = C[w-1];
+
+        //set z flag when zero
+        F_out[`Z_flag] = (C == 0);
+
+        //set PV flag for parity for xor
+        F_out[`PV_flag] = ~(C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0]);
       end
 
       `ADD_SE_B: begin

@@ -89,11 +89,19 @@
 `define XOR_HL      8'hAE
 `define XOR_IX_d    8'hAE
 `define XOR_IY_d    8'hAE
-
+`define CP_r        8'b10111???
+`define CP_n        8'hFE
+`define CP_HL       8'hBE
+`define CP_IX_d     8'hBE
+`define CP_IY_d     8'hBE
 `define INC_r       8'b00???100
 `define INC_HL      8'h34
 `define INC_IX_d    8'h34
 `define INC_IY_d    8'h34
+`define DEC_r       8'b00???101
+`define DEC_HL      8'h35
+`define DEC_IX_d    8'h35
+`define DEC_IY_d    8'h35
 
 `define CPL         8'h2F
 `define CCF         8'h3F
@@ -103,6 +111,13 @@
 `define RS_A		8'b000??111
 `define RLD			8'h6F
 `define RRD			8'h67
+
+`define INC_ss      8'b00??0011
+`define INC_IX      8'h23
+`define INC_IY      8'h23
+`define DEC_ss      8'b00??1011
+`define DEC_IX      8'h2B
+`define DEC_IY      8'h2B
 
 `define BIT_b		8'hCB
 
@@ -120,6 +135,19 @@
 `define RET_cc		8'b11???000
 `define RST_p		8'b11???111
 
+`define IN_A_n      8'hDB
+`define IN_r_C      8'b01???000
+`define INI         8'hA2
+`define INIR        8'hB2
+`define IND         8'hAA
+`define INDR        8'hBA
+`define OUT_n_A     8'hD3
+`define OUT_C_r     8'b01???001
+`define OUTI        8'hA3
+`define OTIR        8'hB3
+`define OUTD        8'hAB
+`define OTDR        8'hBB
+
 //flags
 `define PV_flag   2
 `define C_flag    0
@@ -134,7 +162,7 @@
 `define INCR_A_8  6'h1
 `define INCR_B_8  6'h2
 `define INCR_A_16 6'h3
-`define DECR_A    6'h4
+`define DECR_A_16 6'h4
 `define ALU_NOP   6'h5
 `define ADD       6'h6
 `define ADC       6'h7
@@ -152,6 +180,8 @@
 `define XOR       6'h19
 `define ALU_RST   6'h1a
 `define DECR_BC   6'h1b
+`define DECR_B_8  6'h1c
+`define DECR_A_8  6'h1d
 
 
 //DO NOT CHANGE WHAT'S BELOW UNLESS YOU'RE
@@ -165,9 +195,9 @@
 `define BIT_TEST_6  6'h16
 `define BIT_TEST_7  6'h17
 
-`define BIT_RES_0	6'h20
-`define BIT_RES_1	6'h21
-`define BIT_RES_2	6'h22
+`define BIT_RES_0	  6'h20
+`define BIT_RES_1	  6'h21
+`define BIT_RES_2	  6'h22
 `define BIT_RES_3 	6'h23
 `define BIT_RES_4 	6'h24
 `define BIT_RES_5 	6'h25
