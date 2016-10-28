@@ -781,17 +781,25 @@ module decoder (
 
     MACRO_DEFINE_STATES IN_r_C 4
 
-    MACRO_DEFINE_STATES INI 12
+    MACRO_DEFINE_STATES INI 8
 
-    MACRO_DEFINE_STATES INIR 17
+    MACRO_DEFINE_STATES INIR 13
 
-    MACRO_DEFINE_STATES IND 12
+    MACRO_DEFINE_STATES IND 8
 
-    MACRO_DEFINE_STATES INDR 17
+    MACRO_DEFINE_STATES INDR 13
 
     MACRO_DEFINE_STATES OUT_n_A 7
 
     MACRO_DEFINE_STATES OUT_C_r 4
+
+    MACRO_DEFINE_STATES OUTI 8
+
+    MACRO_DEFINE_STATES OTIR 13
+
+    MACRO_DEFINE_STATES OUTD 8
+
+    MACRO_DEFINE_STATES OTDR 13
 
     //Mult-OCF Instructions
     //There is a difference between multi-ocf instructions and
@@ -1061,6 +1069,10 @@ module decoder (
           `INIR:        next_state = INIR_0;
           `IND:         next_state = IND_0;
           `INDR:        next_state = INDR_0;
+          `OUTI:        next_state = OUTI_0;
+          `OTIR:        next_state = OTIR_0;
+          `OUTD:        next_state = OUTD_0;
+          `OTDR:        next_state = OTDR_0;
            default:     next_state = FETCH_0;
         endcase
       end
@@ -1477,6 +1489,26 @@ module decoder (
       MACRO_ENUM_STATES OUT_n_A 7
 
       MACRO_ENUM_STATES OUT_C_r 4
+
+      MACRO_ENUM_STATES OUTI 8
+
+      MACRO_ENUM_STATES_NR OTIR 8
+      OTIR_7: next_state = (flags[`Z_flag]) ? FETCH_0 : OTIR_8;
+      OTIR_8: next_state = OTIR_9;
+      OTIR_9: next_state = OTIR_10;
+      OTIR_10: next_state = OTIR_11;
+      OTIR_11: next_state = OTIR_12;
+      OTIR_12: next_state = FETCH_0;
+
+      MACRO_ENUM_STATES OUTD 8
+
+      MACRO_ENUM_STATES_NR OTDR 8
+      OTDR_7: next_state = (flags[`Z_flag]) ? FETCH_0 : OTDR_8;
+      OTDR_8: next_state = OTDR_9;
+      OTDR_9: next_state = OTDR_10;
+      OTDR_10: next_state = OTDR_11;
+      OTDR_11: next_state = OTDR_12;
+      OTDR_12: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END Input and Output group
@@ -5080,6 +5112,61 @@ module decoder (
       end
 
       INIR_9, INDR_9: begin
+        MACRO_DEC_PC
+      end
+
+      //OUTI
+      OUTI_0, OTIR_0, OUTD_0, OTDR_0: begin
+        MACRO_READ_0
+        MACRO_16_DRIVE HL
+      end
+
+      OUTI_1, OTIR_1, OUTD_1, OTDR_1: begin
+        MACRO_READ_1
+        MACRO_16_DRIVE HL
+      end
+
+      OUTI_2, OTIR_2, OUTD_2, OTDR_2: begin
+        ld_MDR1 = 1;
+      end
+
+      OUTI_3, OTIR_3, OUTD_3, OTDR_3: begin
+        MACRO_OUT_0
+        MACRO_16_DRIVE BC
+        drive_MDR1 = 1;
+      end
+
+      OUTI_4, OTIR_4, OUTD_4, OTDR_4: begin
+        MACRO_OUT_1
+        MACRO_16_DRIVE BC
+        drive_MDR1 = 1;
+      end
+
+      OUTI_5, OTIR_5, OUTD_5, OTDR_5: begin
+        MACRO_OUT_2
+        MACRO_16_DRIVE BC
+        drive_MDR1 = 1;
+      end
+
+      OUTI_6, OTIR_6, OUTD_6, OTDR_6: begin
+        MACRO_SET N
+        MACRO_8_DEC B
+        ld_F_data = 1;
+      end
+
+      OUTI_7, OTIR_7, OUTD_7, OTDR_7: begin
+        if(state == OUTI_7 || state == OTIR_7) begin
+          MACRO_16_INC HL
+        end else begin
+          MACRO_16_DEC HL
+        end
+      end
+
+      OTIR_8, OTDR_8: begin
+        MACRO_DEC_PC
+      end
+
+      OTIR_9, OTDR_9: begin
         MACRO_DEC_PC
       end
 

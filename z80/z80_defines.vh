@@ -132,6 +132,10 @@
 `define INDR        8'hBA
 `define OUT_n_A     8'hD3
 `define OUT_C_r     8'b01???001
+`define OUTI        8'hA3
+`define OTIR        8'hB3
+`define OUTD        8'hAB
+`define OTDR        8'hBB
 
 //flags
 `define PV_flag   2

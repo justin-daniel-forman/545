@@ -1509,10 +1509,6 @@ module decoder (
     INI_5,
     INI_6,
     INI_7,
-    INI_8,
-    INI_9,
-    INI_10,
-    INI_11,
 
     INIR_0,
     INIR_1,
@@ -1527,10 +1523,6 @@ module decoder (
     INIR_10,
     INIR_11,
     INIR_12,
-    INIR_13,
-    INIR_14,
-    INIR_15,
-    INIR_16,
 
     IND_0,
     IND_1,
@@ -1540,10 +1532,6 @@ module decoder (
     IND_5,
     IND_6,
     IND_7,
-    IND_8,
-    IND_9,
-    IND_10,
-    IND_11,
 
     INDR_0,
     INDR_1,
@@ -1558,10 +1546,6 @@ module decoder (
     INDR_10,
     INDR_11,
     INDR_12,
-    INDR_13,
-    INDR_14,
-    INDR_15,
-    INDR_16,
 
     OUT_n_A_0,
     OUT_n_A_1,
@@ -1575,6 +1559,52 @@ module decoder (
     OUT_C_r_1,
     OUT_C_r_2,
     OUT_C_r_3,
+
+    OUTI_0,
+    OUTI_1,
+    OUTI_2,
+    OUTI_3,
+    OUTI_4,
+    OUTI_5,
+    OUTI_6,
+    OUTI_7,
+
+    OTIR_0,
+    OTIR_1,
+    OTIR_2,
+    OTIR_3,
+    OTIR_4,
+    OTIR_5,
+    OTIR_6,
+    OTIR_7,
+    OTIR_8,
+    OTIR_9,
+    OTIR_10,
+    OTIR_11,
+    OTIR_12,
+
+    OUTD_0,
+    OUTD_1,
+    OUTD_2,
+    OUTD_3,
+    OUTD_4,
+    OUTD_5,
+    OUTD_6,
+    OUTD_7,
+
+    OTDR_0,
+    OTDR_1,
+    OTDR_2,
+    OTDR_3,
+    OTDR_4,
+    OTDR_5,
+    OTDR_6,
+    OTDR_7,
+    OTDR_8,
+    OTDR_9,
+    OTDR_10,
+    OTDR_11,
+    OTDR_12,
 
     //Mult-OCF Instructions
     //There is a difference between multi-ocf instructions and
@@ -1844,6 +1874,10 @@ module decoder (
           `INIR:        next_state = INIR_0;
           `IND:         next_state = IND_0;
           `INDR:        next_state = INDR_0;
+          `OUTI:        next_state = OUTI_0;
+          `OTIR:        next_state = OTIR_0;
+          `OUTD:        next_state = OUTD_0;
+          `OTDR:        next_state = OTDR_0;
            default:     next_state = FETCH_0;
         endcase
       end
@@ -3091,6 +3125,56 @@ module decoder (
       OUT_C_r_1: next_state = OUT_C_r_2;
       OUT_C_r_2: next_state = OUT_C_r_3;
       OUT_C_r_3: next_state = FETCH_0;
+
+      //OUTI
+      OUTI_0: next_state = OUTI_1;
+      OUTI_1: next_state = OUTI_2;
+      OUTI_2: next_state = OUTI_3;
+      OUTI_3: next_state = OUTI_4;
+      OUTI_4: next_state = OUTI_5;
+      OUTI_5: next_state = OUTI_6;
+      OUTI_6: next_state = OUTI_7;
+      OUTI_7: next_state = FETCH_0;
+
+      //OTIR
+      OTIR_0: next_state = OTIR_1;
+      OTIR_1: next_state = OTIR_2;
+      OTIR_2: next_state = OTIR_3;
+      OTIR_3: next_state = OTIR_4;
+      OTIR_4: next_state = OTIR_5;
+      OTIR_5: next_state = OTIR_6;
+      OTIR_6: next_state = OTIR_7;
+      OTIR_7: next_state = (flags[`Z_flag]) ? FETCH_0 : OTIR_8;
+      OTIR_8: next_state = OTIR_9;
+      OTIR_9: next_state = OTIR_10;
+      OTIR_10: next_state = OTIR_11;
+      OTIR_11: next_state = OTIR_12;
+      OTIR_12: next_state = FETCH_0;
+
+      //OUTD
+      OUTD_0: next_state = OUTD_1;
+      OUTD_1: next_state = OUTD_2;
+      OUTD_2: next_state = OUTD_3;
+      OUTD_3: next_state = OUTD_4;
+      OUTD_4: next_state = OUTD_5;
+      OUTD_5: next_state = OUTD_6;
+      OUTD_6: next_state = OUTD_7;
+      OUTD_7: next_state = FETCH_0;
+
+      //OTDR
+      OTDR_0: next_state = OTDR_1;
+      OTDR_1: next_state = OTDR_2;
+      OTDR_2: next_state = OTDR_3;
+      OTDR_3: next_state = OTDR_4;
+      OTDR_4: next_state = OTDR_5;
+      OTDR_5: next_state = OTDR_6;
+      OTDR_6: next_state = OTDR_7;
+      OTDR_7: next_state = (flags[`Z_flag]) ? FETCH_0 : OTDR_8;
+      OTDR_8: next_state = OTDR_9;
+      OTDR_9: next_state = OTDR_10;
+      OTDR_10: next_state = OTDR_11;
+      OTDR_11: next_state = OTDR_12;
+      OTDR_12: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END Input and Output group
@@ -7955,6 +8039,111 @@ module decoder (
       end
 
       INIR_9, INDR_9: begin
+        ld_PCH    = 1;
+        ld_PCL    = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        alu_op    = `DECR_A_16;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+      end
+
+      //OUTI
+      OUTI_0, OTIR_0, OUTD_0, OTDR_0: begin
+        MRD_start = 1;
+        MRD_bus   = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_H = 1;
+        drive_L = 1;
+      end
+
+      OUTI_1, OTIR_1, OUTD_1, OTDR_1: begin
+        MRD_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_H = 1;
+        drive_L = 1;
+      end
+
+      OUTI_2, OTIR_2, OUTD_2, OTDR_2: begin
+        ld_MDR1 = 1;
+      end
+
+      OUTI_3, OTIR_3, OUTD_3, OTDR_3: begin
+        OUT_start = 1;
+        OUT_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_B = 1;
+        drive_C = 1;
+        drive_MDR1 = 1;
+      end
+
+      OUTI_4, OTIR_4, OUTD_4, OTDR_4: begin
+        OUT_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_B = 1;
+        drive_C = 1;
+        drive_MDR1 = 1;
+      end
+
+      OUTI_5, OTIR_5, OUTD_5, OTDR_5: begin
+        OUT_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_B = 1;
+        drive_C = 1;
+        drive_MDR1 = 1;
+      end
+
+      OUTI_6, OTIR_6, OUTD_6, OTDR_6: begin
+        set_N = 2'b11;
+        drive_reg_data = 1;
+        drive_alu_data = 1;
+        drive_B = 1;
+        ld_B    = 1;
+        alu_op  = `DECR_B_8;
+        ld_F_data = 1;
+      end
+
+      OUTI_7, OTIR_7, OUTD_7, OTDR_7: begin
+        if(state == OUTI_7 || state == OTIR_7) begin
+          drive_alu_addr = 1;
+          alu_op         = `INCR_A_16;
+          drive_reg_addr = 1;
+          drive_H = 1;
+          drive_L = 1;
+          ld_H    = 1;
+          ld_L    = 1;
+        end else begin
+          drive_alu_addr = 1;
+          alu_op         = `DECR_A_16;
+          drive_reg_addr = 1;
+          drive_H = 1;
+          drive_L = 1;
+          ld_H    = 1;
+          ld_L    = 1;
+        end
+      end
+
+      OTIR_8, OTDR_8: begin
+        ld_PCH    = 1;
+        ld_PCL    = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        alu_op    = `DECR_A_16;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+      end
+
+      OTIR_9, OTDR_9: begin
         ld_PCH    = 1;
         ld_PCL    = 1;
         drive_PCH = 1;
