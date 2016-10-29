@@ -71,7 +71,7 @@ module datapath (
   input  logic         drive_F,
 
   //ALU drives and controls
-  input  logic [4:0]   alu_op,
+  input  logic [5:0]   alu_op,
   input  logic         drive_alu_data, //8bit drive
   input  logic         drive_alu_addr, //16bit drive
 
@@ -483,14 +483,14 @@ module alu #(parameter w = 8)(
   //---------------------------------------------------------------------------
   input   logic [w-1:0] A,
   input   logic [w-1:0] B, //B stands for Bus
-  input   logic [4:0] op,
+  input   logic [5:0] op,
   input   logic [7:0] F_in,
   output  logic [w-1:0] C,
   output  logic [7:0] F_out
 );
 
-  logic [(w-1)/2:0] lower_sum;
-  logic [(w-1)/2:0] upper_sum;
+  logic [(w-1):(w/2)] lower_sum;
+  logic [(w-1):(w/2)] upper_sum;
   logic               lower_carry_out;
   logic               upper_carry_out;
   logic [(w-1):0]     T;
@@ -529,13 +529,37 @@ module alu #(parameter w = 8)(
         F_out[`N_flag] = 0;
       end
 
+      `DECR_A_8, `DECR_B_8: begin
+
+        //choose which argument gets decremented
+        if(op == `DECR_A_8) T = A;
+        else                T = B;
+
+        //perform the decrement in a ripple carry fashion
+        {upper_carry_out, C} = T[7:0] + 8'hff;
+        {lower_carry_out, lower_sum} = T[3:0] + 8'hf;
+
+        //H flag set when borrow from bit 4
+        F_out[`H_flag] = (lower_carry_out) ? 1 : 0;
+
+        //S flag is set when result is negative, otherwise reset
+        F_out[`S_flag] = C[(w-1)] ? 1 : 0;
+
+        //Z flag is set when result is 0, otherwise reset
+        F_out[`Z_flag] = (C == 0) ? 1 : 0;
+
+        //set PV when m was 80 before operation
+        F_out[`PV_flag] = (T == 8'h80);
+
+      end
+
       //TODO:
       `INCR_A_16: begin
         C = A + 1;
       end
 
       //TODO: Distinguish this operation from the BC decrement operation
-      `DECR_A: begin
+      `DECR_A_16: begin
         C = A - 1;
       end
 
@@ -641,12 +665,21 @@ module alu #(parameter w = 8)(
 
         //set PV flag for parity for xor
         end else begin
-          F_out[`PV_flag] = C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0];
+          F_out[`PV_flag] = ~(C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0]);
         end
       end
 
       `ALU_B: begin
         C = B;
+
+        //set s flag for negative
+        F_out[`S_flag] = C[w-1];
+
+        //set z flag when zero
+        F_out[`Z_flag] = (C == 0);
+
+        //set PV flag for parity for xor
+        F_out[`PV_flag] = ~(C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0]);
       end
 
       `ADD_SE_B: begin
@@ -698,56 +731,204 @@ module alu #(parameter w = 8)(
         F_out[`H_flag] = 1;
         F_out[`N_flag] = 0;
         F_out[`Z_flag] = !B[0];
-        C = A;
+        C = B;
       end
 
       `BIT_TEST_1: begin
         F_out[`H_flag] = 1;
         F_out[`N_flag] = 0;
         F_out[`Z_flag] = !B[1];
-        C = A;
+        C = B;
       end
 
       `BIT_TEST_2: begin
         F_out[`H_flag] = 1;
         F_out[`N_flag] = 0;
         F_out[`Z_flag] = !B[2];
-        C = A;
+        C = B;
       end
 
       `BIT_TEST_3: begin
         F_out[`H_flag] = 1;
         F_out[`N_flag] = 0;
         F_out[`Z_flag] = !B[3];
-        C = A;
+        C = B;
       end
 
       `BIT_TEST_4: begin
         F_out[`H_flag] = 1;
         F_out[`N_flag] = 0;
         F_out[`Z_flag] = !B[4];
-        C = A;
+        C = B;
       end
 
       `BIT_TEST_5: begin
         F_out[`H_flag] = 1;
         F_out[`N_flag] = 0;
         F_out[`Z_flag] = !B[5];
-        C = A;
+        C = B;
       end
 
       `BIT_TEST_6: begin
         F_out[`H_flag] = 1;
         F_out[`N_flag] = 0;
         F_out[`Z_flag] = !B[6];
-        C = A;
+        C = B;
       end
 
      `BIT_TEST_7: begin
         F_out[`H_flag] = 1;
         F_out[`N_flag] = 0;
         F_out[`Z_flag] = !B[7];
-        C = A;
+        C = B;
+      end
+
+      `BIT_SET_0: begin
+        C = B | 8'h1;
+      end
+
+      `BIT_SET_1: begin
+        C = B | 8'h2;
+      end
+
+      `BIT_SET_2: begin
+        C = B | 8'h4;
+      end
+
+      `BIT_SET_3: begin
+        C = B | 8'h8;
+      end
+
+      `BIT_SET_4: begin
+        C = B | 8'h10;
+      end
+
+      `BIT_SET_5: begin
+        C = B | 8'h20;
+      end
+
+      `BIT_SET_6: begin
+        C = B | 8'h40;
+      end
+
+      `BIT_SET_7: begin
+        C = B | 8'h80;
+      end
+
+      `BIT_RES_0: begin
+        C = B & 8'hfe;
+      end
+
+      `BIT_RES_1: begin
+        C = B & 8'hfd;
+      end
+
+      `BIT_RES_2: begin
+        C = B & 8'hfb;
+      end
+
+      `BIT_RES_3: begin
+        C = B & 8'hf7;
+      end
+
+      `BIT_RES_4: begin
+        C = B & 8'hef;
+      end
+
+      `BIT_RES_5: begin
+        C = B & 8'hdf;
+      end
+
+      `BIT_RES_6: begin
+        C = B & 8'hbf;
+      end
+
+      `BIT_RES_7: begin
+        C = B & 8'h7f;
+      end
+
+      `RLC: begin
+        F_out[`N_flag] = 0;
+        F_out[`C_flag] = B[7];
+        F_out[`H_flag] = 0;
+        C = {B[6:0],B[7]};
+      end
+
+      `RL: begin
+        F_out[`N_flag] = 0;
+        F_out[`C_flag] = B[7];
+        F_out[`H_flag] = 0;
+        C = {B[6:0],F_in[`C_flag]};
+      end
+
+      `RRC: begin
+        F_out[`N_flag] = 0;
+        F_out[`C_flag] = B[0];
+        F_out[`H_flag] = 0;
+        C = {B[0],B[7:1]};
+      end
+
+      `RR: begin
+        F_out[`N_flag] = 0;
+        F_out[`C_flag] = B[0];
+        F_out[`H_flag] = 0;
+        C = {F_in[`C_flag],B[7:1]};
+      end
+
+      `SLA: begin
+        C = {B[6:0],1'b0};
+        F_out[`C_flag] = B[7];
+        F_out[`N_flag] = 0;
+        F_out[`S_flag] = B[6];
+        F_out[`Z_flag] = (C == 0);
+        F_out[`H_flag] = 0;
+        F_out[`PV_flag] = !(C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0]);
+      end
+
+      `SRA: begin
+        C = {B[7],B[7:1]};
+        F_out[`C_flag] = B[0];
+        F_out[`N_flag] = 0;
+        F_out[`S_flag] = B[6];
+        F_out[`Z_flag] = (C == 0);
+        F_out[`H_flag] = 0;
+        F_out[`PV_flag] = !(C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0]);
+      end
+
+      `SRL: begin
+        C = {1'b0,B[7:1]};
+        F_out[`C_flag] = B[0];
+        F_out[`N_flag] = 0;
+        F_out[`S_flag] = 0;
+        F_out[`Z_flag] = (C == 0);
+        F_out[`H_flag] = 0;
+        F_out[`PV_flag] = !(C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0]);
+      end
+
+      `ALU_RLD: begin
+        C = {B[3:0],A[3:0]};
+      end
+
+      `ALU_RLD_ACC: begin
+        C = {A[7:4],B[7:4]};
+        F_out[`N_flag] = 0;
+        F_out[`H_flag] = 0;
+        F_out[`S_flag] = C[7];
+        F_out[`Z_flag] = !C;
+        F_out[`PV_flag] = !(C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0]);
+      end
+
+      `ALU_RRD: begin
+        C = {A[3:0],B[7:4]};
+      end
+
+      `ALU_RRD_ACC: begin
+        C = {A[7:4],B[3:0]};
+        F_out[`N_flag] = 0;
+        F_out[`H_flag] = 0;
+        F_out[`S_flag] = C[7];
+        F_out[`Z_flag] = !C;
+        F_out[`PV_flag] = !(C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0]);
       end
 
       default: begin

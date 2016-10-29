@@ -89,16 +89,35 @@
 `define XOR_HL      8'hAE
 `define XOR_IX_d    8'hAE
 `define XOR_IY_d    8'hAE
-
+`define CP_r        8'b10111???
+`define CP_n        8'hFE
+`define CP_HL       8'hBE
+`define CP_IX_d     8'hBE
+`define CP_IY_d     8'hBE
 `define INC_r       8'b00???100
 `define INC_HL      8'h34
 `define INC_IX_d    8'h34
 `define INC_IY_d    8'h34
+`define DEC_r       8'b00???101
+`define DEC_HL      8'h35
+`define DEC_IX_d    8'h35
+`define DEC_IY_d    8'h35
 
 `define CPL         8'h2F
 `define CCF         8'h3F
 `define SCF         8'h37
 `define NOP         8'h00
+
+`define RS_A		8'b000??111
+`define RLD			8'h6F
+`define RRD			8'h67
+
+`define INC_ss      8'b00??0011
+`define INC_IX      8'h23
+`define INC_IY      8'h23
+`define DEC_ss      8'b00??1011
+`define DEC_IX      8'h2B
+`define DEC_IY      8'h2B
 
 `define BIT_b		8'hCB
 
@@ -116,6 +135,19 @@
 `define RET_cc		8'b11???000
 `define RST_p		8'b11???111
 
+`define IN_A_n      8'hDB
+`define IN_r_C      8'b01???000
+`define INI         8'hA2
+`define INIR        8'hB2
+`define IND         8'hAA
+`define INDR        8'hBA
+`define OUT_n_A     8'hD3
+`define OUT_C_r     8'b01???001
+`define OUTI        8'hA3
+`define OTIR        8'hB3
+`define OUTD        8'hAB
+`define OTDR        8'hBB
+
 //flags
 `define PV_flag   2
 `define C_flag    0
@@ -127,33 +159,78 @@
 //TODO: SUB MIGHT NEED TO BE SPLIT INTO CPI AND SUB
 
 //ALU commands
-`define INCR_A_8  5'h1
-`define INCR_B_8  5'h2
-`define INCR_A_16 5'h3
-`define DECR_A    5'h4
-`define ALU_NOP   5'h5
-`define ADD       5'h6
-`define ADC       5'h7
-`define ADD_SE_B  5'h8
-`define ALU_B     5'h9
-`define SUB       5'ha
-`define SBC       5'hb
-`define SUB_EX    5'hc
-`define ALU_CCF   5'hd
-`define ALU_CPL   5'he
-`define AND       5'hf
+`define INCR_A_8  6'h1
+`define INCR_B_8  6'h2
+`define INCR_A_16 6'h3
+`define DECR_A_16 6'h4
+`define ALU_NOP   6'h5
+`define ADD       6'h6
+`define ADC       6'h7
+`define ADD_SE_B  6'h8
+`define ALU_B     6'h9
+`define SUB       6'ha
+`define SBC       6'hb
+`define SUB_EX    6'hc
+`define ALU_CCF   6'hd
+`define ALU_CPL   6'he
+`define AND       6'hf
 
 //TODO: Update all of these as necessary
-`define OR        5'h18
-`define XOR       5'h19
-`define ALU_RST   5'h1a
-`define DECR_BC   5'h1b
+`define OR        6'h18
+`define XOR       6'h19
+`define ALU_RST   6'h1a
+`define DECR_BC   6'h1b
+`define DECR_B_8  6'h1c
+`define DECR_A_8  6'h1d
 
-`define BIT_TEST_0  5'h10
-`define BIT_TEST_1  5'h11
-`define BIT_TEST_2  5'h12
-`define BIT_TEST_3  5'h13
-`define BIT_TEST_4  5'h14
-`define BIT_TEST_5  5'h15
-`define BIT_TEST_6  5'h16
-`define BIT_TEST_7  5'h17
+
+//DO NOT CHANGE WHAT'S BELOW UNLESS YOU'RE
+//EXTENDING THE LENGTH OF THE BITCODES
+`define BIT_TEST_0  6'h10
+`define BIT_TEST_1  6'h11
+`define BIT_TEST_2  6'h12
+`define BIT_TEST_3  6'h13
+`define BIT_TEST_4  6'h14
+`define BIT_TEST_5  6'h15
+`define BIT_TEST_6  6'h16
+`define BIT_TEST_7  6'h17
+
+`define BIT_RES_0	  6'h20
+`define BIT_RES_1	  6'h21
+`define BIT_RES_2	  6'h22
+`define BIT_RES_3 	6'h23
+`define BIT_RES_4 	6'h24
+`define BIT_RES_5 	6'h25
+`define BIT_RES_6 	6'h26
+`define BIT_RES_7 	6'h27
+
+`define BIT_SET_0 	6'h30
+`define BIT_SET_1 	6'h31
+`define BIT_SET_2 	6'h32
+`define BIT_SET_3 	6'h33
+`define BIT_SET_4 	6'h34
+`define BIT_SET_5 	6'h35
+`define BIT_SET_6 	6'h36
+`define BIT_SET_7 	6'h37
+
+`define RLC			6'h28
+`define RL 			6'h29
+`define RRC 		6'h2A
+`define RR 			6'h2B
+`define SLA 		6'h2C
+`define SRA 		6'h2D
+`define SRL 		6'h2E
+
+`define ALU_RLD 	  6'h38
+`define ALU_RLD_ACC	6'h39
+`define ALU_RRD     6'h3A
+`define ALU_RRD_ACC 6'h3B
+
+//Bit operations definition
+`define RLC_op		5'h00
+`define RL_op 		5'h02
+`define RRC_op 		5'h01
+`define RR_op 		5'h03
+`define SLA_op 		5'h04
+`define SRA_op		5'h05
+`define SRL_op		5'h07
