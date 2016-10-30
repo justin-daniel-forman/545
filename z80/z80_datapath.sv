@@ -707,6 +707,38 @@ module alu #(parameter w = 8)(
         C = ~A;
       end
 
+      `ALU_DAA: begin
+        T = A;
+
+        //if the bottom 4 bits contain a non-bcd digit
+        if( F_in[`H_flag] || (T[3:0] > 4'h9)) begin
+          T = T + 4'h6;
+          F_out[`H_flag] = 1;
+        end else begin
+          F_out[`H_flag] = 0;
+        end
+
+        //if the top 4 bits contain a non-bcd digit
+        if(F_in[`C_flag] || T[7:4] > 9) begin
+          //T = T + 8'h60;
+          F_out[`C_flag] = 1;
+        end else begin
+          F_out[`C_flag] = 0;
+        end
+
+        C = T;
+
+        //set s flag for negative
+        F_out[`S_flag] = C[w-1];
+
+        //set z flag when zero
+        F_out[`Z_flag] = (C == 0);
+
+        //set PV flag for parity
+        F_out[`PV_flag] = ~(C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0]);
+
+      end
+
       `ALU_NOP: begin
         C = A;
 

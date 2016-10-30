@@ -102,7 +102,7 @@
 `define DEC_HL      8'h35
 `define DEC_IX_d    8'h35
 `define DEC_IY_d    8'h35
-
+`define DAA         8'h27
 `define CPL         8'h2F
 `define CCF         8'h3F
 `define SCF         8'h37
@@ -182,6 +182,7 @@
 `define DECR_BC   6'h1b
 `define DECR_B_8  6'h1c
 `define DECR_A_8  6'h1d
+`define ALU_DAA   6'h1e
 
 
 //DO NOT CHANGE WHAT'S BELOW UNLESS YOU'RE

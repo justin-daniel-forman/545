@@ -734,6 +734,7 @@ module decoder (
 
     MACRO_DEFINE_STATES DEC_IY_d 15
 
+    MACRO_DEFINE_STATES DAA 1
 
     MACRO_DEFINE_STATES CPL 1
 
@@ -747,7 +748,7 @@ module decoder (
     MACRO_DEFINE_STATES RLD 10
 
     MACRO_DEFINE_STATES RRD 10
-    
+
 
     MACRO_DEFINE_STATES ADD_HL_ss 7
 
@@ -908,6 +909,7 @@ module decoder (
           `CP_r:      next_state = (op0[2:0] != 3'b110) ? CP_r_0    : FETCH_3;
           `INC_r:     next_state = (op0[5:3] != 3'b110) ? INC_r_0   : FETCH_3;
           `DEC_r:     next_state = (op0[5:3] != 3'b110) ? DEC_r_0   : FETCH_3;
+          `DAA:       next_state = DAA_0;
           `CPL:       next_state = CPL_0;
           `CCF:       next_state = CCF_0;
           `SCF:       next_state = SCF_0;
@@ -1395,6 +1397,8 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN General Purpose Arith and CPU Control
       //-----------------------------------------------------------------------
+
+      MACRO_ENUM_STATES DAA 1
 
       MACRO_ENUM_STATES CPL 1
 
@@ -4455,6 +4459,12 @@ module decoder (
       //-----------------------------------------------------------------------
       //BEGIN General Purpose Arith and CPU Control
       //-----------------------------------------------------------------------
+
+      DAA_0: begin
+        ld_A           = 1;
+        drive_alu_data = 1;
+        alu_op         = `ALU_DAA;
+      end
 
       CPL_0: begin
         MACRO_SET H
