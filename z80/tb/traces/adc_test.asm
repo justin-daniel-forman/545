@@ -24,7 +24,7 @@ section code
 
   adc [st-2] #A <- 34 $22
   adc [uv-4] #A <- 35 $23
-  ld hl, $51 
+  ld hl, $51
   adc [hl] #A <- 36 $24
 
   adc $80   #A <- A4

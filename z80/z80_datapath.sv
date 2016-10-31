@@ -571,6 +571,26 @@ module alu #(parameter w = 8)(
 
       end
 
+      `ADD_16, `ADC_16: begin
+
+        //H flag is set when there is a carry from bit 3 into bit 4
+        //C flag is set when there is a carry from bit 7 into bit 8
+        //So we divide the addition into two stages in ripple carry fashion
+        //For an ADC operation, add in the Carry-in
+        if(op == `ADD_16) begin
+          {lower_carry_out, lower_sum} = A[((w-1)/2):0] + B[((w-1)/2):0];
+        end else begin
+          {lower_carry_out, lower_sum} = A[((w-1)/2):0] + B[((w-1)/2):0] + F_in[`C_flag];
+        end
+        {upper_carry_out, upper_sum} = A[(w-1):(w/2)] + B[(w-1):(w/2)] + lower_carry_out;
+
+        C = {upper_sum, lower_sum};
+
+        F_out[`H_flag] = (lower_carry_out) ? 1 : 0;
+        F_out[`C_flag] = (upper_carry_out) ? 1 : 0;
+
+      end
+
       //Make the general add width agnostic
       `ADD, `ADC: begin
 
@@ -961,6 +981,11 @@ module alu #(parameter w = 8)(
         F_out[`S_flag] = C[7];
         F_out[`Z_flag] = !C;
         F_out[`PV_flag] = !(C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0]);
+      end
+
+      `Z_TEST: begin
+        //16 bit zero test
+        F_out[`Z_flag] = (A == 0);
       end
 
       default: begin

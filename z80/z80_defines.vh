@@ -107,6 +107,10 @@
 `define CCF         8'h3F
 `define SCF         8'h37
 `define NOP         8'h00
+`define ADD_HL_ss   8'b00??1001
+`define ADC_HL_ss   8'b01??1010
+`define ADD_IX_pp   8'b00??1001
+`define ADD_IY_rr   8'b00??1001
 
 `define RS_A		8'b000??111
 `define RLD			8'h6F
@@ -183,6 +187,9 @@
 `define DECR_B_8  6'h1c
 `define DECR_A_8  6'h1d
 `define ALU_DAA   6'h1e
+`define ADD_16    6'h3c
+`define ADC_16    8'h3d
+`define Z_TEST    8'h3e
 
 
 //DO NOT CHANGE WHAT'S BELOW UNLESS YOU'RE
