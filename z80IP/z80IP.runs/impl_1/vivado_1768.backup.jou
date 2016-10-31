@@ -1,0 +1,10 @@
+#-----------------------------------------------------------
+# Vivado v2015.2 (64-bit)
+# SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+# IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+# Start of session at: Wed Oct 19 12:48:46 2016
+# Process ID: 32113
+# Log file: /afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.runs/impl_1/z80.vdi
+# Journal file: /afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.runs/impl_1/vivado.jou
+#-----------------------------------------------------------
+source z80.tcl -notrace

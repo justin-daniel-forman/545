@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenRun Id="impl_1" LaunchPart="xc7z020clg484-1" LaunchTime="1476895688">
+  <File Type="WBT-USG" Name="usage_statistics_webtalk.html"/>
+  <File Type="RDI-RDI" Name="z80.vdi"/>
+  <File Type="BG-DRC" Name="z80.drc"/>
+  <File Type="BG-BGN" Name="z80.bgn"/>
+  <File Type="BITSTR-SYSDEF" Name="z80.sysdef"/>
+  <File Type="BITSTR-MMI" Name="z80.mmi"/>
+  <File Type="BITSTR-BMM" Name="z80_bd.bmm"/>
+  <File Type="BITSTR-NKY" Name="z80.nky"/>
+  <File Type="BITSTR-RBT" Name="z80.rbt"/>
+  <File Type="BITSTR-MSK" Name="z80.msk"/>
+  <File Type="BG-BIN" Name="z80.bin"/>
+  <File Type="BG-BIT" Name="z80.bit"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING-RPX" Name="z80_timing_summary_postroute_physopted.rpx"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING" Name="z80_timing_summary_postroute_physopted.rpt"/>
+  <File Type="POSTROUTE-PHYSOPT-DCP" Name="z80_postroute_physopt.dcp"/>
+  <File Type="ROUTE-CLK" Name="z80_clock_utilization_routed.rpt"/>
+  <File Type="ROUTE-SIMILARITY" Name="z80_incremental_reuse_routed.rpt"/>
+  <File Type="ROUTE-TIMING-RPX" Name="z80_timing_summary_routed.rpx"/>
+  <File Type="ROUTE-TIMING-PB" Name="z80_timing_summary_routed.pb"/>
+  <File Type="ROUTE-TIMINGSUMMARY" Name="z80_timing_summary_routed.rpt"/>
+  <File Type="ROUTE-STATUS-PB" Name="z80_route_status.pb"/>
+  <File Type="ROUTE-STATUS" Name="z80_route_status.rpt"/>
+  <File Type="ROUTE-PWR-SUM" Name="z80_power_summary_routed.pb"/>
+  <File Type="ROUTE-PWR" Name="z80_power_routed.rpt"/>
+  <File Type="ROUTE-DRC-PB" Name="z80_drc_routed.pb"/>
+  <File Type="ROUTE-DRC" Name="z80_drc_routed.rpt"/>
+  <File Type="ROUTE-DCP" Name="z80_routed.dcp"/>
+  <File Type="PHYSOPT-DRC" Name="z80_drc_physopted.rpt"/>
+  <File Type="PHYSOPT-DCP" Name="z80_physopt.dcp"/>
+  <File Type="POSTPLACE-PWROPT-DCP" Name="z80_postplace_pwropt.dcp"/>
+  <File Type="PLACE-PRE-SIMILARITY" Name="z80_incremental_reuse_pre_placed.rpt"/>
+  <File Type="PLACE-SIMILARITY" Name="z80_incremental_reuse_placed.rpt"/>
+  <File Type="PLACE-CTRL" Name="z80_control_sets_placed.rpt"/>
+  <File Type="PLACE-UTIL-PB" Name="z80_utilization_placed.pb"/>
+  <File Type="PLACE-UTIL" Name="z80_utilization_placed.rpt"/>
+  <File Type="PLACE-CLK" Name="z80_clock_utilization_placed.rpt"/>
+  <File Type="PLACE-IO" Name="z80_io_placed.rpt"/>
+  <File Type="PLACE-DCP" Name="z80_placed.dcp"/>
+  <File Type="PWROPT-DRC" Name="z80_drc_pwropted.rpt"/>
+  <File Type="PWROPT-DCP" Name="z80_pwropt.dcp"/>
+  <File Type="OPT-HWDEF" Name="z80.hwdef"/>
+  <File Type="OPT-DRC" Name="z80_drc_opted.rpt"/>
+  <File Type="OPT-DCP" Name="z80_opt.dcp"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING-PB" Name="z80_timing_summary_postroute_physopted.pb"/>
+  <File Type="PA-TCL" Name="z80.tcl"/>
+  <File Type="RUN-STRAT" Name="$PDATADIR/runs/impl_1/impl_1.psg"/>
+  <File Type="RUN-SRCS" Name="$PDATADIR/runs/impl_1/sources.xml"/>
+  <File Type="RUN-CONSTRS" Name="$PDATADIR/runs/impl_1/constrs_in.xml"/>
+  <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1">
+    <Filter Type="Srcs"/>
+    <File Path="$PSRCDIR/sources_1/imports/library/library.sv">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../library/library.sv"/>
+        <Attr Name="ImportTime" Val="1476886910"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/z80/z80_defines.vh">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../z80/z80_defines.vh"/>
+        <Attr Name="ImportTime" Val="1476888969"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/z80/z80_control.sv">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../z80/z80_control.sv"/>
+        <Attr Name="ImportTime" Val="1476894608"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/z80/z80_datapath.sv">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../z80/z80_datapath.sv"/>
+        <Attr Name="ImportTime" Val="1476888969"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/z80/z80_top.sv">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../z80/z80_top.sv"/>
+        <Attr Name="ImportTime" Val="1476886911"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="DesignMode" Val="RTL"/>
+      <Option Name="TopModule" Val="z80"/>
+      <Option Name="TopAutoSet" Val="TRUE"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="constrs_in" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">
+    <Filter Type="Constrs"/>
+    <Config>
+      <Option Name="ConstrsType" Val="XDC"/>
+    </Config>
+  </FileSet>
+  <Strategy Version="1" Minor="2">
+    <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2015">
+      <Desc>Vivado Implementation Defaults</Desc>
+    </StratHandle>
+    <Step Id="init_design"/>
+    <Step Id="opt_design"/>
+    <Step Id="power_opt_design"/>
+    <Step Id="place_design"/>
+    <Step Id="post_place_power_opt_design"/>
+    <Step Id="phys_opt_design"/>
+    <Step Id="route_design"/>
+    <Step Id="post_route_phys_opt_design"/>
+    <Step Id="write_bitstream"/>
+  </Strategy>
+</GenRun>

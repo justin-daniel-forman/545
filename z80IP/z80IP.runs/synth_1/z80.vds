@@ -1,0 +1,856 @@
+#-----------------------------------------------------------
+# Vivado v2015.2 (64-bit)
+# SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+# IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+# Start of session at: Wed Oct 19 12:48:09 2016
+# Process ID: 31730
+# Log file: /afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.runs/synth_1/z80.vds
+# Journal file: /afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.runs/synth_1/vivado.jou
+#-----------------------------------------------------------
+source z80.tcl -notrace
+Command: synth_design -top z80 -part xc7z020clg484-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: [Common 17-1223] The version limit for your license is '2016.07' and will expire in -80 days. A version limit expiration means that, although you may be able to continue to use the current version of tools or IP with this license, you will not be eligible for any updates or new releases.
+WARNING: [Synth 8-1102] /* in comment [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/library/library.sv:101]
+---------------------------------------------------------------------------------
+Starting Synthesize : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 1071.859 ; gain = 162.551 ; free physical = 5349 ; free virtual = 20607
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'z80' [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_top.sv:3]
+WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_top.sv:181]
+INFO: [Synth 8-638] synthesizing module 'datapath' [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_datapath.sv:9]
+INFO: [Synth 8-638] synthesizing module 'register' [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/library/library.sv:1]
+	Parameter w bound to: 8 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'register' (1#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/library/library.sv:1]
+INFO: [Synth 8-638] synthesizing module 'register__parameterized0' [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/library/library.sv:1]
+	Parameter w bound to: 16 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'register__parameterized0' (1#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/library/library.sv:1]
+INFO: [Synth 8-638] synthesizing module 'regfile' [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_datapath.sv:496]
+INFO: [Synth 8-256] done synthesizing module 'regfile' (2#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_datapath.sv:496]
+INFO: [Synth 8-638] synthesizing module 'alu' [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_datapath.sv:433]
+	Parameter w bound to: 8 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'alu' (3#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_datapath.sv:433]
+INFO: [Synth 8-638] synthesizing module 'alu__parameterized0' [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_datapath.sv:433]
+	Parameter w bound to: 16 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'alu__parameterized0' (3#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_datapath.sv:433]
+INFO: [Synth 8-256] done synthesizing module 'datapath' (4#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_datapath.sv:9]
+WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_top.sv:183]
+INFO: [Synth 8-638] synthesizing module 'control_logic' [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:3]
+INFO: [Synth 8-638] synthesizing module 'OCF_fsm' [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:3594]
+INFO: [Synth 8-294] found qualifier unique on case statement: implementing as parallel_case [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:3643]
+INFO: [Synth 8-155] case statement is not full and has no default [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:3676]
+INFO: [Synth 8-256] done synthesizing module 'OCF_fsm' (5#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:3594]
+INFO: [Synth 8-638] synthesizing module 'MRD_fsm' [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:3464]
+INFO: [Synth 8-294] found qualifier unique on case statement: implementing as parallel_case [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:3492]
+INFO: [Synth 8-294] found qualifier unique on case statement: implementing as parallel_case [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:3504]
+INFO: [Synth 8-256] done synthesizing module 'MRD_fsm' (6#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:3464]
+INFO: [Synth 8-638] synthesizing module 'MWR_fsm' [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:3529]
+INFO: [Synth 8-294] found qualifier unique on case statement: implementing as parallel_case [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:3557]
+INFO: [Synth 8-155] case statement is not full and has no default [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:3569]
+INFO: [Synth 8-256] done synthesizing module 'MWR_fsm' (7#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:3529]
+INFO: [Synth 8-638] synthesizing module 'decoder' [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:345]
+INFO: [Synth 8-155] case statement is not full and has no default [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:856]
+INFO: [Synth 8-294] found qualifier unique on case statement: implementing as parallel_case [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:864]
+WARNING: [Synth 8-151] case item 8'b00110110 is unreachable [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:919]
+WARNING: [Synth 8-151] case item 8'b01xxx110 is unreachable [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:965]
+WARNING: [Synth 8-152] case item 8'b01110xxx overlaps with previous case item(s) [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:965]
+WARNING: [Synth 8-151] case item 8'b01110xxx is unreachable [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:965]
+WARNING: [Synth 8-151] case item 8'b00110110 is unreachable [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:965]
+WARNING: [Synth 8-151] case item 8'b00100001 is unreachable [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:965]
+WARNING: [Synth 8-151] case item 8'b00101010 is unreachable [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:965]
+WARNING: [Synth 8-151] case item 8'b11111001 is unreachable [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:965]
+WARNING: [Synth 8-151] case item 8'b11111001 is unreachable [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:965]
+WARNING: [Synth 8-151] case item 8'b11100011 is unreachable [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:965]
+WARNING: [Synth 8-151] case item 8'b11100101 is unreachable [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:965]
+WARNING: [Synth 8-151] case item 32'b00000000000000000000000001010100 is unreachable [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:1508]
+INFO: [Synth 8-155] case statement is not full and has no default [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:1559]
+INFO: [Synth 8-155] case statement is not full and has no default [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:1570]
+INFO: [Synth 8-155] case statement is not full and has no default [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:1607]
+INFO: [Synth 8-155] case statement is not full and has no default [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:1690]
+INFO: [Synth 8-155] case statement is not full and has no default [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:1757]
+INFO: [Synth 8-155] case statement is not full and has no default [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:1794]
+INFO: [Synth 8-155] case statement is not full and has no default [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:1862]
+WARNING: [Synth 8-151] case item 32'b00000000000000000000000000001010 is unreachable [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:2430]
+WARNING: [Synth 8-151] case item 32'b00000000000000000000000000001011 is unreachable [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:2431]
+INFO: [Synth 8-155] case statement is not full and has no default [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:2427]
+WARNING: [Synth 8-151] case item 32'b00000000000000000000000000001010 is unreachable [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:2439]
+WARNING: [Synth 8-151] case item 32'b00000000000000000000000000001011 is unreachable [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:2440]
+INFO: [Synth 8-155] case statement is not full and has no default [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:2436]
+WARNING: [Synth 8-151] case item 32'b00000000000000000000000000001010 is unreachable [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:2461]
+WARNING: [Synth 8-151] case item 32'b00000000000000000000000000001011 is unreachable [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:2465]
+INFO: [Synth 8-155] case statement is not full and has no default [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:2452]
+WARNING: [Synth 8-151] case item 32'b00000000000000000000000000001010 is unreachable [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:2494]
+WARNING: [Synth 8-151] case item 32'b00000000000000000000000000001011 is unreachable [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:2499]
+INFO: [Synth 8-155] case statement is not full and has no default [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:2483]
+WARNING: [Synth 8-151] case item 32'b00000000000000000000000000001010 is unreachable [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:2522]
+WARNING: [Synth 8-151] case item 32'b00000000000000000000000000001011 is unreachable [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:2523]
+INFO: [Synth 8-155] case statement is not full and has no default [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:2519]
+INFO: [Synth 8-155] case statement is not full and has no default [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:3155]
+INFO: [Synth 8-155] case statement is not full and has no default [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:3176]
+INFO: [Synth 8-155] case statement is not full and has no default [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:3208]
+INFO: [Synth 8-155] case statement is not full and has no default [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:3228]
+INFO: [Synth 8-155] case statement is not full and has no default [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:3247]
+INFO: [Synth 8-155] case statement is not full and has no default [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:3257]
+INFO: [Synth 8-155] case statement is not full and has no default [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:1508]
+INFO: [Synth 8-256] done synthesizing module 'decoder' (8#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:345]
+WARNING: [Synth 8-3848] Net ld_op0 in module/entity control_logic does not have driver. [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:149]
+WARNING: [Synth 8-3848] Net ld_op1 in module/entity control_logic does not have driver. [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:149]
+WARNING: [Synth 8-3848] Net ld_op2 in module/entity control_logic does not have driver. [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:149]
+INFO: [Synth 8-256] done synthesizing module 'control_logic' (9#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_control.sv:3]
+INFO: [Synth 8-256] done synthesizing module 'z80' (10#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_top.sv:3]
+---------------------------------------------------------------------------------
+Finished Synthesize : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 1132.117 ; gain = 222.809 ; free physical = 5286 ; free virtual = 20546
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:06 ; elapsed = 00:00:08 . Memory (MB): peak = 1132.117 ; gain = 222.809 ; free physical = 5285 ; free virtual = 20544
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7z020clg484-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:06 ; elapsed = 00:00:08 . Memory (MB): peak = 1140.117 ; gain = 230.809 ; free physical = 5285 ; free virtual = 20544
+---------------------------------------------------------------------------------
+INFO: [Device 21-403] Loading part xc7z020clg484-1
+INFO: [Synth 8-3537] HDL ADVISOR - The operator resource <adder> is shared. To prevent sharing consider applying a KEEP on the inputs of the operator [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_datapath.sv:455]
+INFO: [Synth 8-5546] ROM "F_out0" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-3537] HDL ADVISOR - The operator resource <adder> is shared. To prevent sharing consider applying a KEEP on the inputs of the operator [/afs/ece.cmu.edu/usr/suyashb/Private/545/z80IP/z80IP.srcs/sources_1/imports/z80/z80_datapath.sv:455]
+INFO: [Synth 8-5546] ROM "F_out0" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5544] ROM "MAR_in1" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "drive_value_addr1" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
+INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'OCF_fsm'
+INFO: [Synth 8-5544] ROM "next_state0" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
+INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'decoder'
+INFO: [Synth 8-5545] ROM "MWR_bus" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "MWR_start" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "MRD_bus" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "MRD_start" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "OCF_bus" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "OCF_start" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "drive_MAR" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "ld_MARL" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "drive_MDR2" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "drive_MDR1" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "ld_TEMP" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "ld_MDR2" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "ld_MDR1" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "swap_reg" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "switch_context" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "set_H" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "ld_F_addr" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "ld_F_data" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "drive_STRH" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "drive_SPL" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "ld_STRL" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "ld_STRH" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "ld_IYH" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "ld_IXH" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "ld_H" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "ld_IYL" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "ld_IXL" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "ld_L" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "drive_IYL" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "drive_IXL" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "drive_L" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "drive_reg_data" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "drive_IYL" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "drive_IXL" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "drive_L" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "drive_reg_data" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "drive_IYH" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "drive_IXH" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "drive_H" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "drive_reg_data" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "drive_IYH" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "drive_IXH" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "drive_H" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5545] ROM "drive_reg_data" won't be mapped to RAM because address size (32) is larger than maximum supported(18)
+INFO: [Synth 8-5544] ROM "next_state0" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "next_state0" won't be mapped to Block RAM because address size (1) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "next_state0" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "next_state0" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "next_state0" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "next_state0" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "next_state0" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "next_state0" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "next_state0" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "next_state0" won't be mapped to Block RAM because address size (4) smaller than threshold (5)
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                     Old Encoding 
+---------------------------------------------------------------------------------------------------
+                      T1 |                               00 |                              000
+                      T2 |                               01 |                              001
+                      T3 |                               10 |                              010
+                      T4 |                               11 |                              011
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 'sequential' in module 'OCF_fsm'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                     Old Encoding 
+---------------------------------------------------------------------------------------------------
+                   START |                        000000000 | 00000000000000000000000000000000
+                 FETCH_1 |                        000000001 | 00000000000000000000000000000010
+                 FETCH_2 |                        000000010 | 00000000000000000000000000000011
+              EX_DE_HL_0 |                        000000011 | 00000000000000000000000011100010
+              EX_AF_AF_0 |                        000000100 | 00000000000000000000000011100011
+                   EXX_0 |                        000000101 | 00000000000000000000000011100100
+                   INC_0 |                        000000110 | 00000000000000000000000100100111
+              EXT_INST_0 |                        000000111 | 00000000000000000000000100101100
+               IX_INST_0 |                        000001000 | 00000000000000000000000100101010
+               IY_INST_0 |                        000001001 | 00000000000000000000000100101011
+                 FETCH_4 |                        000001010 | 00000000000000000000000000000101
+                 FETCH_5 |                        000001011 | 00000000000000000000000000000110
+                 FETCH_6 |                        000001100 | 00000000000000000000000000000111
+                 FETCH_7 |                        000001101 | 00000000000000000000000000001000
+            LD_dd_nn_x_0 |                        000001110 | 00000000000000000000000010010111
+            LD_dd_nn_x_1 |                        000001111 | 00000000000000000000000010011000
+            LD_dd_nn_x_2 |                        000010000 | 00000000000000000000000010011001
+            LD_dd_nn_x_3 |                        000010001 | 00000000000000000000000010011010
+            LD_dd_nn_x_4 |                        000010010 | 00000000000000000000000010011011
+            LD_dd_nn_x_5 |                        000010011 | 00000000000000000000000010011100
+            LD_dd_nn_x_6 |                        000010100 | 00000000000000000000000010011101
+            LD_dd_nn_x_7 |                        000010101 | 00000000000000000000000010011110
+            LD_dd_nn_x_8 |                        000010110 | 00000000000000000000000010011111
+            LD_dd_nn_x_9 |                        000010111 | 00000000000000000000000010100000
+           LD_dd_nn_x_10 |                        000011000 | 00000000000000000000000010100001
+           LD_dd_nn_x_11 |                        000011001 | 00000000000000000000000010100010
+                   LDI_0 |                        000011010 | 00000000000000000000000100010010
+                   LDI_1 |                        000011011 | 00000000000000000000000100010011
+                   LDI_2 |                        000011100 | 00000000000000000000000100010100
+                   LDI_3 |                        000011101 | 00000000000000000000000100010101
+                   LDI_4 |                        000011110 | 00000000000000000000000100010110
+                   LDI_5 |                        000011111 | 00000000000000000000000100010111
+                   LDI_6 |                        000100000 | 00000000000000000000000100011000
+                   LDI_7 |                        000100001 | 00000000000000000000000100011001
+                  LDIR_0 |                        000100010 | 00000000000000000000000100011010
+                  LDIR_1 |                        000100011 | 00000000000000000000000100011011
+                  LDIR_2 |                        000100100 | 00000000000000000000000100011100
+                  LDIR_3 |                        000100101 | 00000000000000000000000100011101
+                  LDIR_4 |                        000100110 | 00000000000000000000000100011110
+                  LDIR_5 |                        000100111 | 00000000000000000000000100011111
+                  LDIR_6 |                        000101000 | 00000000000000000000000100100000
+                  LDIR_7 |                        000101001 | 00000000000000000000000100100001
+                  LDIR_8 |                        000101010 | 00000000000000000000000100100010
+                  LDIR_9 |                        000101011 | 00000000000000000000000100100011
+                 LDIR_10 |                        000101100 | 00000000000000000000000100100100
+                 LDIR_11 |                        000101101 | 00000000000000000000000100100101
+                 LDIR_12 |                        000101110 | 00000000000000000000000100100110
+             LD_r_IX_d_0 |                        000101111 | 00000000000000000000000000010000
+             LD_r_IX_d_1 |                        000110000 | 00000000000000000000000000010001
+             LD_r_IX_d_2 |                        000110001 | 00000000000000000000000000010010
+             LD_r_IX_d_3 |                        000110010 | 00000000000000000000000000010011
+             LD_r_IX_d_4 |                        000110011 | 00000000000000000000000000010100
+             LD_r_IX_d_5 |                        000110100 | 00000000000000000000000000010101
+             LD_r_IX_d_6 |                        000110101 | 00000000000000000000000000010110
+             LD_r_IX_d_7 |                        000110110 | 00000000000000000000000000010111
+             LD_r_IX_d_8 |                        000110111 | 00000000000000000000000000011000
+             LD_r_IX_d_9 |                        000111000 | 00000000000000000000000000011001
+            LD_r_IX_d_10 |                        000111001 | 00000000000000000000000000011010
+             LD_r_IY_d_0 |                        000111010 | 00000000000000000000000000011011
+             LD_r_IY_d_1 |                        000111011 | 00000000000000000000000000011100
+             LD_r_IY_d_2 |                        000111100 | 00000000000000000000000000011101
+             LD_r_IY_d_3 |                        000111101 | 00000000000000000000000000011110
+             LD_r_IY_d_4 |                        000111110 | 00000000000000000000000000011111
+             LD_r_IY_d_5 |                        000111111 | 00000000000000000000000000100000
+             LD_r_IY_d_6 |                        001000000 | 00000000000000000000000000100001
+             LD_r_IY_d_7 |                        001000001 | 00000000000000000000000000100010
+             LD_r_IY_d_8 |                        001000010 | 00000000000000000000000000100011
+             LD_r_IY_d_9 |                        001000011 | 00000000000000000000000000100100
+            LD_r_IY_d_10 |                        001000100 | 00000000000000000000000000100101
+             LD_IX_d_r_0 |                        001000101 | 00000000000000000000000000101001
+             LD_IX_d_r_1 |                        001000110 | 00000000000000000000000000101010
+             LD_IX_d_r_2 |                        001000111 | 00000000000000000000000000101011
+             LD_IX_d_r_3 |                        001001000 | 00000000000000000000000000101100
+             LD_IX_d_r_4 |                        001001001 | 00000000000000000000000000101101
+             LD_IX_d_r_5 |                        001001010 | 00000000000000000000000000101110
+             LD_IX_d_r_6 |                        001001011 | 00000000000000000000000000101111
+             LD_IX_d_r_7 |                        001001100 | 00000000000000000000000000110000
+             LD_IX_d_r_8 |                        001001101 | 00000000000000000000000000110001
+             LD_IX_d_r_9 |                        001001110 | 00000000000000000000000000110010
+            LD_IX_d_r_10 |                        001001111 | 00000000000000000000000000110011
+             LD_IY_d_r_0 |                        001010000 | 00000000000000000000000000110100
+             LD_IY_d_r_1 |                        001010001 | 00000000000000000000000000110101
+             LD_IY_d_r_2 |                        001010010 | 00000000000000000000000000110110
+             LD_IY_d_r_3 |                        001010011 | 00000000000000000000000000110111
+             LD_IY_d_r_4 |                        001010100 | 00000000000000000000000000111000
+             LD_IY_d_r_5 |                        001010101 | 00000000000000000000000000111001
+             LD_IY_d_r_6 |                        001010110 | 00000000000000000000000000111010
+             LD_IY_d_r_7 |                        001010111 | 00000000000000000000000000111011
+             LD_IY_d_r_8 |                        001011000 | 00000000000000000000000000111100
+             LD_IY_d_r_9 |                        001011001 | 00000000000000000000000000111101
+            LD_IY_d_r_10 |                        001011010 | 00000000000000000000000000111110
+             LD_IX_d_n_0 |                        001011011 | 00000000000000000000000001000101
+             LD_IX_d_n_1 |                        001011100 | 00000000000000000000000001000110
+             LD_IX_d_n_2 |                        001011101 | 00000000000000000000000001000111
+             LD_IX_d_n_3 |                        001011110 | 00000000000000000000000001001000
+             LD_IX_d_n_4 |                        001011111 | 00000000000000000000000001001001
+             LD_IX_d_n_5 |                        001100000 | 00000000000000000000000001001010
+             LD_IX_d_n_6 |                        001100001 | 00000000000000000000000001001011
+             LD_IX_d_n_7 |                        001100010 | 00000000000000000000000001001100
+             LD_IX_d_n_8 |                        001100011 | 00000000000000000000000001001101
+             LD_IX_d_n_9 |                        001100100 | 00000000000000000000000001001110
+            LD_IX_d_n_10 |                        001100101 | 00000000000000000000000001001111
+             LD_IY_d_n_0 |                        001100110 | 00000000000000000000000001010000
+             LD_IY_d_n_1 |                        001100111 | 00000000000000000000000001010001
+             LD_IY_d_n_2 |                        001101000 | 00000000000000000000000001010010
+             LD_IY_d_n_3 |                        001101001 | 00000000000000000000000001010011
+             LD_IY_d_n_4 |                        001101010 | 00000000000000000000000001010100
+             LD_IY_d_n_5 |                        001101011 | 00000000000000000000000001010101
+             LD_IY_d_n_6 |                        001101100 | 00000000000000000000000001010110
+             LD_IY_d_n_7 |                        001101101 | 00000000000000000000000001010111
+             LD_IY_d_n_8 |                        001101110 | 00000000000000000000000001011000
+             LD_IY_d_n_9 |                        001101111 | 00000000000000000000000001011001
+            LD_IY_d_n_10 |                        001110000 | 00000000000000000000000001011010
+              LD_IX_nn_0 |                        001110001 | 00000000000000000000000001111111
+              LD_IX_nn_1 |                        001110010 | 00000000000000000000000010000000
+              LD_IX_nn_2 |                        001110011 | 00000000000000000000000010000001
+              LD_IX_nn_3 |                        001110100 | 00000000000000000000000010000010
+              LD_IX_nn_4 |                        001110101 | 00000000000000000000000010000011
+              LD_IX_nn_5 |                        001110110 | 00000000000000000000000010000100
+              LD_IY_nn_0 |                        001110111 | 00000000000000000000000010000101
+              LD_IY_nn_1 |                        001111000 | 00000000000000000000000010000110
+              LD_IY_nn_2 |                        001111001 | 00000000000000000000000010000111
+              LD_IY_nn_3 |                        001111010 | 00000000000000000000000010001000
+              LD_IY_nn_4 |                        001111011 | 00000000000000000000000010001001
+              LD_IY_nn_5 |                        001111100 | 00000000000000000000000010001010
+            LD_IX_nn_x_0 |                        001111101 | 00000000000000000000000010100011
+            LD_IX_nn_x_1 |                        001111110 | 00000000000000000000000010100100
+            LD_IX_nn_x_2 |                        001111111 | 00000000000000000000000010100101
+            LD_IX_nn_x_3 |                        010000000 | 00000000000000000000000010100110
+            LD_IX_nn_x_4 |                        010000001 | 00000000000000000000000010100111
+            LD_IX_nn_x_5 |                        010000010 | 00000000000000000000000010101000
+            LD_IX_nn_x_6 |                        010000011 | 00000000000000000000000010101001
+            LD_IX_nn_x_7 |                        010000100 | 00000000000000000000000010101010
+            LD_IX_nn_x_8 |                        010000101 | 00000000000000000000000010101011
+            LD_IX_nn_x_9 |                        010000110 | 00000000000000000000000010101100
+           LD_IX_nn_x_10 |                        010000111 | 00000000000000000000000010101101
+           LD_IX_nn_x_11 |                        010001000 | 00000000000000000000000010101110
+            LD_IY_nn_x_0 |                        010001001 | 00000000000000000000000010101111
+            LD_IY_nn_x_1 |                        010001010 | 00000000000000000000000010110000
+            LD_IY_nn_x_2 |                        010001011 | 00000000000000000000000010110001
+            LD_IY_nn_x_3 |                        010001100 | 00000000000000000000000010110010
+            LD_IY_nn_x_4 |                        010001101 | 00000000000000000000000010110011
+            LD_IY_nn_x_5 |                        010001110 | 00000000000000000000000010110100
+            LD_IY_nn_x_6 |                        010001111 | 00000000000000000000000010110101
+            LD_IY_nn_x_7 |                        010010000 | 00000000000000000000000010110110
+            LD_IY_nn_x_8 |                        010010001 | 00000000000000000000000010110111
+            LD_IY_nn_x_9 |                        010010010 | 00000000000000000000000010111000
+           LD_IY_nn_x_10 |                        010010011 | 00000000000000000000000010111001
+           LD_IY_nn_x_11 |                        010010100 | 00000000000000000000000010111010
+              LD_SP_IX_0 |                        010010101 | 00000000000000000000000011001001
+              LD_SP_IX_1 |                        010010110 | 00000000000000000000000011001010
+              LD_SP_IY_0 |                        010010111 | 00000000000000000000000011001011
+              LD_SP_IY_1 |                        010011000 | 00000000000000000000000011001100
+              EX_SP_IX_0 |                        010011001 | 00000000000000000000000011110100
+              EX_SP_IX_1 |                        010011010 | 00000000000000000000000011110101
+              EX_SP_IX_2 |                        010011011 | 00000000000000000000000011110110
+              EX_SP_IX_3 |                        010011100 | 00000000000000000000000011110111
+              EX_SP_IX_4 |                        010011101 | 00000000000000000000000011111000
+              EX_SP_IX_5 |                        010011110 | 00000000000000000000000011111001
+              EX_SP_IX_6 |                        010011111 | 00000000000000000000000011111010
+              EX_SP_IX_7 |                        010100000 | 00000000000000000000000011111011
+              EX_SP_IX_8 |                        010100001 | 00000000000000000000000011111100
+              EX_SP_IX_9 |                        010100010 | 00000000000000000000000011111101
+             EX_SP_IX_10 |                        010100011 | 00000000000000000000000011111110
+             EX_SP_IX_11 |                        010100100 | 00000000000000000000000011111111
+             EX_SP_IX_12 |                        010100101 | 00000000000000000000000100000000
+             EX_SP_IX_13 |                        010100110 | 00000000000000000000000100000001
+             EX_SP_IX_14 |                        010100111 | 00000000000000000000000100000010
+              EX_SP_IY_0 |                        010101000 | 00000000000000000000000100000011
+              EX_SP_IY_1 |                        010101001 | 00000000000000000000000100000100
+              EX_SP_IY_2 |                        010101010 | 00000000000000000000000100000101
+              EX_SP_IY_3 |                        010101011 | 00000000000000000000000100000110
+              EX_SP_IY_4 |                        010101100 | 00000000000000000000000100000111
+              EX_SP_IY_5 |                        010101101 | 00000000000000000000000100001000
+              EX_SP_IY_6 |                        010101110 | 00000000000000000000000100001001
+              EX_SP_IY_7 |                        010101111 | 00000000000000000000000100001010
+              EX_SP_IY_8 |                        010110000 | 00000000000000000000000100001011
+              EX_SP_IY_9 |                        010110001 | 00000000000000000000000100001100
+             EX_SP_IY_10 |                        010110010 | 00000000000000000000000100001101
+             EX_SP_IY_11 |                        010110011 | 00000000000000000000000100001110
+             EX_SP_IY_12 |                        010110100 | 00000000000000000000000100001111
+             EX_SP_IY_13 |                        010110101 | 00000000000000000000000100010000
+             EX_SP_IY_14 |                        010110110 | 00000000000000000000000100010001
+               PUSH_IX_0 |                        010110111 | 00000000000000000000000011010100
+               PUSH_IX_1 |                        010111000 | 00000000000000000000000011010101
+               PUSH_IX_2 |                        010111001 | 00000000000000000000000011010110
+               PUSH_IX_3 |                        010111010 | 00000000000000000000000011010111
+               PUSH_IX_4 |                        010111011 | 00000000000000000000000011011000
+               PUSH_IX_5 |                        010111100 | 00000000000000000000000011011001
+               PUSH_IX_6 |                        010111101 | 00000000000000000000000011011010
+               PUSH_IY_0 |                        010111110 | 00000000000000000000000011011011
+               PUSH_IY_1 |                        010111111 | 00000000000000000000000011011100
+               PUSH_IY_2 |                        011000000 | 00000000000000000000000011011101
+               PUSH_IY_3 |                        011000001 | 00000000000000000000000011011110
+               PUSH_IY_4 |                        011000010 | 00000000000000000000000011011111
+               PUSH_IY_5 |                        011000011 | 00000000000000000000000011100000
+               PUSH_IY_6 |                        011000100 | 00000000000000000000000011100001
+                 FETCH_3 |                        011000101 | 00000000000000000000000000000100
+               LD_HL_r_0 |                        011000110 | 00000000000000000000000000100110
+               LD_HL_r_1 |                        011000111 | 00000000000000000000000000100111
+               LD_HL_r_2 |                        011001000 | 00000000000000000000000000101000
+               LD_HL_n_0 |                        011001001 | 00000000000000000000000000111111
+               LD_HL_n_1 |                        011001010 | 00000000000000000000000001000000
+               LD_HL_n_2 |                        011001011 | 00000000000000000000000001000001
+               LD_HL_n_3 |                        011001100 | 00000000000000000000000001000010
+               LD_HL_n_4 |                        011001101 | 00000000000000000000000001000011
+               LD_HL_n_5 |                        011001110 | 00000000000000000000000001000100
+               LD_nn_A_0 |                        011001111 | 00000000000000000000000001110000
+               LD_nn_A_1 |                        011010000 | 00000000000000000000000001110001
+               LD_nn_A_2 |                        011010001 | 00000000000000000000000001110010
+               LD_nn_A_3 |                        011010010 | 00000000000000000000000001110011
+               LD_nn_A_4 |                        011010011 | 00000000000000000000000001110100
+               LD_nn_A_5 |                        011010100 | 00000000000000000000000001110101
+               LD_nn_A_6 |                        011010101 | 00000000000000000000000001110110
+               LD_nn_A_7 |                        011010110 | 00000000000000000000000001110111
+               LD_nn_A_8 |                        011010111 | 00000000000000000000000001111000
+              LD_dd_nn_0 |                        011011000 | 00000000000000000000000001111001
+              LD_dd_nn_1 |                        011011001 | 00000000000000000000000001111010
+              LD_dd_nn_2 |                        011011010 | 00000000000000000000000001111011
+              LD_dd_nn_3 |                        011011011 | 00000000000000000000000001111100
+              LD_dd_nn_4 |                        011011100 | 00000000000000000000000001111101
+              LD_dd_nn_5 |                        011011101 | 00000000000000000000000001111110
+                LD_r_n_0 |                        011011110 | 00000000000000000000000000001010
+                LD_r_n_1 |                        011011111 | 00000000000000000000000000001011
+                LD_r_n_2 |                        011100000 | 00000000000000000000000000001100
+               LD_r_HL_0 |                        011100001 | 00000000000000000000000000001101
+               LD_r_HL_1 |                        011100010 | 00000000000000000000000000001110
+               LD_r_HL_2 |                        011100011 | 00000000000000000000000000001111
+               LD_A_BC_0 |                        011100100 | 00000000000000000000000001011011
+               LD_A_BC_1 |                        011100101 | 00000000000000000000000001011100
+               LD_A_BC_2 |                        011100110 | 00000000000000000000000001011101
+               LD_A_DE_0 |                        011100111 | 00000000000000000000000001011110
+               LD_A_DE_1 |                        011101000 | 00000000000000000000000001011111
+               LD_A_DE_2 |                        011101001 | 00000000000000000000000001100000
+               LD_A_nn_0 |                        011101010 | 00000000000000000000000001100001
+               LD_A_nn_1 |                        011101011 | 00000000000000000000000001100010
+               LD_A_nn_2 |                        011101100 | 00000000000000000000000001100011
+               LD_A_nn_3 |                        011101101 | 00000000000000000000000001100100
+               LD_A_nn_4 |                        011101110 | 00000000000000000000000001100101
+               LD_A_nn_5 |                        011101111 | 00000000000000000000000001100110
+               LD_A_nn_6 |                        011110000 | 00000000000000000000000001100111
+               LD_A_nn_7 |                        011110001 | 00000000000000000000000001101000
+               LD_A_nn_8 |                        011110010 | 00000000000000000000000001101001
+               LD_BC_A_0 |                        011110011 | 00000000000000000000000001101010
+               LD_BC_A_1 |                        011110100 | 00000000000000000000000001101011
+               LD_BC_A_2 |                        011110101 | 00000000000000000000000001101100
+               LD_DE_A_0 |                        011110110 | 00000000000000000000000001101101
+               LD_DE_A_1 |                        011110111 | 00000000000000000000000001101110
+               LD_DE_A_2 |                        011111000 | 00000000000000000000000001101111
+              LD_HL_nn_0 |                        011111001 | 00000000000000000000000010001011
+              LD_HL_nn_1 |                        011111010 | 00000000000000000000000010001100
+              LD_HL_nn_2 |                        011111011 | 00000000000000000000000010001101
+              LD_HL_nn_3 |                        011111100 | 00000000000000000000000010001110
+              LD_HL_nn_4 |                        011111101 | 00000000000000000000000010001111
+              LD_HL_nn_5 |                        011111110 | 00000000000000000000000010010000
+              LD_HL_nn_6 |                        011111111 | 00000000000000000000000010010001
+              LD_HL_nn_7 |                        100000000 | 00000000000000000000000010010010
+              LD_HL_nn_8 |                        100000001 | 00000000000000000000000010010011
+              LD_HL_nn_9 |                        100000010 | 00000000000000000000000010010100
+             LD_HL_nn_10 |                        100000011 | 00000000000000000000000010010101
+             LD_HL_nn_11 |                        100000100 | 00000000000000000000000010010110
+            LD_nn_x_HL_0 |                        100000101 | 00000000000000000000000010111011
+            LD_nn_x_HL_1 |                        100000110 | 00000000000000000000000010111100
+            LD_nn_x_HL_2 |                        100000111 | 00000000000000000000000010111101
+            LD_nn_x_HL_3 |                        100001000 | 00000000000000000000000010111110
+            LD_nn_x_HL_4 |                        100001001 | 00000000000000000000000010111111
+            LD_nn_x_HL_5 |                        100001010 | 00000000000000000000000011000000
+            LD_nn_x_HL_6 |                        100001011 | 00000000000000000000000011000001
+            LD_nn_x_HL_7 |                        100001100 | 00000000000000000000000011000010
+            LD_nn_x_HL_8 |                        100001101 | 00000000000000000000000011000011
+            LD_nn_x_HL_9 |                        100001110 | 00000000000000000000000011000100
+           LD_nn_x_HL_10 |                        100001111 | 00000000000000000000000011000101
+           LD_nn_x_HL_11 |                        100010000 | 00000000000000000000000011000110
+              LD_SP_HL_0 |                        100010001 | 00000000000000000000000011000111
+              LD_SP_HL_1 |                        100010010 | 00000000000000000000000011001000
+              EX_SP_HL_0 |                        100010011 | 00000000000000000000000011100101
+              EX_SP_HL_1 |                        100010100 | 00000000000000000000000011100110
+              EX_SP_HL_2 |                        100010101 | 00000000000000000000000011100111
+              EX_SP_HL_3 |                        100010110 | 00000000000000000000000011101000
+              EX_SP_HL_4 |                        100010111 | 00000000000000000000000011101001
+              EX_SP_HL_5 |                        100011000 | 00000000000000000000000011101010
+              EX_SP_HL_6 |                        100011001 | 00000000000000000000000011101011
+              EX_SP_HL_7 |                        100011010 | 00000000000000000000000011101100
+              EX_SP_HL_8 |                        100011011 | 00000000000000000000000011101101
+              EX_SP_HL_9 |                        100011100 | 00000000000000000000000011101110
+             EX_SP_HL_10 |                        100011101 | 00000000000000000000000011101111
+             EX_SP_HL_11 |                        100011110 | 00000000000000000000000011110000
+             EX_SP_HL_12 |                        100011111 | 00000000000000000000000011110001
+             EX_SP_HL_13 |                        100100000 | 00000000000000000000000011110010
+             EX_SP_HL_14 |                        100100001 | 00000000000000000000000011110011
+               PUSH_qq_0 |                        100100010 | 00000000000000000000000011001101
+               PUSH_qq_1 |                        100100011 | 00000000000000000000000011001110
+               PUSH_qq_2 |                        100100100 | 00000000000000000000000011001111
+               PUSH_qq_3 |                        100100101 | 00000000000000000000000011010000
+               PUSH_qq_4 |                        100100110 | 00000000000000000000000011010001
+               PUSH_qq_5 |                        100100111 | 00000000000000000000000011010010
+               PUSH_qq_6 |                        100101000 | 00000000000000000000000011010011
+                LD_r_r_0 |                        100101001 | 00000000000000000000000000001001
+                 FETCH_0 |                        100101010 | 00000000000000000000000000000001
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 'sequential' in module 'decoder'
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:23 ; elapsed = 00:00:22 . Memory (MB): peak = 1507.734 ; gain = 598.426 ; free physical = 4916 ; free virtual = 20175
+---------------------------------------------------------------------------------
+INFO: [Synth 8-223] decloning instance 'CTRL/op0_reg' (register) to 'CTRL/op1_reg'
+INFO: [Synth 8-223] decloning instance 'CTRL/op0_reg' (register) to 'CTRL/op2_reg'
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+No constraint files found.
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input     16 Bit       Adders := 2     
+	   2 Input      8 Bit       Adders := 2     
++---Registers : 
+	               16 Bit    Registers := 1     
+	                8 Bit    Registers := 32    
+	                2 Bit    Registers := 2     
++---Muxes : 
+	   2 Input     16 Bit        Muxes := 13    
+	  11 Input     16 Bit        Muxes := 1     
+	   6 Input     16 Bit        Muxes := 1     
+	   3 Input     16 Bit        Muxes := 1     
+	 348 Input      9 Bit        Muxes := 1     
+	  16 Input      8 Bit        Muxes := 1     
+	   2 Input      8 Bit        Muxes := 117   
+	   3 Input      8 Bit        Muxes := 4     
+	   4 Input      8 Bit        Muxes := 4     
+	   6 Input      8 Bit        Muxes := 1     
+	  20 Input      8 Bit        Muxes := 2     
+	 171 Input      3 Bit        Muxes := 1     
+	   8 Input      2 Bit        Muxes := 6     
+	   5 Input      2 Bit        Muxes := 1     
+	   4 Input      2 Bit        Muxes := 2     
+	   2 Input      2 Bit        Muxes := 1     
+	 171 Input      2 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 47    
+	   6 Input      1 Bit        Muxes := 2     
+	   4 Input      1 Bit        Muxes := 27    
+	   8 Input      1 Bit        Muxes := 30    
+	 171 Input      1 Bit        Muxes := 50    
+	   3 Input      1 Bit        Muxes := 2     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Hierarchical Component Statistics 
+---------------------------------------------------------------------------------
+Hierarchical RTL Component report 
+Module register 
+Detailed RTL Component Info : 
++---Registers : 
+	                8 Bit    Registers := 1     
+Module register__parameterized0 
+Detailed RTL Component Info : 
++---Registers : 
+	               16 Bit    Registers := 1     
+Module regfile 
+Detailed RTL Component Info : 
++---Muxes : 
+	   2 Input     16 Bit        Muxes := 2     
+	  11 Input     16 Bit        Muxes := 1     
+	  16 Input      8 Bit        Muxes := 1     
+	   2 Input      8 Bit        Muxes := 105   
+	   3 Input      8 Bit        Muxes := 2     
+	   4 Input      8 Bit        Muxes := 4     
+	   8 Input      2 Bit        Muxes := 6     
+Module alu 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input      8 Bit       Adders := 2     
++---Muxes : 
+	   2 Input      8 Bit        Muxes := 2     
+	   6 Input      8 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 1     
+	   6 Input      1 Bit        Muxes := 1     
+Module alu__parameterized0 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input     16 Bit       Adders := 2     
++---Muxes : 
+	   2 Input     16 Bit        Muxes := 2     
+	   6 Input     16 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 1     
+	   6 Input      1 Bit        Muxes := 1     
+Module datapath 
+Detailed RTL Component Info : 
++---Muxes : 
+	   2 Input     16 Bit        Muxes := 9     
+	   3 Input     16 Bit        Muxes := 1     
+	   2 Input      8 Bit        Muxes := 10    
+	  20 Input      8 Bit        Muxes := 2     
+	   2 Input      1 Bit        Muxes := 24    
+Module OCF_fsm 
+Detailed RTL Component Info : 
++---Muxes : 
+	   5 Input      2 Bit        Muxes := 1     
+	   4 Input      1 Bit        Muxes := 1     
+Module MRD_fsm 
+Detailed RTL Component Info : 
++---Registers : 
+	                2 Bit    Registers := 1     
++---Muxes : 
+	   4 Input      2 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 3     
+Module MWR_fsm 
+Detailed RTL Component Info : 
++---Registers : 
+	                2 Bit    Registers := 1     
++---Muxes : 
+	   4 Input      2 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 3     
+Module decoder 
+Detailed RTL Component Info : 
++---Registers : 
+	                8 Bit    Registers := 2     
++---Muxes : 
+	 348 Input      9 Bit        Muxes := 1     
+	   3 Input      8 Bit        Muxes := 2     
+	 171 Input      3 Bit        Muxes := 1     
+	   2 Input      2 Bit        Muxes := 1     
+	 171 Input      2 Bit        Muxes := 1     
+	   4 Input      1 Bit        Muxes := 26    
+	   8 Input      1 Bit        Muxes := 30    
+	   2 Input      1 Bit        Muxes := 8     
+	 171 Input      1 Bit        Muxes := 50    
+	   3 Input      1 Bit        Muxes := 2     
+Module control_logic 
+Detailed RTL Component Info : 
++---Muxes : 
+	   2 Input      1 Bit        Muxes := 7     
+---------------------------------------------------------------------------------
+Finished RTL Hierarchical Component Statistics
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 220 (col length:60)
+BRAMs: 280 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+Start Parallel Synthesis Optimization  : Time (s): cpu = 00:00:23 ; elapsed = 00:00:22 . Memory (MB): peak = 1507.734 ; gain = 598.426 ; free physical = 4916 ; free virtual = 20175
+---------------------------------------------------------------------------------
+Start Cross Boundary Optimization
+---------------------------------------------------------------------------------
+INFO: [Synth 8-5546] ROM "DP/eightBit/F_out0" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "DP/sixteenBit/F_out0" won't be mapped to RAM because it is too sparse
+WARNING: [Synth 8-3917] design z80 has port IORQ_L driven by constant 1
+WARNING: [Synth 8-3917] design z80 has port BUSACK_L driven by constant 1
+WARNING: [Synth 8-3917] design z80 has port HALT_L driven by constant 1
+WARNING: [Synth 8-3331] design z80 has unconnected port INT_L
+WARNING: [Synth 8-3331] design z80 has unconnected port NMI_L
+WARNING: [Synth 8-3331] design z80 has unconnected port WAIT_L
+WARNING: [Synth 8-3331] design z80 has unconnected port BUSREQ_L
+---------------------------------------------------------------------------------
+Finished Cross Boundary Optimization : Time (s): cpu = 00:00:24 ; elapsed = 00:00:23 . Memory (MB): peak = 1507.734 ; gain = 598.426 ; free physical = 4916 ; free virtual = 20175
+---------------------------------------------------------------------------------
+Finished Parallel Reinference  : Time (s): cpu = 00:00:24 ; elapsed = 00:00:23 . Memory (MB): peak = 1507.734 ; gain = 598.426 ; free physical = 4916 ; free virtual = 20175
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+No constraint files found.
+WARNING: [Synth 8-3332] Sequential element (\DP/F_not/value_reg[0] ) is unused and will be removed from module z80.
+WARNING: [Synth 8-3332] Sequential element (\DP/F_not/value_reg[1] ) is unused and will be removed from module z80.
+WARNING: [Synth 8-3332] Sequential element (\DP/F_not/value_reg[2] ) is unused and will be removed from module z80.
+WARNING: [Synth 8-3332] Sequential element (\DP/F_not/value_reg[3] ) is unused and will be removed from module z80.
+WARNING: [Synth 8-3332] Sequential element (\DP/F_not/value_reg[4] ) is unused and will be removed from module z80.
+WARNING: [Synth 8-3332] Sequential element (\DP/F_not/value_reg[6] ) is unused and will be removed from module z80.
+WARNING: [Synth 8-3332] Sequential element (\DP/F_not/value_reg[7] ) is unused and will be removed from module z80.
+WARNING: [Synth 8-3332] Sequential element (\DP/F/value_reg[0] ) is unused and will be removed from module z80.
+WARNING: [Synth 8-3332] Sequential element (\DP/F/value_reg[1] ) is unused and will be removed from module z80.
+WARNING: [Synth 8-3332] Sequential element (\DP/F/value_reg[2] ) is unused and will be removed from module z80.
+WARNING: [Synth 8-3332] Sequential element (\DP/F/value_reg[3] ) is unused and will be removed from module z80.
+WARNING: [Synth 8-3332] Sequential element (\DP/F/value_reg[4] ) is unused and will be removed from module z80.
+WARNING: [Synth 8-3332] Sequential element (\DP/F/value_reg[6] ) is unused and will be removed from module z80.
+WARNING: [Synth 8-3332] Sequential element (\DP/F/value_reg[7] ) is unused and will be removed from module z80.
+---------------------------------------------------------------------------------
+Start Area Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Area Optimization : Time (s): cpu = 00:00:31 ; elapsed = 00:00:30 . Memory (MB): peak = 1507.738 ; gain = 598.430 ; free physical = 4915 ; free virtual = 20175
+---------------------------------------------------------------------------------
+Finished Parallel Area Optimization  : Time (s): cpu = 00:00:31 ; elapsed = 00:00:30 . Memory (MB): peak = 1507.738 ; gain = 598.430 ; free physical = 4915 ; free virtual = 20175
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+Finished Parallel Synthesis Optimization  : Time (s): cpu = 00:00:31 ; elapsed = 00:00:30 . Memory (MB): peak = 1507.738 ; gain = 598.430 ; free physical = 4915 ; free virtual = 20175
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:31 ; elapsed = 00:00:30 . Memory (MB): peak = 1507.738 ; gain = 598.430 ; free physical = 4915 ; free virtual = 20175
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:31 ; elapsed = 00:00:31 . Memory (MB): peak = 1507.738 ; gain = 598.430 ; free physical = 4887 ; free virtual = 20147
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:32 ; elapsed = 00:00:31 . Memory (MB): peak = 1507.738 ; gain = 598.430 ; free physical = 4886 ; free virtual = 20146
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:32 ; elapsed = 00:00:31 . Memory (MB): peak = 1507.738 ; gain = 598.430 ; free physical = 4886 ; free virtual = 20146
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:32 ; elapsed = 00:00:31 . Memory (MB): peak = 1507.738 ; gain = 598.430 ; free physical = 4886 ; free virtual = 20146
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports : Time (s): cpu = 00:00:32 ; elapsed = 00:00:31 . Memory (MB): peak = 1507.738 ; gain = 598.430 ; free physical = 4886 ; free virtual = 20146
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:32 ; elapsed = 00:00:31 . Memory (MB): peak = 1507.738 ; gain = 598.430 ; free physical = 4886 ; free virtual = 20146
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+-------+------+
+|      |Cell   |Count |
++------+-------+------+
+|1     |BUFG   |     1|
+|2     |CARRY4 |    10|
+|3     |LUT1   |    26|
+|4     |LUT2   |   162|
+|5     |LUT3   |   254|
+|6     |LUT4   |    91|
+|7     |LUT5   |   229|
+|8     |LUT6   |   783|
+|9     |MUXF7  |    77|
+|10    |MUXF8  |     8|
+|11    |FDRE   |   265|
+|12    |IBUF   |     2|
+|13    |IOBUF  |     8|
+|14    |OBUF   |     9|
+|15    |OBUFT  |    15|
++------+-------+------+
+
+Report Instance Areas: 
++------+------------------+-------------------------+------+
+|      |Instance          |Module                   |Cells |
++------+------------------+-------------------------+------+
+|1     |top               |                         |  1940|
+|2     |  CTRL            |control_logic            |  1513|
+|3     |    DECODE        |decoder                  |  1502|
+|4     |    machine_fetch |OCF_fsm                  |     5|
+|5     |    memory_read   |MRD_fsm                  |     3|
+|6     |    memory_write  |MWR_fsm                  |     3|
+|7     |  DP              |datapath                 |   392|
+|8     |    A             |register                 |    17|
+|9     |    A_not         |register_0               |     8|
+|10    |    F             |register_1               |     2|
+|11    |    F_not         |register_2               |     1|
+|12    |    MAR           |register__parameterized0 |    16|
+|13    |    MDR1          |register_3               |     8|
+|14    |    MDR2          |register_4               |     8|
+|15    |    RFILE         |regfile                  |   301|
+|16    |      B           |register_6               |    60|
+|17    |      B_not       |register_7               |     8|
+|18    |      C           |register_8               |    11|
+|19    |      C_not       |register_9               |     8|
+|20    |      D__0        |register_10              |    15|
+|21    |      D_not       |register_11              |     8|
+|22    |      E           |register_12              |    11|
+|23    |      E_not       |register_13              |     8|
+|24    |      H           |register_14              |    24|
+|25    |      H_not       |register_15              |     8|
+|26    |      IXH         |register_16              |     9|
+|27    |      IXL         |register_17              |     8|
+|28    |      IYH         |register_18              |    22|
+|29    |      IYL         |register_19              |     8|
+|30    |      L           |register_20              |    10|
+|31    |      L_not       |register_21              |     8|
+|32    |      PCH         |register_22              |    11|
+|33    |      PCL         |register_23              |     8|
+|34    |      SPH         |register_24              |    16|
+|35    |      SPL         |register_25              |    13|
+|36    |      STRH        |register_26              |    13|
+|37    |      STRL        |register_27              |    14|
+|38    |    TEMP          |register_5               |     9|
+|39    |    eightBit      |alu                      |     2|
+|40    |    sixteenBit    |alu__parameterized0      |    20|
++------+------------------+-------------------------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:32 ; elapsed = 00:00:31 . Memory (MB): peak = 1507.738 ; gain = 598.430 ; free physical = 4885 ; free virtual = 20145
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 49 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:29 ; elapsed = 00:00:28 . Memory (MB): peak = 1507.738 ; gain = 481.910 ; free physical = 4885 ; free virtual = 20145
+Synthesis Optimization Complete : Time (s): cpu = 00:00:32 ; elapsed = 00:00:31 . Memory (MB): peak = 1507.738 ; gain = 598.430 ; free physical = 4885 ; free virtual = 20145
+INFO: [Project 1-571] Translating synthesized netlist
+INFO: [Netlist 29-17] Analyzing 20 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 8 instances were transformed.
+  IOBUF => IOBUF (IBUF, OBUFT): 8 instances
+
+INFO: [Common 17-83] Releasing license: Synthesis
+130 Infos, 49 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:31 ; elapsed = 00:00:30 . Memory (MB): peak = 1563.758 ; gain = 545.930 ; free physical = 4881 ; free virtual = 20141
+report_utilization: Time (s): cpu = 00:00:00.03 ; elapsed = 00:00:00.09 . Memory (MB): peak = 1595.777 ; gain = 0.000 ; free physical = 4880 ; free virtual = 20141
+INFO: [Common 17-206] Exiting Vivado at Wed Oct 19 12:48:46 2016...
