@@ -738,6 +738,8 @@ module decoder (
 
     MACRO_DEFINE_STATES CPL 1
 
+    MACRO_DEFINE_STATES NEG 1
+
     MACRO_DEFINE_STATES CCF 1
 
     MACRO_DEFINE_STATES SCF 1
@@ -1094,6 +1096,7 @@ module decoder (
           `INC_IY_d:    next_state = (op0[7:4] == 4'hF) ?  INC_IY_d_0 : INC_IX_d_0;
           `DEC_IX_d:    next_state = (op0[7:4] == 4'hD) ?  DEC_IX_d_0 : DEC_IY_d_0;
           `DEC_IY_d:    next_state = (op0[7:4] == 4'hF) ?  DEC_IY_d_0 : DEC_IX_d_0;
+          `NEG:         next_state = NEG_0;
           `INC_IX:      next_state = (op0[7:4] == 4'hD) ?  INC_IX_0   : INC_IY_0;
           `INC_IY:      next_state = (op0[7:4] == 4'hF) ?  INC_IY_0   : INC_IX_0;
           `DEC_IX:      next_state = (op0[7:4] == 4'hD) ?  DEC_IX_0   : DEC_IY_0;
@@ -1411,6 +1414,8 @@ module decoder (
       MACRO_ENUM_STATES DAA 1
 
       MACRO_ENUM_STATES CPL 1
+
+      MACRO_ENUM_STATES NEG 1
 
       MACRO_ENUM_STATES CCF 1
 
@@ -4681,6 +4686,14 @@ module decoder (
         drive_alu_data = 1;
         ld_A           = 1;
         drive_A        = 1;
+      end
+
+      NEG_0: begin
+        MACRO_SET N
+        alu_op         = `ALU_NEG;
+        drive_alu_data = 1;
+        ld_A           = 1;
+        ld_F_data      = 1;
       end
 
       CCF_0: begin

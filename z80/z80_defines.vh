@@ -38,22 +38,20 @@
 `define POP_qq      8'b11??0001
 `define POP_IX      8'hE1
 `define POP_IY      8'hE1
-
-`define EX_DE_HL  8'hEB
-`define EX_AF_AF  8'h08
-`define EXX       8'hD9
-`define EX_SP_HL  8'hE3
-`define EX_SP_IX  8'hE3
-`define EX_SP_IY  8'hE3
-`define LDI       8'hA0
-`define LDIR      8'hB0
-`define LDD       8'hA8
-`define LDDR      8'hB8
-`define CPI       8'hA1
-`define CPIR      8'hB1
-`define CPD       8'hA9
-`define CPDR      8'hB9
-
+`define EX_DE_HL    8'hEB
+`define EX_AF_AF    8'h08
+`define EXX         8'hD9
+`define EX_SP_HL    8'hE3
+`define EX_SP_IX    8'hE3
+`define EX_SP_IY    8'hE3
+`define LDI         8'hA0
+`define LDIR        8'hB0
+`define LDD         8'hA8
+`define LDDR        8'hB8
+`define CPI         8'hA1
+`define CPIR        8'hB1
+`define CPD         8'hA9
+`define CPDR        8'hB9
 `define ADD_A_r     8'b10000???
 `define ADD_A_n     8'hC6
 `define ADD_A_HL    8'h86
@@ -104,6 +102,7 @@
 `define DEC_IY_d    8'h35
 `define DAA         8'h27
 `define CPL         8'h2F
+`define NEG         8'h44
 `define CCF         8'h3F
 `define SCF         8'h37
 `define NOP         8'h00
@@ -111,20 +110,16 @@
 `define ADC_HL_ss   8'b01??1010
 `define ADD_IX_pp   8'b00??1001
 `define ADD_IY_rr   8'b00??1001
-
-`define RS_A		8'b000??111
-`define RLD			8'h6F
-`define RRD			8'h67
-
 `define INC_ss      8'b00??0011
 `define INC_IX      8'h23
 `define INC_IY      8'h23
 `define DEC_ss      8'b00??1011
 `define DEC_IX      8'h2B
 `define DEC_IY      8'h2B
-
-`define BIT_b		8'hCB
-
+`define RS_A		    8'b000??111
+`define RLD			    8'h6F
+`define RRD			    8'h67
+`define BIT_b		    8'hCB
 `define JP_nn       8'hC3
 `define JP_cc_nn    8'b11???010
 `define JR_e        8'h18
@@ -132,13 +127,11 @@
 `define JR_NC_e     8'h30
 `define JR_Z_e      8'h28
 `define JR_NZ_e     8'h20
-
-`define CALL_nn		8'hCD
+`define CALL_nn		  8'hCD
 `define CALL_cc_nn  8'b11???100
-`define RET			8'hC9
-`define RET_cc		8'b11???000
-`define RST_p		8'b11???111
-
+`define RET			    8'hC9
+`define RET_cc		  8'b11???000
+`define RST_p		    8'b11???111
 `define IN_A_n      8'hDB
 `define IN_r_C      8'b01???000
 `define INI         8'hA2
@@ -190,7 +183,7 @@
 `define ADD_16    6'h3c
 `define ADC_16    8'h3d
 `define Z_TEST    8'h3e
-
+`define ALU_NEG   8'h3f
 
 //DO NOT CHANGE WHAT'S BELOW UNLESS YOU'RE
 //EXTENDING THE LENGTH OF THE BITCODES

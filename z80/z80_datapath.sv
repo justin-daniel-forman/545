@@ -689,6 +689,29 @@ module alu #(parameter w = 8)(
         end
       end
 
+      `ALU_NEG: begin
+
+        {upper_carry_out, C} =
+          {~A[7], ~A[6], ~A[5], ~A[4], ~A[3], ~A[2], ~A[1], ~A[0]} + 4'h1;
+        {lower_carry_out, lower_sum} = {~A[3], ~A[2], ~A[1], ~A[0]} + 4'h1;
+
+        F_out[`H_flag] = ~lower_carry_out;
+        F_out[`C_flag] = ~upper_carry_out;
+
+        //N is set
+        F_out[`N_flag] = 1;
+
+        //S flag is set when result is negative, otherwise reset
+        F_out[`S_flag] = C[(w-1)] ? 1 : 0;
+
+        //Z flag is set when result is 0, otherwise reset
+        F_out[`Z_flag] = (C == 0) ? 1 : 0;
+
+        //PV flag is set when there is overflow, which occurs when
+        //output changes the MSB of the accumulator
+        F_out[`PV_flag] = (A == 8'h80); 
+      end
+
       `ALU_B: begin
         C = B;
 
