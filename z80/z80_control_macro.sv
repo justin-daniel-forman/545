@@ -791,6 +791,11 @@ module decoder (
 
     MACRO_DEFINE_STATES JR_e 8
 
+    MACRO_DEFINE_STATES JP_HL 1
+
+    MACRO_DEFINE_STATES JP_IX 1
+
+    MACRO_DEFINE_STATES JP_IY 1
 
     MACRO_DEFINE_STATES CALL_nn 13
 
@@ -923,6 +928,7 @@ module decoder (
           `IX_INST:   next_state = IX_INST_0;
           `IY_INST:   next_state = IY_INST_0;
           `RS_A:      next_state = BIT_b_r_3;
+          `JP_HL:     next_state = JP_HL_0;
           default:    next_state = FETCH_3;
         endcase
       end
@@ -1026,6 +1032,8 @@ module decoder (
       FETCH_6: begin
         //TODO: might need to acknowledge a WAIT cycle
         casex(op1)
+          `JP_IX:     next_state = (op0[7:4] == 4'hD) ? JP_IX_0 : JP_IY_0;
+          `JP_IY:     next_state = (op0[7:4] == 4'hF) ? JP_IY_0 : JP_IX_0;
           default:    next_state = FETCH_7;
         endcase
       end
@@ -1480,11 +1488,26 @@ module decoder (
       //BEGIN Jump group
       //-----------------------------------------------------------------------
 
-      MACRO_ENUM_STATES JP_nn 6
+      //All of the jumps should go to START since that state does not inc the
+      //pc when fetching the next instruction. IF we inc the PC right away
+      //we miss a byte
+      MACRO_ENUM_STATES_NR JP_nn 6
+      JP_nn_5: next_state = START;
 
-      MACRO_ENUM_STATES JP_cc_nn 6
+      MACRO_ENUM_STATES_NR JP_cc_nn 6
+      JP_cc_nn_5: next_state = START;
 
-      MACRO_ENUM_STATES JR_e 8
+      MACRO_ENUM_STATES_NR JR_e 8
+      JR_e_7: next_state = START;
+
+      MACRO_ENUM_STATES_NR JP_HL 1
+      JP_HL_0: next_state = START;
+
+      MACRO_ENUM_STATES_NR JP_IX 1
+      JP_IX_0: next_state = START;
+
+      MACRO_ENUM_STATES_NR JP_IY 1
+      JP_IY_0: next_state = START;
 
       //-----------------------------------------------------------------------
       //END Jump group
@@ -5160,6 +5183,27 @@ module decoder (
             ld_PCL = 1;
           end
         endcase
+      end
+
+      //JP (HL)
+      JP_HL_0: begin
+        MACRO_16_DRIVE HL
+        ld_PCH = 1;
+        ld_PCL = 1;
+      end
+
+      //JP (IX)
+      JP_IX_0: begin
+        MACRO_16_DRIVE IX
+        ld_PCH = 1;
+        ld_PCL = 1;
+      end
+
+      //JP (IY)
+      JP_IY_0: begin
+        MACRO_16_DRIVE IY
+        ld_PCH = 1;
+        ld_PCL = 1;
       end
 
       //-----------------------------------------------------------------------

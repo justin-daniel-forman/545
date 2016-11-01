@@ -127,6 +127,9 @@
 `define JR_NC_e     8'h30
 `define JR_Z_e      8'h28
 `define JR_NZ_e     8'h20
+`define JP_HL       8'hE9
+`define JP_IX       8'hE9
+`define JP_IY       8'hE9
 `define CALL_nn		  8'hCD
 `define CALL_cc_nn  8'b11???100
 `define RET			    8'hC9

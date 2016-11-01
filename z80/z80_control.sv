@@ -1509,6 +1509,11 @@ module decoder (
     JR_e_6,
     JR_e_7,
 
+    JP_HL_0,
+
+    JP_IX_0,
+
+    JP_IY_0,
 
     CALL_nn_0,
     CALL_nn_1,
@@ -1776,6 +1781,7 @@ module decoder (
           `IX_INST:   next_state = IX_INST_0;
           `IY_INST:   next_state = IY_INST_0;
           `RS_A:      next_state = BIT_b_r_3;
+          `JP_HL:     next_state = JP_HL_0;
           default:    next_state = FETCH_3;
         endcase
       end
@@ -1879,6 +1885,8 @@ module decoder (
       FETCH_6: begin
         //TODO: might need to acknowledge a WAIT cycle
         casex(op1)
+          `JP_IX:     next_state = (op0[7:4] == 4'hD) ? JP_IX_0 : JP_IY_0;
+          `JP_IY:     next_state = (op0[7:4] == 4'hF) ? JP_IY_0 : JP_IX_0;
           default:    next_state = FETCH_7;
         endcase
       end
@@ -3123,13 +3131,16 @@ module decoder (
       //BEGIN Jump group
       //-----------------------------------------------------------------------
 
+      //All of the jumps should go to START since that state does not inc the
+      //pc when fetching the next instruction. IF we inc the PC right away
+      //we miss a byte
       //JP_nn
       JP_nn_0: next_state = JP_nn_1;
       JP_nn_1: next_state = JP_nn_2;
       JP_nn_2: next_state = JP_nn_3;
       JP_nn_3: next_state = JP_nn_4;
       JP_nn_4: next_state = JP_nn_5;
-      JP_nn_5: next_state = FETCH_0;
+      JP_nn_5: next_state = START;
 
       //JP_cc_nn
       JP_cc_nn_0: next_state = JP_cc_nn_1;
@@ -3137,7 +3148,7 @@ module decoder (
       JP_cc_nn_2: next_state = JP_cc_nn_3;
       JP_cc_nn_3: next_state = JP_cc_nn_4;
       JP_cc_nn_4: next_state = JP_cc_nn_5;
-      JP_cc_nn_5: next_state = FETCH_0;
+      JP_cc_nn_5: next_state = START;
 
       //JR_e
       JR_e_0: next_state = JR_e_1;
@@ -3147,7 +3158,16 @@ module decoder (
       JR_e_4: next_state = JR_e_5;
       JR_e_5: next_state = JR_e_6;
       JR_e_6: next_state = JR_e_7;
-      JR_e_7: next_state = FETCH_0;
+      JR_e_7: next_state = START;
+
+      //JP_HL
+      JP_HL_0: next_state = START;
+
+      //JP_IX
+      JP_IX_0: next_state = START;
+
+      //JP_IY
+      JP_IY_0: next_state = START;
 
       //-----------------------------------------------------------------------
       //END Jump group
@@ -8106,6 +8126,39 @@ module decoder (
             ld_PCL = 1;
           end
         endcase
+      end
+
+      //JP (HL)
+      JP_HL_0: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_H = 1;
+        drive_L = 1;
+        ld_PCH = 1;
+        ld_PCL = 1;
+      end
+
+      //JP (IX)
+      JP_IX_0: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_IXL = 1;
+        drive_IXH = 1;
+        ld_PCH = 1;
+        ld_PCL = 1;
+      end
+
+      //JP (IY)
+      JP_IY_0: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_IYL = 1;
+        drive_IYH = 1;
+        ld_PCH = 1;
+        ld_PCL = 1;
       end
 
       //-----------------------------------------------------------------------
