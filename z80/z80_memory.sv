@@ -1,4 +1,4 @@
-module memory (
+module memory #(parameter w = 200)(
   input logic clk,
   input logic rst_L,
   input logic MREQ_L,
@@ -8,20 +8,23 @@ module memory (
   inout wire  [15:0]  addr_bus
 );
 
-  logic [1000:0] ens;
-  logic [1000:0] [7:0] Qs, defs;
+  logic [w-1:0] ens;
+  logic [w-1:0] [7:0] Qs, defs;
 
   //Read out our memory contents from a textfile
-  logic [7:0] memory [150:0];
-  logic [50:0] j;
+  logic [7:0] memory [w-1:0];
   initial begin
-    $readmemb("traces/DUT.raw", memory);
+    if(w > 1000) begin
+      $readmemb("bios/DUT.raw", memory);
+    end else begin
+      $readmemb("traces/DUT.raw", memory);
+    end
   end
 
   //Put out the memory contents into our "register interpretation" of memory
   genvar i;
   generate
-    for(i = 0; i < 150; i++) begin
+    for(i = 0; i < w; i++) begin
       register_def #(8) foo (.clk, .rst_L, .D(data_bus), .Q(Qs[i]),
         .en(ens[i]),
         .def(memory[i])
