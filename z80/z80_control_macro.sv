@@ -1035,8 +1035,15 @@ module decoder (
       FETCH_7: begin
         casex(op1)
           //Some cases are identical and are only different in the first byte
-          `LD_r_IX_d:   next_state = (op0[7:4] == 4'hD) ?  LD_r_IX_d_0  : LD_r_IY_d_0;
-          `LD_r_IY_d:   next_state = (op0[7:4] == 4'hF) ?  LD_r_IY_d_0  : LD_r_IX_d_0;
+          `LD_r_IX_d: begin
+            if       (op0[7:4] == 4'hF) next_state = LD_r_IY_d_0;
+            else if  (op0[7:4] == 4'hD) next_state = LD_r_IX_d_0;
+            else                        next_state = FETCH_0;
+          end          `LD_r_IY_d: begin
+            if       (op0[7:4] == 4'hF) next_state = LD_r_IY_d_0;
+            else if  (op0[7:4] == 4'hD) next_state = LD_r_IX_d_0;
+            else                        next_state = FETCH_0;
+          end
           `LD_IX_d_r: begin
               if     (op0[7:4] == 4'hF)  next_state = LD_IY_d_r_0;
               else if(op0[7:4] == 4'hD)  next_state = LD_IX_d_r_0;
