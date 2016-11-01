@@ -3170,7 +3170,7 @@ module decoder (
       CALL_nn_9: next_state = CALL_nn_10;
       CALL_nn_10: next_state = CALL_nn_11;
       CALL_nn_11: next_state = CALL_nn_12;
-      CALL_nn_12: next_state = FETCH_0;
+      CALL_nn_12: next_state = START; //do not increment PC in next fetch
 
       //CALL_cc_nn
       CALL_cc_nn_0: next_state = CALL_cc_nn_1;
@@ -3198,7 +3198,7 @@ module decoder (
       CALL_cc_nn_9: next_state = CALL_cc_nn_10;
       CALL_cc_nn_10: next_state = CALL_cc_nn_11;
       CALL_cc_nn_11: next_state = CALL_cc_nn_12;
-      CALL_cc_nn_12: next_state = FETCH_0;
+      CALL_cc_nn_12: next_state = START; //do not increment PC in next fetch
 
       //RET
       RET_0: next_state = RET_1;

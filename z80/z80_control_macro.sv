@@ -1494,7 +1494,8 @@ module decoder (
       //BEGIN Call and Return group
       //-----------------------------------------------------------------------
 
-      MACRO_ENUM_STATES CALL_nn 13
+      MACRO_ENUM_STATES_NR CALL_nn 13
+      CALL_nn_12: next_state = START; //do not increment PC in next fetch
 
       MACRO_ENUM_STATES_NR CALL_cc_nn 6
 
@@ -1517,7 +1518,7 @@ module decoder (
       CALL_cc_nn_9: next_state = CALL_cc_nn_10;
       CALL_cc_nn_10: next_state = CALL_cc_nn_11;
       CALL_cc_nn_11: next_state = CALL_cc_nn_12;
-      CALL_cc_nn_12: next_state = FETCH_0;
+      CALL_cc_nn_12: next_state = START; //do not increment PC in next fetch
 
       MACRO_ENUM_STATES RET 6
 
