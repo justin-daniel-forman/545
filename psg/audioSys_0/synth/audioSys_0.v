@@ -65,7 +65,11 @@ module audioSys_0 (
   MCLK,
   BCLK,
   LRCLK,
-  SDATA
+  SDATA,
+  freq,
+  atten_mag,
+  enable,
+  atten_enable
 );
 
 input wire [15 : 0] addr;
@@ -82,6 +86,10 @@ output wire MCLK;
 output wire BCLK;
 output wire LRCLK;
 output wire SDATA;
+output wire [9 : 0] freq;
+output wire [3 : 0] atten_mag;
+output wire [2 : 0] enable;
+output wire [2 : 0] atten_enable;
 
   audioSys inst (
     .addr(addr),
@@ -95,6 +103,10 @@ output wire SDATA;
     .MCLK(MCLK),
     .BCLK(BCLK),
     .LRCLK(LRCLK),
-    .SDATA(SDATA)
+    .SDATA(SDATA),
+    .freq(freq),
+    .atten_mag(atten_mag),
+    .enable(enable),
+    .atten_enable(atten_enable)
   );
 endmodule

@@ -21,7 +21,7 @@
 
 
 module audio_top(
-    input [7:0] data_in,
+    input [7:0] data_out,
     input [15:0] addr_bus,
     input logic IORQ_L,
     input logic WR_L,
@@ -32,9 +32,12 @@ module audio_top(
     output logic LRCLK,
     output logic SDATA,
     input logic clk_100,
-    input logic reset
-    );
+    input logic reset,
+    output logic [9:0] freq,
+    output logic [3:0] atten_mag,
+    output logic [2:0] atten_enable,enable
+);
     
-    audioSys_0 toneGenerator(.data(data_in),.addr(addr_bus),.clk(clk_100),.reset(reset),.WR_N(WR_L),.MREQ_N(IORQ_L),.*);
+    audioSys_0 toneGenerator(.data(data_out),.addr(addr_bus),.clk(clk_100),.reset(reset),.WR_N(WR_L),.MREQ_N(IORQ_L),.*);
     
 endmodule

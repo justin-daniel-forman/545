@@ -55,18 +55,22 @@
 
 //----------- Begin Cut here for INSTANTIATION Template ---// INST_TAG
 audioSys_0 your_instance_name (
-  .addr(addr),      // input wire [15 : 0] addr
-  .clk(clk),        // input wire clk
-  .reset(reset),    // input wire reset
-  .MREQ_N(MREQ_N),  // input wire MREQ_N
-  .WR_N(WR_N),      // input wire WR_N
-  .data(data),      // input wire [7 : 0] data
-  .SDA(SDA),        // inout wire SDA
-  .SCL(SCL),        // output wire SCL
-  .MCLK(MCLK),      // output wire MCLK
-  .BCLK(BCLK),      // output wire BCLK
-  .LRCLK(LRCLK),    // output wire LRCLK
-  .SDATA(SDATA)    // output wire SDATA
+  .addr(addr),                  // input wire [15 : 0] addr
+  .clk(clk),                    // input wire clk
+  .reset(reset),                // input wire reset
+  .MREQ_N(MREQ_N),              // input wire MREQ_N
+  .WR_N(WR_N),                  // input wire WR_N
+  .data(data),                  // input wire [7 : 0] data
+  .SDA(SDA),                    // inout wire SDA
+  .SCL(SCL),                    // output wire SCL
+  .MCLK(MCLK),                  // output wire MCLK
+  .BCLK(BCLK),                  // output wire BCLK
+  .LRCLK(LRCLK),                // output wire LRCLK
+  .SDATA(SDATA),                // output wire SDATA
+  .freq(freq),                  // output wire [9 : 0] freq
+  .atten_mag(atten_mag),        // output wire [3 : 0] atten_mag
+  .enable(enable),              // output wire [2 : 0] enable
+  .atten_enable(atten_enable)  // output wire [2 : 0] atten_enable
 );
 // INST_TAG_END ------ End INSTANTIATION Template ---------
 

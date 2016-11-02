@@ -32,13 +32,18 @@ module audioSys(
     output logic MCLK,
     output logic BCLK,
     output logic LRCLK,
-    output logic SDATA);
+    output logic SDATA,
+    output freq,
+    output atten_mag,
+    output enable,
+    output atten_enable);
     
     logic [2:0] enable,atten_enable;
     logic [3:0] atten_mag;
     logic [9:0] freq;
     
     logic signed [2:0][15:0] waveform,waveform_atten_freq;
+    logic signed [15:0] waveform_atten;
     logic [2:0] waveform_valid;
     logic [2:0] acquire;
     logic [2:0] atten_valid_freq;

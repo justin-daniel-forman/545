@@ -1,0 +1,35 @@
+#-----------------------------------------------------------
+# Vivado v2015.2 (64-bit)
+# SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+# IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+# Start of session at: Wed Nov  2 14:39:49 2016
+# Process ID: 23420
+# Log file: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/vivado.log
+# Journal file: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.xpr
+set_property -dict [list CONFIG.Coe_File {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/ScaleTone.coe}] [get_ips blk_mem_gen_0]
+generate_target all [get_files  /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci]
+reset_run blk_mem_gen_0_synth_1
+launch_run -jobs 4 blk_mem_gen_0_synth_1
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 4
+wait_on_run impl_1
+open_hw
+connect_hw_server
+open_hw_target [lindex [get_hw_targets -of_objects [get_hw_servers localhost]] 0]
+set_property PROGRAM.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/project_top.bit} [lindex [get_hw_devices] 1]
+set_property PROBES.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/debug_nets.ltx} [lindex [get_hw_devices] 1]
+current_hw_device [lindex [get_hw_devices] 1]
+refresh_hw_device [lindex [get_hw_devices] 1]
+set_property PROBES.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/debug_nets.ltx} [lindex [get_hw_devices] 1]
+set_property PROGRAM.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/project_top.bit} [lindex [get_hw_devices] 1]
+program_hw_devices [lindex [get_hw_devices] 1]
+refresh_hw_device [lindex [get_hw_devices] 1]
+display_hw_ila_data [ get_hw_ila_data hw_ila_data_1]
+close_hw
+set_property -dict [list CONFIG.Coe_File {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/ScaleTone.coe}] [get_ips blk_mem_gen_0]
+generate_target all [get_files  /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci]
+reset_run blk_mem_gen_0_synth_1
+launch_run -jobs 4 blk_mem_gen_0_synth_1
