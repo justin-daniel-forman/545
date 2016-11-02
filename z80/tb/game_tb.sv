@@ -2,8 +2,7 @@ module tb ();
 
   logic clk, rst_L;
 
-  wire [7:0]  data_in;
-  wire [7:0]  data_out;
+  wire [7:0]  data_bus;
   wire [15:0] addr_bus;
 
   logic M1_L;
@@ -20,8 +19,8 @@ module tb ();
   logic HALT_L;
 
   z80 DUT(.*);
-  memory m_DUT(.*);
-  ports  p_DUT(.*);
+  memory #(8192) m_DUT(.*);
+  ports          p_DUT(.*);
 
   //generate clock
   initial begin
@@ -38,7 +37,7 @@ module tb ();
     if($test$plusargs("DEBUG")) begin
     $monitor($stime,, "addr bus: %h, data bus: %h, state: %s, A: %h, F: %h, DE: %h, HL: %h, BC: %h, IX: %h, IY: %h, SP: %h, m_data:%h, z80_data: %h, MEM_VAL: %h, foo: %h",
       addr_bus,
-      data_out,
+      data_bus,
       DUT.CTRL.DECODE.state.name,
       DUT.DP.A_out,
       DUT.DP.F_out,
@@ -51,7 +50,7 @@ module tb ();
       m_DUT.out_value,
       DUT.DP.data_out,
       m_DUT.Qs[97],
-      DUT.CTRL.IN_start
+      DUT.DP.alu_op
     );
     end
 
@@ -64,9 +63,11 @@ module tb ();
     //START OF T1
     @(posedge clk);
 
+    i = 0;
     //currently our range for assembly programs is $51
-    while( {DUT.DP.RFILE.PCH_out, DUT.DP.RFILE.PCL_out} <= 16'h0050 ) begin
+    while( i < 1000000 ) begin
       @(posedge clk);
+      i++;
     end
 
     $display("\n\n\n");

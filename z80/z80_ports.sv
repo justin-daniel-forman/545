@@ -4,7 +4,8 @@ module ports (
   input logic IORQ_L,
   input logic RD_L,
   input logic WR_L,
-  inout wire  [7:0]   data_bus,
+  input wire  [7:0]   data_out,
+  output wire [7:0]   data_in,
   inout wire  [15:0]  addr_bus
 );
 
@@ -16,7 +17,7 @@ module ports (
   genvar i;
   generate
     for(i = 0; i < 256; i++) begin
-      register_def #(8) foo (.clk, .rst_L, .D(data_bus), .Q(Qs[i]),
+      register_def #(8) foo (.clk, .rst_L, .D(data_out), .Q(Qs[i]),
         .en(ens[i]),
         .def(i[7:0])
       );
@@ -26,7 +27,7 @@ module ports (
   //Write a memory controller to output the memory values on the bus
   //at the right time
   logic [7:0] out_value;
-  assign data_bus = out_value;
+  assign data_in = out_value;
 
   always @(posedge clk) begin
 

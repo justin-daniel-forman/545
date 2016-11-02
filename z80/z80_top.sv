@@ -18,7 +18,8 @@ module z80(
   //  We are ignoring DMA interface and bus arbitration logic because we do not
   //  anticipate the need for any slave device to take control of the bus
   //---------------------------------------------------------------------------
-  inout   wire  [7:0]   data_bus,
+  input   wire  [7:0]   data_in,
+  output  wire  [7:0]   data_out,
   inout   wire  [15:0]  addr_bus,
 
   //---------------------------------------------------------------------------
@@ -174,8 +175,6 @@ module z80(
   logic         drive_MAR;
 
   //External bus outputs
-  logic [7:0]   data_in;
-  logic [7:0]   data_out;
   logic [15:0]  addr_out;
 
   //Datapath flags that the control module ueses
@@ -185,9 +184,6 @@ module z80(
 
   control_logic CTRL(.*);
 
-  assign data_in  = data_bus;
-  assign data_bus = data_out;
   assign addr_bus = addr_out;
-
 
 endmodule: z80
