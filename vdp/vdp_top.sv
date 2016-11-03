@@ -19,16 +19,18 @@ module vdp_top (
 
   //---------------------------------------------------------------------------
   //Interrupt output interface
-  //
+  //  - BUSY: Asserted when the screen is being updated.
+  // 
   //TODO: Define the necessary outputs for VDP generated interrupts
   //---------------------------------------------------------------------------
+
+  output logic      BUSY, 
 
   //---------------------------------------------------------------------------
   //Board output interface
   //---------------------------------------------------------------------------
   output logic       VGA_HS, VGA_VS,
-  output logic [3:0] VGA_R, VGA_B, VGA_G,
-  input  logic [7:0] SW
+  output logic [3:0] VGA_R, VGA_B, VGA_G
 );
 
   // Decoder logic
@@ -57,6 +59,11 @@ module vdp_top (
   // VGA logic
   logic [9:0] pixel_col;
   logic [8:0] pixel_row;
+
+  // Stuff
+  logic screenBusy;
+
+  assign BUSY = screenBusy && (pixel_row > 48 && pixel_row <= 575);
 
   /******* Decoder *******/
 
@@ -91,6 +98,7 @@ module vdp_top (
     .data_in(data_bus),
     .data_out(data_port_out),
     .stat_reg_out(stat_reg_out),
+    .screenBusy,
     .VRAM_io_re,
     .VRAM_io_we,
     .VRAM_io_data_in,
@@ -107,10 +115,6 @@ module vdp_top (
   );
 
   /******* VGA Interface *******/
-
-  logic [2:0] disp_state;
-  logic [3:0] bitSliceSel;
-  logic [3:0][7:0] colorLatch_out;
 
   /*
   vdp_disp_interface DISP_INTERFACE(
@@ -143,13 +147,10 @@ module vdp_top (
       .VGA_R, 
       .VGA_G, 
       .VGA_B,
-      .disp_state,
-      .colorLatch_out,
-      .bitSliceSel,
+      .screenBusy,
       .VRAM_go(VRAM_go_VGA),
-      .waitTime1(SW[7:4]),
-      .waitTime2(SW[3:0]),
-      .R2()
+      .R2(8'd0),
+      .R6(8'd0)
     );
   
   vga VGA(
@@ -174,7 +175,7 @@ module vdp_top (
  
   /******** VRAM & CRAM ********/  
 
-  assign VRAM_go = VRAM_go_VGA || VRAM_go_io;
+  assign VRAM_go = (VRAM_go_VGA || (VRAM_go_io && ~BUSY));
 
   mem #(8, 5) CRAM(
     .clka(clk_4),
@@ -373,6 +374,7 @@ module vdp_io(
   input   logic CSR_L,
   input   logic CSW_L,
   input   logic vdp_go,
+  input   logic screenBusy,
 
   input   logic [7:0] data_in, VRAM_io_data_out,
   output  logic [7:0] data_out,
@@ -431,7 +433,8 @@ module vdp_io(
     .VRAM_we(VRAM_io_we),
     .CRAM_re(CRAM_io_re),
     .CRAM_we(CRAM_io_we),
-    .VRAM_go(VRAM_go)
+    .VRAM_go(VRAM_go),
+    .screenBusy
   );
 
   /******** Data Bus Interfacing ********/ 
@@ -468,10 +471,8 @@ module vdp_io(
   // MEM assignment 
   assign VRAM_io_data_in = data_port_out;
   assign VRAM_io_addr = write_addr_out;
-  assign VRAM_VGA_addr = 0; // FIX
   assign CRAM_io_data_in = data_port_out;
   assign CRAM_io_addr = write_addr_out;
-  assign CRAM_VGA_addr = 0; // FIX
 
   // Data bus I/O assignment
   assign data_out = data_port_out;
@@ -485,7 +486,7 @@ endmodule: vdp_io
 
 module vdp_io_fsm(
   input  logic       clk, rst_L,
-  input  logic       MODE, CSR_L, CSW_L, go,
+  input  logic       MODE, CSR_L, CSW_L, go, screenBusy,
   input  logic [1:0] op,  
   output logic       wr_cmd_1, wr_cmd_2, rf_en,
   output logic       wr_addr_sel, wr_addr_en, stat_en,
@@ -494,17 +495,19 @@ module vdp_io_fsm(
   output logic       VRAM_go
 );
 
-  enum logic [3:0] {Load_addr_1,
+  enum logic [4:0] {Load_addr_1,
                     Load_addr_1_wait,
                     Load_addr_2,
                     Load_addr_2_wait,
                     Decode,
                     VRAM_read_addr,
                     VRAM_read_wait,
-                    VRAM_read_data,
+                    VRAM_read_data_1,
+                    VRAM_read_data_2,
                     VRAM_write_addr,
                     VRAM_write_wait,
-                    VRAM_write_data,
+                    VRAM_write_data_1,
+                    VRAM_write_data_2,
                     RF_write,
                     CRAM_write_addr,
                     CRAM_write_wait,
@@ -530,16 +533,18 @@ module vdp_io_fsm(
       VRAM_read_wait:  // If read, read out another byte, otherwise 
                        // reconfigure the command register
         ns = (go) ? (     
-             (MODE) ? Load_addr_1 : VRAM_read_data
+             (MODE) ? Load_addr_1 : VRAM_read_data_1
              ) : VRAM_read_wait;
-      VRAM_read_data: ns = VRAM_read_wait; // Prepare for sequential reads
+      VRAM_read_data_1: ns = VRAM_read_data_2;
+      VRAM_read_data_2: ns = VRAM_read_wait; // Prepare for sequential reads
       VRAM_write_addr: ns = VRAM_write_wait;
       VRAM_write_wait: begin
         ns = (go) ? (     
-             (MODE) ? Load_addr_1 : VRAM_write_data
+             (MODE) ? Load_addr_1 : VRAM_write_data_1
              ) : VRAM_write_wait;
       end
-      VRAM_write_data: ns = VRAM_write_wait;
+      VRAM_write_data_1: ns = VRAM_write_data_2;
+      VRAM_write_data_2: ns = VRAM_write_wait;
       RF_write: ns = Load_addr_1;
       CRAM_write_addr: ns = CRAM_write_wait;
       CRAM_write_wait: begin
@@ -584,10 +589,12 @@ module vdp_io_fsm(
         VRAM_re = 1;
         data_in_sel = 1;
       end
-      VRAM_read_data: begin
+      VRAM_read_data_1: begin
         wr_addr_en = 1; // Autoincrement address in case of sequential read
         VRAM_go = 1;
-        // We need to wait 1 more clock cycle here!
+      end
+      VRAM_read_data_2: begin
+        wr_addr_en = 1;
       end
       VRAM_write_addr: begin
         wr_addr_sel = 1;
@@ -596,11 +603,14 @@ module vdp_io_fsm(
       VRAM_write_wait: begin
         
       end
-      VRAM_write_data: begin
+      VRAM_write_data_1: begin
         VRAM_we = 1;
         wr_addr_en = 1; // Autoincrement address in case of sequential write
         VRAM_go = 1;
-        // We need to wait 1 more clock cycle here!
+      end
+      VRAM_write_data_2: begin
+        VRAM_we = 1;
+        wr_addr_en = 1;
       end
       RF_write: begin
         rf_en = 1;
@@ -788,12 +798,16 @@ module vdp_sprite_interface(
   input  logic             clk, rst_L,
   input  logic [8:0]       row,
   input  logic [9:0]       col,
-  input  logic [7:0]       R5,
+  input  logic             screenBusy,
   input  logic [5:0][7:0]  VRAM_sprite_data,
-  output logic [4:0]       CRAM_sprite_addr,
-  output logic             spr_inRange, VRAM_go,
-  output logic [8:0]       sprPat, // Feeds into VRAM addr 2-5
-  output logic [5:0][13:0] VRAM_sprite_addr
+  output logic             VRAM_go,
+  output logic [7:0]       sprPat, // Feeds into VRAM addr 2-5
+  output logic [1:0][13:0] VRAM_sprite_addr,
+  output logic             validSprite,
+  output logic [7:0]       validHPOS,
+  output logic [2:0]       sprPatRow_out,
+  output logic [2:0]       sprCnt,
+  output logic [7:0][2:0]  spriteOffset
 );
 
   logic [8:0] pixelRow;
@@ -813,18 +827,17 @@ module vdp_sprite_interface(
   logic [7:0]      VPOSlatch_en;
   logic [7:0][7:0] HPOSlatch_out;
   logic [7:0]      HPOSlatch_en;
-  logic [7:0][2:0] spriteOffset;
   logic            HPOSlatch_set, VPOSlatch_set, sprLatch_en;
   logic [7:0]      sprLatch_in, sprLatch_out;
 
   // FSM Status Points
   logic doneTable, validVPOS;
-  logic [7:0] validHPOS;
 
   // Sprite Counter logic
-  logic [2:0] sprCnt;
   logic       sprCnt_en, sprCnt_clr;
-
+  logic       sprPatRow_en, sprPat_done;
+  logic       VRAM_go_RC, VRAM_go_SPR;
+  
   /******* Position Register *******/
   // Keeps track of where in the SAT we are
 
@@ -841,11 +854,11 @@ module vdp_sprite_interface(
   /******* VRAM Addressing *******/
 
   // VRAM_addr_6
-  assign VRAM_sprite_addr[4] = (~VPOSorHPOS) ? 
+  assign VRAM_sprite_addr[0] = (~VPOSorHPOS) ? 
     {6'd0, posReg_out} + 14'h3F00 :
     {5'd0, posReg_out, 1'd0} + 14'h3F80;
 
-  assign VRAM_sprite_addr[5] = VRAM_sprite_addr[4] + 14'd1;
+  assign VRAM_sprite_addr[1] = VRAM_sprite_addr[0] + 14'd1;
 
   /******* VRAM Data Handling *******/
 
@@ -888,16 +901,29 @@ module vdp_sprite_interface(
       assign HPOSlatch_en[i] = (sprCnt == i) && HPOSlatch_set;
       assign VPOSlatch_en[i] = (sprCnt == i) && VPOSlatch_set;
       inRange #(8) validHPOSCheck (
-        .IN(col[8:1]),
+        .IN(pixelCol[8:1]),
         .hi(HPOSlatch_out[i] + 8'd7),
         .lo(HPOSlatch_out[i]),
         .inRange(validHPOS[i])
       );
     end
   endgenerate
- 
-  assign VPOSlatch_clr = (col > 10'd576);
-  assign HPOSlatch_clr = (col > 10'd576);
+
+  always_comb begin
+    validSprite = 0;
+    case(sprCnt)
+      0: validSprite = 0;
+      1: validSprite = |validHPOS[0] & (col >= 64 && col < 576);
+      2: validSprite = |validHPOS[1:0] & (col >= 64 && col < 576);
+      3: validSprite = |validHPOS[2:0] & (col >= 64 && col < 576);
+      4: validSprite = |validHPOS[3:0] & (col >= 64 && col < 576);
+      5: validSprite = |validHPOS[4:0] & (col >= 64 && col < 576);
+      6: validSprite = |validHPOS[5:0] & (col >= 64 && col < 576);
+      7: validSprite = |validHPOS[6:0]  & (col >= 64 && col < 576);
+      // 8 valid sprites, may need to make sprCnt 4 bits
+      default: validSprite = 0;
+    endcase
+  end 
 
   register #(8) sprLatch(
     .clk, .rst_L,
@@ -907,14 +933,35 @@ module vdp_sprite_interface(
   );
 
   assign sprLatch_in = VRAM_sprite_data[5];
+  assign sprPat = sprLatch_out;
+
+  // FSM to read different pattern rows out of VRAM
+  vdp_sprite_pattern_row_control SPR_PAT_DIV_CTRL(
+    .clk,
+    .rst_L,
+    .sprLatch_en,
+    .sprPatRow_en,
+    .VRAM_go(VRAM_go_RC),
+    .sprPat_done
+  );
 
   /******* Various Counters *******/ 
 
-  counter #(3) spriteCount(
+  // Selects the current sprite
+  counter #(3) SPRITE_COUNT(
     .clk, .rst_L,
     .clear(sprCnt_clr),
     .en(sprCnt_en),
     .count(sprCnt)
+  );
+
+  // Selects the row in the current sprite to read out
+  counter #(3) SPRITE_PAT_ROW(
+    .clk,
+    .rst_L,
+    .clear(~sprPatRow_en),
+    .en(sprPatRow_en),
+    .count(sprPatRow_out)
   );
 
   /******** FSM *******/
@@ -930,11 +977,14 @@ module vdp_sprite_interface(
     .VPOSorHPOS,
     .VPOSlatch_set,
     .HPOSlatch_set,
-    .VRAM_go,
+    .VRAM_go(VRAM_go_SPR),
     .sprLatch_en,
     .sprCnt_en,
-    .sprCnt_clr
+    .sprCnt_clr,
+    .sprPat_done
   );
+
+  assign VRAM_go = VRAM_go_SPR || VRAM_go_RC;
 
 endmodule
 
@@ -942,22 +992,23 @@ module vdp_sprite_fsm(
   input  logic clk, rst_L,
   input  logic [8:0] row, 
   input  logic [9:0] col,
-  input  logic doneTable, validVPOS,
+  input  logic doneTable, validVPOS, sprPat_done,
   output logic posReg_en, posReg_incr, 
   output logic VPOSorHPOS, // VPOS = 0, HPOS = 1 
   output logic VPOSlatch_set, HPOSlatch_set,
   output logic VRAM_go, sprLatch_en, sprCnt_en, sprCnt_clr
 );
 
-  enum logic [2:0] {WaitInit, SetVPOS, WaitVPOS, LoadVPOS, 
-                    SetHPOS, WaitHPOS, LoadHPOS, WaitDone} 
+  enum logic [3:0] {WaitInit, SetVPOS, WaitVPOS, LoadVPOS, 
+                    SetHPOS, WaitHPOS, LoadHPOS, WaitForPattern,
+                    WaitDone} 
                     cs, ns;
 
   // Next State logic
   always_comb begin
     ns = WaitInit;
     case(cs)
-      WaitInit: ns = (row < 9'd48 || col >= 64) ? WaitInit : SetVPOS;
+      WaitInit: ns = ((row >= 9'd48 && row < 9'd432) && col < 64) ? SetVPOS : WaitInit;
       SetVPOS:  ns = WaitVPOS;
       WaitVPOS: ns = LoadVPOS;
       LoadVPOS: begin
@@ -967,7 +1018,8 @@ module vdp_sprite_fsm(
       end
       SetHPOS:  ns = WaitHPOS;
       WaitHPOS: ns = LoadHPOS;
-      LoadHPOS: ns = (row < 9'd432) ? SetVPOS : WaitDone;
+      LoadHPOS: ns = (row < 9'd432) ? WaitForPattern : WaitDone;
+      WaitForPattern: ns = (sprPat_done) ? SetVPOS : WaitForPattern;
       WaitDone: ns = (col < 10'd576) ? WaitDone : WaitInit;
       default:  ns = WaitInit;
     endcase
@@ -988,6 +1040,7 @@ module vdp_sprite_fsm(
       WaitInit: begin
         posReg_en = 1;
         sprCnt_clr = 1;
+        sprCnt_en = 1;
       end
       SetVPOS: begin
         VRAM_go = 1;
@@ -1014,7 +1067,9 @@ module vdp_sprite_fsm(
         posReg_incr = (row < 9'd432);
         HPOSlatch_set = 1;
         sprLatch_en = 1;
-        sprCnt_en = 1;
+      end
+      WaitForPattern: begin
+        sprCnt_en = (sprPat_done);
       end
       WaitDone: begin
         // No outputs
@@ -1038,6 +1093,128 @@ module vdp_sprite_fsm(
 
 endmodule
 
+// When the sprite pattern address gets latched, 
+// read out the 8 different rows of the corresponding pattern.
+module vdp_sprite_pattern_row_control(
+  input  logic clk, rst_L,
+  input  logic sprLatch_en,
+  output logic sprPatRow_en,
+  output logic VRAM_go, sprPat_done
+);
+
+  enum logic [4:0] {Wait, 
+                    Row0, Row0_wait, 
+                    Row1, Row1_wait, 
+                    Row2, Row2_wait,      
+                    Row3, Row3_wait, 
+                    Row4, Row4_wait, 
+                    Row5, Row5_wait, 
+                    Row6, Row6_wait, 
+                    Row7, Row7_wait} 
+                    cs, ns;
+
+  always_comb begin
+    sprPatRow_en = 0;
+    sprPat_done = 0;
+    VRAM_go = 0;
+    
+    // NS logic
+    case(cs)
+      Wait: begin
+        ns = (sprLatch_en) ? Row0 : Wait;
+        sprPatRow_en = 0;
+      end
+      Row0:      ns = Row0_wait;
+      Row0_wait: ns = Row1;
+      Row1:      ns = Row1_wait;
+      Row1_wait: ns = Row2;
+      Row2:      ns = Row2_wait;
+      Row2_wait: ns = Row3;
+      Row3:      ns = Row3_wait;
+      Row3_wait: ns = Row4;
+      Row4:      ns = Row4_wait;
+      Row4_wait: ns = Row5;
+      Row5:      ns = Row5_wait;
+      Row5_wait: ns = Row6;
+      Row6:      ns = Row6_wait;
+      Row6_wait: ns = Row7;
+      Row7:      ns = Row7_wait;
+      Row7_wait: ns = Wait;
+      default: begin
+        ns = Wait;
+        sprPatRow_en = 1;
+        VRAM_go = 0;
+      end
+    endcase
+ 
+    // Output logic
+    case(cs)
+      Wait: begin
+        sprPatRow_en = 0;
+      end
+      Row0: begin
+        VRAM_go = 1;
+      end
+      Row0_wait: begin
+        sprPatRow_en = 1;
+      end     
+      Row1: begin
+        VRAM_go = 1;
+      end
+      Row1_wait: begin
+        sprPatRow_en = 1;
+      end  
+      Row2: begin
+        VRAM_go = 1;
+      end
+      Row2_wait: begin
+        sprPatRow_en = 1;
+      end
+      Row3: begin
+        VRAM_go = 1;
+      end
+      Row3_wait: begin
+        sprPatRow_en = 1;
+      end
+      Row4: begin
+        VRAM_go = 1;
+      end
+      Row4_wait: begin
+        sprPatRow_en = 1;
+      end
+      Row5: begin
+        VRAM_go = 1;
+      end
+      Row5_wait: begin
+        sprPatRow_en = 1;
+      end
+      Row6: begin
+        VRAM_go = 1;
+      end
+      Row6_wait: begin
+        sprPatRow_en = 1;
+      end
+      Row7: begin
+        VRAM_go = 1;
+      end
+      Row7_wait: begin
+        sprPatRow_en = 1;
+        sprPat_done = 1;
+      end
+      default: begin
+        sprPatRow_en = 0;
+        VRAM_go = 0;
+        sprPat_done = 0;
+      end
+    endcase
+  end
+
+  always_ff @(posedge clk, negedge rst_L) begin
+    cs <= (~rst_L) ? Wait : ns;
+  end
+
+endmodule
+
 /****** Old stuff ********/
 
 /* vdp_disp_interface
@@ -1050,18 +1227,13 @@ module vdp_disp_interface_old(
   input  logic             clk, rst_L, // 25 MHz clock
   input  logic [7:0][7:0]  VRAM_VGA_data_out,
   input  logic      [5:0]  CRAM_VGA_data_out,
-  input  logic      [7:0]  R2, // Used for offset into screen map in VRAM
+  input  logic      [7:0]  R2, R6, // Used for offset into screen map in VRAM
   input  logic      [9:0]  col,
   input  logic      [8:0]  row,
-  input  logic      [3:0]  waitTime1,
-  input  logic      [3:0]  waitTime2,
   output logic [7:0][13:0] VRAM_VGA_addr,
   output logic      [4:0]  CRAM_VGA_addr,
   output logic      [3:0]  VGA_R, VGA_G, VGA_B,
-  output logic      [2:0]  disp_state,
-  output logic             VRAM_go,
-  output logic      [3:0]  bitSliceSel,
-  output logic [3:0][7:0]  colorLatch_out
+  output logic             VRAM_go, screenBusy
 );
 
   logic       patSelLatch_en; // Set in disp_fsm
@@ -1080,11 +1252,21 @@ module vdp_disp_interface_old(
   logic        bgSel_en; // Set in disp_fsm
 
   // Color Latch Logic
-  //logic [3:0][7:0] colorLatch_out;
+  logic [3:0][7:0] colorLatch_out;
   logic            colorLatch_en;
 
   // Misc stuff
   logic [5:0] colorToDisplay;
+  logic [4:0] CRAM_addr_BG, CRAM_addr_SPR;
+  logic       VRAM_go_BG, VRAM_go_SPR;
+  logic [7:0] sprPat;  
+  logic       validSprite; // Used to let sprites hijack CRAM
+  logic [2:0] sprPatRow, sprPatRow_1, sprPatRow_2;
+  logic [2:0] sprCnt, sprCnt_1, sprCnt_2, sprCnt_3, sprCnt_4;  
+
+  logic [7:0][255:0] sprPatLatch_out;
+  logic [7:0]        validHPOS;
+  logic [7:0][2:0]   spriteOffset;
 
   /******** Background Select Register ********/
  
@@ -1100,16 +1282,15 @@ module vdp_disp_interface_old(
   logic [9:0] pixelCol;
 
   assign pixelRow = row - 9'd48;
-  assign pixelCol = col - 10'd64 + 10'd6; // Add 3 to pre-fetch pixel data for the pipeline (maybe even 4???)
+  assign pixelCol = col - 10'd64 + 10'd6; // Add 6 to pre-fetch pixel data for the pipeline
 
   // Each pixel position is 2 bytes, so -------------------|
   assign bgSel_in = {3'b111, pixelRow[8:4], pixelCol[8:4], 1'b0}; // Either blank screen or iterating
-  // 7:3 and 8:4 worked for some reason... .coe files may be written incorrectly
 
   assign VRAM_VGA_addr[0] = bgSel_out;
   assign VRAM_VGA_addr[1] = bgSel_out + 14'd1;
 
-  assign VRAM_VGA_addr[2] = charPatternAddr;
+  assign VRAM_VGA_addr[2] = (col < 10'd57) ? {R6[2], sprPat, sprPatRow, 2'd0} : charPatternAddr;
   assign VRAM_VGA_addr[3] = VRAM_VGA_addr[2] + 2'd1;  
   assign VRAM_VGA_addr[4] = VRAM_VGA_addr[2] + 2'd2; // Pixel colors are stored across 4 bytes each.
   assign VRAM_VGA_addr[5] = VRAM_VGA_addr[2] + 2'd3;
@@ -1156,7 +1337,7 @@ module vdp_disp_interface_old(
   logic [9:0] colorLatchIndex; 
   assign colorLatchIndex = col + 1;
   
-  assign CRAM_VGA_addr = {
+  assign CRAM_addr_BG = {
     paletteSel,
     colorLatch_out[0][colorLatchIndex[3:1]], 
     colorLatch_out[1][colorLatchIndex[3:1]],
@@ -1177,16 +1358,99 @@ module vdp_disp_interface_old(
 
   disp_fsm_old DISP_FSM(
     .*,
+    .row,
     .col(colorLatchIndex),
-    .waitTime1(waitTime1),
-    .waitTime2(waitTime2),
     .bgSel_en,
     .patSelLatch_en,
     .colorLatch_en,
-    .cs(disp_state),
-    .bitSliceSel(bitSliceSel),
-    .VRAM_go(VRAM_go)
+    .screenBusy,
+    .VRAM_go(VRAM_go_BG)
   );
+
+  /******* Sprite Handling *******/
+
+  vdp_sprite_interface SPRITE_LOGIC(
+    .clk, 
+    .rst_L,
+    .row,
+    .col,
+    .screenBusy,
+    .VRAM_sprite_data(VRAM_VGA_data_out[7:2]),
+    .VRAM_go(VRAM_go_SPR),
+    .sprPat, 
+    .validSprite,
+    .validHPOS,
+    .VRAM_sprite_addr(VRAM_VGA_addr[7:6]),
+    .sprPatRow_out(sprPatRow),
+    .sprCnt,
+    .spriteOffset
+  );
+
+  // Sprite Pattern Latches - *******TODO: Need to enable the right registers at the right time
+
+  // Delay the sprite row index by 2 clock cycles to sync with the result from VRAM
+  // BAD BAD BAD BAD BAD lol
+  register #(3) SPR_PAT_ROW_1(.*, .D(sprPatRow),   .Q(sprPatRow_1), .en(1'b1));
+  register #(3) SPR_PAT_ROW_2(.*, .D(sprPatRow_1), .Q(sprPatRow_2), .en(1'b1));
+
+  // Delay the sprite count by 3 clock cycles to sync with the result from VRAM
+  register #(3) SPR_CNT_1(.*, .D(sprCnt),   .Q(sprCnt_1), .en(1'b1));
+  register #(3) SPR_CNT_2(.*, .D(sprCnt_1),   .Q(sprCnt_2), .en(1'b1));
+  register #(3) SPR_CNT_3(.*, .D(sprCnt_2),   .Q(sprCnt_3), .en(1'b1));
+  register #(3) SPR_CNT_4(.*, .D(sprCnt_3),   .Q(sprCnt_4), .en(1'b1)); // Might not be necessary
+
+  // Sprite Pattern Row Buffer
+  generate
+    genvar i;
+    genvar j;
+    for(i = 0; i < 8; i++) begin      // 8 Possible Sprites
+      for(j = 0; j < 8; j++) begin    // 8 sets of 4 bytes, for a total of 32 bytes per pattern
+        logic [3:0][7:0] B;
+        assign sprPatLatch_out[i][(j*4+1)*8-1:(j*4+0)*8] = B[0]; // Might be reversed
+        assign sprPatLatch_out[i][(j*4+2)*8-1:(j*4+1)*8] = B[1];
+        assign sprPatLatch_out[i][(j*4+3)*8-1:(j*4+2)*8] = B[2];
+        assign sprPatLatch_out[i][(j*4+4)*8-1:(j*4+3)*8] = B[3];
+        register #(8) SPR_PAT_LATCH [3:0] (
+          .clk,
+          .rst_L,
+          .D(VRAM_VGA_data_out[5:2]),
+          .Q(B),
+          .en((sprPatRow == j) && (sprCnt_4 == i))
+        );
+      end
+    end
+  endgenerate
+ 
+  logic [3:0][7:0]  currSprRow;
+  
+  spritePartition SPR_PARTITION(
+    .sprPatLatch_out,
+    .spriteOffset,
+    .currSprRow,
+    .validHPOS
+  );  
+  
+  logic [3:0] sprColorIndex;
+
+  assign CRAM_addr_SPR = {
+    1'b0,
+    currSprRow[0][sprColorIndex[3:1]],
+    currSprRow[1][sprColorIndex[3:1]],
+    currSprRow[2][sprColorIndex[3:1]],
+    currSprRow[3][sprColorIndex[3:1]]
+  }; 
+  
+  // Iterates over the bits in a 4-byte row to generate the palettes
+  counter #(4) SPR_COLOR_INDEX(
+    .clk,
+    .rst_L,
+    .en(validSprite),
+    .clear(col > 10'd575),
+    .count(sprColorIndex)
+  );
+
+  assign CRAM_VGA_addr = (~validSprite) ? CRAM_addr_BG : CRAM_addr_SPR;
+  assign VRAM_go = VRAM_go_BG || VRAM_go_SPR;
 
 endmodule
 
@@ -1194,36 +1458,31 @@ endmodule
 module disp_fsm_old(
   input  logic       clk, rst_L,
   input  logic [9:0] col,
-  input  logic [3:0] waitTime1,
-  input  logic [3:0] waitTime2,
+  input  logic [8:0] row,
   output logic       bgSel_en, patSelLatch_en, colorLatch_en,
-  output logic [2:0] cs,
-  output logic [3:0] bitSliceSel,
+  output logic       screenBusy,
   output logic       VRAM_go // Read from VRAM signal
 );
 
-  enum logic [2:0] {PosFetch, WaitForPos, PatFetch, WaitForPat, RowLoad, Wait} cs, ns;
-
-  logic [3:0] waitCount;
-  logic       waitEn, waitClear;
-  
-  assign bitSliceSel = waitCount;
-
-  always_ff @(posedge clk, negedge rst_L) begin
-    if (~rst_L)         waitCount <= 0;
-    else if (waitClear) waitCount <= 0;
-    else if (waitEn)    waitCount <= waitCount + 5'd1;
-  end
+  enum logic [2:0] {WaitInit, PosFetch, WaitForPos, PatFetch, WaitForPat, RowLoad, Wait} cs, ns; 
 
   // Next State Logic
   always_comb begin
     case(cs)
+      WaitInit:   ns = ((row >= 48 && row < 432) && col < 58) ? PosFetch : WaitInit;
       PosFetch:   ns = WaitForPos;
       WaitForPos: ns = PatFetch;
       PatFetch:   ns = WaitForPat;
       WaitForPat: ns = RowLoad;
       RowLoad:    ns = Wait;
-      Wait:       ns = (col[3:0] == waitTime2) ? PosFetch : Wait;
+      Wait: begin
+        if (col[3:0] == 10'd10) begin
+          ns = (col < 570) ? PosFetch : WaitInit;
+        end
+        else begin
+          ns = Wait;
+        end
+      end
       default:    ns = Wait;
     endcase
   end
@@ -1234,12 +1493,13 @@ module disp_fsm_old(
     colorLatch_en = 0;
     bgSel_en = 0;
     patSelLatch_en = 0;
-    waitEn = 0;
-    waitClear = 0;
+    screenBusy = 1;
     case(cs)
+      WaitInit: begin
+        screenBusy = 0;
+      end  
       PosFetch: begin
         bgSel_en = 1; 
-        waitClear = 1;
       end
       WaitForPos: begin
         VRAM_go = 1;
@@ -1256,14 +1516,13 @@ module disp_fsm_old(
         colorLatch_en = 1;
       end
       Wait: begin
-        waitEn = 1;
+
       end
       default: begin
         colorLatch_en = 0;
         bgSel_en = 0;
-        waitEn = 0;
         patSelLatch_en = 0;
-        waitClear = 0;
+        screenBusy = 1;
       end
     endcase
   end
@@ -1275,4 +1534,64 @@ module disp_fsm_old(
 
 endmodule
 
+module spritePartition(
+  input  logic [7:0]        validHPOS,
+  input  logic [7:0][2:0]   spriteOffset,
+  input  logic [7:0][255:0] sprPatLatch_out,
+  output logic [3:0][7:0]   currSprRow
+);
+  
+  logic [31:0][7:0] currSprPat;
+  logic [2:0]       currSprIndex;
 
+  always_comb
+    if(validHPOS[0]) begin
+      currSprIndex = 3'd0;
+    end 
+    else if(validHPOS[1]) begin
+      currSprIndex = 3'd1;
+    end 
+    else if(validHPOS[2]) begin
+      currSprIndex = 3'd2;
+    end 
+    else if(validHPOS[3]) begin
+      currSprIndex = 3'd3;
+    end 
+    else if(validHPOS[4]) begin
+      currSprIndex = 3'd4;
+    end 
+    else if(validHPOS[5]) begin
+      currSprIndex = 3'd5;
+    end 
+    else if(validHPOS[6]) begin
+      currSprIndex = 3'd6;
+    end 
+    else if(validHPOS[7]) begin
+      currSprIndex = 3'd7;
+    end 
+    else begin
+      currSprIndex = 3'd0;
+    end
+
+  // Sprite Row Buffer output muxing
+  generate 
+    genvar j;
+    for (j = 0; j < 32; j++)
+      assign currSprPat[j] = sprPatLatch_out[currSprIndex][(j*8)+8-1:(j*8)]; 
+  endgenerate
+
+  always_comb begin
+    case(spriteOffset[currSprIndex])
+      0: currSprRow = currSprPat[3:0];
+      1: currSprRow = currSprPat[7:4];
+      2: currSprRow = currSprPat[11:8];
+      3: currSprRow = currSprPat[15:12];
+      4: currSprRow = currSprPat[19:16];
+      5: currSprRow = currSprPat[23:20];
+      6: currSprRow = currSprPat[27:24];
+      7: currSprRow = currSprPat[31:28];
+      default: currSprRow = 32'd0;
+    endcase
+  end
+
+endmodule
