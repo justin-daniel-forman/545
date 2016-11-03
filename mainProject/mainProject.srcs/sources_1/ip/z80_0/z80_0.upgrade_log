@@ -1,0 +1,123 @@
+Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2015.2 (lin64) Build 1266856 Fri Jun 26 16:35:25 MDT 2015
+| Date         : Tue Nov  1 16:25:54 2016
+| Host         : mittlefrueh.andrew.cmu.edu running 64-bit Red Hat Enterprise Linux Server release 7.2 (Maipo)
+| Command      : upgrade_ip
+| Device       : xc7z020clg484-1
+---------------------------------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'z80_0'
+
+1. Summary
+----------
+
+CAUTION (success, with warnings) in the update of z80_0 (user.org:user:z80:1.0 (Rev. 2)) to current project options.
+
+After upgrade, an IP may have parameter and port differences compared to the original customization. Please review the parameters within the IP customization GUI to ensure proper functionality. Also, please review the updated IP instantiation template to ensure proper connectivity, and update your design if required.
+
+2. Connection Warnings
+----------------------
+
+Detected external port differences while upgrading IP 'z80_0'. These changes may impact your design.
+
+
+-upgraded port 'data_in' in differs from original direction out
+-upgraded port 'data_out' out differs from original direction in
+
+
+
+
+
+
+Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2015.2 (lin64) Build 1266856 Fri Jun 26 16:35:25 MDT 2015
+| Date         : Tue Nov  1 14:22:20 2016
+| Host         : mittlefrueh.andrew.cmu.edu running 64-bit Red Hat Enterprise Linux Server release 7.2 (Maipo)
+| Command      : upgrade_ip
+| Device       : xc7z020clg484-1
+---------------------------------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'z80_0'
+
+1. Summary
+----------
+
+CAUTION (success, with warnings) in the update of z80_0 (user.org:user:z80:1.0 (Rev. 2)) to current project options.
+
+After upgrade, an IP may have parameter and port differences compared to the original customization. Please review the parameters within the IP customization GUI to ensure proper functionality. Also, please review the updated IP instantiation template to ensure proper connectivity, and update your design if required.
+
+2. Connection Warnings
+----------------------
+
+Detected external port differences while upgrading IP 'z80_0'. These changes may impact your design.
+
+
+-upgrade has removed port 'data_bus'
+-upgrade has added port 'data_in'
+-upgrade has added port 'data_out'
+
+
+
+
+
+
+Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2015.2 (lin64) Build 1266856 Fri Jun 26 16:35:25 MDT 2015
+| Date         : Tue Nov  1 14:11:54 2016
+| Host         : mittlefrueh.andrew.cmu.edu running 64-bit Red Hat Enterprise Linux Server release 7.2 (Maipo)
+| Command      : upgrade_ip
+| Device       : xc7z020clg484-1
+---------------------------------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'z80_0'
+
+1. Summary
+----------
+
+SUCCESS in the update of z80_0 (user.org:user:z80:1.0 (Rev. 2)) to current project options.
+
+
+
+
+
+
+Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2015.2 (lin64) Build 1266856 Fri Jun 26 16:35:25 MDT 2015
+| Date         : Tue Nov  1 13:30:57 2016
+| Host         : mittlefrueh.andrew.cmu.edu running 64-bit Red Hat Enterprise Linux Server release 7.2 (Maipo)
+| Command      : upgrade_ip
+| Device       : xc7z020clg484-1
+---------------------------------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'z80_0'
+
+1. Summary
+----------
+
+SUCCESS in the update of z80_0 (user.org:user:z80:1.0 (Rev. 2)) to current project options.
+
+
+
+
+
+
+Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2015.2 (lin64) Build 1266856 Fri Jun 26 16:35:25 MDT 2015
+| Date         : Tue Nov  1 12:54:16 2016
+| Host         : mittlefrueh.andrew.cmu.edu running 64-bit Red Hat Enterprise Linux Server release 7.2 (Maipo)
+| Command      : upgrade_ip
+| Device       : xc7z020clg484-1
+---------------------------------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'z80_0'
+
+1. Summary
+----------
+
+SUCCESS in the update of z80_0 (user.org:user:z80:1.0 (Rev. 2)) to current project options.
+

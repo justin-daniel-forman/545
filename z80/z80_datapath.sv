@@ -571,6 +571,26 @@ module alu #(parameter w = 8)(
 
       end
 
+      `ADD_16, `ADC_16: begin
+
+        //H flag is set when there is a carry from bit 3 into bit 4
+        //C flag is set when there is a carry from bit 7 into bit 8
+        //So we divide the addition into two stages in ripple carry fashion
+        //For an ADC operation, add in the Carry-in
+        if(op == `ADD_16) begin
+          {lower_carry_out, lower_sum} = A[((w-1)/2):0] + B[((w-1)/2):0];
+        end else begin
+          {lower_carry_out, lower_sum} = A[((w-1)/2):0] + B[((w-1)/2):0] + F_in[`C_flag];
+        end
+        {upper_carry_out, upper_sum} = A[(w-1):(w/2)] + B[(w-1):(w/2)] + lower_carry_out;
+
+        C = {upper_sum, lower_sum};
+
+        F_out[`H_flag] = (lower_carry_out) ? 1 : 0;
+        F_out[`C_flag] = (upper_carry_out) ? 1 : 0;
+
+      end
+
       //Make the general add width agnostic
       `ADD, `ADC: begin
 
@@ -669,6 +689,29 @@ module alu #(parameter w = 8)(
         end
       end
 
+      `ALU_NEG: begin
+
+        {upper_carry_out, C} =
+          {~A[7], ~A[6], ~A[5], ~A[4], ~A[3], ~A[2], ~A[1], ~A[0]} + 4'h1;
+        {lower_carry_out, lower_sum} = {~A[3], ~A[2], ~A[1], ~A[0]} + 4'h1;
+
+        F_out[`H_flag] = ~lower_carry_out;
+        F_out[`C_flag] = ~upper_carry_out;
+
+        //N is set
+        F_out[`N_flag] = 1;
+
+        //S flag is set when result is negative, otherwise reset
+        F_out[`S_flag] = C[(w-1)] ? 1 : 0;
+
+        //Z flag is set when result is 0, otherwise reset
+        F_out[`Z_flag] = (C == 0) ? 1 : 0;
+
+        //PV flag is set when there is overflow, which occurs when
+        //output changes the MSB of the accumulator
+        F_out[`PV_flag] = (A == 8'h80); 
+      end
+
       `ALU_B: begin
         C = B;
 
@@ -705,6 +748,38 @@ module alu #(parameter w = 8)(
       `ALU_CPL: begin
         //take the ones complement of A
         C = ~A;
+      end
+
+      `ALU_DAA: begin
+        T = A;
+
+        //if the bottom 4 bits contain a non-bcd digit
+        if( F_in[`H_flag] || (T[3:0] > 4'h9)) begin
+          T = T + 4'h6;
+          F_out[`H_flag] = 1;
+        end else begin
+          F_out[`H_flag] = 0;
+        end
+
+        //if the top 4 bits contain a non-bcd digit
+        if(F_in[`C_flag] || T[7:4] > 9) begin
+          //T = T + 8'h60;
+          F_out[`C_flag] = 1;
+        end else begin
+          F_out[`C_flag] = 0;
+        end
+
+        C = T;
+
+        //set s flag for negative
+        F_out[`S_flag] = C[w-1];
+
+        //set z flag when zero
+        F_out[`Z_flag] = (C == 0);
+
+        //set PV flag for parity
+        F_out[`PV_flag] = ~(C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0]);
+
       end
 
       `ALU_NOP: begin
@@ -929,6 +1004,11 @@ module alu #(parameter w = 8)(
         F_out[`S_flag] = C[7];
         F_out[`Z_flag] = !C;
         F_out[`PV_flag] = !(C[7] ^ C[6] ^ C[5] ^ C[4] ^ C[3] ^ C[2] ^ C[1] ^ C[0]);
+      end
+
+      `Z_TEST: begin
+        //16 bit zero test
+        F_out[`Z_flag] = (A == 0);
       end
 
       default: begin

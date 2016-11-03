@@ -734,8 +734,11 @@ module decoder (
 
     MACRO_DEFINE_STATES DEC_IY_d 15
 
+    MACRO_DEFINE_STATES DAA 1
 
     MACRO_DEFINE_STATES CPL 1
+
+    MACRO_DEFINE_STATES NEG 1
 
     MACRO_DEFINE_STATES CCF 1
 
@@ -743,13 +746,13 @@ module decoder (
 
     MACRO_DEFINE_STATES NOP 1
 
-
-    MACRO_DEFINE_STATES RLD 10
-
-    MACRO_DEFINE_STATES RRD 10
-    
-
     MACRO_DEFINE_STATES ADD_HL_ss 7
+
+    MACRO_DEFINE_STATES ADC_HL_ss 7
+
+    MACRO_DEFINE_STATES ADD_IX_pp 7
+
+    MACRO_DEFINE_STATES ADD_IY_rr 7
 
     MACRO_DEFINE_STATES INC_ss 2
 
@@ -763,6 +766,9 @@ module decoder (
 
     MACRO_DEFINE_STATES DEC_IY 2
 
+    MACRO_DEFINE_STATES RLD 10
+
+    MACRO_DEFINE_STATES RRD 10
 
     MACRO_DEFINE_STATES BIT_b_r 4
 
@@ -785,6 +791,11 @@ module decoder (
 
     MACRO_DEFINE_STATES JR_e 8
 
+    MACRO_DEFINE_STATES JP_HL 1
+
+    MACRO_DEFINE_STATES JP_IX 1
+
+    MACRO_DEFINE_STATES JP_IY 1
 
     MACRO_DEFINE_STATES CALL_nn 13
 
@@ -908,6 +919,7 @@ module decoder (
           `CP_r:      next_state = (op0[2:0] != 3'b110) ? CP_r_0    : FETCH_3;
           `INC_r:     next_state = (op0[5:3] != 3'b110) ? INC_r_0   : FETCH_3;
           `DEC_r:     next_state = (op0[5:3] != 3'b110) ? DEC_r_0   : FETCH_3;
+          `DAA:       next_state = DAA_0;
           `CPL:       next_state = CPL_0;
           `CCF:       next_state = CCF_0;
           `SCF:       next_state = SCF_0;
@@ -916,6 +928,7 @@ module decoder (
           `IX_INST:   next_state = IX_INST_0;
           `IY_INST:   next_state = IY_INST_0;
           `RS_A:      next_state = BIT_b_r_3;
+          `JP_HL:     next_state = JP_HL_0;
           default:    next_state = FETCH_3;
         endcase
       end
@@ -985,6 +998,7 @@ module decoder (
             `EX_SP_HL:   next_state = EX_SP_HL_0;
             `PUSH_qq:    next_state = PUSH_qq_0;
             `POP_qq:     next_state = POP_qq_0;
+            `ADD_HL_ss:  next_state = ADD_HL_ss_0;
             `INC_ss:     next_state = INC_ss_0;
             `DEC_ss:     next_state = DEC_ss_0;
             `BIT_b:      next_state = BIT_b_r_0;
@@ -1018,6 +1032,8 @@ module decoder (
       FETCH_6: begin
         //TODO: might need to acknowledge a WAIT cycle
         casex(op1)
+          `JP_IX:     next_state = (op0[7:4] == 4'hD) ? JP_IX_0 : JP_IY_0;
+          `JP_IY:     next_state = (op0[7:4] == 4'hF) ? JP_IY_0 : JP_IX_0;
           default:    next_state = FETCH_7;
         endcase
       end
@@ -1027,8 +1043,15 @@ module decoder (
       FETCH_7: begin
         casex(op1)
           //Some cases are identical and are only different in the first byte
-          `LD_r_IX_d:   next_state = (op0[7:4] == 4'hD) ?  LD_r_IX_d_0  : LD_r_IY_d_0;
-          `LD_r_IY_d:   next_state = (op0[7:4] == 4'hF) ?  LD_r_IY_d_0  : LD_r_IX_d_0;
+          `LD_r_IX_d: begin
+            if       (op0[7:4] == 4'hF) next_state = LD_r_IY_d_0;
+            else if  (op0[7:4] == 4'hD) next_state = LD_r_IX_d_0;
+            else                        next_state = FETCH_0;
+          end          `LD_r_IY_d: begin
+            if       (op0[7:4] == 4'hF) next_state = LD_r_IY_d_0;
+            else if  (op0[7:4] == 4'hD) next_state = LD_r_IX_d_0;
+            else                        next_state = FETCH_0;
+          end
           `LD_IX_d_r: begin
               if     (op0[7:4] == 4'hF)  next_state = LD_IY_d_r_0;
               else if(op0[7:4] == 4'hD)  next_state = LD_IX_d_r_0;
@@ -1086,18 +1109,19 @@ module decoder (
           `CP_IY_d:     next_state = (op0[7:4] == 4'hF) ?  CP_IY_d_0 : CP_IX_d_0;
           `INC_IX_d:    next_state = (op0[7:4] == 4'hD) ?  INC_IX_d_0 : INC_IY_d_0;
           `INC_IY_d:    next_state = (op0[7:4] == 4'hF) ?  INC_IY_d_0 : INC_IX_d_0;
-
-          `BIT_b:       next_state = (op0[7:4] == 4'hD) ?  BIT_b_IX_d_x_0 : BIT_b_IY_d_x_0;
-
-          `RLD:       next_state = RLD_0;
-          `RRD:       next_state = RRD_0;
-
           `DEC_IX_d:    next_state = (op0[7:4] == 4'hD) ?  DEC_IX_d_0 : DEC_IY_d_0;
           `DEC_IY_d:    next_state = (op0[7:4] == 4'hF) ?  DEC_IY_d_0 : DEC_IX_d_0;
+          `NEG:         next_state = NEG_0;
           `INC_IX:      next_state = (op0[7:4] == 4'hD) ?  INC_IX_0   : INC_IY_0;
           `INC_IY:      next_state = (op0[7:4] == 4'hF) ?  INC_IY_0   : INC_IX_0;
           `DEC_IX:      next_state = (op0[7:4] == 4'hD) ?  DEC_IX_0   : DEC_IY_0;
           `DEC_IY:      next_state = (op0[7:4] == 4'hF) ?  DEC_IY_0   : DEC_IX_0;
+          `ADC_HL_ss:   next_state = ADC_HL_ss_0;
+          `ADD_IX_pp:   next_state = (op0[7:4]  == 4'hD) ?  ADD_IX_pp_0: ADD_IY_rr_0;
+          `ADD_IY_rr:   next_state = (op0[7:4]  == 4'hF) ?  ADD_IY_rr_0: ADD_IX_pp_0;
+          `BIT_b:       next_state = (op0[7:4] == 4'hD) ?  BIT_b_IX_d_x_0 : BIT_b_IY_d_x_0;
+          `RLD:       next_state = RLD_0;
+          `RRD:       next_state = RRD_0;
           `BIT_b:       next_state = (op0[7:4] == 4'hD) ?  BIT_b_IX_d_x_0 :BIT_b_IY_d_x_0;
           `IN_r_C:      next_state = IN_r_C_0;
           `OUT_C_r:     next_state = OUT_C_r_0;
@@ -1376,6 +1400,12 @@ module decoder (
 
       MACRO_ENUM_STATES ADD_HL_ss 7
 
+      MACRO_ENUM_STATES ADC_HL_ss 7
+
+      MACRO_ENUM_STATES ADD_IX_pp 7
+
+      MACRO_ENUM_STATES ADD_IY_rr 7
+
       MACRO_ENUM_STATES INC_ss 2
 
       MACRO_ENUM_STATES INC_IX 2
@@ -1396,7 +1426,11 @@ module decoder (
       //BEGIN General Purpose Arith and CPU Control
       //-----------------------------------------------------------------------
 
+      MACRO_ENUM_STATES DAA 1
+
       MACRO_ENUM_STATES CPL 1
+
+      MACRO_ENUM_STATES NEG 1
 
       MACRO_ENUM_STATES CCF 1
 
@@ -1454,11 +1488,26 @@ module decoder (
       //BEGIN Jump group
       //-----------------------------------------------------------------------
 
-      MACRO_ENUM_STATES JP_nn 6
+      //All of the jumps should go to START since that state does not inc the
+      //pc when fetching the next instruction. IF we inc the PC right away
+      //we miss a byte
+      MACRO_ENUM_STATES_NR JP_nn 6
+      JP_nn_5: next_state = START;
 
-      MACRO_ENUM_STATES JP_cc_nn 6
+      MACRO_ENUM_STATES_NR JP_cc_nn 6
+      JP_cc_nn_5: next_state = START;
 
-      MACRO_ENUM_STATES JR_e 8
+      MACRO_ENUM_STATES_NR JR_e 8
+      JR_e_7: next_state = START;
+
+      MACRO_ENUM_STATES_NR JP_HL 1
+      JP_HL_0: next_state = START;
+
+      MACRO_ENUM_STATES_NR JP_IX 1
+      JP_IX_0: next_state = START;
+
+      MACRO_ENUM_STATES_NR JP_IY 1
+      JP_IY_0: next_state = START;
 
       //-----------------------------------------------------------------------
       //END Jump group
@@ -1468,7 +1517,8 @@ module decoder (
       //BEGIN Call and Return group
       //-----------------------------------------------------------------------
 
-      MACRO_ENUM_STATES CALL_nn 13
+      MACRO_ENUM_STATES_NR CALL_nn 13
+      CALL_nn_12: next_state = START; //do not increment PC in next fetch
 
       MACRO_ENUM_STATES_NR CALL_cc_nn 6
 
@@ -1491,7 +1541,7 @@ module decoder (
       CALL_cc_nn_9: next_state = CALL_cc_nn_10;
       CALL_cc_nn_10: next_state = CALL_cc_nn_11;
       CALL_cc_nn_11: next_state = CALL_cc_nn_12;
-      CALL_cc_nn_12: next_state = FETCH_0;
+      CALL_cc_nn_12: next_state = START; //do not increment PC in next fetch
 
       MACRO_ENUM_STATES RET 6
 
@@ -4398,6 +4448,204 @@ module decoder (
       //BEGIN 16-bit arithmetic group
       //-----------------------------------------------------------------------
 
+      ADD_HL_ss_0, ADD_IX_pp_0, ADD_IY_rr_0, ADC_HL_ss_0: begin
+        //move A to MDR1
+        drive_A = 1;
+        ld_MDR1 = 1;
+      end
+
+      ADD_HL_ss_1, ADD_IX_pp_1, ADD_IY_rr_1, ADC_HL_ss_1: begin
+        //load A with lower byte
+        ld_A = 1;
+
+        if(state == ADD_HL_ss_1 || state == ADC_HL_ss_1) begin
+          MACRO_8_DRIVE L
+        end else if (state == ADD_IX_pp_1) begin
+          MACRO_8_DRIVE IXL
+        end else begin
+          MACRO_8_DRIVE IYL
+        end
+      end
+
+      ADD_HL_ss_2, ADD_IX_pp_2, ADD_IY_rr_2, ADC_HL_ss_2: begin
+        //add the lower bytes together and set carry flags
+        ld_F_data      = 1;
+        alu_op         = (state == ADC_HL_ss_2) ? `ADC_16 : `ADD_16;
+        drive_alu_data = 1;
+
+        //destination register
+        if(state == ADD_HL_ss_2 || state == ADC_HL_ss_2) begin
+          ld_L = 1;
+        end else if (state == ADD_IX_pp_2) begin
+          ld_IXL = 1;
+        end else begin
+          ld_IYL = 1;
+        end
+
+        //source register
+        //ADC uses op1, ADD uses op0
+        if(state == ADD_HL_ss_2) begin
+
+          //case on op0 for ADD
+          unique case(op0[5:4])
+            2'b00: begin
+              MACRO_8_DRIVE C
+            end
+            2'b01: begin
+              MACRO_8_DRIVE E
+            end
+            2'b10: begin
+              if(state == ADD_HL_ss_2) begin
+                MACRO_8_DRIVE L
+              end else if (state == ADD_IX_pp_2) begin
+                MACRO_8_DRIVE IXL
+              end else begin
+                MACRO_8_DRIVE IYL
+              end
+            end
+            2'b11: begin
+              MACRO_8_DRIVE SPL
+            end
+          endcase
+
+        end else begin
+
+          //case on op1 for ADC
+          unique case(op1[5:4])
+            2'b00: begin
+              MACRO_8_DRIVE C
+            end
+            2'b01: begin
+              MACRO_8_DRIVE E
+            end
+            2'b10: begin
+              if(state == ADC_HL_ss_2) begin
+                MACRO_8_DRIVE L
+              end else if (state == ADD_IX_pp_2) begin
+                MACRO_8_DRIVE IXL
+              end else begin
+                MACRO_8_DRIVE IYL
+              end
+            end
+            2'b11: begin
+              MACRO_8_DRIVE SPL
+            end
+          endcase
+
+        end
+
+     end
+
+      ADD_HL_ss_3, ADD_IX_pp_3, ADD_IY_rr_3, ADC_HL_ss_3: begin
+        //load the upper byte into A
+        if(state == ADD_HL_ss_3 || state == ADC_HL_ss_3) begin
+          MACRO_8_DRIVE H
+        end else if (state == ADD_IX_pp_3) begin
+          MACRO_8_DRIVE IXH
+        end else begin
+          MACRO_8_DRIVE IYH
+        end
+
+        ld_A = 1;
+      end
+
+      ADD_HL_ss_5, ADD_IX_pp_5, ADD_IY_rr_5, ADC_HL_ss_5: begin
+        //add the upper bytes together and set the carry flags
+        ld_F_data      = 1;
+        //an ADC operation sets all of the flags, not just the C/H
+        alu_op         = (state == ADC_HL_ss_5) ? `ADC : `ADC_16;
+        drive_alu_data = 1;
+        MACRO_RESET N
+
+        //destination register
+        if(state == ADD_HL_ss_5 || state == ADC_HL_ss_5) begin
+          ld_H = 1;
+        end else if (state == ADD_IX_pp_5) begin
+          ld_IXH = 1;
+        end else begin
+          ld_IYH = 1;
+        end
+
+        //source register
+        //ADC uses op1, ADD uses op0
+        if(state == ADD_HL_ss_5) begin
+
+          //case on op0 for ADD
+          unique case(op0[5:4])
+            2'b00: begin
+              MACRO_8_DRIVE B
+            end
+            2'b01: begin
+              MACRO_8_DRIVE D
+            end
+            2'b10: begin
+              if(state == ADD_HL_ss_5) begin
+                MACRO_8_DRIVE H
+              end else if (state == ADD_IX_pp_5) begin
+                MACRO_8_DRIVE IXH
+              end else begin
+                MACRO_8_DRIVE IYH
+              end
+            end
+            2'b11: begin
+              MACRO_8_DRIVE SPH
+            end
+          endcase
+
+        end else begin
+
+          //case on op1 for ADC
+          unique case(op1[5:4])
+            2'b00: begin
+              MACRO_8_DRIVE B
+            end
+            2'b01: begin
+              MACRO_8_DRIVE D
+            end
+            2'b10: begin
+              if(state == ADC_HL_ss_5) begin
+                MACRO_8_DRIVE H
+              end else if (state == ADD_IX_pp_5) begin
+                MACRO_8_DRIVE IXH
+              end else begin
+                MACRO_8_DRIVE IYH
+              end
+            end
+            2'b11: begin
+              MACRO_8_DRIVE SPH
+            end
+          endcase
+
+        end
+
+      end
+
+      ADD_HL_ss_6, ADD_IX_pp_6, ADD_IY_rr_6, ADC_HL_ss_6: begin
+        //restore the accumulator
+        ld_A       = 1;
+        drive_MDR1 = 1;
+
+        if(state == ADC_HL_ss_6) begin
+
+          ld_F_addr      = 1;
+          alu_op         = `Z_TEST;
+          drive_reg_addr = 1;
+
+          //case on op1 for ADC
+          unique case(op1[5:4])
+            2'b00: begin drive_B = 1; drive_C = 1; end
+            2'b01: begin drive_D = 1; drive_E = 1; end
+            2'b10: begin
+              if(state == ADC_HL_ss_6) begin drive_H = 1; drive_L = 1;
+              end else if (state == ADD_IX_pp_6) begin drive_IXH = 1; drive_IXL = 1;
+              end else begin drive_IYH = 1; drive_IYL = 1;
+              end
+            end
+            2'b11: begin drive_SPH = 1; drive_SPL = 1; end
+          endcase
+        end
+      end
+
       INC_ss_0: begin
         unique case(op0[5:4])
           2'b00: begin
@@ -4456,6 +4704,12 @@ module decoder (
       //BEGIN General Purpose Arith and CPU Control
       //-----------------------------------------------------------------------
 
+      DAA_0: begin
+        ld_A           = 1;
+        drive_alu_data = 1;
+        alu_op         = `ALU_DAA;
+      end
+
       CPL_0: begin
         MACRO_SET H
         MACRO_SET N
@@ -4463,6 +4717,14 @@ module decoder (
         drive_alu_data = 1;
         ld_A           = 1;
         drive_A        = 1;
+      end
+
+      NEG_0: begin
+        MACRO_SET N
+        alu_op         = `ALU_NEG;
+        drive_alu_data = 1;
+        ld_A           = 1;
+        ld_F_data      = 1;
       end
 
       CCF_0: begin
@@ -4921,6 +5183,27 @@ module decoder (
             ld_PCL = 1;
           end
         endcase
+      end
+
+      //JP (HL)
+      JP_HL_0: begin
+        MACRO_16_DRIVE HL
+        ld_PCH = 1;
+        ld_PCL = 1;
+      end
+
+      //JP (IX)
+      JP_IX_0: begin
+        MACRO_16_DRIVE IX
+        ld_PCH = 1;
+        ld_PCL = 1;
+      end
+
+      //JP (IY)
+      JP_IY_0: begin
+        MACRO_16_DRIVE IY
+        ld_PCH = 1;
+        ld_PCL = 1;
       end
 
       //-----------------------------------------------------------------------
