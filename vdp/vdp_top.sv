@@ -86,7 +86,7 @@ module vdp_top (
 
   /******* z80 I/O Logic *******/
   
-  logic VRAM_go, VRAM_go_VGA, VGA_go_io;
+  logic VRAM_go, VRAM_go_VGA, VRAM_go_io;
   
   vdp_io IO_LOGIC(
     .clk(clk_4),
@@ -476,9 +476,7 @@ module vdp_io(
 
   // Data bus I/O assignment
   assign data_out = data_port_out;
-  assign data_port_in = (~CSW_L) ?           
-    (data_in_sel ? VRAM_io_data_out : data_in)
-    : data_port_out;
+  assign data_port_in = (data_in_sel ? VRAM_io_data_out : data_in);
   assign cmd_port_in_1 = data_in;
   assign cmd_port_in_2 = data_in;
 
@@ -590,11 +588,14 @@ module vdp_io_fsm(
         data_in_sel = 1;
       end
       VRAM_read_data_1: begin
+        VRAM_re = 1;
+        data_in_sel = 1;
         wr_addr_en = 1; // Autoincrement address in case of sequential read
         VRAM_go = 1;
       end
       VRAM_read_data_2: begin
-        wr_addr_en = 1;
+        data_in_sel = 1;
+        VRAM_re = 1;
       end
       VRAM_write_addr: begin
         wr_addr_sel = 1;
@@ -610,7 +611,6 @@ module vdp_io_fsm(
       end
       VRAM_write_data_2: begin
         VRAM_we = 1;
-        wr_addr_en = 1;
       end
       RF_write: begin
         rf_en = 1;
@@ -771,7 +771,7 @@ module vram(
     .Q(vga_data_out[7:4])
   );
  
-  assign io_data_out = io_re ? vga_data_out[0] : 'bz;
+  assign io_data_out = vga_data_out[0];
  
   // Memory
   mem #(8, 14) cp(
@@ -1528,7 +1528,7 @@ module disp_fsm_old(
   end
 
   always_ff @(posedge clk, negedge rst_L) begin
-    if (~rst_L) cs <= Wait;
+    if (~rst_L) cs <= WaitInit;
     else        cs <= ns;
   end
 
