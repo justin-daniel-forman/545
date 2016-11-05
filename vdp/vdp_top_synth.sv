@@ -52,9 +52,10 @@ module vdp_top (
   logic             CRAM_VGA_re, CRAM_io_re, CRAM_io_we; // Set in io_FSM
 
   // RF logic
-  logic [7:0] rf_data_out, rf_data_in;
-  logic [3:0] rf_addr;
-  logic       rf_en; // Set in FSM
+  logic [9:0][7:0] rf_data_out;
+  logic [7:0]      rf_data_in;
+  logic [3:0]      rf_addr;
+  logic            rf_en; // Set in FSM
    
   // VGA logic
   logic [9:0] pixel_col;
@@ -130,8 +131,7 @@ module vdp_top (
       .VGA_B,
       .screenBusy,
       .VRAM_go(VRAM_go_VGA),
-      .R2(8'd0),
-      .R6(8'd0)
+      .regFile(rf_data_out)
     );
   
   vga VGA(
@@ -349,13 +349,13 @@ module regFile (
   input  logic [7:0] data_in,
   input  logic [3:0] addr,
   input  logic en,
-  output logic [7:0] data_out);
+  output logic [9:0][7:0] data_out);
 
   logic [15:0][7:0] reg_out;
   logic [15:0]      reg_en;
 
   // Output mux - 10 registers, addr 11-15 has no effect
-  assign data_out = reg_out[addr]; 
+  assign data_out = reg_out[9:0]; 
 
   genvar i; 
   generate 
