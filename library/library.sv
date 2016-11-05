@@ -120,22 +120,16 @@ module mem #(parameter DATA = 8, ADDR = 16)(
   output logic [DATA-1:0] doutb);
 
   logic [DATA-1:0] memory [2**ADDR-1:0];
-
-  /*
-  // A-port
-  always_ff @(posedge a_clk, negedge rst_L) begin // Change clk back later!
-    //Removing write port for testing
-    if (a_we) memory[a_addr] <= data_in;
-    if (a_re) a_data_out <= memory[a_addr];
-    else      a_data_out <= 'bz;
-  end
-  */
   
-  always_ff @(posedge clka) begin
-    douta <= memory[addra];
+  always @(posedge clka) begin
+    if (wea) begin
+      memory[addra] <= dina;
+      douta <= dina;
+    end
+    else douta <= memory[addra];
   end 
 
-  always_ff @(posedge clkb) begin
+  always @(posedge clkb) begin
     doutb <= memory[addrb];
   end
     
