@@ -5,7 +5,7 @@ module VGA_test(
   output logic [3:0] VGA_R, VGA_G, VGA_B,
   output logic  VGA_HS, VGA_VS);
 
-  logic        clk_4, clk_25, clk_100, rst_L;
+  logic        clk_4, clk_25, clk_100, rst_L, BUSY;
   logic [8:0]  row;
   logic [9:0]  col;
   
