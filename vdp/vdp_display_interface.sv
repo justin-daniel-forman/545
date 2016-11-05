@@ -8,7 +8,7 @@ module vdp_disp_interface(
   input  logic             clk, rst_L, // 25 MHz clock
   input  logic [7:0][7:0]  VRAM_VGA_data_out,
   input  logic      [5:0]  CRAM_VGA_data_out,
-  input  logic      [7:0]  R2, R6, // Used for offset into screen map in VRAM
+  input  logic [9:0][7:0]  regFile, // Used for various things
   input  logic      [9:0]  col,
   input  logic      [8:0]  row,
   output logic [7:0][13:0] VRAM_VGA_addr,
@@ -48,6 +48,7 @@ module vdp_disp_interface(
   logic [7:0][255:0] sprPatLatch_out;
   logic [7:0]        validHPOS;
   logic [7:0][2:0]   spriteOffset;
+  logic [2:0]        bgPatOffset;
 
   /******** Background Select Register ********/
  
@@ -71,7 +72,8 @@ module vdp_disp_interface(
   assign VRAM_VGA_addr[0] = bgSel_out;
   assign VRAM_VGA_addr[1] = bgSel_out + 14'd1;
 
-  assign VRAM_VGA_addr[2] = (col < 10'd57) ? {R6[2], sprPat, sprPatRow, 2'd0} : charPatternAddr;
+  // When bit 1 of R1 is set, add 32 for the bottom half - SPRITES ONLY
+  assign VRAM_VGA_addr[2] = (col < 10'd57) ? {regFile[6][2], sprPat, sprPatRow, 2'd0} : charPatternAddr;
   assign VRAM_VGA_addr[3] = VRAM_VGA_addr[2] + 2'd1;  
   assign VRAM_VGA_addr[4] = VRAM_VGA_addr[2] + 2'd2; // Pixel colors are stored across 4 bytes each.
   assign VRAM_VGA_addr[5] = VRAM_VGA_addr[2] + 2'd3;
@@ -99,7 +101,8 @@ module vdp_disp_interface(
 
   /******** patSel Parsing ********/
   
-  assign charPatternAddr = {patSelLatch1_out[0], patSelLatch2_out, pixelRow[3:1], 2'd0}; // 14-bit signal to differentiate 512 patterns of 32 bytes each
+  assign bgPatOffset =     (vertFlip) ? 3'd7 - pixelRow[3:1] : pixelRow[3:1];
+  assign charPatternAddr = {patSelLatch1_out[0], patSelLatch2_out, bgPatOffset, 2'd0}; // 14-bit signal to differentiate 512 patterns of 32 bytes each
   assign horizFlip =       patSelLatch1_out[1];
   assign vertFlip =        patSelLatch1_out[2];
   assign paletteSel =      patSelLatch1_out[3];
@@ -183,7 +186,7 @@ module vdp_disp_interface(
   // Sprite Pattern Latches - *******TODO: Need to enable the right registers at the right time
 
   // Delay the sprite row index by 2 clock cycles to sync with the result from VRAM
-  // BAD BAD BAD BAD BAD lol
+  // Doesn't actually get used anymore (?)
   register #(3) SPR_PAT_ROW_1(.*, .D(sprPatRow),   .Q(sprPatRow_1), .en(1'b1));
   register #(3) SPR_PAT_ROW_2(.*, .D(sprPatRow_1), .Q(sprPatRow_2), .en(1'b1));
 
@@ -243,7 +246,17 @@ module vdp_disp_interface(
     .count(sprColorIndex)
   );
 
-  assign CRAM_VGA_addr = (~validSprite) ? CRAM_addr_BG : CRAM_addr_SPR;
+  always_comb begin
+    if (validSprite) begin
+      if (CRAM_addr_SPR == 5'd0) begin
+        CRAM_VGA_addr = CRAM_addr_BG;
+      end
+      else CRAM_VGA_addr = CRAM_addr_SPR;
+    end
+    else CRAM_VGA_addr = CRAM_addr_BG;
+  end
+
+  //assign CRAM_VGA_addr = (~validSprite) ? CRAM_addr_BG : CRAM_addr_SPR;
   assign VRAM_go = VRAM_go_BG || VRAM_go_SPR;
 
 endmodule
