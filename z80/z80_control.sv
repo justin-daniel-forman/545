@@ -1740,13 +1740,14 @@ module decoder (
     end
 
     //Latch values on the clock edge for opcode and operand fetches
-    unique case(state)
+    case(state)
       FETCH_1: op0 <= data_in;
       FETCH_2: op1 <= op0;
       FETCH_5: op1 <= data_in;
       BIT_b_r_2: op1 <= data_in;
       BIT_b_IX_d_x_5: op1 <= data_in;
       BIT_b_IY_d_x_5: op1 <= data_in;
+      default: begin end
     endcase
   end
 
@@ -9176,7 +9177,7 @@ module NMI_fsm(
 
   //next state logic
   always_comb begin
-    unique case(state)
+    case(state)
       T1:   next_state = (NMI_start) ? T2 : T1;
       T2:   next_state = TW1;
 
@@ -9185,6 +9186,7 @@ module NMI_fsm(
       TW2:  next_state = T3;
       T3:   next_state = T4;
       T4:   next_state = T1;
+      default: next_state = T1;
     endcase
   end
 
@@ -9195,7 +9197,7 @@ module NMI_fsm(
     NMI_MREQ_L  = 1;
     NMI_IORQ_L  = 1;
 
-    unique case(state)
+    case(state)
       T1: begin
         NMI_M1_L = (NMI_start) ? 0 : 1;
       end
@@ -9213,6 +9215,8 @@ module NMI_fsm(
         NMI_M1_L   = 0;
         NMI_IORQ_L = 0;
       end
+
+      default: begin end
 
     endcase
   end
@@ -9252,10 +9256,11 @@ module MRD_fsm(
 
   //next state logic
   always_comb begin
-    unique case(state)
+    case(state)
       T1: next_state = (MRD_start) ?  T2 : T1;
       T2: next_state = T3;
       T3: next_state = T1;
+      default: next_state = T1;
     endcase
   end
 
@@ -9264,7 +9269,7 @@ module MRD_fsm(
     MRD_MREQ_L = 1;
     MRD_RD_L   = 1;
 
-    unique case(state)
+    case(state)
       //TODO: Wait_L timing
 
       T1: begin
@@ -9278,6 +9283,8 @@ module MRD_fsm(
         MRD_MREQ_L = 0;
         MRD_RD_L   = 0;
       end
+
+      default: begin end
     endcase
   end
 
@@ -9317,10 +9324,11 @@ module MWR_fsm(
 
   //next state logic
   always_comb begin
-    unique case(state)
+    case(state)
       T1: next_state = (MWR_start) ?  T2 : T1;
       T2: next_state = T3;
       T3: next_state = T1;
+      default: next_state = T1;
     endcase
   end
 
@@ -9329,7 +9337,7 @@ module MWR_fsm(
     MWR_MREQ_L = 1;
     MWR_WR_L   = 1;
 
-    unique case(state)
+    case(state)
       //TODO: Wait_L timing
 
       T1: begin
@@ -9343,6 +9351,9 @@ module MWR_fsm(
         MWR_MREQ_L = 0;
         MWR_WR_L   = 0;
       end
+
+      default: begin end
+
     endcase
   end
 
@@ -9403,7 +9414,7 @@ module OCF_fsm(
   //next state logic
   always_comb begin
     //wait for a start signal, then just step through the states
-    unique case (state)
+    case (state)
 
       T1: begin
         next_state = (OCF_start) ? T2 : T1;
@@ -9424,6 +9435,8 @@ module OCF_fsm(
         next_state = T1;
       end
 
+      default: begin next_state = T1; end
+
     endcase
   end
 
@@ -9436,7 +9449,7 @@ module OCF_fsm(
     OCF_M1_L        = 1;
     OCF_RFSH_L      = 1;
 
-    unique case(state)
+    case(state)
 
       //start on the same clock cycle that we receive the start signal
       //so that the output is valid on clock edge T1/T2
@@ -9473,6 +9486,9 @@ module OCF_fsm(
 
       T4: begin
       end
+
+      default: begin end
+
 
     endcase
   end
@@ -9513,11 +9529,12 @@ module IN_fsm(
 
   //next state logic
   always_comb begin
-    unique case(state)
+    case(state)
       T1: next_state = (IN_start) ?  T2 : T1;
       T2: next_state = TW;
       TW: next_state = T3;
       T3: next_state = T1;
+      default: next_state = T1;
     endcase
   end
 
@@ -9526,7 +9543,7 @@ module IN_fsm(
     IN_IORQ_L = 1;
     IN_RD_L   = 1;
 
-    unique case(state)
+    case(state)
       //TODO: Wait_L timing
 
       T1: begin
@@ -9545,6 +9562,8 @@ module IN_fsm(
         IN_IORQ_L = 0;
         IN_RD_L   = 0;
       end
+
+      default: begin end
 
     endcase
   end
@@ -9585,11 +9604,12 @@ module OUT_fsm(
 
   //next state logic
   always_comb begin
-    unique case(state)
+    case(state)
       T1: next_state = (OUT_start) ?  T2 : T1;
       T2: next_state = TW;
       TW: next_state = T3;
       T3: next_state = T1;
+      default: next_state = T1;
     endcase
   end
 
@@ -9598,7 +9618,7 @@ module OUT_fsm(
     OUT_IORQ_L = 1;
     OUT_WR_L   = 1;
 
-    unique case(state)
+    case(state)
       //TODO: Wait_L timing
 
       T1: begin
@@ -9617,6 +9637,8 @@ module OUT_fsm(
         OUT_IORQ_L = 0;
         OUT_WR_L   = 0;
       end
+
+      default: begin end
 
     endcase
   end
