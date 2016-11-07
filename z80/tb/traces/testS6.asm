@@ -5,9 +5,9 @@ range data $0051 $0100
 
 
 section code
-  jp $0005
+  jp foo
   ld hl,$cafe
-  ld bc,$f00d
+  foo: ld bc,$f00d
 
 section data
   addr0: data !DEAD !BEEF

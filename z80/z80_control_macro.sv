@@ -1488,17 +1488,29 @@ module decoder (
       //BEGIN Jump group
       //-----------------------------------------------------------------------
 
-      //All of the jumps should go to START since that state does not inc the
-      //pc when fetching the next instruction. IF we inc the PC right away
-      //we miss a byte
+      //All of the absolute jumps should go to START since that state does not
+      //inc the pc when fetching the next instruction. IF we inc the PC right
+      //away we miss a byte
       MACRO_ENUM_STATES_NR JP_nn 6
       JP_nn_5: next_state = START;
 
       MACRO_ENUM_STATES_NR JP_cc_nn 6
-      JP_cc_nn_5: next_state = START;
+      JP_cc_nn_5: begin
+        //Increment the PC when the jump is not taken
+        unique case(op0[5:3])
+          3'b000: next_state = (!flags[6]) ? START : FETCH_0;
+          3'b001: next_state = ( flags[6]) ? START : FETCH_0;
+          3'b010: next_state = (!flags[0]) ? START : FETCH_0;
+          3'b011: next_state = ( flags[0]) ? START : FETCH_0;
+          3'b100: next_state = (!flags[2]) ? START : FETCH_0;
+          3'b101: next_state = ( flags[2]) ? START : FETCH_0;
+          3'b110: next_state = ( flags[7]) ? START : FETCH_0;
+          3'b111: next_state = ( flags[7]) ? START : FETCH_0;
+        endcase
+      end
 
-      MACRO_ENUM_STATES_NR JR_e 8
-      JR_e_7: next_state = START;
+      //Always inc pc immediately after a relative jump
+      MACRO_ENUM_STATES JR_e 8
 
       MACRO_ENUM_STATES_NR JP_HL 1
       JP_HL_0: next_state = START;
