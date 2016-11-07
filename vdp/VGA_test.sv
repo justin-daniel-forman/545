@@ -33,7 +33,7 @@ module VGA_test(
   logic [7:0]       CRAM_VGA_data_out;
   logic [4:0]       CRAM_VGA_addr;
     
-  wire [7:0]  data_bus, addr_bus;
+  wire [7:0]  data_bus_in, data_bus_out, addr_bus_in;
   logic       IORQ_L, RD_L, WR_L;
  
   assign rst_L = ~BTNC;
@@ -43,7 +43,7 @@ module VGA_test(
   assign WR_L = 1;
  
   //vga VGA(.clk(clk_25), .rst_L, .HSync(VGA_HS), .VSync(VGA_VS), .row, .col);
-  vdp_top vdp(.*);
+  //vdp_top vdp(.*);
 
   /* 
   initial begin
