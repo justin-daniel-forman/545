@@ -1381,6 +1381,14 @@ module decoder (
     ADC_HL_ss_5,
     ADC_HL_ss_6,
 
+    SBC_HL_ss_0,
+    SBC_HL_ss_1,
+    SBC_HL_ss_2,
+    SBC_HL_ss_3,
+    SBC_HL_ss_4,
+    SBC_HL_ss_5,
+    SBC_HL_ss_6,
+
     ADD_IX_pp_0,
     ADD_IX_pp_1,
     ADD_IX_pp_2,
@@ -1914,7 +1922,8 @@ module decoder (
             if       (op0[7:4] == 4'hF) next_state = LD_r_IY_d_0;
             else if  (op0[7:4] == 4'hD) next_state = LD_r_IX_d_0;
             else                        next_state = FETCH_0;
-          end          `LD_r_IY_d: begin
+          end
+          `LD_r_IY_d: begin
             if       (op0[7:4] == 4'hF) next_state = LD_r_IY_d_0;
             else if  (op0[7:4] == 4'hD) next_state = LD_r_IX_d_0;
             else                        next_state = FETCH_0;
@@ -1984,6 +1993,7 @@ module decoder (
           `DEC_IX:      next_state = (op0[7:4] == 4'hD) ?  DEC_IX_0   : DEC_IY_0;
           `DEC_IY:      next_state = (op0[7:4] == 4'hF) ?  DEC_IY_0   : DEC_IX_0;
           `ADC_HL_ss:   next_state = ADC_HL_ss_0;
+          `SBC_HL_ss:   next_state = SBC_HL_ss_0;
           `ADD_IX_pp:   next_state = (op0[7:4]  == 4'hD) ?  ADD_IX_pp_0: ADD_IY_rr_0;
           `ADD_IY_rr:   next_state = (op0[7:4]  == 4'hF) ?  ADD_IY_rr_0: ADD_IX_pp_0;
           `BIT_b:       next_state = (op0[7:4] == 4'hD) ?  BIT_b_IX_d_x_0 : BIT_b_IY_d_x_0;
@@ -2969,6 +2979,15 @@ module decoder (
       ADC_HL_ss_4: next_state = ADC_HL_ss_5;
       ADC_HL_ss_5: next_state = ADC_HL_ss_6;
       ADC_HL_ss_6: next_state = FETCH_0;
+
+      //SBC_HL_ss
+      SBC_HL_ss_0: next_state = SBC_HL_ss_1;
+      SBC_HL_ss_1: next_state = SBC_HL_ss_2;
+      SBC_HL_ss_2: next_state = SBC_HL_ss_3;
+      SBC_HL_ss_3: next_state = SBC_HL_ss_4;
+      SBC_HL_ss_4: next_state = SBC_HL_ss_5;
+      SBC_HL_ss_5: next_state = SBC_HL_ss_6;
+      SBC_HL_ss_6: next_state = FETCH_0;
 
       //ADD_IX_pp
       ADD_IX_pp_0: next_state = ADD_IX_pp_1;
@@ -7410,6 +7429,96 @@ module decoder (
             2'b11: begin drive_SPH = 1; drive_SPL = 1; end
           endcase
         end
+      end
+
+      SBC_HL_ss_0: begin
+        //move A to MDR1
+        drive_A = 1;
+        ld_MDR1 = 1;
+      end
+
+      SBC_HL_ss_1: begin
+        //load A with lower byte
+        ld_A = 1;
+        drive_L = 1;
+        drive_reg_data = 1;
+      end
+
+      SBC_HL_ss_2: begin
+        //add the lower bytes together and set carry flags
+        ld_F_data      = 1;
+        alu_op         = `SBC;
+        drive_alu_data = 1;
+
+        //destination register
+        ld_L = 1;
+
+        //source register
+        unique case(op1[5:4])
+          2'b00: begin
+            drive_C = 1;
+            drive_reg_data = 1;
+          end
+          2'b01: begin
+            drive_E = 1;
+            drive_reg_data = 1;
+          end
+          2'b10: begin
+            drive_L = 1;
+            drive_reg_data = 1;
+          end
+          2'b11: begin
+            drive_SPL = 1;
+            drive_reg_data = 1;
+          end
+        endcase
+
+      end
+
+      SBC_HL_ss_3: begin
+        //load the upper byte into A
+        drive_H = 1;
+        drive_reg_data = 1;
+        ld_A = 1;
+      end
+
+      SBC_HL_ss_5: begin
+
+        //add the upper bytes together and set the carry flags
+        ld_F_data      = 1;
+        alu_op         = `SBC;
+        drive_alu_data = 1;
+        set_N = 2'b11;
+
+        //destination register
+        ld_H = 1;
+
+        //source register
+        unique case(op1[5:4])
+          2'b00: begin
+            drive_B = 1;
+            drive_reg_data = 1;
+          end
+          2'b01: begin
+            drive_D = 1;
+            drive_reg_data = 1;
+          end
+          2'b10: begin
+            drive_H = 1;
+            drive_reg_data = 1;
+          end
+          2'b11: begin
+            drive_SPH = 1;
+            drive_reg_data = 1;
+          end
+        endcase
+
+      end
+
+      SBC_HL_ss_6: begin
+        //restore the accumulator
+        ld_A       = 1;
+        drive_MDR1 = 1;
       end
 
       INC_ss_0: begin

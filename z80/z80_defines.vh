@@ -108,6 +108,7 @@
 `define NOP         8'h00
 `define ADD_HL_ss   8'b00??1001
 `define ADC_HL_ss   8'b01??1010
+`define SBC_HL_ss   8'b01??0010
 `define ADD_IX_pp   8'b00??1001
 `define ADD_IY_rr   8'b00??1001
 `define INC_ss      8'b00??0011
