@@ -755,21 +755,22 @@ module alu #(parameter w = 8)(
 
         //if the bottom 4 bits contain a non-bcd digit
         if( F_in[`H_flag] || (T[3:0] > 4'h9)) begin
-          T = T + 4'h6;
+          {lower_carry_out, C[3:0]} = T[3:0] + 4'h6;
           F_out[`H_flag] = 1;
         end else begin
+          C[3:0] = T[3:0];
+          lower_carry_out = 0;
           F_out[`H_flag] = 0;
         end
 
         //if the top 4 bits contain a non-bcd digit
         if(F_in[`C_flag] || T[7:4] > 9) begin
-          //T = T + 8'h60;
+          C[7:4] = T[7:4] + 8'h60 + lower_carry_out;
           F_out[`C_flag] = 1;
         end else begin
+          C[7:4] = T[7:4] + lower_carry_out;
           F_out[`C_flag] = 0;
         end
-
-        C = T;
 
         //set s flag for negative
         F_out[`S_flag] = C[w-1];
