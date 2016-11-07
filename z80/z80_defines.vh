@@ -130,6 +130,7 @@
 `define JP_HL       8'hE9
 `define JP_IX       8'hE9
 `define JP_IY       8'hE9
+`define DJNZ_e      8'h10
 `define CALL_nn		  8'hCD
 `define CALL_cc_nn  8'b11???100
 `define RET			    8'hC9

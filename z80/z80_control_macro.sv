@@ -797,6 +797,8 @@ module decoder (
 
     MACRO_DEFINE_STATES JP_IY 1
 
+    MACRO_DEFINE_STATES DJNZ_e 11
+
     MACRO_DEFINE_STATES CALL_nn 13
 
     MACRO_DEFINE_STATES CALL_cc_nn 13
@@ -929,6 +931,7 @@ module decoder (
           `IY_INST:   next_state = IY_INST_0;
           `RS_A:      next_state = BIT_b_r_3;
           `JP_HL:     next_state = JP_HL_0;
+          `DJNZ_e:    next_state = DJNZ_e_0;
           default:    next_state = FETCH_3;
         endcase
       end
@@ -1009,6 +1012,7 @@ module decoder (
             `JR_NC_e:    next_state = JR_e_0;
             `JR_Z_e:     next_state = JR_e_0;
             `JR_NZ_e:    next_state = JR_e_0;
+            `DJNZ_e:     next_state = DJNZ_e_0;
             `CALL_nn:    next_state = CALL_nn_0;
             `CALL_cc_nn: next_state = CALL_cc_nn_0;
             `RET:        next_state = RET_0;
@@ -1520,6 +1524,14 @@ module decoder (
 
       MACRO_ENUM_STATES_NR JP_IY 1
       JP_IY_0: next_state = START;
+
+      MACRO_ENUM_STATES_NR DJNZ_e 6
+      DJNZ_e_5: next_state = (flags[`Z_flag]) ? FETCH_0 : DJNZ_e_6;
+      DJNZ_e_6: next_state = DJNZ_e_7;
+      DJNZ_e_7: next_state = DJNZ_e_8;
+      DJNZ_e_8: next_state = DJNZ_e_9;
+      DJNZ_e_9: next_state = DJNZ_e_10;
+      DJNZ_e_10: next_state = FETCH_0; //don't fetch the next pc after the jump
 
       //-----------------------------------------------------------------------
       //END Jump group
@@ -5216,6 +5228,50 @@ module decoder (
         MACRO_16_DRIVE IY
         ld_PCH = 1;
         ld_PCL = 1;
+      end
+
+      //DJNZ_e
+      DJNZ_e_0: begin
+        //store the flags
+        drive_F = 1;
+        ld_MDR1 = 1;
+      end
+
+      DJNZ_e_1: begin
+        //decrement B
+        ld_F_data = 1;
+        MACRO_8_DEC B
+      end
+
+      DJNZ_e_2: begin
+        //start fetching the offset
+        MACRO_READ_0
+        MACRO_INC_PC
+      end
+
+      DJNZ_e_3: begin
+        //continue fetching the offset
+        MACRO_16_DRIVE PC
+        MACRO_READ_1
+      end
+
+      DJNZ_e_4: begin
+        //load the offset from the bus
+        ld_TEMP = 1;
+      end
+
+      DJNZ_e_5: begin
+        //restore the flags in the next cycle as the processor
+        //jumps conditional to the current value of the flags
+        drive_MDR1 = 1;
+        ld_F_data  = 1;
+        alu_op     = `ALU_NOP;
+      end
+
+      DJNZ_e_6: begin
+        //we only reach this point if we were not zero
+        //add the offset to the current pc
+        MACRO_16_ADD_SE_B PC
       end
 
       //-----------------------------------------------------------------------
