@@ -11,11 +11,12 @@ module vdp_top (
   //  - RD_L:     Main CPU is ready for memory data to be placed onto data bus
   //  - WR_L:     Main CPU is placing valid data onto bus for write
   //---------------------------------------------------------------------------
-  inout wire  [7:0] data_bus,
-  inout wire  [7:0] addr_bus,
-  input logic       IORQ_L,
-  input logic       RD_L,
-  input logic       WR_L,
+  input  wire [7:0] data_bus_in,
+  input  wire [7:0] addr_bus_in,
+  output wire [7:0] data_bus_out,
+  input  logic      IORQ_L,
+  input  logic      RD_L,
+  input  logic      WR_L,
 
   //---------------------------------------------------------------------------
   //Interrupt output interface
@@ -71,8 +72,8 @@ module vdp_top (
   vdp_port_decoder DECODER(
     .clk(clk_4),
     .reset_L(rst_L),
-    .addr_in(addr_bus),
-    .data_in(data_bus),
+    .addr_in(addr_bus_in),
+    .data_in(data_bus_in),
     .IORQ_L(IORQ_L),
     .RD_L(RD_L),
     .WR_L(WR_L),
@@ -96,7 +97,7 @@ module vdp_top (
     .CSR_L(CSR_L),
     .CSW_L(CSW_L),
     .vdp_go(vdp_go),
-    .data_in(data_bus),
+    .data_in(data_bus_in),
     .data_out(data_port_out),
     .stat_reg_out(stat_reg_out),
     .screenBusy,
@@ -190,10 +191,7 @@ module vdp_top (
   /******* Top Level I/O Interface *******/
 
   //assign the data bus if we are reading from it
-  assign data_bus = (MODE & ~CSR_L) ? 
-                    (stat_reg_out) : (
-                    (~MODE & ~CSR_L) ? data_port_out : 8'bz 
-                    );
+  assign data_bus_out = (MODE & ~CSR_L) ? stat_reg_out : data_port_out;
 
   /*
   ila_1 LOGIC_ANALYZER(

@@ -52,9 +52,10 @@ module vdp_top (
   logic             CRAM_VGA_re, CRAM_io_re, CRAM_io_we; // Set in io_FSM
 
   // RF logic
-  logic [7:0] rf_data_out, rf_data_in;
-  logic [3:0] rf_addr;
-  logic       rf_en; // Set in FSM
+  logic [9:0][7:0] rf_data_out; 
+  logic [7:0]      rf_data_in;
+  logic [3:0]      rf_addr;
+  logic            rf_en; // Set in FSM
    
   // VGA logic
   logic [9:0] pixel_col;
@@ -149,8 +150,7 @@ module vdp_top (
       .VGA_B,
       .screenBusy,
       .VRAM_go(VRAM_go_VGA),
-      .R2(8'd0),
-      .R6(8'd0)
+      .regFile(rf_data_out)
     );
   
   vga VGA(
@@ -657,13 +657,13 @@ module regFile (
   input  logic [7:0] data_in,
   input  logic [3:0] addr,
   input  logic en,
-  output logic [7:0] data_out);
+  output logic [9:0][7:0] data_out);
 
   logic [15:0][7:0] reg_out;
   logic [15:0]      reg_en;
 
   // Output mux - 10 registers, addr 11-15 has no effect
-  assign data_out = reg_out[addr]; 
+  assign data_out = reg_out[9:0]; 
 
   genvar i; 
   generate 
@@ -1227,7 +1227,7 @@ module vdp_disp_interface_old(
   input  logic             clk, rst_L, // 25 MHz clock
   input  logic [7:0][7:0]  VRAM_VGA_data_out,
   input  logic      [5:0]  CRAM_VGA_data_out,
-  input  logic      [7:0]  R2, R6, // Used for offset into screen map in VRAM
+  input  logic [9:0][7:0]  regFile, // Used for offset into screen map in VRAM
   input  logic      [9:0]  col,
   input  logic      [8:0]  row,
   output logic [7:0][13:0] VRAM_VGA_addr,
@@ -1267,6 +1267,9 @@ module vdp_disp_interface_old(
   logic [7:0][255:0] sprPatLatch_out;
   logic [7:0]        validHPOS;
   logic [7:0][2:0]   spriteOffset;
+  logic [7:0]        bottomHalfFlag;
+  logic [2:0]        currSprIndex;
+  logic [3:0]        sprColorIndex;
 
   /******** Background Select Register ********/
  
@@ -1290,7 +1293,13 @@ module vdp_disp_interface_old(
   assign VRAM_VGA_addr[0] = bgSel_out;
   assign VRAM_VGA_addr[1] = bgSel_out + 14'd1;
 
-  assign VRAM_VGA_addr[2] = (col < 10'd57) ? {R6[2], sprPat, sprPatRow, 2'd0} : charPatternAddr;
+  always_comb begin
+    if (col < 10'd57) begin
+      VRAM_VGA_addr[2] = (bottomHalfFlag[currSprIndex]) ? {regFile[6][2], sprPat, sprPatRow, 2'd0} + 14'd32 : {regFile[6][2], sprPat, sprPatRow, 2'd0}; 
+    end
+    else VRAM_VGA_addr[2] = charPatternAddr;
+  end
+
   assign VRAM_VGA_addr[3] = VRAM_VGA_addr[2] + 2'd1;  
   assign VRAM_VGA_addr[4] = VRAM_VGA_addr[2] + 2'd2; // Pixel colors are stored across 4 bytes each.
   assign VRAM_VGA_addr[5] = VRAM_VGA_addr[2] + 2'd3;
@@ -1416,8 +1425,15 @@ module vdp_disp_interface_old(
           .D(VRAM_VGA_data_out[5:2]),
           .Q(B),
           .en((sprPatRow == j) && (sprCnt_4 == i))
-        );
+        ); 
       end
+      register #(1) BottomHalf(
+        .clk,
+        .rst_L,
+        .D(~bottomHalfFlag[i]),
+        .Q(bottomHalfFlag[i]),
+        .en(regFile[1][1] & (sprColorIndex == 4'd15) & (spriteOffset[currSprIndex] == 3'd7))
+      ); // ********Possible this won't work, depends if 8x16 sprites mean the screen map has 1 or 2 entries...
     end
   endgenerate
  
@@ -1427,10 +1443,9 @@ module vdp_disp_interface_old(
     .sprPatLatch_out,
     .spriteOffset,
     .currSprRow,
-    .validHPOS
-  );  
-  
-  logic [3:0] sprColorIndex;
+    .validHPOS,
+    .currSprIndex
+  );   
 
   assign CRAM_addr_SPR = {
     1'b0,
@@ -1538,11 +1553,11 @@ module spritePartition(
   input  logic [7:0]        validHPOS,
   input  logic [7:0][2:0]   spriteOffset,
   input  logic [7:0][255:0] sprPatLatch_out,
-  output logic [3:0][7:0]   currSprRow
+  output logic [3:0][7:0]   currSprRow,
+  output logic [2:0]        currSprIndex
 );
   
   logic [31:0][7:0] currSprPat;
-  logic [2:0]       currSprIndex;
 
   always_comb
     if(validHPOS[0]) begin
