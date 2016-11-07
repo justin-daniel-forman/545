@@ -871,7 +871,7 @@ module decoder (
     end
 
     //Latch values on the clock edge for opcode and operand fetches
-    case(state)
+    unique case(state)
       FETCH_1: op0 <= data_in;
       FETCH_2: op1 <= op0;
       FETCH_5: op1 <= data_in;
@@ -1837,7 +1837,7 @@ module decoder (
         //register into another
 
         //Destination register
-        case(op0[5:3])
+        unique case(op0[5:3])
           3'b111: ld_A = 1;
           3'b000: ld_B = 1;
           3'b001: ld_C = 1;
@@ -1848,7 +1848,7 @@ module decoder (
         endcase
 
         //source register
-        case(op0[2:0])
+        unique case(op0[2:0])
           3'b111: drive_A = 1;
           3'b000: begin drive_B = 1; drive_reg_data = 1; end
           3'b001: begin drive_C = 1; drive_reg_data = 1; end
@@ -1885,7 +1885,7 @@ module decoder (
 
       LD_r_n_2, LD_r_HL_2: begin
         //latch the data into the selected reg
-        case(op0[5:3])
+        unique case(op0[5:3])
           3'b111: ld_A = 1;
           3'b000: ld_B = 1;
           3'b001: ld_C = 1;
@@ -1968,7 +1968,7 @@ module decoder (
 
       LD_r_IX_d_5: begin
         //latch the data into the selected reg
-        case(op1[5:3])
+        unique case(op1[5:3])
           3'b111: ld_A = 1;
           3'b000: ld_B = 1;
           3'b001: ld_C = 1;
@@ -2035,7 +2035,7 @@ module decoder (
 
       LD_r_IY_d_5: begin
         //latch the data into the selected reg
-        case(op1[5:3])
+        unique case(op1[5:3])
           3'b111: ld_A = 1;
           3'b000: ld_B = 1;
           3'b001: ld_C = 1;
@@ -2072,7 +2072,7 @@ module decoder (
         drive_MAR = 1;
         MWR_bus   = 1;
 
-        case(op0[2:0])
+        unique case(op0[2:0])
           3'b111: drive_A = 1;
           3'b000: begin drive_B = 1; drive_reg_data = 1; end
           3'b001: begin drive_C = 1; drive_reg_data = 1; end
@@ -2140,7 +2140,7 @@ module decoder (
         drive_MDR1 = 1;
 
         //put the right register out on the databus
-        case(op1[2:0])
+        unique case(op1[2:0])
           3'b111: drive_A = 1;
           3'b000: begin drive_B = 1; drive_reg_data = 1; end
           3'b001: begin drive_C = 1; drive_reg_data = 1; end
@@ -2516,7 +2516,7 @@ module decoder (
       end
 
       LD_dd_nn_2: begin
-        case(op0[5:4])
+        unique case(op0[5:4])
           2'b00: ld_C = 1;
           2'b01: ld_E = 1;
           2'b10: ld_L = 1;
@@ -2525,7 +2525,7 @@ module decoder (
       end
 
       LD_dd_nn_5: begin
-        case(op0[5:4])
+        unique case(op0[5:4])
           2'b00: ld_B = 1;
           2'b01: ld_D = 1;
           2'b10: ld_H = 1;
@@ -2679,7 +2679,7 @@ module decoder (
       end
 
       LD_dd_nn_x_8: begin
-        case(op1[5:4])
+        unique case(op1[5:4])
           2'b00: ld_C = 1;
           2'b01: ld_E = 1;
           2'b10: ld_L = 1;
@@ -2689,7 +2689,7 @@ module decoder (
       end
 
       LD_dd_nn_x_11: begin
-        case(op1[5:4])
+        unique case(op1[5:4])
           2'b00: ld_B = 1;
           2'b01: ld_D = 1;
           2'b10: ld_H = 1;
@@ -2878,7 +2878,7 @@ module decoder (
         drive_MAR = 1;
 
         if(state == LD_nn_x_dd_6) begin
-          case(op1[5:4])
+          unique case(op1[5:4])
             2'b00: begin
               MACRO_8_DRIVE C
             end
@@ -2895,7 +2895,7 @@ module decoder (
           endcase
 
         end else begin
-          case(op1[5:4])
+          unique case(op1[5:4])
             2'b00: begin
               MACRO_8_DRIVE B
             end
@@ -2918,7 +2918,7 @@ module decoder (
         drive_MAR = 1;
 
         if(state == LD_nn_x_dd_7) begin
-          case(op1[5:4])
+          unique case(op1[5:4])
             2'b00: begin
               MACRO_8_DRIVE C
             end
@@ -2935,7 +2935,7 @@ module decoder (
           endcase
 
         end else begin
-          case(op1[5:4])
+          unique case(op1[5:4])
             2'b00: begin
               MACRO_8_DRIVE B
             end
@@ -3046,7 +3046,7 @@ module decoder (
       PUSH_qq_1: begin
         drive_MAR = 1;
         MACRO_WRITE_0
-        case(op0[5:4])
+        unique case(op0[5:4])
           2'b00: begin
             MACRO_8_DRIVE B
           end
@@ -3065,7 +3065,7 @@ module decoder (
       PUSH_qq_2: begin
         drive_MAR = 1;
         MACRO_WRITE_1
-        case(op0[5:4])
+        unique case(op0[5:4])
           2'b00: begin
             MACRO_8_DRIVE B
           end
@@ -3092,7 +3092,7 @@ module decoder (
       PUSH_qq_4: begin
         drive_MAR = 1;
         MACRO_WRITE_0
-        case(op0[5:4])
+        unique case(op0[5:4])
           2'b00: begin
             MACRO_8_DRIVE C
           end
@@ -3111,7 +3111,7 @@ module decoder (
       PUSH_qq_5: begin
         drive_MAR = 1;
         MACRO_WRITE_1
-        case(op0[5:4])
+        unique case(op0[5:4])
           2'b00: begin
             MACRO_8_DRIVE C
           end
@@ -3344,7 +3344,7 @@ module decoder (
         MACRO_WRITE_0;
         drive_MAR = 1;
 
-        case(state)
+        unique case(state)
           EX_SP_HL_6: begin
             MACRO_8_DRIVE H
           end
@@ -3362,7 +3362,7 @@ module decoder (
         MACRO_WRITE_1;
         drive_MAR = 1;
 
-        case(state)
+        unique case(state)
           EX_SP_HL_7: begin
             MACRO_8_DRIVE H
           end
@@ -3386,7 +3386,7 @@ module decoder (
         MACRO_WRITE_0;
         drive_MAR = 1;
 
-        case(state)
+        unique case(state)
           EX_SP_HL_9: begin
             MACRO_8_DRIVE L
           end
@@ -3403,7 +3403,7 @@ module decoder (
         MACRO_WRITE_1;
         drive_MAR = 1;
 
-        case(state)
+        unique case(state)
           EX_SP_HL_10: begin
             MACRO_8_DRIVE L
           end
@@ -3419,7 +3419,7 @@ module decoder (
       EX_SP_HL_11, EX_SP_IX_11, EX_SP_IY_11: begin
         drive_MDR2 = 1;
 
-        case(state)
+        unique case(state)
           EX_SP_HL_11: ld_H   = 1;
           EX_SP_IX_11: ld_IXH = 1;
           EX_SP_IY_11: ld_IYH = 1;
@@ -3429,7 +3429,7 @@ module decoder (
       EX_SP_HL_12, EX_SP_IX_12, EX_SP_IY_12: begin
         drive_MDR1 = 1;
 
-        case(state)
+        unique case(state)
           EX_SP_HL_12: ld_L   = 1;
           EX_SP_IX_12: ld_IXL = 1;
           EX_SP_IY_12: ld_IYL = 1;
@@ -3609,7 +3609,7 @@ module decoder (
       //ADD A, r
       ADD_A_r_0: begin
 
-        case(op0[2:0])
+        unique case(op0[2:0])
           3'b111: begin
             MACRO_8_ADD A
           end
@@ -3726,7 +3726,7 @@ module decoder (
       //ADC A, r
       ADC_A_r_0: begin
 
-        case(op0[2:0])
+        unique case(op0[2:0])
           3'b111: begin
             MACRO_8_ADC A
           end
@@ -5889,7 +5889,7 @@ module NMI_fsm(
 
   //next state logic
   always_comb begin
-    case(state)
+    unique case(state)
       T1:   next_state = (NMI_start) ? T2 : T1;
       T2:   next_state = TW1;
 
@@ -5908,7 +5908,7 @@ module NMI_fsm(
     NMI_MREQ_L  = 1;
     NMI_IORQ_L  = 1;
 
-    case(state)
+    unique case(state)
       T1: begin
         NMI_M1_L = (NMI_start) ? 0 : 1;
       end
@@ -5965,7 +5965,7 @@ module MRD_fsm(
 
   //next state logic
   always_comb begin
-    case(state)
+    unique case(state)
       T1: next_state = (MRD_start) ?  T2 : T1;
       T2: next_state = T3;
       T3: next_state = T1;
@@ -5977,7 +5977,7 @@ module MRD_fsm(
     MRD_MREQ_L = 1;
     MRD_RD_L   = 1;
 
-    case(state)
+    unique case(state)
       //TODO: Wait_L timing
 
       T1: begin
@@ -6030,7 +6030,7 @@ module MWR_fsm(
 
   //next state logic
   always_comb begin
-    case(state)
+    unique case(state)
       T1: next_state = (MWR_start) ?  T2 : T1;
       T2: next_state = T3;
       T3: next_state = T1;
@@ -6042,7 +6042,7 @@ module MWR_fsm(
     MWR_MREQ_L = 1;
     MWR_WR_L   = 1;
 
-    case(state)
+    unique case(state)
       //TODO: Wait_L timing
 
       T1: begin
@@ -6116,7 +6116,7 @@ module OCF_fsm(
   //next state logic
   always_comb begin
     //wait for a start signal, then just step through the states
-    case (state)
+    unique case (state)
 
       T1: begin
         next_state = (OCF_start) ? T2 : T1;
@@ -6149,7 +6149,7 @@ module OCF_fsm(
     OCF_M1_L        = 1;
     OCF_RFSH_L      = 1;
 
-    case(state)
+    unique case(state)
 
       //start on the same clock cycle that we receive the start signal
       //so that the output is valid on clock edge T1/T2
@@ -6226,7 +6226,7 @@ module IN_fsm(
 
   //next state logic
   always_comb begin
-    case(state)
+    unique case(state)
       T1: next_state = (IN_start) ?  T2 : T1;
       T2: next_state = TW;
       TW: next_state = T3;
@@ -6239,7 +6239,7 @@ module IN_fsm(
     IN_IORQ_L = 1;
     IN_RD_L   = 1;
 
-    case(state)
+    unique case(state)
       //TODO: Wait_L timing
 
       T1: begin
@@ -6298,7 +6298,7 @@ module OUT_fsm(
 
   //next state logic
   always_comb begin
-    case(state)
+    unique case(state)
       T1: next_state = (OUT_start) ?  T2 : T1;
       T2: next_state = TW;
       TW: next_state = T3;
@@ -6311,7 +6311,7 @@ module OUT_fsm(
     OUT_IORQ_L = 1;
     OUT_WR_L   = 1;
 
-    case(state)
+    unique case(state)
       //TODO: Wait_L timing
 
       T1: begin
