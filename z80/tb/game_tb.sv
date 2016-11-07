@@ -2,7 +2,8 @@ module tb ();
 
   logic clk, rst_L;
 
-  wire [7:0]  data_bus;
+  wire [7:0]  data_in;
+  wire [7:0]  data_out;
   wire [15:0] addr_bus;
 
   logic M1_L;
@@ -37,7 +38,7 @@ module tb ();
     if($test$plusargs("DEBUG")) begin
     $monitor($stime,, "addr bus: %h, data bus: %h, state: %s, A: %h, F: %h, DE: %h, HL: %h, BC: %h, IX: %h, IY: %h, SP: %h, m_data:%h, z80_data: %h, MEM_VAL: %h, foo: %h",
       addr_bus,
-      data_bus,
+      data_in,
       DUT.CTRL.DECODE.state.name,
       DUT.DP.A_out,
       DUT.DP.F_out,
@@ -65,7 +66,7 @@ module tb ();
 
     i = 0;
     //currently our range for assembly programs is $51
-    while( i < 1000000 ) begin
+    while(i < 1_000_000) begin
       @(posedge clk);
       i++;
     end

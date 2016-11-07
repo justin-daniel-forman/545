@@ -108,6 +108,7 @@
 `define NOP         8'h00
 `define ADD_HL_ss   8'b00??1001
 `define ADC_HL_ss   8'b01??1010
+`define SBC_HL_ss   8'b01??0010
 `define ADD_IX_pp   8'b00??1001
 `define ADD_IY_rr   8'b00??1001
 `define INC_ss      8'b00??0011
@@ -130,6 +131,7 @@
 `define JP_HL       8'hE9
 `define JP_IX       8'hE9
 `define JP_IY       8'hE9
+`define DJNZ_e      8'h10
 `define CALL_nn		  8'hCD
 `define CALL_cc_nn  8'b11???100
 `define RET			    8'hC9

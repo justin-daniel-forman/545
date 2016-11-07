@@ -1381,6 +1381,14 @@ module decoder (
     ADC_HL_ss_5,
     ADC_HL_ss_6,
 
+    SBC_HL_ss_0,
+    SBC_HL_ss_1,
+    SBC_HL_ss_2,
+    SBC_HL_ss_3,
+    SBC_HL_ss_4,
+    SBC_HL_ss_5,
+    SBC_HL_ss_6,
+
     ADD_IX_pp_0,
     ADD_IX_pp_1,
     ADD_IX_pp_2,
@@ -1514,6 +1522,18 @@ module decoder (
     JP_IX_0,
 
     JP_IY_0,
+
+    DJNZ_e_0,
+    DJNZ_e_1,
+    DJNZ_e_2,
+    DJNZ_e_3,
+    DJNZ_e_4,
+    DJNZ_e_5,
+    DJNZ_e_6,
+    DJNZ_e_7,
+    DJNZ_e_8,
+    DJNZ_e_9,
+    DJNZ_e_10,
 
     CALL_nn_0,
     CALL_nn_1,
@@ -1727,6 +1747,7 @@ module decoder (
       BIT_b_r_2: op1 <= data_in;
       BIT_b_IX_d_x_5: op1 <= data_in;
       BIT_b_IY_d_x_5: op1 <= data_in;
+      default: begin end
     endcase
   end
 
@@ -1782,6 +1803,7 @@ module decoder (
           `IY_INST:   next_state = IY_INST_0;
           `RS_A:      next_state = BIT_b_r_3;
           `JP_HL:     next_state = JP_HL_0;
+          `DJNZ_e:    next_state = DJNZ_e_0;
           default:    next_state = FETCH_3;
         endcase
       end
@@ -1862,6 +1884,7 @@ module decoder (
             `JR_NC_e:    next_state = JR_e_0;
             `JR_Z_e:     next_state = JR_e_0;
             `JR_NZ_e:    next_state = JR_e_0;
+            `DJNZ_e:     next_state = DJNZ_e_0;
             `CALL_nn:    next_state = CALL_nn_0;
             `CALL_cc_nn: next_state = CALL_cc_nn_0;
             `RET:        next_state = RET_0;
@@ -1900,7 +1923,8 @@ module decoder (
             if       (op0[7:4] == 4'hF) next_state = LD_r_IY_d_0;
             else if  (op0[7:4] == 4'hD) next_state = LD_r_IX_d_0;
             else                        next_state = FETCH_0;
-          end          `LD_r_IY_d: begin
+          end
+          `LD_r_IY_d: begin
             if       (op0[7:4] == 4'hF) next_state = LD_r_IY_d_0;
             else if  (op0[7:4] == 4'hD) next_state = LD_r_IX_d_0;
             else                        next_state = FETCH_0;
@@ -1970,6 +1994,7 @@ module decoder (
           `DEC_IX:      next_state = (op0[7:4] == 4'hD) ?  DEC_IX_0   : DEC_IY_0;
           `DEC_IY:      next_state = (op0[7:4] == 4'hF) ?  DEC_IY_0   : DEC_IX_0;
           `ADC_HL_ss:   next_state = ADC_HL_ss_0;
+          `SBC_HL_ss:   next_state = SBC_HL_ss_0;
           `ADD_IX_pp:   next_state = (op0[7:4]  == 4'hD) ?  ADD_IX_pp_0: ADD_IY_rr_0;
           `ADD_IY_rr:   next_state = (op0[7:4]  == 4'hF) ?  ADD_IY_rr_0: ADD_IX_pp_0;
           `BIT_b:       next_state = (op0[7:4] == 4'hD) ?  BIT_b_IX_d_x_0 : BIT_b_IY_d_x_0;
@@ -2956,6 +2981,15 @@ module decoder (
       ADC_HL_ss_5: next_state = ADC_HL_ss_6;
       ADC_HL_ss_6: next_state = FETCH_0;
 
+      //SBC_HL_ss
+      SBC_HL_ss_0: next_state = SBC_HL_ss_1;
+      SBC_HL_ss_1: next_state = SBC_HL_ss_2;
+      SBC_HL_ss_2: next_state = SBC_HL_ss_3;
+      SBC_HL_ss_3: next_state = SBC_HL_ss_4;
+      SBC_HL_ss_4: next_state = SBC_HL_ss_5;
+      SBC_HL_ss_5: next_state = SBC_HL_ss_6;
+      SBC_HL_ss_6: next_state = FETCH_0;
+
       //ADD_IX_pp
       ADD_IX_pp_0: next_state = ADD_IX_pp_1;
       ADD_IX_pp_1: next_state = ADD_IX_pp_2;
@@ -3131,9 +3165,9 @@ module decoder (
       //BEGIN Jump group
       //-----------------------------------------------------------------------
 
-      //All of the jumps should go to START since that state does not inc the
-      //pc when fetching the next instruction. IF we inc the PC right away
-      //we miss a byte
+      //All of the absolute jumps should go to START since that state does not
+      //inc the pc when fetching the next instruction. IF we inc the PC right
+      //away we miss a byte
       //JP_nn
       JP_nn_0: next_state = JP_nn_1;
       JP_nn_1: next_state = JP_nn_2;
@@ -3148,8 +3182,21 @@ module decoder (
       JP_cc_nn_2: next_state = JP_cc_nn_3;
       JP_cc_nn_3: next_state = JP_cc_nn_4;
       JP_cc_nn_4: next_state = JP_cc_nn_5;
-      JP_cc_nn_5: next_state = START;
+      JP_cc_nn_5: begin
+        //Increment the PC when the jump is not taken
+        unique case(op0[5:3])
+          3'b000: next_state = (!flags[6]) ? START : FETCH_0;
+          3'b001: next_state = ( flags[6]) ? START : FETCH_0;
+          3'b010: next_state = (!flags[0]) ? START : FETCH_0;
+          3'b011: next_state = ( flags[0]) ? START : FETCH_0;
+          3'b100: next_state = (!flags[2]) ? START : FETCH_0;
+          3'b101: next_state = ( flags[2]) ? START : FETCH_0;
+          3'b110: next_state = ( flags[7]) ? START : FETCH_0;
+          3'b111: next_state = ( flags[7]) ? START : FETCH_0;
+        endcase
+      end
 
+      //Always inc pc immediately after a relative jump
       //JR_e
       JR_e_0: next_state = JR_e_1;
       JR_e_1: next_state = JR_e_2;
@@ -3158,7 +3205,7 @@ module decoder (
       JR_e_4: next_state = JR_e_5;
       JR_e_5: next_state = JR_e_6;
       JR_e_6: next_state = JR_e_7;
-      JR_e_7: next_state = START;
+      JR_e_7: next_state = FETCH_0;
 
       //JP_HL
       JP_HL_0: next_state = START;
@@ -3168,6 +3215,19 @@ module decoder (
 
       //JP_IY
       JP_IY_0: next_state = START;
+
+      //DJNZ_e
+      DJNZ_e_0: next_state = DJNZ_e_1;
+      DJNZ_e_1: next_state = DJNZ_e_2;
+      DJNZ_e_2: next_state = DJNZ_e_3;
+      DJNZ_e_3: next_state = DJNZ_e_4;
+      DJNZ_e_4: next_state = DJNZ_e_5;
+      DJNZ_e_5: next_state = (flags[`Z_flag]) ? FETCH_0 : DJNZ_e_6;
+      DJNZ_e_6: next_state = DJNZ_e_7;
+      DJNZ_e_7: next_state = DJNZ_e_8;
+      DJNZ_e_8: next_state = DJNZ_e_9;
+      DJNZ_e_9: next_state = DJNZ_e_10;
+      DJNZ_e_10: next_state = FETCH_0; //don't fetch the next pc after the jump
 
       //-----------------------------------------------------------------------
       //END Jump group
@@ -3579,7 +3639,7 @@ module decoder (
         //register into another
 
         //Destination register
-        case(op0[5:3])
+        unique case(op0[5:3])
           3'b111: ld_A = 1;
           3'b000: ld_B = 1;
           3'b001: ld_C = 1;
@@ -3590,7 +3650,7 @@ module decoder (
         endcase
 
         //source register
-        case(op0[2:0])
+        unique case(op0[2:0])
           3'b111: drive_A = 1;
           3'b000: begin drive_B = 1; drive_reg_data = 1; end
           3'b001: begin drive_C = 1; drive_reg_data = 1; end
@@ -3627,7 +3687,7 @@ module decoder (
 
       LD_r_n_2, LD_r_HL_2: begin
         //latch the data into the selected reg
-        case(op0[5:3])
+        unique case(op0[5:3])
           3'b111: ld_A = 1;
           3'b000: ld_B = 1;
           3'b001: ld_C = 1;
@@ -3710,7 +3770,7 @@ module decoder (
 
       LD_r_IX_d_5: begin
         //latch the data into the selected reg
-        case(op1[5:3])
+        unique case(op1[5:3])
           3'b111: ld_A = 1;
           3'b000: ld_B = 1;
           3'b001: ld_C = 1;
@@ -3777,7 +3837,7 @@ module decoder (
 
       LD_r_IY_d_5: begin
         //latch the data into the selected reg
-        case(op1[5:3])
+        unique case(op1[5:3])
           3'b111: ld_A = 1;
           3'b000: ld_B = 1;
           3'b001: ld_C = 1;
@@ -3814,7 +3874,7 @@ module decoder (
         drive_MAR = 1;
         MWR_bus   = 1;
 
-        case(op0[2:0])
+        unique case(op0[2:0])
           3'b111: drive_A = 1;
           3'b000: begin drive_B = 1; drive_reg_data = 1; end
           3'b001: begin drive_C = 1; drive_reg_data = 1; end
@@ -3882,7 +3942,7 @@ module decoder (
         drive_MDR1 = 1;
 
         //put the right register out on the databus
-        case(op1[2:0])
+        unique case(op1[2:0])
           3'b111: drive_A = 1;
           3'b000: begin drive_B = 1; drive_reg_data = 1; end
           3'b001: begin drive_C = 1; drive_reg_data = 1; end
@@ -4269,7 +4329,7 @@ module decoder (
       end
 
       LD_dd_nn_2: begin
-        case(op0[5:4])
+        unique case(op0[5:4])
           2'b00: ld_C = 1;
           2'b01: ld_E = 1;
           2'b10: ld_L = 1;
@@ -4278,7 +4338,7 @@ module decoder (
       end
 
       LD_dd_nn_5: begin
-        case(op0[5:4])
+        unique case(op0[5:4])
           2'b00: ld_B = 1;
           2'b01: ld_D = 1;
           2'b10: ld_H = 1;
@@ -4474,7 +4534,7 @@ module decoder (
       end
 
       LD_dd_nn_x_8: begin
-        case(op1[5:4])
+        unique case(op1[5:4])
           2'b00: ld_C = 1;
           2'b01: ld_E = 1;
           2'b10: ld_L = 1;
@@ -4490,7 +4550,7 @@ module decoder (
       end
 
       LD_dd_nn_x_11: begin
-        case(op1[5:4])
+        unique case(op1[5:4])
           2'b00: ld_B = 1;
           2'b01: ld_D = 1;
           2'b10: ld_H = 1;
@@ -4755,7 +4815,7 @@ module decoder (
         drive_MAR = 1;
 
         if(state == LD_nn_x_dd_6) begin
-          case(op1[5:4])
+          unique case(op1[5:4])
             2'b00: begin
               drive_C = 1;
               drive_reg_data = 1;
@@ -4776,7 +4836,7 @@ module decoder (
           endcase
 
         end else begin
-          case(op1[5:4])
+          unique case(op1[5:4])
             2'b00: begin
               drive_B = 1;
               drive_reg_data = 1;
@@ -4803,7 +4863,7 @@ module decoder (
         drive_MAR = 1;
 
         if(state == LD_nn_x_dd_7) begin
-          case(op1[5:4])
+          unique case(op1[5:4])
             2'b00: begin
               drive_C = 1;
               drive_reg_data = 1;
@@ -4824,7 +4884,7 @@ module decoder (
           endcase
 
         end else begin
-          case(op1[5:4])
+          unique case(op1[5:4])
             2'b00: begin
               drive_B = 1;
               drive_reg_data = 1;
@@ -4992,7 +5052,7 @@ module decoder (
         drive_MAR = 1;
         MWR_start = 1;
         MWR_bus   = 1;
-        case(op0[5:4])
+        unique case(op0[5:4])
           2'b00: begin
             drive_B = 1;
             drive_reg_data = 1;
@@ -5014,7 +5074,7 @@ module decoder (
       PUSH_qq_2: begin
         drive_MAR = 1;
         MWR_bus = 1;
-        case(op0[5:4])
+        unique case(op0[5:4])
           2'b00: begin
             drive_B = 1;
             drive_reg_data = 1;
@@ -5050,7 +5110,7 @@ module decoder (
         drive_MAR = 1;
         MWR_start = 1;
         MWR_bus   = 1;
-        case(op0[5:4])
+        unique case(op0[5:4])
           2'b00: begin
             drive_C = 1;
             drive_reg_data = 1;
@@ -5073,7 +5133,7 @@ module decoder (
       PUSH_qq_5: begin
         drive_MAR = 1;
         MWR_bus = 1;
-        case(op0[5:4])
+        unique case(op0[5:4])
           2'b00: begin
             drive_C = 1;
             drive_reg_data = 1;
@@ -5391,7 +5451,7 @@ module decoder (
         MWR_bus   = 1;
         drive_MAR = 1;
 
-        case(state)
+        unique case(state)
           EX_SP_HL_6: begin
             drive_H = 1;
             drive_reg_data = 1;
@@ -5412,7 +5472,7 @@ module decoder (
         MWR_bus = 1;
         drive_MAR = 1;
 
-        case(state)
+        unique case(state)
           EX_SP_HL_7: begin
             drive_H = 1;
             drive_reg_data = 1;
@@ -5444,7 +5504,7 @@ module decoder (
         MWR_bus   = 1;
         drive_MAR = 1;
 
-        case(state)
+        unique case(state)
           EX_SP_HL_9: begin
             drive_L = 1;
             drive_reg_data = 1;
@@ -5464,7 +5524,7 @@ module decoder (
         MWR_bus = 1;
         drive_MAR = 1;
 
-        case(state)
+        unique case(state)
           EX_SP_HL_10: begin
             drive_L = 1;
             drive_reg_data = 1;
@@ -5483,7 +5543,7 @@ module decoder (
       EX_SP_HL_11, EX_SP_IX_11, EX_SP_IY_11: begin
         drive_MDR2 = 1;
 
-        case(state)
+        unique case(state)
           EX_SP_HL_11: ld_H   = 1;
           EX_SP_IX_11: ld_IXH = 1;
           EX_SP_IY_11: ld_IYH = 1;
@@ -5493,7 +5553,7 @@ module decoder (
       EX_SP_HL_12, EX_SP_IX_12, EX_SP_IY_12: begin
         drive_MDR1 = 1;
 
-        case(state)
+        unique case(state)
           EX_SP_HL_12: ld_L   = 1;
           EX_SP_IX_12: ld_IXL = 1;
           EX_SP_IY_12: ld_IYL = 1;
@@ -5712,7 +5772,7 @@ module decoder (
       //ADD A, r
       ADD_A_r_0: begin
 
-        case(op0[2:0])
+        unique case(op0[2:0])
           3'b111: begin
             ld_F_data      = 1;
             drive_alu_data = 1;
@@ -5913,7 +5973,7 @@ module decoder (
       //ADC A, r
       ADC_A_r_0: begin
 
-        case(op0[2:0])
+        unique case(op0[2:0])
           3'b111: begin
             ld_F_data      = 1;
             drive_alu_data = 1;
@@ -7372,6 +7432,96 @@ module decoder (
         end
       end
 
+      SBC_HL_ss_0: begin
+        //move A to MDR1
+        drive_A = 1;
+        ld_MDR1 = 1;
+      end
+
+      SBC_HL_ss_1: begin
+        //load A with lower byte
+        ld_A = 1;
+        drive_L = 1;
+        drive_reg_data = 1;
+      end
+
+      SBC_HL_ss_2: begin
+        //add the lower bytes together and set carry flags
+        ld_F_data      = 1;
+        alu_op         = `SBC;
+        drive_alu_data = 1;
+
+        //destination register
+        ld_L = 1;
+
+        //source register
+        unique case(op1[5:4])
+          2'b00: begin
+            drive_C = 1;
+            drive_reg_data = 1;
+          end
+          2'b01: begin
+            drive_E = 1;
+            drive_reg_data = 1;
+          end
+          2'b10: begin
+            drive_L = 1;
+            drive_reg_data = 1;
+          end
+          2'b11: begin
+            drive_SPL = 1;
+            drive_reg_data = 1;
+          end
+        endcase
+
+      end
+
+      SBC_HL_ss_3: begin
+        //load the upper byte into A
+        drive_H = 1;
+        drive_reg_data = 1;
+        ld_A = 1;
+      end
+
+      SBC_HL_ss_5: begin
+
+        //add the upper bytes together and set the carry flags
+        ld_F_data      = 1;
+        alu_op         = `SBC;
+        drive_alu_data = 1;
+        set_N = 2'b11;
+
+        //destination register
+        ld_H = 1;
+
+        //source register
+        unique case(op1[5:4])
+          2'b00: begin
+            drive_B = 1;
+            drive_reg_data = 1;
+          end
+          2'b01: begin
+            drive_D = 1;
+            drive_reg_data = 1;
+          end
+          2'b10: begin
+            drive_H = 1;
+            drive_reg_data = 1;
+          end
+          2'b11: begin
+            drive_SPH = 1;
+            drive_reg_data = 1;
+          end
+        endcase
+
+      end
+
+      SBC_HL_ss_6: begin
+        //restore the accumulator
+        ld_A       = 1;
+        drive_MDR1 = 1;
+      end
+
       INC_ss_0: begin
         unique case(op0[5:4])
           2'b00: begin
@@ -8159,6 +8309,71 @@ module decoder (
         drive_IYH = 1;
         ld_PCH = 1;
         ld_PCL = 1;
+      end
+
+      //DJNZ_e
+      DJNZ_e_0: begin
+        //store the flags
+        drive_F = 1;
+        ld_MDR1 = 1;
+      end
+
+      DJNZ_e_1: begin
+        //decrement B
+        ld_F_data = 1;
+        drive_reg_data = 1;
+        drive_alu_data = 1;
+        drive_B = 1;
+        ld_B    = 1;
+        alu_op  = `DECR_B_8;
+      end
+
+      DJNZ_e_2: begin
+        //start fetching the offset
+        MRD_start = 1;
+        MRD_bus   = 1;
+        ld_PCH    = 1;
+        ld_PCL    = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        alu_op    = `INCR_A_16;
+        drive_reg_addr = 1;
+        drive_alu_addr = 1;
+      end
+
+      DJNZ_e_3: begin
+        //continue fetching the offset
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        MRD_bus = 1;
+      end
+
+      DJNZ_e_4: begin
+        //load the offset from the bus
+        ld_TEMP = 1;
+      end
+
+      DJNZ_e_5: begin
+        //restore the flags in the next cycle as the processor
+        //jumps conditional to the current value of the flags
+        drive_MDR1 = 1;
+        ld_F_data  = 1;
+        alu_op     = `ALU_NOP;
+      end
+
+      DJNZ_e_6: begin
+        //we only reach this point if we were not zero
+        //add the offset to the current pc
+        drive_alu_addr = 1;
+        alu_op         = `ADD_SE_B;
+        drive_reg_addr = 1;
+        drive_PCL        = 1;
+        drive_PCH        = 1;
+        ld_PCL           = 1;
+        ld_PCH           = 1;
       end
 
       //-----------------------------------------------------------------------
@@ -8971,6 +9186,7 @@ module NMI_fsm(
       TW2:  next_state = T3;
       T3:   next_state = T4;
       T4:   next_state = T1;
+      default: next_state = T1;
     endcase
   end
 
@@ -8999,6 +9215,8 @@ module NMI_fsm(
         NMI_M1_L   = 0;
         NMI_IORQ_L = 0;
       end
+
+      default: begin end
 
     endcase
   end
@@ -9042,6 +9260,7 @@ module MRD_fsm(
       T1: next_state = (MRD_start) ?  T2 : T1;
       T2: next_state = T3;
       T3: next_state = T1;
+      default: next_state = T1;
     endcase
   end
 
@@ -9064,6 +9283,8 @@ module MRD_fsm(
         MRD_MREQ_L = 0;
         MRD_RD_L   = 0;
       end
+
+      default: begin end
     endcase
   end
 
@@ -9107,6 +9328,7 @@ module MWR_fsm(
       T1: next_state = (MWR_start) ?  T2 : T1;
       T2: next_state = T3;
       T3: next_state = T1;
+      default: next_state = T1;
     endcase
   end
 
@@ -9129,6 +9351,9 @@ module MWR_fsm(
         MWR_MREQ_L = 0;
         MWR_WR_L   = 0;
       end
+
+      default: begin end
+
     endcase
   end
 
@@ -9210,6 +9435,8 @@ module OCF_fsm(
         next_state = T1;
       end
 
+      default: begin next_state = T1; end
+
     endcase
   end
 
@@ -9260,6 +9487,9 @@ module OCF_fsm(
       T4: begin
       end
 
+      default: begin end
+
+
     endcase
   end
 
@@ -9304,6 +9534,7 @@ module IN_fsm(
       T2: next_state = TW;
       TW: next_state = T3;
       T3: next_state = T1;
+      default: next_state = T1;
     endcase
   end
 
@@ -9331,6 +9562,8 @@ module IN_fsm(
         IN_IORQ_L = 0;
         IN_RD_L   = 0;
       end
+
+      default: begin end
 
     endcase
   end
@@ -9376,6 +9609,7 @@ module OUT_fsm(
       T2: next_state = TW;
       TW: next_state = T3;
       T3: next_state = T1;
+      default: next_state = T1;
     endcase
   end
 
@@ -9403,6 +9637,8 @@ module OUT_fsm(
         OUT_IORQ_L = 0;
         OUT_WR_L   = 0;
       end
+
+      default: begin end
 
     endcase
   end

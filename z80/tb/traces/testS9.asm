@@ -7,10 +7,10 @@ range data $0051 $0100
 section code
   ld a,[$0051]
   ld hl,$23
-  add $ff
-  jp z,$000c
-  jr $-5
-  ld [$0051],a
+foo: add $ff
+  jp z, bar
+  jr foo
+bar: ld [$0051],a
   ld bc,[$0051]
 
 section data
