@@ -1,10 +1,10 @@
 // Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2015.2 (lin64) Build 1266856 Fri Jun 26 16:35:25 MDT 2015
-// Date        : Tue Nov  1 16:39:56 2016
+// Date        : Mon Nov  7 11:28:44 2016
 // Host        : mittlefrueh.andrew.cmu.edu running 64-bit Red Hat Enterprise Linux Server release 7.2 (Maipo)
 // Command     : write_verilog -force -mode synth_stub
-//               /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/z80_0/z80_0_stub.v
+//               /afs/ece.cmu.edu/usr/christoc/Private/class/ece545/545/mainProject/mainProject.srcs/sources_1/ip/z80_0/z80_0_stub.v
 // Design      : z80_0
 // Purpose     : Stub declaration of top-level module interface
 // Device      : xc7z020clg484-1
