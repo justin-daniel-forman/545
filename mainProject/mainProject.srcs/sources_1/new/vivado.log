@@ -1,0 +1,408 @@
+#-----------------------------------------------------------
+# Vivado v2015.2 (64-bit)
+# SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+# IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+# Start of session at: Wed Oct 19 11:43:46 2016
+# Process ID: 23648
+# Log file: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/vivado.log
+# Journal file: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.xpr
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/afs/ece.cmu.edu/usr/suyashb/Private/545'.
+WARNING: [IP_Flow 19-3656] If you move the project, the path for repository '/afs/ece.cmu.edu/usr/suyashb/Private/545' may become invalid. A better location for the repostory would be in a path adjacent to the project. (Current project location is '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject'.)
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/data/ip'.
+open_project: Time (s): cpu = 00:00:23 ; elapsed = 00:00:12 . Memory (MB): peak = 5964.480 ; gain = 113.988 ; free physical = 6059 ; free virtual = 21270
+reset_run ila_0_synth_1
+launch_runs ila_0_synth_1
+[Wed Oct 19 11:44:29 2016] Launched ila_0_synth_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/ila_0_synth_1/runme.log
+wait_on_run ila_0_synth_1
+[Wed Oct 19 11:44:29 2016] Waiting for ila_0_synth_1 to finish...
+[Wed Oct 19 11:44:36 2016] Waiting for ila_0_synth_1 to finish...
+[Wed Oct 19 11:44:41 2016] Waiting for ila_0_synth_1 to finish...
+[Wed Oct 19 11:44:46 2016] Waiting for ila_0_synth_1 to finish...
+[Wed Oct 19 11:44:56 2016] Waiting for ila_0_synth_1 to finish...
+[Wed Oct 19 11:45:06 2016] Waiting for ila_0_synth_1 to finish...
+[Wed Oct 19 11:45:16 2016] Waiting for ila_0_synth_1 to finish...
+[Wed Oct 19 11:45:26 2016] Waiting for ila_0_synth_1 to finish...
+[Wed Oct 19 11:45:46 2016] Waiting for ila_0_synth_1 to finish...
+INFO: [Common 17-41] Interrupt caught. Command should exit soon.
+[Wed Oct 19 11:46:01 2016] Interrupt received
+wait_on_run: Time (s): cpu = 00:00:16 ; elapsed = 00:01:32 . Memory (MB): peak = 5980.480 ; gain = 10.000 ; free physical = 5521 ; free virtual = 20715
+INFO: [Common 17-344] 'wait_on_run' was cancelled
+ERROR: [Vivado 12-4146] Open Elaborated Design failed due to the following error:
+
+reset_run ila_0_synth_1
+reset_run ila_0_synth_1
+launch_runs ila_0_synth_1
+[Wed Oct 19 11:46:15 2016] Launched ila_0_synth_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/ila_0_synth_1/runme.log
+wait_on_run ila_0_synth_1
+[Wed Oct 19 11:46:15 2016] Waiting for ila_0_synth_1 to finish...
+[Wed Oct 19 11:46:22 2016] Waiting for ila_0_synth_1 to finish...
+[Wed Oct 19 11:46:27 2016] Waiting for ila_0_synth_1 to finish...
+[Wed Oct 19 11:46:32 2016] Waiting for ila_0_synth_1 to finish...
+[Wed Oct 19 11:46:42 2016] Waiting for ila_0_synth_1 to finish...
+[Wed Oct 19 11:46:52 2016] Waiting for ila_0_synth_1 to finish...
+[Wed Oct 19 11:47:02 2016] Waiting for ila_0_synth_1 to finish...
+[Wed Oct 19 11:47:12 2016] Waiting for ila_0_synth_1 to finish...
+[Wed Oct 19 11:47:32 2016] Waiting for ila_0_synth_1 to finish...
+[Wed Oct 19 11:47:52 2016] Waiting for ila_0_synth_1 to finish...
+[Wed Oct 19 11:48:12 2016] Waiting for ila_0_synth_1 to finish...
+[Wed Oct 19 11:48:22 2016] ila_0_synth_1 finished
+wait_on_run: Time (s): cpu = 00:00:11 ; elapsed = 00:02:07 . Memory (MB): peak = 6000.000 ; gain = 0.000 ; free physical = 6018 ; free virtual = 21230
+reset_run mult_gen_0_synth_1
+launch_runs mult_gen_0_synth_1
+[Wed Oct 19 11:48:23 2016] Launched mult_gen_0_synth_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/mult_gen_0_synth_1/runme.log
+wait_on_run mult_gen_0_synth_1
+[Wed Oct 19 11:48:23 2016] Waiting for mult_gen_0_synth_1 to finish...
+[Wed Oct 19 11:48:30 2016] Waiting for mult_gen_0_synth_1 to finish...
+[Wed Oct 19 11:48:35 2016] Waiting for mult_gen_0_synth_1 to finish...
+[Wed Oct 19 11:48:40 2016] Waiting for mult_gen_0_synth_1 to finish...
+[Wed Oct 19 11:48:50 2016] Waiting for mult_gen_0_synth_1 to finish...
+[Wed Oct 19 11:49:00 2016] Waiting for mult_gen_0_synth_1 to finish...
+[Wed Oct 19 11:49:00 2016] mult_gen_0_synth_1 finished
+wait_on_run: Time (s): cpu = 00:00:03 ; elapsed = 00:00:37 . Memory (MB): peak = 6000.000 ; gain = 0.000 ; free physical = 5919 ; free virtual = 21131
+reset_run c_add_0_synth_1
+launch_runs c_add_0_synth_1
+[Wed Oct 19 11:49:01 2016] Launched c_add_0_synth_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/c_add_0_synth_1/runme.log
+wait_on_run c_add_0_synth_1
+[Wed Oct 19 11:49:01 2016] Waiting for c_add_0_synth_1 to finish...
+[Wed Oct 19 11:49:08 2016] Waiting for c_add_0_synth_1 to finish...
+[Wed Oct 19 11:49:13 2016] Waiting for c_add_0_synth_1 to finish...
+[Wed Oct 19 11:49:18 2016] Waiting for c_add_0_synth_1 to finish...
+[Wed Oct 19 11:49:28 2016] Waiting for c_add_0_synth_1 to finish...
+[Wed Oct 19 11:49:28 2016] c_add_0_synth_1 finished
+wait_on_run: Time (s): cpu = 00:00:01 ; elapsed = 00:00:27 . Memory (MB): peak = 6000.000 ; gain = 0.000 ; free physical = 6014 ; free virtual = 21226
+reset_run blk_mem_gen_0_synth_1
+launch_runs blk_mem_gen_0_synth_1
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'blk_mem_gen_0'...
+WARNING: [IP_Flow 19-1687] The current project language is set to Verilog. However IP 'blk_mem_gen_0' does not support 'Verilog Synthesis' output products, delivering 'VHDL Synthesis' output products instead.
+[Wed Oct 19 11:49:30 2016] Launched blk_mem_gen_0_synth_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/blk_mem_gen_0_synth_1/runme.log
+wait_on_run blk_mem_gen_0_synth_1
+[Wed Oct 19 11:49:30 2016] Waiting for blk_mem_gen_0_synth_1 to finish...
+[Wed Oct 19 11:49:37 2016] Waiting for blk_mem_gen_0_synth_1 to finish...
+[Wed Oct 19 11:49:42 2016] Waiting for blk_mem_gen_0_synth_1 to finish...
+[Wed Oct 19 11:49:47 2016] Waiting for blk_mem_gen_0_synth_1 to finish...
+[Wed Oct 19 11:49:57 2016] Waiting for blk_mem_gen_0_synth_1 to finish...
+[Wed Oct 19 11:50:07 2016] Waiting for blk_mem_gen_0_synth_1 to finish...
+[Wed Oct 19 11:50:17 2016] Waiting for blk_mem_gen_0_synth_1 to finish...
+[Wed Oct 19 11:50:27 2016] Waiting for blk_mem_gen_0_synth_1 to finish...
+[Wed Oct 19 11:50:47 2016] Waiting for blk_mem_gen_0_synth_1 to finish...
+[Wed Oct 19 11:50:57 2016] blk_mem_gen_0_synth_1 finished
+wait_on_run: Time (s): cpu = 00:00:09 ; elapsed = 00:01:27 . Memory (MB): peak = 6004.227 ; gain = 1.996 ; free physical = 6006 ; free virtual = 21218
+synth_design -rtl -name rtl_1
+Command: synth_design -rtl -name rtl_1
+Starting synth_design
+Using part: xc7z020clg484-1
+Top: audioSys
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:01:54 ; elapsed = 00:07:11 . Memory (MB): peak = 6004.230 ; gain = 5094.914 ; free physical = 6006 ; free virtual = 21218
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'audioSys' [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/audio.sv:23]
+WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/audio.sv:50]
+INFO: [Synth 8-638] synthesizing module 'comInterface' [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/comInterface.sv:23]
+WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/comInterface.sv:47]
+INFO: [Synth 8-638] synthesizing module 'regReceiver' [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/comInterface.sv:129]
+INFO: [Synth 8-256] done synthesizing module 'regReceiver' (1#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/comInterface.sv:129]
+WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/comInterface.sv:48]
+INFO: [Synth 8-638] synthesizing module 'commandDecoder' [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/comInterface.sv:77]
+INFO: [Synth 8-256] done synthesizing module 'commandDecoder' (2#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/comInterface.sv:77]
+INFO: [Synth 8-256] done synthesizing module 'comInterface' (3#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/comInterface.sv:23]
+INFO: [Synth 8-638] synthesizing module 'freqSynth' [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqSynth.sv:23]
+WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqSynth.sv:57]
+INFO: [Synth 8-638] synthesizing module 'divider' [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqSynth.sv:102]
+WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqSynth.sv:115]
+INFO: [Synth 8-638] synthesizing module 'counter' [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqSynth.sv:147]
+INFO: [Synth 8-256] done synthesizing module 'counter' (4#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqSynth.sv:147]
+INFO: [Synth 8-256] done synthesizing module 'divider' (5#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqSynth.sv:102]
+WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqSynth.sv:58]
+INFO: [Synth 8-638] synthesizing module 'waveGen' [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqSynth.sv:62]
+INFO: [Synth 8-256] done synthesizing module 'waveGen' (6#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqSynth.sv:62]
+INFO: [Synth 8-256] done synthesizing module 'freqSynth' (7#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqSynth.sv:23]
+INFO: [Synth 8-638] synthesizing module 'freqAttenuatorSingle' [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqAttenuator.sv:22]
+WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqAttenuator.sv:47]
+INFO: [Synth 8-638] synthesizing module 'baseReg' [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqAttenuator.sv:110]
+INFO: [Synth 8-256] done synthesizing module 'baseReg' (8#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqAttenuator.sv:110]
+WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqAttenuator.sv:48]
+INFO: [Synth 8-638] synthesizing module 'multLookup' [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqAttenuator.sv:135]
+INFO: [Synth 8-226] default block is never used [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqAttenuator.sv:143]
+INFO: [Synth 8-256] done synthesizing module 'multLookup' (9#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqAttenuator.sv:135]
+INFO: [Synth 8-638] synthesizing module 'mult_gen_0' [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/.Xil/Vivado-23648-mittlefrueh.andrew.cmu.edu/realtime/mult_gen_0_stub.v:7]
+INFO: [Synth 8-256] done synthesizing module 'mult_gen_0' (10#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/.Xil/Vivado-23648-mittlefrueh.andrew.cmu.edu/realtime/mult_gen_0_stub.v:7]
+WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqAttenuator.sv:50]
+INFO: [Synth 8-638] synthesizing module 'shifter' [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqAttenuator.sv:181]
+INFO: [Synth 8-256] done synthesizing module 'shifter' (11#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqAttenuator.sv:181]
+INFO: [Synth 8-155] case statement is not full and has no default [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqAttenuator.sv:90]
+INFO: [Synth 8-256] done synthesizing module 'freqAttenuatorSingle' (12#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/freqAttenuator.sv:22]
+WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/audio.sv:53]
+INFO: [Synth 8-638] synthesizing module 'dacInterface' [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/dacInterface.sv:23]
+WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/dacInterface.sv:48]
+INFO: [Synth 8-638] synthesizing module 'I2C' [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/dacInterface.sv:286]
+WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/dacInterface.sv:308]
+INFO: [Synth 8-638] synthesizing module 'counterSCL' [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/dacInterface.sv:266]
+INFO: [Synth 8-256] done synthesizing module 'counterSCL' (13#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/dacInterface.sv:266]
+INFO: [Synth 8-256] done synthesizing module 'I2C' (14#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/dacInterface.sv:286]
+WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/dacInterface.sv:49]
+INFO: [Synth 8-638] synthesizing module 'serialInterface' [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/dacInterface.sv:403]
+INFO: [Synth 8-256] done synthesizing module 'serialInterface' (15#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/dacInterface.sv:403]
+INFO: [Synth 8-638] synthesizing module 'clk_wiz_0' [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/.Xil/Vivado-23648-mittlefrueh.andrew.cmu.edu/realtime/clk_wiz_0_stub.v:6]
+INFO: [Synth 8-256] done synthesizing module 'clk_wiz_0' (16#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/.Xil/Vivado-23648-mittlefrueh.andrew.cmu.edu/realtime/clk_wiz_0_stub.v:6]
+WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/dacInterface.sv:53]
+INFO: [Synth 8-638] synthesizing module 'BCLKGen' [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/dacInterface.sv:388]
+INFO: [Synth 8-256] done synthesizing module 'BCLKGen' (17#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/dacInterface.sv:388]
+INFO: [Synth 8-256] done synthesizing module 'dacInterface' (18#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/dacInterface.sv:23]
+WARNING: [Synth 8-689] width (1) of port connection 'waveform' does not match port width (16) of module 'dacInterface' [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/audio.sv:53]
+INFO: [Synth 8-256] done synthesizing module 'audioSys' (19#1) [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/audio.sv:23]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:01:55 ; elapsed = 00:07:12 . Memory (MB): peak = 6018.484 ; gain = 5109.168 ; free physical = 5990 ; free virtual = 21203
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:01:55 ; elapsed = 00:07:12 . Memory (MB): peak = 6018.484 ; gain = 5109.168 ; free physical = 5990 ; free virtual = 21203
+---------------------------------------------------------------------------------
+INFO: [Project 1-454] Reading design checkpoint '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/clk_wiz_0_synth_1/clk_wiz_0.dcp' for cell 'interfaceTest/serialClocks'
+INFO: [Project 1-491] No black box instances found for design checkpoint '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/ila_0_synth_1/ila_0.dcp'.
+INFO: [Project 1-454] Reading design checkpoint '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/mult_gen_0_synth_1/mult_gen_0.dcp' for cell 'atten[2]/waveMult'
+INFO: [Project 1-454] Reading design checkpoint '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/mult_gen_0_synth_1/mult_gen_0.dcp' for cell 'atten[1]/waveMult'
+INFO: [Project 1-454] Reading design checkpoint '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/mult_gen_0_synth_1/mult_gen_0.dcp' for cell 'atten[0]/waveMult'
+INFO: [Project 1-491] No black box instances found for design checkpoint '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/c_add_0_synth_1/c_add_0.dcp'.
+INFO: [Project 1-491] No black box instances found for design checkpoint '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/blk_mem_gen_0_synth_1/blk_mem_gen_0.dcp'.
+INFO: [Netlist 29-17] Analyzing 5 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2015.2
+INFO: [Device 21-403] Loading part xc7z020clg484-1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/.Xil/Vivado-23648-mittlefrueh.andrew.cmu.edu/dcp/clk_wiz_0_in_context.xdc] for cell 'interfaceTest/serialClocks'
+Finished Parsing XDC File [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/.Xil/Vivado-23648-mittlefrueh.andrew.cmu.edu/dcp/clk_wiz_0_in_context.xdc] for cell 'interfaceTest/serialClocks'
+Parsing XDC File [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0_board.xdc] for cell 'interfaceTest/serialClocks/inst'
+Finished Parsing XDC File [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0_board.xdc] for cell 'interfaceTest/serialClocks/inst'
+Parsing XDC File [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xdc] for cell 'interfaceTest/serialClocks/inst'
+WARNING: [Constraints 18-619] A clock with name 'clk' already exists, overwriting the previous clock with the same name. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xdc:55]
+Finished Parsing XDC File [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xdc] for cell 'interfaceTest/serialClocks/inst'
+INFO: [Timing 38-2] Deriving generated clocks
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/audioSys_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/audioSys_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+CRITICAL WARNING: [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.
+Parsing XDC File [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc]
+WARNING: [Vivado 12-584] No ports matched 'AC_ADR0'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:69]
+WARNING: [Vivado 12-584] No ports matched 'AC_ADR1'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:70]
+WARNING: [Vivado 12-584] No ports matched 'AC_GPIO0'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:71]
+WARNING: [Vivado 12-584] No ports matched 'AC_GPIO1'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:72]
+WARNING: [Vivado 12-584] No ports matched 'AC_GPIO2'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:73]
+WARNING: [Vivado 12-584] No ports matched 'AC_GPIO3'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:74]
+WARNING: [Vivado 12-584] No ports matched 'AC_MCLK'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:75]
+WARNING: [Vivado 12-584] No ports matched 'AC_SCK'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:76]
+WARNING: [Vivado 12-584] No ports matched 'AC_SDA'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:77]
+WARNING: [Vivado 12-584] No ports matched 'GCLK'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:82]
+WARNING: [Vivado 12-584] No ports matched 'JA1'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:87]
+WARNING: [Vivado 12-584] No ports matched 'JA10'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:88]
+WARNING: [Vivado 12-584] No ports matched 'JA2'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:89]
+WARNING: [Vivado 12-584] No ports matched 'JA3'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:90]
+WARNING: [Vivado 12-584] No ports matched 'JA4'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:91]
+WARNING: [Vivado 12-584] No ports matched 'JA7'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:92]
+WARNING: [Vivado 12-584] No ports matched 'JA8'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:93]
+WARNING: [Vivado 12-584] No ports matched 'JA9'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:94]
+WARNING: [Vivado 12-584] No ports matched 'JB1'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:100]
+WARNING: [Vivado 12-584] No ports matched 'JB10'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:101]
+WARNING: [Vivado 12-584] No ports matched 'JB2'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:102]
+WARNING: [Vivado 12-584] No ports matched 'JB3'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:103]
+WARNING: [Vivado 12-584] No ports matched 'JB4'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:104]
+WARNING: [Vivado 12-584] No ports matched 'JB7'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:105]
+WARNING: [Vivado 12-584] No ports matched 'JB8'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:106]
+WARNING: [Vivado 12-584] No ports matched 'JB9'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:107]
+WARNING: [Vivado 12-584] No ports matched 'JC1_N'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:112]
+WARNING: [Vivado 12-584] No ports matched 'JC1_P'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:113]
+WARNING: [Vivado 12-584] No ports matched 'JC2_N'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:114]
+WARNING: [Vivado 12-584] No ports matched 'JC2_P'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:115]
+WARNING: [Vivado 12-584] No ports matched 'JC3_N'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:116]
+WARNING: [Vivado 12-584] No ports matched 'JC3_P'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:117]
+WARNING: [Vivado 12-584] No ports matched 'JC4_N'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:118]
+WARNING: [Vivado 12-584] No ports matched 'JC4_P'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:119]
+WARNING: [Vivado 12-584] No ports matched 'JD1_N'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:124]
+WARNING: [Vivado 12-584] No ports matched 'JD1_P'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:125]
+WARNING: [Vivado 12-584] No ports matched 'JD2_N'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:126]
+WARNING: [Vivado 12-584] No ports matched 'JD2_P'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:127]
+WARNING: [Vivado 12-584] No ports matched 'JD3_N'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:128]
+WARNING: [Vivado 12-584] No ports matched 'JD3_P'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:129]
+WARNING: [Vivado 12-584] No ports matched 'JD4_N'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:130]
+WARNING: [Vivado 12-584] No ports matched 'JD4_P'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:131]
+WARNING: [Vivado 12-584] No ports matched 'OLED_DC'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:136]
+WARNING: [Vivado 12-584] No ports matched 'OLED_RES'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:137]
+WARNING: [Vivado 12-584] No ports matched 'OLED_SCLK'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:138]
+WARNING: [Vivado 12-584] No ports matched 'OLED_SDIN'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:139]
+WARNING: [Vivado 12-584] No ports matched 'OLED_VBAT'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:140]
+WARNING: [Vivado 12-584] No ports matched 'OLED_VDD'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:141]
+WARNING: [Vivado 12-584] No ports matched 'HD_CLK'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:146]
+WARNING: [Vivado 12-584] No ports matched 'HD_D0'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:147]
+WARNING: [Vivado 12-584] No ports matched 'HD_D1'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:148]
+WARNING: [Vivado 12-584] No ports matched 'HD_D10'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:149]
+WARNING: [Vivado 12-584] No ports matched 'HD_D11'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:150]
+WARNING: [Vivado 12-584] No ports matched 'HD_D12'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:151]
+WARNING: [Vivado 12-584] No ports matched 'HD_D13'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:152]
+WARNING: [Vivado 12-584] No ports matched 'HD_D14'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:153]
+WARNING: [Vivado 12-584] No ports matched 'HS_D15'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:154]
+WARNING: [Vivado 12-584] No ports matched 'HD_D2'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:155]
+WARNING: [Vivado 12-584] No ports matched 'HD_D3'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:156]
+WARNING: [Vivado 12-584] No ports matched 'HD_D4'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:157]
+WARNING: [Vivado 12-584] No ports matched 'HD_D5'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:158]
+WARNING: [Vivado 12-584] No ports matched 'HD_D6'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:159]
+WARNING: [Vivado 12-584] No ports matched 'HD_D7'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:160]
+WARNING: [Vivado 12-584] No ports matched 'HD_D8'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:161]
+WARNING: [Vivado 12-584] No ports matched 'HD_D9'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:162]
+WARNING: [Vivado 12-584] No ports matched 'HD_DE'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:163]
+WARNING: [Vivado 12-584] No ports matched 'HD_HSYNC'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:164]
+WARNING: [Vivado 12-584] No ports matched 'HD_INT'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:165]
+WARNING: [Vivado 12-584] No ports matched 'HD_SCL'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:166]
+WARNING: [Vivado 12-584] No ports matched 'HD_SDA'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:167]
+WARNING: [Vivado 12-584] No ports matched 'HD_SPDIF'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:168]
+WARNING: [Vivado 12-584] No ports matched 'HD_SPDIFO'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:169]
+WARNING: [Vivado 12-584] No ports matched 'HD_VSYNC'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:170]
+WARNING: [Vivado 12-584] No ports matched 'LD0'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:175]
+WARNING: [Vivado 12-584] No ports matched 'LD1'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:176]
+WARNING: [Vivado 12-584] No ports matched 'LD2'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:177]
+WARNING: [Vivado 12-584] No ports matched 'LD3'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:178]
+WARNING: [Vivado 12-584] No ports matched 'LD4'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:179]
+WARNING: [Vivado 12-584] No ports matched 'LD5'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:180]
+WARNING: [Vivado 12-584] No ports matched 'LD6'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:181]
+WARNING: [Vivado 12-584] No ports matched 'LD7'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:182]
+WARNING: [Vivado 12-584] No ports matched 'VGA_B1'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:187]
+WARNING: [Vivado 12-584] No ports matched 'VGA_B2'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:188]
+WARNING: [Vivado 12-584] No ports matched 'VGA_B3'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:189]
+WARNING: [Vivado 12-584] No ports matched 'VGA_B4'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:190]
+WARNING: [Vivado 12-584] No ports matched 'VGA_G1'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:191]
+WARNING: [Vivado 12-584] No ports matched 'VGA_G2'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:192]
+WARNING: [Vivado 12-584] No ports matched 'VGA_G3'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:193]
+WARNING: [Vivado 12-584] No ports matched 'VGA_G4'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:194]
+WARNING: [Vivado 12-584] No ports matched 'VGA_HS'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:195]
+WARNING: [Vivado 12-584] No ports matched 'VGA_R1'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:196]
+WARNING: [Vivado 12-584] No ports matched 'VGA_R2'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:197]
+WARNING: [Vivado 12-584] No ports matched 'VGA_R3'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:198]
+WARNING: [Vivado 12-584] No ports matched 'VGA_R4'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:199]
+WARNING: [Vivado 12-584] No ports matched 'VGA_VS'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:200]
+WARNING: [Vivado 12-584] No ports matched 'BTNC'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:205]
+WARNING: [Vivado 12-584] No ports matched 'BTND'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:206]
+WARNING: [Vivado 12-584] No ports matched 'BTNL'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:207]
+WARNING: [Vivado 12-584] No ports matched 'BTNR'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:208]
+WARNING: [Vivado 12-584] No ports matched 'BTNU'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:209]
+INFO: [Common 17-14] Message 'Vivado 12-584' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc:209]
+Finished Parsing XDC File [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc]
+WARNING: [Project 1-498] One or more constraints failed evaluation while reading constraint file [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc] and the design contains unresolved black boxes. These constraints will be read post-synthesis (as long as their source constraint file is marked as used_in_implementation) and should be applied correctly then. You should review the constraints listed in the file [.Xil/audioSys_propImpl.xdc] and check the run log file to verify that these constraints were correctly applied.
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/zedboard_master_XDC_RevC_D_v3.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/audioSys_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/audioSys_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+Completed Processing XDC Constraints
+
+INFO: [Opt 31-140] Inserted 1 IBUFs to IO ports without IO buffers.
+INFO: [Opt 31-141] Inserted 6 OBUFs to IO ports without IO buffers.
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+RTL Elaboration Complete:  : Time (s): cpu = 00:02:13 ; elapsed = 00:07:22 . Memory (MB): peak = 6424.957 ; gain = 5515.641 ; free physical = 5653 ; free virtual = 20874
+59 Infos, 117 Warnings, 1 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:21 ; elapsed = 00:00:15 . Memory (MB): peak = 6424.957 ; gain = 420.730 ; free physical = 5653 ; free virtual = 20874
+WARNING: [IP_Flow 19-3899] Cannot get the environment domain name variable for the component vendor name. Setting the vendor name to 'user.org'.
+ipx::package_project -root_dir /afs/ece.cmu.edu/usr/suyashb/Private/545/psg -vendor user.org -library user -taxonomy /UserIP -import_files -set_current false
+WARNING: [IP_Flow 19-1834] The constraints file "zedboard_master_XDC_RevC_D_v3.xdc" is added to the synthesis file group only, but will be used for both synthesis and implementation in the IP generation.
+WARNING: [IP_Flow 19-3833] Not packaging sources file marked as disabled: '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/audioMemTest.sv'.
+WARNING: [IP_Flow 19-3833] Not packaging sources file marked as disabled: '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/toneGen.sv'.
+ERROR: [IP_Flow 19-272] [HDL Parser] Unable to determine HDL language of top-level HDL model, /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/blk_mem_gen_0/audio_init.coe.
+WARNING: [IP_Flow 19-965] There are no component ports to infer bus interfaces.
+CRITICAL WARNING: [IP_Flow 19-379] There are no ports found from top-level file audio_init.coe. Please re-order source files if necessary.
+ERROR: [Common 17-39] 'ipx::package_project' failed due to earlier errors.
+WARNING: [IP_Flow 19-3899] Cannot get the environment domain name variable for the component vendor name. Setting the vendor name to 'user.org'.
+ipx::package_project -root_dir /afs/ece.cmu.edu/usr/suyashb/Private/545/psg -vendor user.org -library user -taxonomy /UserIP -generated_files -import_files -set_current false -force
+WARNING: [IP_Flow 19-1834] The constraints file "zedboard_master_XDC_RevC_D_v3.xdc" is added to the synthesis file group only, but will be used for both synthesis and implementation in the IP generation.
+WARNING: [IP_Flow 19-3833] Not packaging sources file marked as disabled: '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/audioMemTest.sv'.
+WARNING: [IP_Flow 19-3833] Not packaging sources file marked as disabled: '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/toneGen.sv'.
+ERROR: [IP_Flow 19-262] [HDL Parser] Failed to parse top module entity.  This can result from an empty entity or module declaration (i.e. no ports or parameters/generics).  Check that design unit "audioSys" of HDL file "/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/blk_mem_gen_0/synth/blk_mem_gen_0.vhd" is not empty.
+ERROR: [IP_Flow 19-258] [HDL Parser] Error parsing HDL file '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/blk_mem_gen_0/synth/blk_mem_gen_0.vhd'.
+WARNING: [IP_Flow 19-965] There are no component ports to infer bus interfaces.
+CRITICAL WARNING: [IP_Flow 19-379] There are no ports found from top-level file blk_mem_gen_0.vhd. Please re-order source files if necessary.
+ERROR: [Common 17-39] 'ipx::package_project' failed due to earlier errors.
+WARNING: [IP_Flow 19-3899] Cannot get the environment domain name variable for the component vendor name. Setting the vendor name to 'user.org'.
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+set_property -dict [list CONFIG.Load_Init_File {false} CONFIG.Fill_Remaining_Memory_Locations {false} CONFIG.Coe_File {no_coe_file_loaded} CONFIG.Remaining_Memory_Locations {0}] [get_ips blk_mem_gen_0]
+generate_target all [get_files  /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci]
+INFO: [IP_Flow 19-1686] Generating 'Instantiation Template' target for IP 'blk_mem_gen_0'...
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'blk_mem_gen_0'...
+WARNING: [IP_Flow 19-1687] The current project language is set to Verilog. However IP 'blk_mem_gen_0' does not support 'Verilog Synthesis' output products, delivering 'VHDL Synthesis' output products instead.
+INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'blk_mem_gen_0'...
+INFO: [IP_Flow 19-1686] Generating 'Miscellaneous' target for IP 'blk_mem_gen_0'...
+INFO: [IP_Flow 19-1686] Generating 'Change Log' target for IP 'blk_mem_gen_0'...
+reset_run blk_mem_gen_0_synth_1
+launch_run -jobs 4 blk_mem_gen_0_synth_1
+[Wed Oct 19 11:57:14 2016] Launched blk_mem_gen_0_synth_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/blk_mem_gen_0_synth_1/runme.log
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-3899] Cannot get the environment domain name variable for the component vendor name. Setting the vendor name to 'user.org'.
+ipx::package_project -root_dir /afs/ece.cmu.edu/usr/suyashb/Private/545/psg -vendor user.org -library user -taxonomy /UserIP -import_files -set_current false -force
+WARNING: [IP_Flow 19-1834] The constraints file "zedboard_master_XDC_RevC_D_v3.xdc" is added to the synthesis file group only, but will be used for both synthesis and implementation in the IP generation.
+WARNING: [IP_Flow 19-3833] Not packaging sources file marked as disabled: '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/audioMemTest.sv'.
+WARNING: [IP_Flow 19-3833] Not packaging sources file marked as disabled: '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/toneGen.sv'.
+INFO: [IP_Flow 19-2228] Inferred bus interface "reset" of definition type "xilinx.com:signal:reset:1.0".
+INFO: [IP_Flow 19-2228] Inferred bus interface "clk" of definition type "xilinx.com:signal:clock:1.0".
+ipx::unload_core /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/component.xml
+ipx::edit_ip_in_project -upgrade true -name tmp_edit_project -directory /afs/ece.cmu.edu/usr/suyashb/Private/545/psg /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/component.xml
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/data/ip'.
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/afs/ece.cmu.edu/usr/suyashb/Private/545'.
+WARNING: [IP_Flow 19-3656] If you move the project, the path for repository '/afs/ece.cmu.edu/usr/suyashb/Private/545' may become invalid. A better location for the repostory would be in a path adjacent to the project. (Current project location is '/afs/ece.cmu.edu/usr/suyashb/Private/545/psg'.)
+ipx::edit_ip_in_project: Time (s): cpu = 00:04:29 ; elapsed = 00:04:23 . Memory (MB): peak = 6463.785 ; gain = 23.406 ; free physical = 5468 ; free virtual = 20738
+update_compile_order -fileset sources_1
+set_property top audioSys [get_filesets sim_1]
+update_compile_order -fileset sim_1
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+expected floating-point number but got ""
+report_ip_status -name ip_status 
+upgrade_ip -vlnv xilinx.com:ip:clk_wiz:5.1 [get_ips  clk_wiz_0]
+Upgrading 'clk_wiz_0'
+INFO: [IP_Flow 19-3420] Updated clk_wiz_0 to use current project options
+INFO: [IP_Flow 19-3471] Wrote upgrade log to '/afs/ece.cmu.edu/usr/suyashb/Private/545/psg/src/clk_wiz_0/clk_wiz_0.upgrade_log'.
+INFO: [IP_Flow 19-1686] Generating 'Instantiation Template' target for IP 'clk_wiz_0'...
+generate_target all [get_files  /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/src/clk_wiz_0/clk_wiz_0.xci]
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'clk_wiz_0'...
+INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'clk_wiz_0'...
+INFO: [IP_Flow 19-1686] Generating 'Implementation' target for IP 'clk_wiz_0'...
+INFO: [IP_Flow 19-1686] Generating 'Change Log' target for IP 'clk_wiz_0'...
+create_ip_run [get_files -of_objects [get_fileset sources_1] /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/src/clk_wiz_0/clk_wiz_0.xci]
+launch_run -jobs 4 clk_wiz_0_synth_1
+[Wed Oct 19 12:07:52 2016] Launched clk_wiz_0_synth_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/tmp_edit_project.runs/clk_wiz_0_synth_1/runme.log
+expected floating-point number but got ""
+expected floating-point number but got ""
+report_ip_status -name ip_status 
+close_project
+****** Webtalk v2015.2 (64-bit)
+  **** SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+  **** IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+    ** Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
+
+source /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/tmp_edit_project.hw/webtalk/labtool_webtalk.tcl -notrace
+INFO: [Common 17-186] '/afs/ece.cmu.edu/usr/suyashb/Private/545/psg/tmp_edit_project.hw/webtalk/usage_statistics_ext_labtool.xml' has been successfully sent to Xilinx on Wed Oct 19 12:11:06 2016. For additional details about this file, please refer to the WebTalk help file at /afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/doc/webtalk_introduction.html.
+INFO: [Common 17-206] Exiting Webtalk at Wed Oct 19 12:11:06 2016...
+exit
+INFO: [Common 17-206] Exiting Vivado at Wed Oct 19 12:11:12 2016...

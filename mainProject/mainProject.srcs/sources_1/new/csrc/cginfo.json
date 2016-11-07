@@ -1,0 +1,62 @@
+{
+    "CompileStrategy": "fullobj",
+    "CurCompileUdps": {},
+    "NameTable": {
+        "...MASTER...": [
+            "SIM",
+            "amcQw",
+            "module"
+        ],
+        "freqSynth": [
+            "freqSynth",
+            "vx8iT",
+            "module"
+        ],
+        "std": [
+            "std",
+            "reYIK",
+            "module"
+        ],
+        "divider": [
+            "divider",
+            "ANMrv",
+            "module"
+        ],
+        "test": [
+            "test",
+            "x9Hvb",
+            "module"
+        ]
+    },
+    "CompileProcesses": [
+        "cgproc.3537355.json"
+    ],
+    "SIMBData": {
+        "out": "amcQwB.o",
+        "bytes": 59172
+    },
+    "CurCompileModules": [
+        "...MASTER...",
+        "std",
+        "freqSynth",
+        "divider",
+        "test"
+    ],
+    "stat": {
+        "nMops": 3271
+    },
+    "LVLData": [
+        "SIM"
+    ],
+    "PEModules": [],
+    "Misc": {
+        "csrc_abs": "/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/csrc",
+        "cwd": "/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new",
+        "default_output_dir": "csrc",
+        "csrc": "csrc",
+        "daidir_abs": "/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/simv.daidir",
+        "daidir": "simv.daidir",
+        "archive_dir": "archive.0"
+    },
+    "CompileStatus": "Successful"
+}

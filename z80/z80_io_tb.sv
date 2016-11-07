@@ -1,21 +1,32 @@
 module io_tb();
 
-  logic         clk, reset_L;
+  logic         clk_100, clk_25, clk_4, rst_L;
   wire  [7:0]   data_bus;
   wire  [15:0]  addr_bus;
-  logic         IORQ_L, RD_L, WR_L;
+  logic         IORQ_L, RD_L, WR_L, BUSY;
+
+  logic       clkDiv_25;
+  logic [3:0] clkDiv_4;
 
   //The VDP puts values out on data_bus and addr_bus based on the
   //signals provided. We need to be careful to match that interface
   //in order not to drive the wire in multiple places
   vdp_top VDP(
-    .clk(clk),
-    .reset_L(reset_L),
+    .clk_100,
+    .clk_25,
+    .clk_4,
+    .rst_L(rst_L),
     .data_bus(data_bus),
-    .addr_bus(addr_bus),
+    .addr_bus(addr_bus[7:0]),
     .IORQ_L(IORQ_L),
     .RD_L(RD_L),
-    .WR_L(WR_L)
+    .WR_L(WR_L),
+    .VGA_R(), // Disconnected 
+    .VGA_G(), 
+    .VGA_B(),
+    .VGA_HS(),
+    .VGA_VS(),
+    .BUSY
   );
 
   logic [7:0] read_data;
@@ -30,13 +41,30 @@ module io_tb();
 
   //clock generation block
   initial begin
-    clk = 0;
+    clk_100 = 0;
     forever begin
-      #10 clk = ~clk;
+      #1 clk_100 = ~clk_100;
     end
   end
 
+  // Divide the 100 MHz clk to get 25 MHz clk and 4 MHz clk
+  always_ff @(posedge clk_100, negedge rst_L) begin
+    if (~rst_L) begin 
+      clkDiv_4 <= 0;
+      clkDiv_25 <= 0;
+      clk_4 <= 0;
+      clk_25 <= 0;
+    end
+    else begin
+      clkDiv_4 <= (clkDiv_4 == 4'd9) ? 4'd0 : clkDiv_4 + 4'd1;
+      clkDiv_25 <= clkDiv_25 + 2'd1;
+      clk_4 <= (clkDiv_4 == 4'd9) ? ~clk_4 : clk_4;
+      clk_25 <= (clkDiv_25 == 1'd1) ? ~clk_25 : clk_25;
+    end
+  end 
+
   initial begin
+    $readmemb("VRAM.bin", VDP.VRAM.cp.memory);
     data_bus_out_w = 8'bz;
     data_bus_out_r = 8'bz;
     addr_bus_out_w = 16'bz;
@@ -50,27 +78,31 @@ module io_tb();
     $display("Starting tb\n");
 
     //Z80 requires at least 3 cycles of reset, VDP requires like 300 microseconds
-    reset_L = 0;
-    @(posedge clk);
-    @(posedge clk);
-    @(posedge clk);
-    reset_L <= 1;
-    @(posedge clk);
+    rst_L = 0;
+    @(posedge clk_100);
+    @(posedge clk_100);
+    @(posedge clk_100);
+    rst_L <= 1;
+    @(posedge clk_100);
 
     write_in_prog <= 1;
 
     // Write to VRAM 
-    io_write(16'h00BF, 8'hFF); // Write to VRAM, address 14'h3FFF
+    io_write(16'h00BF, 8'hCE); // Write to VRAM, address 14'h0ACE
     nop;
-    io_write(16'h00BF, 8'h7F); // 7F = 01_111111, so write to VRAM
+    io_write(16'h00BF, 8'h4A); // 40 = 01_001010, so write to VRAM
     nop;
     io_write(16'h00BE, 8'h55); // Write 8'h55 in
     nop;
+    io_write(16'h00BE, 8'h77); // Write 8'h77 in
+    nop;
+    io_write(16'h00BE, 8'h99); // Write 8'h99 in
+    nop;
 
     // Read from VRAM
-    io_write(16'h00BF, 8'hFF); // Write to VRAM, address 14'h3FFF
+    io_write(16'h00BF, 8'hCF); // Write to VRAM, address 14'h0001
     nop;
-    io_write(16'h00BF, 8'h3F); // 3F = 00_111111, so read from VRAM
+    io_write(16'h00BF, 8'h0A); // 0A = 00_001010, so read from VRAM
     nop;
     write_in_prog <= 0;
     read_in_prog  <= 1;
@@ -168,19 +200,19 @@ module io_tb();
        data_bus_out_r = 8'bz;
 
     #4 addr_bus_out_r = port_addr;
-    @(posedge clk); //ends T1
+    @(posedge clk_4); //ends T1
 
     //-------------------------------------------------------------------------
     //TIME 1-2
     //-------------------------------------------------------------------------
     #5 IORQ_L = 0;
        RD_L   = 0;
-    @(posedge clk); //ends T2
+    @(posedge clk_4); //ends T2
 
     //-------------------------------------------------------------------------
     //TIME 2-W
     //-------------------------------------------------------------------------
-    @(posedge clk); //ends TW
+    @(posedge clk_4); //ends TW
 
     //-------------------------------------------------------------------------
     //TIME W-3
@@ -188,7 +220,7 @@ module io_tb();
     #5 IORQ_L = 1;
        RD_L   = 1;
     port_data <= data_bus; //sample the data bus on the end of cycle T3
-    @(posedge clk); //ends T3
+    @(posedge clk_4); //ends T3
 
     read_in_prog = 0;
     $display("Data received from I/O read to %h: %h\n", port_addr, port_data);
@@ -197,7 +229,7 @@ module io_tb();
 
 
   task nop();
-    @(posedge clk);@(posedge clk);@(posedge clk);@(posedge clk);@(posedge clk);
+    @(posedge clk_4);@(posedge clk_4);@(posedge clk_4);@(posedge clk_4);@(posedge clk_4);
   endtask;
 
 
@@ -222,26 +254,26 @@ module io_tb();
 
     #4 addr_bus_out_w = port_addr;
        data_bus_out_w = port_data;
-    @(posedge clk); //ends T1
+    @(posedge clk_4); //ends T1
 
     //-------------------------------------------------------------------------
     //TIME 1-2
     //-------------------------------------------------------------------------
     #5 IORQ_L = 0;
        WR_L   = 0;
-    @(posedge clk); //ends T2
+    @(posedge clk_4); //ends T2
 
     //-------------------------------------------------------------------------
     //TIME 2-W
     //-------------------------------------------------------------------------
-    @(posedge clk); //ends TW
+    @(posedge clk_4); //ends TW
 
     //-------------------------------------------------------------------------
     //TIME W-3
     //-------------------------------------------------------------------------
     #5 IORQ_L = 1;
        WR_L   = 1;
-    @(posedge clk); //ends T3
+    @(posedge clk_4); //ends T3
 
     write_in_prog = 0;
     $display("Data %h written to I/O port %h\n", port_data, port_addr);
