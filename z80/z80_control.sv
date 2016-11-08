@@ -1827,6 +1827,7 @@ module decoder (
             `DEC_HL:    next_state = DEC_HL_0;
             `INC_ss:    next_state = INC_ss_0;
             `DEC_ss:    next_state = DEC_ss_0;
+            `RST_p:     next_state = RST_p_0;
             default:    next_state = FETCH_0;
           endcase
         end
@@ -3308,6 +3309,7 @@ module decoder (
       RET_cc_5: next_state = RET_cc_6;
       RET_cc_6: next_state = FETCH_0;
 
+      //Dont increment the PC after going to a RST
       //RST_p
       RST_p_0: next_state = RST_p_1;
       RST_p_1: next_state = RST_p_2;
@@ -3315,7 +3317,7 @@ module decoder (
       RST_p_3: next_state = RST_p_4;
       RST_p_4: next_state = RST_p_5;
       RST_p_5: next_state = RST_p_6;
-      RST_p_6: next_state = FETCH_0;
+      RST_p_6: next_state = START;
 
       //-----------------------------------------------------------------------
       //END Call and Return group
