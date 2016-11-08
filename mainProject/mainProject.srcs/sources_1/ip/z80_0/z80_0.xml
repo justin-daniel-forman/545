@@ -154,7 +154,7 @@
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Tue Nov 01 18:36:43 UTC 2016</spirit:value>
+            <spirit:value>Thu Jan 01 00:00:00 UTC 1970</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>StaleAtRelink</spirit:name>
