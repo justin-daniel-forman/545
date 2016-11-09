@@ -174,6 +174,17 @@ module z80(
   logic         ld_MARL_data;
   logic         drive_MAR;
 
+  //-----------------------------------
+  //Maskable interrupt controls
+  //  Can disable and enable INT_L
+  //  response
+  //----------------------------------
+  logic         push_interrupts;
+  logic         pop_interrupts;
+  logic         enable_interrupts;
+  logic         disable_interrupts;
+  logic         IFF1_out;
+
   //External bus outputs
   logic [15:0]  addr_out;
 

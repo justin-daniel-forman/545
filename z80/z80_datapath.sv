@@ -99,7 +99,16 @@ module datapath (
   output logic [15:0]  addr_out,
 
   //Flag outputs, the control module needs this information
-  output logic [7:0]   flags
+  output logic [7:0]   flags,
+
+  //Interrupt register controls
+  input  logic         enable_interrupts,
+  input  logic         disable_interrupts,
+  input  logic         push_interrupts,
+  input  logic         pop_interrupts,
+
+  //Interrupt register outputs
+  output logic         IFF1_out
 );
 
   //---------------------------------------------------------------------------
@@ -463,6 +472,61 @@ module datapath (
   assign data_out = (is_driven_data) ? internal_data : 8'bz;
   assign addr_out = (is_driven_addr) ? internal_addr : 15'bz;
 
+
+  //---------------------------------------------------------------------------
+  //Interrupt Control Registers
+  //---------------------------------------------------------------------------
+  logic IFF1_in;
+  logic IFF2_in;
+  logic IFF1_en;
+  logic IFF2_en;
+  logic IFF2_out;
+
+  register #(1) IFF1(.clk, .rst_L, .D(IFF1_in), .Q(IFF1_out), .en(IFF1_en));
+  register #(1) IFF2(.clk, .rst_L, .D(IFF2_in), .Q(IFF2_out), .en(IFF2_en));
+
+  always_comb begin
+    if(enable_interrupts) begin
+      //to enable interrupts, set both registers to true
+      IFF1_in = 1;
+      IFF2_in = 1;
+      IFF1_en = 1;
+      IFF2_en = 1;
+    end
+
+    else if(disable_interrupts) begin
+      IFF1_in = 0;
+      IFF2_in = 0;
+      IFF1_en = 1;
+      IFF2_en = 1;
+    end
+
+    else if(push_interrupts) begin
+      //When we process an interrupt and enter the handler,
+      //we want to save the state of our interrupt control
+      //register (IFF1) such that we can restore its value
+      //upon exiting the interrupt subroutine. When we enter
+      //a handler by default, we disable interrupts.
+      IFF1_in = 0;
+      IFF2_in = IFF1_out;
+      IFF1_en = 1;
+      IFF2_en = 1;
+    end
+
+    else if(pop_interrupts) begin
+      //When we exit an interrupt handler, we want to restore
+      //the status of our interrupt masking to whatever it
+      //was before the ISR masked our interrupts. The stored
+      //value exists in IFF2.
+      IFF1_in = IFF2_out;
+      IFF2_in = 0;
+      IFF1_en = 1;
+      IFF2_en = 1;
+    end
+
+  end
+
+
 endmodule: datapath
 
 //-----------------------------------------------------------------------------
@@ -709,7 +773,7 @@ module alu #(parameter w = 8)(
 
         //PV flag is set when there is overflow, which occurs when
         //output changes the MSB of the accumulator
-        F_out[`PV_flag] = (A == 8'h80); 
+        F_out[`PV_flag] = (A == 8'h80);
       end
 
       `ALU_B: begin
@@ -801,6 +865,11 @@ module alu #(parameter w = 8)(
           3'b110: C = 16'h0030;
           3'b111: C = 16'h0038;
         endcase
+      end
+
+      //Maskable interrupt resets PC to this address
+      `ALU_INT: begin
+        C = 16'h0038;
       end
 
       `BIT_TEST_0: begin
