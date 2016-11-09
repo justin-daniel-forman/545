@@ -16,7 +16,7 @@ module vdp_top (
   input  wire [7:0] addr_bus_in,
   output wire [7:0] data_bus_out,
   input  logic      IORQ_L,
-  input  logic      MREQ_L,
+  input  logic      M1_L,
   input  logic      RD_L,
   input  logic      WR_L,
 
@@ -198,11 +198,11 @@ module vdp_top (
   
   /******* Interrupt Register *******/
 
-  always_ff @(posedge clk, negedge rst_L) begin
+  always_ff @(posedge clk_25, negedge rst_L) begin
     if (~rst_L) begin
       INT_L <= 1;
     end
-    else if (~IORQ_L && ~MREQ_L) begin
+    else if (~IORQ_L && ~M1_L) begin
       INT_L <= 1;
     end
     else if (pixel_row == 9'd431 && pixel_col == 10'd576) begin

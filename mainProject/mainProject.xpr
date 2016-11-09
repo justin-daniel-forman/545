@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="5" Path="/afs/ece.cmu.edu/usr/christoc/Private/class/ece545/545/mainProject/mainProject.xpr">
+<Project Version="7" Minor="5" Path="/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="59e691da5a294821974d353606a17697"/>
@@ -138,18 +138,6 @@
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="VRAM.xml"/>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="synth/VRAM.vhd"/>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2.vhd"/>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd"/>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="VRAM_ooc.xdc"/>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="VRAM.mif"/>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="doc/blk_mem_gen_v8_2_changelog.txt"/>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="sim/VRAM.v"/>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="blk_mem_gen_v8_2/simulation/blk_mem_gen_v8_2.v"/>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="summary.log"/>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="/afs/ece.cmu.edu/usr/christoc/Private/class/ece545/545/VRAM_v6.coe"/>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="VRAM.veo"/>
       </File>
       <File Path="$PPRDIR/../VRAM_v6.coe">
         <FileInfo>
@@ -176,6 +164,47 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PSRCDIR/sources_1/ip/Bios.coe">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/z80/z80_defines.vh">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../z80/z80_defines.vh"/>
+          <Attr Name="ImportTime" Val="1478710892"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/z80/z80_control.sv">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../z80/z80_control.sv"/>
+          <Attr Name="ImportTime" Val="1478713567"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/z80/z80_top.sv">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../z80/z80_top.sv"/>
+          <Attr Name="ImportTime" Val="1478710892"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/z80/z80_datapath.sv">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../z80/z80_datapath.sv"/>
+          <Attr Name="ImportTime" Val="1478713438"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
         <Option Name="TopModule" Val="project_top"/>
@@ -185,7 +214,7 @@
       <Filter Type="Constrs"/>
       <File Path="$PSRCDIR/constrs_1/imports/Downloads/zedboard_master_XDC_RevC_D_v3.xdc">
         <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../../../../../suyashb/Downloads/zedboard_master_XDC_RevC_D_v3.xdc"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../Downloads/zedboard_master_XDC_RevC_D_v3.xdc"/>
           <Attr Name="ImportTime" Val="1465229162"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -214,23 +243,6 @@
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_0.xml"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="synth/blk_mem_gen_0.vhd"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2.vhd"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_0_ooc.xdc"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="sim/blk_mem_gen_0.v"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_v8_2/simulation/blk_mem_gen_v8_2.v"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_0.mif"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_0.veo"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="doc/blk_mem_gen_v8_2_changelog.txt"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="summary.log"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="/afs/ece.cmu.edu/usr/christoc/Private/class/ece545/545/mainProject/mainProject.srcs/sources_1/ip/vdp_test.coe"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_0_funcsim.vhdl"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_0.dcp"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_0_stub.v"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_0_funcsim.v"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_0_stub.vhdl"/>
       </File>
       <Config>
         <Option Name="TopModule" Val="blk_mem_gen_0"/>
@@ -263,19 +275,6 @@
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
-    <FileSet Name="z80_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/z80_0">
-      <File Path="$PSRCDIR/sources_1/ip/z80_0/z80_0.xci">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <Config>
-        <Option Name="TopModule" Val="z80_0"/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-      </Config>
-    </FileSet>
     <FileSet Name="audioSys_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/audioSys_0">
       <File Path="$PPRDIR/../psg/audioSys_0/audioSys_0.xci">
         <FileInfo>
@@ -287,6 +286,19 @@
       <File Path="$PPRDIR/../psg/audioSys_0/src/clk_wiz_0/clk_wiz_0.upgrade_log"/>
       <Config>
         <Option Name="TopModule" Val="audioSys_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="z80_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/z80_0">
+      <File Path="$PSRCDIR/sources_1/ip/z80_0/z80_0.xci">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <Config>
+        <Option Name="TopModule" Val="z80_0"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
@@ -341,14 +353,14 @@
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
     </Run>
-    <Run Id="z80_0_synth_1" Type="Ft3:Synth" SrcSet="z80_0" Part="xc7z020clg484-1" ConstrsSet="z80_0" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/z80_0_synth_1">
+    <Run Id="audioSys_0_synth_1" Type="Ft3:Synth" SrcSet="audioSys_0" Part="xc7z020clg484-1" ConstrsSet="audioSys_0" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/audioSys_0_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2015"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
     </Run>
-    <Run Id="audioSys_0_synth_1" Type="Ft3:Synth" SrcSet="audioSys_0" Part="xc7z020clg484-1" ConstrsSet="audioSys_0" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/audioSys_0_synth_1">
+    <Run Id="z80_0_synth_1" Type="Ft3:Synth" SrcSet="z80_0" Part="xc7z020clg484-1" ConstrsSet="z80_0" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/z80_0_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2015"/>
         <Step Id="synth_design"/>
@@ -412,7 +424,7 @@
         <Step Id="write_bitstream"/>
       </Strategy>
     </Run>
-    <Run Id="z80_0_impl_1" Type="Ft2:EntireDesign" Part="xc7z020clg484-1" ConstrsSet="z80_0" Description="Vivado Implementation Defaults" SynthRun="z80_0_synth_1">
+    <Run Id="audioSys_0_impl_1" Type="Ft2:EntireDesign" Part="xc7z020clg484-1" ConstrsSet="audioSys_0" Description="Vivado Implementation Defaults" SynthRun="audioSys_0_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2015"/>
         <Step Id="init_design"/>
@@ -426,7 +438,7 @@
         <Step Id="write_bitstream"/>
       </Strategy>
     </Run>
-    <Run Id="audioSys_0_impl_1" Type="Ft2:EntireDesign" Part="xc7z020clg484-1" ConstrsSet="audioSys_0" Description="Vivado Implementation Defaults" SynthRun="audioSys_0_synth_1">
+    <Run Id="z80_0_impl_1" Type="Ft2:EntireDesign" Part="xc7z020clg484-1" ConstrsSet="z80_0" Description="Vivado Implementation Defaults" SynthRun="z80_0_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2015"/>
         <Step Id="init_design"/>

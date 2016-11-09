@@ -18,7 +18,8 @@ module z80(
   //  We are ignoring DMA interface and bus arbitration logic because we do not
   //  anticipate the need for any slave device to take control of the bus
   //---------------------------------------------------------------------------
-  inout   wire  [7:0]   data_bus,
+  input   wire  [7:0]   data_in,
+  output  wire  [7:0]   data_out,
   inout   wire  [15:0]  addr_bus,
 
   //---------------------------------------------------------------------------
@@ -129,7 +130,7 @@ module z80(
   logic         ld_F_addr;      //16bit load
   logic         drive_A;
   logic         drive_F;
-  logic [3:0]   alu_op;
+  logic [5:0]   alu_op;
   logic         drive_alu_data; //8bit drive
   logic         drive_alu_addr; //16bit drive
   logic [1:0]   set_S;
@@ -164,15 +165,27 @@ module z80(
 
   //-----------------------------------
   //temporary addr_bus registers
-  //  These registers sit on the addr bus
+  //  These registers sit on the addr bus, but can load
+  //  data from the D-Bus when necessary
   //-----------------------------------
   logic         ld_MARH; //load upper byte of MAR
   logic         ld_MARL; //load lower byte of MAR
+  logic         ld_MARH_data;
+  logic         ld_MARL_data;
   logic         drive_MAR;
 
+  //-----------------------------------
+  //Maskable interrupt controls
+  //  Can disable and enable INT_L
+  //  response
+  //----------------------------------
+  logic         push_interrupts;
+  logic         pop_interrupts;
+  logic         enable_interrupts;
+  logic         disable_interrupts;
+  logic         IFF1_out;
+
   //External bus outputs
-  logic [7:0]   data_in;
-  logic [7:0]   data_out;
   logic [15:0]  addr_out;
 
   //Datapath flags that the control module ueses
@@ -182,9 +195,6 @@ module z80(
 
   control_logic CTRL(.*);
 
-  assign data_in  = data_bus;
-  assign data_bus = data_out;
   assign addr_bus = addr_out;
-
 
 endmodule: z80
