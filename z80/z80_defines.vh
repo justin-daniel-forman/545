@@ -106,6 +106,8 @@
 `define CCF         8'h3F
 `define SCF         8'h37
 `define NOP         8'h00
+`define EI          8'hFB
+`define DI          8'hF3
 `define ADD_HL_ss   8'b00??1001
 `define ADC_HL_ss   8'b01??1010
 `define SBC_HL_ss   8'b01??0010
@@ -176,6 +178,7 @@
 `define ALU_CCF   6'hd
 `define ALU_CPL   6'he
 `define AND       6'hf
+`define ALU_INT   6'h2f
 
 //TODO: Update all of these as necessary
 `define OR        6'h18

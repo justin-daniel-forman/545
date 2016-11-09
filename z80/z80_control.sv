@@ -13,6 +13,15 @@ module control_logic (
   input   logic [7:0]   flags,
 
   //---------------------------------------------------------------------------
+  //Maskable interrupt control signals
+  //---------------------------------------------------------------------------
+  output logic          enable_interrupts,
+  output logic          disable_interrupts,
+  output logic          push_interrupts,
+  output logic          pop_interrupts,
+  input  logic          IFF1_out,
+
+  //---------------------------------------------------------------------------
   //Control Signals
   //  See subsections for details on these signals.
   //---------------------------------------------------------------------------
@@ -185,6 +194,11 @@ module control_logic (
   logic OUT_WR_L;
   logic OUT_bus;
 
+  logic INT_start;
+  logic INT_IORQ_L;
+  logic INT_M1_L;
+  logic INT_bus;
+
   OCF_fsm machine_fetch(
     .clk(clk),
     .rst_L(rst_L),
@@ -237,6 +251,16 @@ module control_logic (
     .OUT_WR_L
   );
 
+  INT_fsm interrupt_ack(
+    .clk,
+    .rst_L,
+    .INT_start,
+
+    .WAIT_L,
+    .INT_IORQ_L,
+    .INT_M1_L
+  );
+
   //---------------------------------------------------------------------------
   //DECODER
   //  Determines which instruction we are currently executing and who gets
@@ -247,6 +271,7 @@ module control_logic (
     .rst_L(rst_L),
 
     .WAIT_L,
+    .INT_L,
     .data_in,
     .flags,
 
@@ -334,7 +359,16 @@ module control_logic (
     .IN_start,
     .IN_bus,
     .OUT_start,
-    .OUT_bus
+    .OUT_bus,
+    .INT_start,
+    .INT_bus,
+
+    //Interrupt controls
+    .enable_interrupts,
+    .disable_interrupts,
+    .push_interrupts,
+    .pop_interrupts,
+    .IFF1_out
   );
 
   //---------------------------------------------------------------------------
@@ -380,6 +414,11 @@ module control_logic (
       IORQ_L = OUT_IORQ_L;
     end
 
+    else if(INT_bus) begin
+      IORQ_L = INT_IORQ_L;
+      M1_L   = INT_M1_L;
+    end
+
   end
 
 endmodule: control_logic
@@ -400,6 +439,7 @@ module decoder (
   //           if the memory technology is not ready. Probably not needed.
   //---------------------------------------------------------------------------
   input logic WAIT_L,
+  input logic INT_L,
 
   //---------------------------------------------------------------------------
   //
@@ -528,7 +568,18 @@ module decoder (
   output logic      IN_start,
   output logic      IN_bus,
   output logic      OUT_start,
-  output logic      OUT_bus
+  output logic      OUT_bus,
+  output logic      INT_start,
+  output logic      INT_bus,
+
+  //---------------------------------------------------------------------------
+  // Maskable interrupt controls
+  //---------------------------------------------------------------------------
+  output logic      enable_interrupts,
+  output logic      disable_interrupts,
+  output logic      push_interrupts,
+  output logic      pop_interrupts,
+  input  logic      IFF1_out
 );
 
   enum logic [31:0] {
@@ -542,6 +593,16 @@ module decoder (
     FETCH_5,
     FETCH_6,
     FETCH_7,
+
+    INT_0,
+    INT_1,
+    INT_2,
+    INT_3,
+    INT_4,
+    INT_5,
+    INT_6,
+    INT_7,
+    INT_8,
 
     LD_r_r_0,
 
@@ -1365,6 +1426,10 @@ module decoder (
 
     NOP_0,
 
+    DI_0,
+
+    EI_0,
+
     ADD_HL_ss_0,
     ADD_HL_ss_1,
     ADD_HL_ss_2,
@@ -1586,7 +1651,6 @@ module decoder (
     RST_p_5,
     RST_p_6,
 
-
     IN_A_n_0,
     IN_A_n_1,
     IN_A_n_2,
@@ -1724,8 +1788,6 @@ module decoder (
   logic [7:0] op0;
   logic [7:0] op1;
   logic [7:0] op2;
-  logic [7:0] odf0;
-  logic [7:0] odf1;
 
   always_ff @(posedge clk) begin
     if(~rst_L) begin
@@ -1759,15 +1821,21 @@ module decoder (
       //BEGIN Opcode Fetch Group
       //-----------------------------------------------------------------------
 
+      //We are also going to sample the interrupt line at this point in time
+      //which is one cycle later than the original z80 processor, but should
+      //have the same functional effect. If an INT is received, we will
+      //function in z80 mode 1 and jump to address 038 before restarting
+      //our instruction fetch.
+
       //On processor restart, we want to access address 0, but FETCH0
       //automagically increments the PC for us, which we do not want
       //here
-      START: next_state = FETCH_1;
+      START: next_state   = (~INT_L & IFF1_out) ? INT_0 : FETCH_1;
 
       //An OCF takes 4 cycles in total, but only 2 of those cycles are needed
       //to retreive the opcode (which comes in on T2/T3). The other two
       //cycles are spent refreshing the DRAM.
-      FETCH_0: next_state = FETCH_1;
+      FETCH_0: next_state = (~INT_L & IFF1_out) ? INT_0 : FETCH_1;
       FETCH_1: next_state = FETCH_2;
 
       //This cycle is spent decoding the instruction, and the 4th cycle
@@ -1893,6 +1961,8 @@ module decoder (
             `RST_p:      next_state = RST_p_0;
             `IN_A_n:     next_state = IN_A_n_0;
             `OUT_n_A:    next_state = OUT_n_A_0;
+            `DI:         next_state = DI_0;
+            `EI:         next_state = EI_0;
             default:     next_state = FETCH_0;
           endcase
         end
@@ -2015,6 +2085,19 @@ module decoder (
            default:     next_state = FETCH_0;
         endcase
       end
+
+      //Interrupt response returns to a fetch cycle when it is finished,
+      //but it does not increment the PC then
+      //INT
+      INT_0: next_state = INT_1;
+      INT_1: next_state = INT_2;
+      INT_2: next_state = INT_3;
+      INT_3: next_state = INT_4;
+      INT_4: next_state = INT_5;
+      INT_5: next_state = INT_6;
+      INT_6: next_state = INT_7;
+      INT_7: next_state = INT_8;
+      INT_8: next_state = START;
 
       //-----------------------------------------------------------------------
       //END Opcode fetch group
@@ -3059,6 +3142,12 @@ module decoder (
       //NOP
       NOP_0: next_state = FETCH_0;
 
+      //DI
+      DI_0: next_state = FETCH_0;
+
+      //EI
+      EI_0: next_state = FETCH_0;
+
       //-----------------------------------------------------------------------
       //END General Purpose Arith and CPU Control
       //-----------------------------------------------------------------------
@@ -3317,7 +3406,7 @@ module decoder (
       RST_p_3: next_state = RST_p_4;
       RST_p_4: next_state = RST_p_5;
       RST_p_5: next_state = RST_p_6;
-      RST_p_6: next_state = START;
+      RST_p_6: next_state = FETCH_0;
 
       //-----------------------------------------------------------------------
       //END Call and Return group
@@ -3506,6 +3595,8 @@ module decoder (
     IN_bus    = 0;
     OUT_start = 0;
     OUT_bus   = 0;
+    INT_start = 0;
+    INT_bus   = 0;
 
     //Regfile loads
     ld_B = 0;
@@ -3589,19 +3680,65 @@ module decoder (
     ld_MARL_data = 0;
     drive_MAR = 0;
 
+    //maskable interrupt controls
+    enable_interrupts  = 0;
+    disable_interrupts = 0;
+    push_interrupts    = 0;
+    pop_interrupts     = 0;
+
     case(state)
 
       START: begin
-        drive_PCH = 1;
-        drive_PCL = 1;
-        drive_reg_addr = 1;
-        drive_alu_addr = 1;
-        alu_op    = `ALU_NOP;
-        OCF_start = 1;
-        OCF_bus   = 1;
+        //Handle an interrupt by starting an interrupt ack cycle
+        if(~INT_L & IFF1_out) begin
+          drive_alu_addr = 1;
+          alu_op = `ALU_NOP;
+          drive_reg_addr = 1;
+          drive_PCH = 1;
+          drive_PCL = 1;
+          INT_start = 1;
+          INT_bus   = 1;
+
+        //When there is normal behavior, drive the PC and begin a fetch
+        end else begin
+          drive_PCH = 1;
+          drive_PCL = 1;
+          drive_reg_addr = 1;
+          drive_alu_addr = 1;
+          alu_op    = `ALU_NOP;
+          OCF_start = 1;
+          OCF_bus   = 1;
+        end
       end
 
-      FETCH_0, FETCH_4: begin
+      FETCH_0: begin
+        //Handle an intterrupt by starting an interrupt ack cycle
+        if(~INT_L & IFF1_out) begin
+          drive_alu_addr = 1;
+          alu_op         = `INCR_A_16;
+          drive_reg_addr = 1;
+          drive_PCH = 1;
+          drive_PCL = 1;
+          ld_PCH    = 1;
+          ld_PCL    = 1;
+          INT_start = 1;
+          INT_bus   = 1;
+
+        //When there is normal behavior, inc the PC and begin a fetch
+        end else begin
+          drive_alu_addr = 1;
+          alu_op         = `INCR_A_16;
+          drive_reg_addr = 1;
+          drive_PCH = 1;
+          drive_PCL = 1;
+          ld_PCH    = 1;
+          ld_PCL    = 1;
+          OCF_start = 1;
+          OCF_bus   = 1;
+        end
+      end
+
+      FETCH_4: begin
         ld_PCH = 1;
         ld_PCL = 1;
         drive_PCH = 1;
@@ -3631,6 +3768,101 @@ module decoder (
         OCF_bus = 1;
       end
 
+      //Maskable Interrupt Handler
+      //Spend these two cycles acknowledging the interrupt
+      //We also want to decrement the PC by one while we are here.
+      //A normal CALL instruction stacks the PC of the next instruction
+      //minus 1 because that is the PC when that instruction executes. Any
+      //instruction following the RET instruction will increment the PC
+      //restored to so that we continue execution at the proper instruction.
+      //As a result, in order for the interrupt to restore execution to
+      //the instruction it suspended, we need to stack PC-1 such that the
+      //fetch following the return puts the PC where it needs to be.
+      INT_0: begin
+        INT_bus = 1;
+        drive_alu_addr = 1;
+        alu_op         = `DECR_A_16;
+        drive_reg_addr = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        ld_PCH    = 1;
+        ld_PCL    = 1;
+      end
+
+      INT_1: begin
+        INT_bus = 1;
+
+        //Disable interrupts, but store the mask state in IFF2
+        push_interrupts = 1;
+      end
+
+      //Start reseting the address to 16'h0038
+      INT_2: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+        ld_SPL = 1;
+        ld_SPH = 1;
+        alu_op = `DECR_A_16;
+        ld_MARH = 1;
+        ld_MARL = 1;
+      end
+
+      INT_3: begin
+        MWR_start = 1;
+        MWR_bus   = 1;
+        drive_MAR = 1;
+        drive_PCH = 1;
+        drive_reg_data = 1;
+      end
+
+      INT_4: begin
+        MWR_bus = 1;
+        drive_MAR = 1;
+        drive_PCH = 1;
+        drive_reg_data = 1;
+      end
+
+      INT_5: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_SPL = 1;
+        drive_SPH = 1;
+        ld_SPL = 1;
+        ld_SPH = 1;
+        alu_op = `DECR_A_16;
+        ld_MARH = 1;
+        ld_MARL = 1;
+      end
+
+      INT_6: begin
+        MWR_start = 1;
+        MWR_bus   = 1;
+        drive_MAR = 1;
+        drive_PCL = 1;
+        drive_reg_data = 1;
+      end
+
+      INT_7: begin
+        MWR_bus = 1;
+        drive_MAR = 1;
+        drive_PCL = 1;
+        drive_reg_data = 1;
+      end
+
+      INT_8: begin
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_PCH = 1;
+        drive_PCL = 1;
+        ld_PCH = 1;
+        ld_PCL = 1;
+        alu_op = `ALU_INT;
+      end
 
       //-----------------------------------------------------------------------
       //BEGIN 8-bit load group
@@ -7689,6 +7921,14 @@ module decoder (
         set_N = 2'b10;
       end
 
+      EI_0: begin
+        enable_interrupts = 1;
+      end
+
+      DI_0: begin
+        disable_interrupts = 1;
+      end
+
       //-----------------------------------------------------------------------
       //END General Purpose Arith and CPU Control
       //-----------------------------------------------------------------------
@@ -9646,5 +9886,76 @@ module OUT_fsm(
   end
 
 endmodule: OUT_fsm
+
+//-----------------------------------------------------------------------------
+//INT_fsm
+//  This module generates the relevant bus signals for a maskable interrupt
+//  subroutine.
+//-----------------------------------------------------------------------------
+module INT_fsm(
+  input   logic clk,
+  input   logic rst_L,
+
+  input   logic INT_start,
+  input   logic WAIT_L,
+
+  output  logic INT_M1_L,
+  output  logic INT_IORQ_L
+);
+
+  enum logic [3:0] {
+    T1  = 4'b0000,
+    T2  = 4'b0001,
+    T3  = 4'b0010
+  }state, next_state;
+
+  always_ff @(posedge clk) begin
+    if(~rst_L) begin
+      state <= T1;
+    end
+
+    else begin
+      state <= next_state;
+    end
+  end
+
+  //next state logic
+  always_comb begin
+    case(state)
+      T1: next_state = (INT_start) ? T2 : T1;
+      T2: next_state = T3;
+      T3: next_state = T1;
+      default: next_state = T1;
+    endcase
+  end
+
+  //output logic
+  always_comb begin
+    //defaults
+    INT_M1_L    = 1;
+    INT_IORQ_L  = 1;
+
+    case(state)
+      T1: begin
+        INT_M1_L   = (INT_start) ? 0 : 1;
+        INT_IORQ_L = (INT_start) ? 0 : 1;
+      end
+
+      T2: begin
+        INT_M1_L   = 0;
+        INT_IORQ_L = 0;
+      end
+
+      T3: begin
+        INT_M1_L   = 0;
+        INT_IORQ_L = 0;
+      end
+
+      default: begin end
+
+    endcase
+  end
+
+endmodule: INT_fsm
 
 
