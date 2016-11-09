@@ -8,6 +8,7 @@ module vdp_top (
   //  - data_bus:
   //  - addr_bus:
   //  - IORQ_L:   The data on the bus is part of an I/O request
+  //  - MREQ_L:   Used to detect interrupt acknowledgement
   //  - RD_L:     Main CPU is ready for memory data to be placed onto data bus
   //  - WR_L:     Main CPU is placing valid data onto bus for write
   //---------------------------------------------------------------------------
@@ -15,6 +16,7 @@ module vdp_top (
   input  wire [7:0] addr_bus_in,
   output wire [7:0] data_bus_out,
   input  logic      IORQ_L,
+  input  logic      MREQ_L,
   input  logic      RD_L,
   input  logic      WR_L,
 
@@ -26,6 +28,7 @@ module vdp_top (
   //---------------------------------------------------------------------------
 
   output logic      BUSY, 
+  output logic      INT_L,
 
   //---------------------------------------------------------------------------
   //Board output interface
@@ -159,7 +162,7 @@ module vdp_top (
 
   assign VRAM_go = (VRAM_go_VGA || (VRAM_go_io && ~BUSY));
 
-  blk_mem_gen_1 CRAM(
+  CRAM colorRam(
     .clka(clk_4),
     .wea(CRAM_io_we),
     .addra(CRAM_io_addr),
@@ -190,8 +193,22 @@ module vdp_top (
 
   /******* Top Level I/O Interface *******/
 
-  //assign the data bus if we are reading from it
+  //assign the data bus if we are writing to it
   assign data_bus_out = (MODE & ~CSR_L) ? stat_reg_out : data_port_out;
+  
+  /******* Interrupt Register *******/
+
+  always_ff @(posedge clk, negedge rst_L) begin
+    if (~rst_L) begin
+      INT_L <= 1;
+    end
+    else if (~IORQ_L && ~MREQ_L) begin
+      INT_L <= 1;
+    end
+    else if (pixel_row == 9'd431 && pixel_col == 10'd576) begin
+      INT_L <= 0;
+    end 
+  end
 
   /*
   ila_1 LOGIC_ANALYZER(
@@ -297,11 +314,13 @@ module vdp_port_decoder(
     // next state logic
     case (state)
       WAIT: begin
-        if(~IORQ_L & ~WR_L) begin
-          next_state = WR0;
+        if(addr_in == 8'hBE || addr_in == 8'hBF) begin
+          if(~IORQ_L & ~WR_L) begin
+            next_state = WR0;
+          end
+          else if (~IORQ_L & ~RD_L) begin
+            next_state = RD0;
         end
-        else if (~IORQ_L & ~RD_L) begin
-          next_state = RD0;
         end else next_state = WAIT;
       end
       WR0: next_state = WR1;
