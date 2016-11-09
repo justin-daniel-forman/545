@@ -5,6 +5,8 @@ module control_logic (
   input   logic       clk,
   input   logic       rst_L,
 
+  output  logic [31:0] curr_state,
+
   //---------------------------------------------------------------------------
   //Bus Signals
   //  - data_in: The control segment only receives data from the bus
@@ -368,7 +370,10 @@ module control_logic (
     .disable_interrupts,
     .push_interrupts,
     .pop_interrupts,
-    .IFF1_out
+    .IFF1_out,
+
+    //debug
+    .curr_state
   );
 
   //---------------------------------------------------------------------------
@@ -579,7 +584,9 @@ module decoder (
   output logic      disable_interrupts,
   output logic      push_interrupts,
   output logic      pop_interrupts,
-  input  logic      IFF1_out
+  input  logic      IFF1_out,
+
+  output logic [31:0] curr_state
 );
 
   enum logic [31:0] {
@@ -905,6 +912,8 @@ module decoder (
                 //Bit Instructions Group
     EXT_INST_0  //Extended Instructions Group
   } state, next_state;
+
+  assign curr_state = state;
 
   //Internal storage of opcode and operand data bytes that are
   //fetched as part of an execution
