@@ -1781,6 +1781,8 @@ module decoder (
       //END IY instructions group
       //-----------------------------------------------------------------------
 
+      default: next_state = FETCH_0;
+
     endcase
   end
 
