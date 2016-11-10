@@ -387,7 +387,7 @@ module datapath (
       else if(set_N == 2'b10) begin F_in[1] = 0; F_en = 1; end
       if     (set_C == 2'b11) begin F_in[0] = 1; F_en = 1; end
       else if(set_C == 2'b10) begin F_in[0] = 0; F_en = 1; end
-
+      else begin end
     end
 
     //We are including a point to point connection between the 8-bit alu and
@@ -549,6 +549,13 @@ module datapath (
       IFF2_in_p = 0;
       IFF1_en_p = 1;
       IFF2_en_p = 1;
+    end
+
+    else begin
+      IFF1_in_p = 0;
+      IFF2_in_p = 0;
+      IFF1_en_p = 0;
+      IFF2_en_p = 0;
     end
 
   end
@@ -1394,42 +1401,42 @@ module regfile(
         B_not_en  = 1;
         B_in      = B_not_out;
         B_not_in  = B_out;
-      end
+      end else begin end
 
       if(ld_C) begin
         C_en      = 1;
         C_not_en  = 1;
         C_in      = C_not_out;
         C_not_in  = C_out;
-      end
+      end else begin end
 
       if(ld_D) begin
         D_en      = 1;
         D_not_en  = 1;
         D_in      = D_not_out;
         D_not_in  = D_out;
-      end
+      end else begin end
 
       if(ld_E) begin
         E_en      = 1;
         E_not_en  = 1;
         E_in      = E_not_out;
         E_not_in  = E_out;
-      end
+      end else begin end
 
       if(ld_H) begin
         H_en      = 1;
         H_not_en  = 1;
         H_in      = H_not_out;
         H_not_in  = H_out;
-      end
+      end else begin end
 
       if(ld_L) begin
         L_en      = 1;
         L_not_en  = 1;
         L_in      = L_not_out;
         L_not_in  = L_out;
-      end
+      end else begin end
     end
 
     //switch the specified 16 bit registers
