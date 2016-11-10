@@ -424,6 +424,18 @@ module control_logic (
       M1_L   = INT_M1_L;
     end
 
+    else begin
+      //default signals
+      M1_L    = 1'b1;
+      MREQ_L  = 1'b1;
+      IORQ_L  = 1'b1;
+      RD_L    = 1'b1;
+      WR_L    = 1'b1;
+      RFSH_L  = 1'b1;
+      HALT_L  = 1'b1;
+      BUSACK_L = 1'b1;
+    end
+
   end
 
 endmodule: control_logic
@@ -3699,7 +3711,7 @@ module decoder (
 
       START: begin
         //Handle an interrupt by starting an interrupt ack cycle
-        if(~INT_L & IFF1_out) begin
+        if(~INT_L) begin// & IFF1_out) begin
           drive_alu_addr = 1;
           alu_op = `ALU_NOP;
           drive_reg_addr = 1;
@@ -3722,7 +3734,7 @@ module decoder (
 
       FETCH_0: begin
         //Handle an intterrupt by starting an interrupt ack cycle
-        if(~INT_L & IFF1_out) begin
+        if(~INT_L) begin // & IFF1_out) begin
           drive_alu_addr = 1;
           alu_op         = `INCR_A_16;
           drive_reg_addr = 1;
@@ -5920,6 +5932,7 @@ module decoder (
           alu_op    = `DECR_A_16;
           drive_reg_addr = 1;
           drive_alu_addr = 1;
+        end else begin
         end
       end
 
@@ -6000,6 +6013,8 @@ module decoder (
           alu_op    = `DECR_A_16;
           drive_reg_addr = 1;
           drive_alu_addr = 1;
+        end else begin
+
         end
       end
 
@@ -8066,6 +8081,8 @@ module decoder (
           drive_MAR = 1;
           MWR_start = 1;
           MWR_bus   = 1;
+        end else begin
+
         end
       end
 
@@ -8075,6 +8092,8 @@ module decoder (
           drive_reg_data = 1;
           drive_MAR = 1;
           MWR_bus = 1;
+        end else begin
+
         end
       end
 
@@ -8767,6 +8786,8 @@ module decoder (
           ld_SPH = 1;
           ld_MARH = 1;
           ld_MARL = 1;
+        end else begin
+
         end
       end
 

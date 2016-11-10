@@ -424,6 +424,18 @@ module control_logic (
       M1_L   = INT_M1_L;
     end
 
+    else begin
+      //default signals
+      M1_L    = 1'b1;
+      MREQ_L  = 1'b1;
+      IORQ_L  = 1'b1;
+      RD_L    = 1'b1;
+      WR_L    = 1'b1;
+      RFSH_L  = 1'b1;
+      HALT_L  = 1'b1;
+      BUSACK_L = 1'b1;
+    end
+
   end
 
 endmodule: control_logic
@@ -1881,7 +1893,7 @@ module decoder (
 
       START: begin
         //Handle an interrupt by starting an interrupt ack cycle
-        if(~INT_L & IFF1_out) begin
+        if(~INT_L) begin// & IFF1_out) begin
           MACRO_16_DRIVE PC
           INT_start = 1;
           INT_bus   = 1;
@@ -1900,7 +1912,7 @@ module decoder (
 
       FETCH_0: begin
         //Handle an intterrupt by starting an interrupt ack cycle
-        if(~INT_L & IFF1_out) begin
+        if(~INT_L) begin // & IFF1_out) begin
           MACRO_16_INC PC
           INT_start = 1;
           INT_bus   = 1;
@@ -3713,6 +3725,7 @@ module decoder (
         //Repeat the instruction if BC != 0
         if(flags[ `PV_flag ] == 1) begin
           MACRO_DEC_PC
+        end else begin
         end
       end
 
@@ -3778,6 +3791,8 @@ module decoder (
         //Repeat the instruction if BC != 0 or if the compare succeeded
         if(flags[`PV_flag] & ~flags[`Z_flag]) begin
           MACRO_DEC_PC
+        end else begin
+
         end
       end
 
@@ -5141,6 +5156,8 @@ module decoder (
           MACRO_8_DRIVE L
           drive_MAR = 1;
           MACRO_WRITE_0
+        end else begin
+
         end
       end
 
@@ -5149,6 +5166,8 @@ module decoder (
           MACRO_8_DRIVE L
           drive_MAR = 1;
           MACRO_WRITE_1
+        end else begin
+
         end
       end
 
@@ -5649,6 +5668,8 @@ module decoder (
           MACRO_16_LOAD SP
           ld_MARH = 1;
           ld_MARL = 1;
+        end else begin
+
         end
       end
 
