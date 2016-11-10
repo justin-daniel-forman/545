@@ -1895,7 +1895,7 @@ module decoder (
 
       START: begin
         //Handle an interrupt by starting an interrupt ack cycle
-        if(~INT_L) begin// & IFF1_out) begin
+        if(~INT_L & IFF1_out) begin
           MACRO_16_DRIVE PC
           INT_start = 1;
           INT_bus   = 1;
@@ -1914,7 +1914,7 @@ module decoder (
 
       FETCH_0: begin
         //Handle an intterrupt by starting an interrupt ack cycle
-        if(~INT_L) begin // & IFF1_out) begin
+        if(~INT_L & IFF1_out) begin
           MACRO_16_INC PC
           INT_start = 1;
           INT_bus   = 1;
