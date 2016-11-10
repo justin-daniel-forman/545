@@ -3599,6 +3599,8 @@ module decoder (
       //END IY instructions group
       //-----------------------------------------------------------------------
 
+      default: next_state = FETCH_0;
+
     endcase
   end
 
@@ -3711,7 +3713,7 @@ module decoder (
 
       START: begin
         //Handle an interrupt by starting an interrupt ack cycle
-        if(~INT_L) begin// & IFF1_out) begin
+        if(~INT_L & IFF1_out) begin
           drive_alu_addr = 1;
           alu_op = `ALU_NOP;
           drive_reg_addr = 1;
@@ -3734,7 +3736,7 @@ module decoder (
 
       FETCH_0: begin
         //Handle an intterrupt by starting an interrupt ack cycle
-        if(~INT_L) begin // & IFF1_out) begin
+        if(~INT_L & IFF1_out) begin
           drive_alu_addr = 1;
           alu_op         = `INCR_A_16;
           drive_reg_addr = 1;

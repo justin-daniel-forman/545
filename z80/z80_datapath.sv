@@ -597,6 +597,14 @@ module alu #(parameter w = 8)(
 
     F_out = F_in;
 
+    //set default values for outputs and internal logics
+    C = 0;
+    lower_sum = 0;
+    upper_sum = 0;
+    lower_carry_out = 0;
+    upper_carry_out = 0;
+    T = 0;
+
     case(op)
 
       `INCR_A_8, `INCR_B_8: begin
