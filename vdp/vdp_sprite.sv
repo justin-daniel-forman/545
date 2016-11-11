@@ -79,7 +79,7 @@ module vdp_sprite_interface(
 
   inRange #(8) validVPOSCheck(
     .IN(pixelRow[8:1]),
-    .hi(VRAM_sprite_data[4] + 8'd7),
+    .hi(VRAM_sprite_data[4] + (regFile[1][1] ? 8'd15 : 8'd7),
     .lo(VRAM_sprite_data[4]),
     .inRange(validVPOS)
   );
@@ -129,6 +129,7 @@ module vdp_sprite_interface(
     endcase
   end 
 
+  // Register to latch the pattern address of the current sprite
   register #(8) sprLatch(
     .clk, .rst_L,
     .D(sprLatch_in),
@@ -144,6 +145,8 @@ module vdp_sprite_interface(
     .clk,
     .rst_L,
     .sprLatch_en,
+    .tallSprites(regFile[1][1]),
+    .sprPatRow_out,
     .sprPatRow_en,
     .VRAM_go(VRAM_go_RC),
     .sprPat_done
@@ -160,10 +163,10 @@ module vdp_sprite_interface(
   );
 
   // Selects the row in the current sprite to read out
-  counter #(3) SPRITE_PAT_ROW(
+  counter #(4) SPRITE_PAT_ROW(
     .clk,
     .rst_L,
-    .clear(~sprPatRow_en),
+    .clear(sprPatRow_done),
     .en(sprPatRow_en),
     .count(sprPatRow_out)
   );
@@ -300,22 +303,18 @@ endmodule
 // When the sprite pattern address gets latched, 
 // read out the 8 different rows of the corresponding pattern.
 module vdp_sprite_pattern_row_control(
-  input  logic clk, rst_L,
-  input  logic sprLatch_en,
-  output logic sprPatRow_en,
-  output logic VRAM_go, sprPat_done
+  input  logic       clk, rst_L,
+  input  logic       sprLatch_en, tallSprites,
+  input  logic [3:0] sprPatRow_out,
+  output logic       sprPatRow_en,
+  output logic       VRAM_go, sprPat_done
 );
 
-  enum logic [4:0] {Wait, 
-                    Row0, Row0_wait, 
-                    Row1, Row1_wait, 
-                    Row2, Row2_wait,      
-                    Row3, Row3_wait, 
-                    Row4, Row4_wait, 
-                    Row5, Row5_wait, 
-                    Row6, Row6_wait, 
-                    Row7, Row7_wait} 
-                    cs, ns;
+  enum logic [1:0] {Wait, getPat, incRow} cs, ns;
+  
+  logic done;
+  assign done = ~(tallSprites ^ sprPatRow_out[3]); // Either 8x8 sprites and we're on the 7th, 
+                                                   // or 8x16 and we're on the 16th.
 
   always_comb begin
     sprPatRow_en = 0;
@@ -325,29 +324,14 @@ module vdp_sprite_pattern_row_control(
     // NS logic
     case(cs)
       Wait: begin
-        ns = (sprLatch_en) ? Row0 : Wait;
-        sprPatRow_en = 0;
+        ns = (sprLatch_en) ? getPat : Wait;
       end
-      Row0:      ns = Row0_wait;
-      Row0_wait: ns = Row1;
-      Row1:      ns = Row1_wait;
-      Row1_wait: ns = Row2;
-      Row2:      ns = Row2_wait;
-      Row2_wait: ns = Row3;
-      Row3:      ns = Row3_wait;
-      Row3_wait: ns = Row4;
-      Row4:      ns = Row4_wait;
-      Row4_wait: ns = Row5;
-      Row5:      ns = Row5_wait;
-      Row5_wait: ns = Row6;
-      Row6:      ns = Row6_wait;
-      Row6_wait: ns = Row7;
-      Row7:      ns = Row7_wait;
-      Row7_wait: ns = Wait;
+      getPat: ns = incRow; 
+      incRow: ns = (sprPatRow_out[2:0] == 3'd7) ? 
+                   ((done) ? Wait : getPat) : 
+                   getPat;
       default: begin
         ns = Wait;
-        sprPatRow_en = 1;
-        VRAM_go = 0;
       end
     endcase
  
@@ -356,54 +340,12 @@ module vdp_sprite_pattern_row_control(
       Wait: begin
         sprPatRow_en = 0;
       end
-      Row0: begin
+      getPat: begin
         VRAM_go = 1;
       end
-      Row0_wait: begin
+      incRow: begin
         sprPatRow_en = 1;
-      end     
-      Row1: begin
-        VRAM_go = 1;
-      end
-      Row1_wait: begin
-        sprPatRow_en = 1;
-      end  
-      Row2: begin
-        VRAM_go = 1;
-      end
-      Row2_wait: begin
-        sprPatRow_en = 1;
-      end
-      Row3: begin
-        VRAM_go = 1;
-      end
-      Row3_wait: begin
-        sprPatRow_en = 1;
-      end
-      Row4: begin
-        VRAM_go = 1;
-      end
-      Row4_wait: begin
-        sprPatRow_en = 1;
-      end
-      Row5: begin
-        VRAM_go = 1;
-      end
-      Row5_wait: begin
-        sprPatRow_en = 1;
-      end
-      Row6: begin
-        VRAM_go = 1;
-      end
-      Row6_wait: begin
-        sprPatRow_en = 1;
-      end
-      Row7: begin
-        VRAM_go = 1;
-      end
-      Row7_wait: begin
-        sprPatRow_en = 1;
-        sprPat_done = 1;
+        sprPat_done = done && (sprPatRow_out[2:0] == 3'd7);
       end
       default: begin
         sprPatRow_en = 0;
@@ -422,14 +364,16 @@ endmodule
 // Combination logic partitioning the 256B sprite read out of VRAM
 // into 4-byte pixel rows.
 module spritePartition(
+  input  logic              tallSprites,
+  input  logic [7:0]        bottomHalf,
   input  logic [7:0]        validHPOS,
   input  logic [7:0][2:0]   spriteOffset,
   input  logic [7:0][255:0] sprPatLatch_out,
-  output logic [3:0][7:0]   currSprRow
+  output logic [3:0][7:0]   currSprRow,
+  output logic [2:0]        currSprIndex
 );
   
   logic [31:0][7:0] currSprPat;
-  logic [2:0]       currSprIndex;
 
   always_comb
     if(validHPOS[0]) begin
@@ -464,7 +408,9 @@ module spritePartition(
   generate 
     genvar j;
     for (j = 0; j < 32; j++)
-      assign currSprPat[j] = sprPatLatch_out[currSprIndex][(j*8)+8-1:(j*8)]; 
+      assign currSprPat[j] = (bottomHalf[currSprIndex]) ? 
+                             sprPatLatch_out[{1'b1, currSprIndex}][(j*8)+8-1:(j*8)] : 
+                             sprPatLatch_out[{1'b0, currSprIndex}][(j*8)+8-1:(j*8)];
   endgenerate
 
   always_comb begin

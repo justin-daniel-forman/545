@@ -138,18 +138,6 @@
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="VRAM.xml"/>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="synth/VRAM.vhd"/>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2.vhd"/>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd"/>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="VRAM_ooc.xdc"/>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="VRAM.mif"/>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="doc/blk_mem_gen_v8_2_changelog.txt"/>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="sim/VRAM.v"/>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="blk_mem_gen_v8_2/simulation/blk_mem_gen_v8_2.v"/>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="summary.log"/>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="/afs/ece.cmu.edu/usr/christoc/Private/class/ece545/545/VRAM_v6.coe"/>
-        <CompFileExtendedInfo CompFileName="VRAM.xci" FileRelPathName="VRAM.veo"/>
       </File>
       <File Path="$PPRDIR/../VRAM_v6.coe">
         <FileInfo>
@@ -214,23 +202,6 @@
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_0.xml"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="synth/blk_mem_gen_0.vhd"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2.vhd"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_0_ooc.xdc"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="sim/blk_mem_gen_0.v"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_v8_2/simulation/blk_mem_gen_v8_2.v"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_0.mif"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_0.veo"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="doc/blk_mem_gen_v8_2_changelog.txt"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="summary.log"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="/afs/ece.cmu.edu/usr/christoc/Private/class/ece545/545/mainProject/mainProject.srcs/sources_1/ip/vdp_test.coe"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_0_funcsim.vhdl"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_0.dcp"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_0_stub.v"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_0_funcsim.v"/>
-        <CompFileExtendedInfo CompFileName="blk_mem_gen_0.xci" FileRelPathName="blk_mem_gen_0_stub.vhdl"/>
       </File>
       <Config>
         <Option Name="TopModule" Val="blk_mem_gen_0"/>

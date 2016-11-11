@@ -198,7 +198,7 @@ module vdp_top (
   
   /******* Interrupt Register *******/
 
-  always_ff @(posedge clk, negedge rst_L) begin
+  always_ff @(posedge clk_25, negedge rst_L) begin
     if (~rst_L) begin
       INT_L <= 1;
     end
