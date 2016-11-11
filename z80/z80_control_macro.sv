@@ -5,6 +5,8 @@ module control_logic (
   input   logic       clk,
   input   logic       rst_L,
 
+  output  logic [31:0] curr_state,
+
   //---------------------------------------------------------------------------
   //Bus Signals
   //  - data_in: The control segment only receives data from the bus
@@ -368,7 +370,10 @@ module control_logic (
     .disable_interrupts,
     .push_interrupts,
     .pop_interrupts,
-    .IFF1_out
+    .IFF1_out,
+
+    //debug
+    .curr_state
   );
 
   //---------------------------------------------------------------------------
@@ -417,6 +422,18 @@ module control_logic (
     else if(INT_bus) begin
       IORQ_L = INT_IORQ_L;
       M1_L   = INT_M1_L;
+    end
+
+    else begin
+      //default signals
+      M1_L    = 1'b1;
+      MREQ_L  = 1'b1;
+      IORQ_L  = 1'b1;
+      RD_L    = 1'b1;
+      WR_L    = 1'b1;
+      RFSH_L  = 1'b1;
+      HALT_L  = 1'b1;
+      BUSACK_L = 1'b1;
     end
 
   end
@@ -579,7 +596,9 @@ module decoder (
   output logic      disable_interrupts,
   output logic      push_interrupts,
   output logic      pop_interrupts,
-  input  logic      IFF1_out
+  input  logic      IFF1_out,
+
+  output logic [31:0] curr_state
 );
 
   enum logic [31:0] {
@@ -906,6 +925,8 @@ module decoder (
     EXT_INST_0  //Extended Instructions Group
   } state, next_state;
 
+  assign curr_state = state;
+
   //Internal storage of opcode and operand data bytes that are
   //fetched as part of an execution
   logic [7:0] op0;
@@ -1019,6 +1040,7 @@ module decoder (
             `INC_ss:    next_state = INC_ss_0;
             `DEC_ss:    next_state = DEC_ss_0;
             `RST_p:     next_state = RST_p_0;
+            `DI:        next_state = DI_0;
             default:    next_state = FETCH_0;
           endcase
         end
@@ -1759,6 +1781,8 @@ module decoder (
       //-----------------------------------------------------------------------
       //END IY instructions group
       //-----------------------------------------------------------------------
+
+      default: next_state = FETCH_0;
 
     endcase
   end
@@ -3704,6 +3728,7 @@ module decoder (
         //Repeat the instruction if BC != 0
         if(flags[ `PV_flag ] == 1) begin
           MACRO_DEC_PC
+        end else begin
         end
       end
 
@@ -3769,6 +3794,8 @@ module decoder (
         //Repeat the instruction if BC != 0 or if the compare succeeded
         if(flags[`PV_flag] & ~flags[`Z_flag]) begin
           MACRO_DEC_PC
+        end else begin
+
         end
       end
 
@@ -5132,6 +5159,8 @@ module decoder (
           MACRO_8_DRIVE L
           drive_MAR = 1;
           MACRO_WRITE_0
+        end else begin
+
         end
       end
 
@@ -5140,6 +5169,8 @@ module decoder (
           MACRO_8_DRIVE L
           drive_MAR = 1;
           MACRO_WRITE_1
+        end else begin
+
         end
       end
 
@@ -5640,6 +5671,8 @@ module decoder (
           MACRO_16_LOAD SP
           ld_MARH = 1;
           ld_MARL = 1;
+        end else begin
+
         end
       end
 

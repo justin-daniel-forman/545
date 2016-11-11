@@ -387,7 +387,7 @@ module datapath (
       else if(set_N == 2'b10) begin F_in[1] = 0; F_en = 1; end
       if     (set_C == 2'b11) begin F_in[0] = 1; F_en = 1; end
       else if(set_C == 2'b10) begin F_in[0] = 0; F_en = 1; end
-
+      else begin end
     end
 
     //We are including a point to point connection between the 8-bit alu and
@@ -476,29 +476,56 @@ module datapath (
   //---------------------------------------------------------------------------
   //Interrupt Control Registers
   //---------------------------------------------------------------------------
+
+  //I apologize in advance for this very hacky fix, but since we are nearing a
+  //deadline, I cannot afford to do this correctly. The problem is that the
+  //original z80 processor sampled the interrupt line on the last cycle
+  //of a given instruction, but our implentation samples on the first cycle
+  //of a given instruction. As a result, when you return from an interrupt
+  //by running EI, then RET, you can actually catch an interrupt before
+  //returning from the first one. This will cause you not to unstack your
+  //interrupt stack variables and cause a huge stack overflow in the case that
+  //an interrupt is not acknowledged properly. The fix is that we delay any
+  //change to the interrupt mask by a single cycle to miss the sampling in
+  //the next instruction. Oh well......
+
   logic IFF1_in;
   logic IFF2_in;
   logic IFF1_en;
   logic IFF2_en;
   logic IFF2_out;
 
+  logic IFF1_in_p;
+  logic IFF2_in_p;
+  logic IFF1_en_p;
+  logic IFF2_en_p;
+  logic IFF1_out_p;
+  logic IFF2_out_p;
+
   register #(1) IFF1(.clk, .rst_L, .D(IFF1_in), .Q(IFF1_out), .en(IFF1_en));
   register #(1) IFF2(.clk, .rst_L, .D(IFF2_in), .Q(IFF2_out), .en(IFF2_en));
+  register #(1) IFF1_pending(.clk, .rst_L, .D(IFF1_in_p), .Q(IFF1_out_p), .en(IFF1_en_p));
+  register #(1) IFF2_pending(.clk, .rst_L, .D(IFF2_in_p), .Q(IFF2_out_p), .en(IFF2_en_p));
+
+  assign IFF1_in = IFF1_out_p;
+  assign IFF2_in = IFF2_out_p;
+  assign IFF1_en = 1;
+  assign IFF2_en = 1;
 
   always_comb begin
     if(enable_interrupts) begin
       //to enable interrupts, set both registers to true
-      IFF1_in = 1;
-      IFF2_in = 1;
-      IFF1_en = 1;
-      IFF2_en = 1;
+      IFF1_in_p = 1;
+      IFF2_in_p = 1;
+      IFF1_en_p = 1;
+      IFF2_en_p = 1;
     end
 
     else if(disable_interrupts) begin
-      IFF1_in = 0;
-      IFF2_in = 0;
-      IFF1_en = 1;
-      IFF2_en = 1;
+      IFF1_in_p = 0;
+      IFF2_in_p = 0;
+      IFF1_en_p = 1;
+      IFF2_en_p = 1;
     end
 
     else if(push_interrupts) begin
@@ -507,10 +534,10 @@ module datapath (
       //register (IFF1) such that we can restore its value
       //upon exiting the interrupt subroutine. When we enter
       //a handler by default, we disable interrupts.
-      IFF1_in = 0;
-      IFF2_in = IFF1_out;
-      IFF1_en = 1;
-      IFF2_en = 1;
+      IFF1_in_p = 0;
+      IFF2_in_p = IFF1_out;
+      IFF1_en_p = 1;
+      IFF2_en_p = 1;
     end
 
     else if(pop_interrupts) begin
@@ -518,10 +545,17 @@ module datapath (
       //the status of our interrupt masking to whatever it
       //was before the ISR masked our interrupts. The stored
       //value exists in IFF2.
-      IFF1_in = IFF2_out;
-      IFF2_in = 0;
-      IFF1_en = 1;
-      IFF2_en = 1;
+      IFF1_in_p = IFF2_out;
+      IFF2_in_p = 0;
+      IFF1_en_p = 1;
+      IFF2_en_p = 1;
+    end
+
+    else begin
+      IFF1_in_p = 0;
+      IFF2_in_p = 0;
+      IFF1_en_p = 0;
+      IFF2_en_p = 0;
     end
 
   end
@@ -562,6 +596,14 @@ module alu #(parameter w = 8)(
   always_comb begin
 
     F_out = F_in;
+
+    //set default values for outputs and internal logics
+    C = 0;
+    lower_sum = 0;
+    upper_sum = 0;
+    lower_carry_out = 0;
+    upper_carry_out = 0;
+    T = 0;
 
     case(op)
 
@@ -1367,42 +1409,42 @@ module regfile(
         B_not_en  = 1;
         B_in      = B_not_out;
         B_not_in  = B_out;
-      end
+      end else begin end
 
       if(ld_C) begin
         C_en      = 1;
         C_not_en  = 1;
         C_in      = C_not_out;
         C_not_in  = C_out;
-      end
+      end else begin end
 
       if(ld_D) begin
         D_en      = 1;
         D_not_en  = 1;
         D_in      = D_not_out;
         D_not_in  = D_out;
-      end
+      end else begin end
 
       if(ld_E) begin
         E_en      = 1;
         E_not_en  = 1;
         E_in      = E_not_out;
         E_not_in  = E_out;
-      end
+      end else begin end
 
       if(ld_H) begin
         H_en      = 1;
         H_not_en  = 1;
         H_in      = H_not_out;
         H_not_in  = H_out;
-      end
+      end else begin end
 
       if(ld_L) begin
         L_en      = 1;
         L_not_en  = 1;
         L_in      = L_not_out;
         L_not_in  = L_out;
-      end
+      end else begin end
     end
 
     //switch the specified 16 bit registers

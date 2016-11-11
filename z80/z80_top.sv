@@ -67,7 +67,10 @@ module z80(
   output  logic         RFSH_L,
   output  logic         BUSACK_L,
   input   logic         BUSREQ_L,
-  output  logic         HALT_L
+  output  logic         HALT_L,
+
+  output  logic         interrupt_mask,
+  output  logic [31:0]  curr_state
 );
 
   //-----------------------------------
@@ -196,5 +199,8 @@ module z80(
   control_logic CTRL(.*);
 
   assign addr_bus = addr_out;
+
+
+  assign interrupt_mask = IFF1_out;
 
 endmodule: z80
