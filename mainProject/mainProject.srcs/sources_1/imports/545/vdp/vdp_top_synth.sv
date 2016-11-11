@@ -198,17 +198,29 @@ module vdp_top (
   
   /******* Interrupt Register *******/
 
+  intGen INTERRUPT_LOGIC(
+    .clk(clk_25), .rst_L,
+    .IORQ_L, .M1_L, .INT_L, 
+    .row(pixel_row),
+    .col(pixel_col)
+  );
+
+/*
+  logic [5:0] intCount;
+
   always_ff @(posedge clk_25, negedge rst_L) begin
     if (~rst_L) begin
       INT_L <= 1;
+      intCount <= 0;
     end
     else if (~IORQ_L && ~M1_L) begin
-      INT_L <= 1;
+      intCount <= (intCount == 6'd15) ? 6'd0 : intCount + 6'd1;
+      INT_L <= ~(intCount == 6'd15);
     end
     else if (pixel_row == 9'd431 && pixel_col == 10'd576) begin
       INT_L <= 0;
     end 
-  end
+  end*/
 
   /*
   ila_1 LOGIC_ANALYZER(
@@ -320,8 +332,13 @@ module vdp_port_decoder(
           end
           else if (~IORQ_L & ~RD_L) begin
             next_state = RD0;
-        end
-        end else next_state = WAIT;
+          end
+          else begin
+            next_state = WAIT;
+          end
+        end 
+        else 
+          next_state = WAIT;
       end
       WR0: next_state = WR1;
       WR1: next_state = WAIT;
@@ -388,3 +405,68 @@ module regFile (
   endgenerate
 
 endmodule
+
+module intGen(
+  input  logic clk, rst_L,
+  input  logic M1_L, IORQ_L,
+  input  logic [8:0] row, 
+  input  logic [9:0] col,
+  output logic INT_L
+);
+
+    enum logic [8:0] {
+        START, 
+        T1,
+        T2,
+        T3,
+        T4,
+        T5, 
+        T6, 
+        T7,
+        T8,
+        T9,
+        T10,
+        T11,
+        T12,
+        WAIT_TO_CLEAR
+    } curr_state, next_state;
+    
+    // next state logic
+    always_comb begin
+        case(curr_state) 
+            START: next_state = (row == 431 && col == 576) ? WAIT_TO_CLEAR : START;
+            WAIT_TO_CLEAR: next_state = (~M1_L && ~IORQ_L) ? T1 : WAIT_TO_CLEAR;
+            T1: next_state = T2;
+            T2: next_state = T3;
+            T3: next_state = T4;
+            T4: next_state = T5;
+            T5: next_state = T6;
+            T6: next_state = T7;
+            T7: next_state = T8;
+            T8: next_state = T9;
+            T9: next_state = T10;
+            T10: next_state = T11;
+            T11: next_state = T12;
+            T12: next_state = START;
+            default: next_state = START;
+        endcase
+    end
+
+    // output logic
+    always_comb begin
+        INT_L = 0;
+        case(curr_state)
+             START: INT_L = 1;
+             default: INT_L = 0;
+        endcase
+    end
+
+    always_ff @(posedge clk, negedge rst_L) begin
+        if(~rst_L) begin
+            curr_state <= START;
+        end else begin
+            curr_state <= next_state;
+        end
+    end
+
+endmodule: intGen

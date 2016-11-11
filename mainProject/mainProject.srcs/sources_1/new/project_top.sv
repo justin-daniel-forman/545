@@ -76,13 +76,16 @@ module project_top(
     
     assign data_in = (~IORQ_L) ? vdp_data_out : mem_data_out;
 
+    logic [31:0] curr_state;
+    logic        interrupt_mask;
+
     vdp_top VDP(.*, .data_bus_in(data_out), .data_bus_out(vdp_data_out), .addr_bus_in(addr_bus[7:0]), .BUSY(~WAIT_L));    
     audio_top psg(.*);
     mem_interface blkMem(.*, .data_in(mem_data_out)); //FUCK YOU
     z80_block proc_top(.*);
     clk_wiz_0 ClkMHzGen(.clk_in1(GCLK),.clk_out1(clk_8),.*);
     ila_0 debug(.clk(GCLK),.probe0(addr_bus),.probe1(data_in),.probe2(data_out),.probe3(WR_L),.probe4(RD_L),.probe5(MREQ_L),
-        .probe6(IORQ_L),.probe7(clk_4),.probe8(INT_L),.probe9(32'd0),.probe10(3'd0),.probe11(3'd0));
+        .probe6(IORQ_L),.probe7(clk_4),.probe8(INT_L),.probe9(curr_state),.probe10({2'b0, interrupt_mask}),.probe11({2'b0,M1_L}));
     logic clkDiv_25;
     
     // Divide the 100 MHz clk to get 25 MHz clk
