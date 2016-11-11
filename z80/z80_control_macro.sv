@@ -1040,6 +1040,7 @@ module decoder (
             `INC_ss:    next_state = INC_ss_0;
             `DEC_ss:    next_state = DEC_ss_0;
             `RST_p:     next_state = RST_p_0;
+            `DI:        next_state = DI_0;
             default:    next_state = FETCH_0;
           endcase
         end
