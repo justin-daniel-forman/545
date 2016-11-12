@@ -246,7 +246,7 @@ module vdp_io_fsm(
         VRAM_go = 1;
       end
       VRAM_write_data_2: begin
-        //VRAM_we = 1;
+        VRAM_we = 1;
         wr_addr_en = 1;
       end
       RF_write: begin
