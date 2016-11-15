@@ -42,18 +42,17 @@ module vdp_disp_interface(
   logic       VRAM_go_BG, VRAM_go_SPR;
   logic [7:0] sprPat;  
   logic       validSprite; // Used to let sprites hijack CRAM
-  logic [3:0] sprPatRow, sprPatRow_1, sprPatRow_2;
+  logic [2:0] sprPatRow, sprPatRow_1, sprPatRow_2;
   logic [2:0] sprCnt, sprCnt_1, sprCnt_2, sprCnt_3, sprCnt_4;  
 
-  logic [1:0][15:0][255:0] sprPatLatch_out; // 2 Buffers, 8 pairs of 2 entries, each 32*8 bytes
-  logic [7:0]              validHPOS;
-  logic [7:0][2:0]         spriteOffset;
-  logic [2:0]              bgPatOffset;
-  logic [2:0]              currSprIndex;
-  logic [3:0]              sprColorIndex;
-  logic [1:0][7:0]         bottomHalfFlag;
-  logic                    sprLatch_en, sprLatch_en_1, sprLatch_en_2, sprLatch_en_3;
-
+  logic [7:0][255:0] sprPatLatch_out; // 2 Buffers, 8 pairs of 2 entries, each 32*8 bytes
+  logic [7:0]        validHPOS;
+  logic [7:0][2:0]   spriteOffset;
+  logic [2:0]        bgPatOffset;
+  logic [2:0]        currSprIndex;
+  logic [3:0]        sprColorIndex;
+  logic              bottomHalf_latched;
+  
   /******** Background Select Register ********/
  
   register #(14) bgSelReg(
@@ -78,8 +77,7 @@ module vdp_disp_interface(
 
   always_comb begin
     if (col < 10'd57) begin
-      VRAM_VGA_addr[2] = {regFile[6][2], sprPat, 5'd0} + {sprPatRow, 2'd0}; 
-      // sprPatRow is 4 bits, so might add 1 to sprPat to get bottom half 
+      VRAM_VGA_addr[2] = {regFile[6][2], (sprPat + bottomHalf_latched), sprPatRow, 2'd0}; 
     end
     else VRAM_VGA_addr[2] = charPatternAddr;
   end
@@ -190,79 +188,40 @@ module vdp_disp_interface(
     .sprPatRow_out(sprPatRow),
     .sprCnt,
     .spriteOffset,
-    .sprLatch_en
+    .bottomHalf_latched
   );
 
   // Sprite Pattern Latches - *******TODO: Need to enable the right registers at the right time
 
   // Delay the sprite row index by 2 clock cycles to sync with the result from VRAM
   // Doesn't actually get used anymore (?)
-  register #(4) SPR_PAT_ROW_1(.*, .D(sprPatRow),   .Q(sprPatRow_1), .en(1'b1));
-  register #(4) SPR_PAT_ROW_2(.*, .D(sprPatRow_1), .Q(sprPatRow_2), .en(1'b1));
+  register #(3) SPR_PAT_ROW_1(.*, .D(sprPatRow),   .Q(sprPatRow_1), .en(1'b1));
+  register #(3) SPR_PAT_ROW_2(.*, .D(sprPatRow_1), .Q(sprPatRow_2), .en(1'b1));
 
   // Delay the sprite count by 3 clock cycles to sync with the result from VRAM
   register #(3) SPR_CNT_1(.*, .D(sprCnt),   .Q(sprCnt_1), .en(1'b1));
   register #(3) SPR_CNT_2(.*, .D(sprCnt_1),   .Q(sprCnt_2), .en(1'b1));
   register #(3) SPR_CNT_3(.*, .D(sprCnt_2),   .Q(sprCnt_3), .en(1'b1));
   register #(3) SPR_CNT_4(.*, .D(sprCnt_3),   .Q(sprCnt_4), .en(1'b1));
-
-  // Delay the sprite latch enable by 4 clock cycles to sync with above
-  register #(1) SPR_LATCH_EN_1(.*, .D(sprLatch_en), .Q(sprLatch_en_1), .en(1'b1));
-  register #(1) SPR_LATCH_EN_2(.*, .D(sprLatch_en_1), .Q(sprLatch_en_2), .en(1'b1));
-  register #(1) SPR_LATCH_EN_3(.*, .D(sprLatch_en_2), .Q(sprLatch_en_3), .en(1'b1));
-  register #(1) SPR_LATCH_EN_4(.*, .D(sprLatch_en_3), .Q(sprLatch_en_4), .en(1'b1));
-
-  logic [1:0][7:0][7:0] sprAddr_out, sprAddr_in;
-  logic [1:0][7:0]      newBottomHalfFlag;
-
+  
   // Sprite Pattern Row Buffer
   generate
-    genvar i, j, k, bufSel;
-    for(bufSel = 0; bufSel < 2; bufSel++) begin
-      for(i = 0; i < 16; i++) begin      // 16 Possible Sprite locations, 0-7 is top half patterns, 8-15 is bottom half
-        for(j = 0; j < 8; j++) begin    // 8 sets of 4 bytes, for a total of 32 bytes per pattern
-          logic [3:0][7:0] B;
-          assign sprPatLatch_out[bufSel][i][(j*4+1)*8-1:(j*4+0)*8] = B[0]; 
-          assign sprPatLatch_out[bufSel][i][(j*4+2)*8-1:(j*4+1)*8] = B[1];
-          assign sprPatLatch_out[bufSel][i][(j*4+3)*8-1:(j*4+2)*8] = B[2];
-          assign sprPatLatch_out[bufSel][i][(j*4+4)*8-1:(j*4+3)*8] = B[3];
-          register_clr #(8) SPR_PAT_LATCH [3:0] (
-            .clk,
-            .rst_L,
-            .D(VRAM_VGA_data_out[5:2]),
-            .Q(B),
-            .en((sprPatRow[2:0] == j) & ({sprPatRow[3], sprCnt_4} == i) & (pixelRow[0] == bufSel)),
-            .clr(pixelRow > 9'd383)
-          ); // Probably need something more here... 
-        end
-      end
-      for(k = 0; k < 8; k++) begin
-        register_clr #(8) sprAddr(
-          .clk, .rst_L,
-          .D(sprAddr_in[bufSel][k]),
-          .Q(sprAddr_out[bufSel][k]),
-          .en(sprLatch_en_4 && (sprCnt_4 == k) && (pixelRow[0] == bufSel)),
-          .clr((pixelRow > 9'd383) | 
-               ((col == 10'd63) &
-                (pixelRow[0] == ~bufSel[0])
-               )
-          )
-        );
-        assign sprAddr_in[bufSel][k] = sprPat;
-        register_clr #(1) BottomHalf(
+    genvar i, j;
+    for(i = 0; i < 8; i++) begin      // 8 Possible Sprite locations
+      for(j = 0; j < 8; j++) begin    // 8 sets of 4 bytes, for a total of 32 bytes per pattern
+        logic [3:0][7:0] B;
+        assign sprPatLatch_out[i][(j*4+1)*8-1:(j*4+0)*8] = B[0]; 
+        assign sprPatLatch_out[i][(j*4+2)*8-1:(j*4+1)*8] = B[1];
+        assign sprPatLatch_out[i][(j*4+3)*8-1:(j*4+2)*8] = B[2];
+        assign sprPatLatch_out[i][(j*4+4)*8-1:(j*4+3)*8] = B[3];
+        register_clr #(8) SPR_PAT_LATCH [3:0] (
           .clk,
           .rst_L,
-          .D(~bottomHalfFlag[bufSel][k]),
-          .Q(bottomHalfFlag[bufSel][k]),              // We should read off the bottom half for the next 16 rows:
-          .en(regFile[1][1] &                         // Only if sprites are 8x16
-              (sprColorIndex == 4'd15) &              // Only at the last pixel index
-              (spriteOffset[currSprIndex] == 3'd7) &  // Only at the last row
-              (pixelRow[0]) &                         // Active for 2 rows, so only on the second one
-              (currSprIndex == k) &                   // Only for the current sprite
-              (pixelRow[0] == bufSel)
-          ),
+          .D(VRAM_VGA_data_out[5:2]),
+          .Q(B),
+          .en((sprPatRow == j) & (sprCnt_4 == i)),
           .clr(pixelRow > 9'd383)
-        ); // Used to indicate that the top half of a given sprite has already been read, so read the bottom half
+        ); // Probably need something more here... 
       end
     end
   endgenerate
@@ -270,14 +229,11 @@ module vdp_disp_interface(
   logic [3:0][7:0]  currSprRow;
   
   spritePartition SPR_PARTITION(
-    .tallSprites(regFile[1][1]),
-    .bottomHalf(bottomHalfFlag),
     .sprPatLatch_out,
     .spriteOffset,
     .currSprRow,
     .validHPOS,
-    .currSprIndex,
-    .pixelRow
+    .currSprIndex
   );  
   
   assign CRAM_addr_SPR = {
@@ -324,7 +280,7 @@ module disp_fsm(
 
   enum logic [2:0] {WaitInit, PosFetch, WaitForPos, 
                     PatFetch, WaitForPat, RowLoad, Wait} 
-                   cs, ns; 
+                    cs, ns; 
 
   // Next State Logic
   always_comb begin
