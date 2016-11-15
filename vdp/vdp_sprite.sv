@@ -3,15 +3,17 @@ module vdp_sprite_interface(
   input  logic [8:0]       row,
   input  logic [9:0]       col,
   input  logic             screenBusy,
+  input  logic [9:0][7:0]  regFile,
   input  logic [5:0][7:0]  VRAM_sprite_data,
   output logic             VRAM_go,
   output logic [7:0]       sprPat, // Feeds into VRAM addr 2-5
   output logic [1:0][13:0] VRAM_sprite_addr,
   output logic             validSprite,
   output logic [7:0]       validHPOS,
-  output logic [2:0]       sprPatRow_out,
+  output logic [3:0]       sprPatRow_out,
   output logic [2:0]       sprCnt,
-  output logic [7:0][2:0]  spriteOffset
+  output logic [7:0][2:0]  spriteOffset,
+  output logic             sprLatch_en
 );
 
   logic [8:0] pixelRow;
@@ -31,7 +33,7 @@ module vdp_sprite_interface(
   logic [7:0]      VPOSlatch_en;
   logic [7:0][7:0] HPOSlatch_out;
   logic [7:0]      HPOSlatch_en;
-  logic            HPOSlatch_set, VPOSlatch_set, sprLatch_en;
+  logic            HPOSlatch_set, VPOSlatch_set;
   logic [7:0]      sprLatch_in, sprLatch_out;
 
   // FSM Status Points
@@ -79,7 +81,7 @@ module vdp_sprite_interface(
 
   inRange #(8) validVPOSCheck(
     .IN(pixelRow[8:1]),
-    .hi(VRAM_sprite_data[4] + (regFile[1][1] ? 8'd15 : 8'd7),
+    .hi(VRAM_sprite_data[4] + (regFile[1][1] ? 8'd15 : 8'd7)),
     .lo(VRAM_sprite_data[4]),
     .inRange(validVPOS)
   );
@@ -166,7 +168,7 @@ module vdp_sprite_interface(
   counter #(4) SPRITE_PAT_ROW(
     .clk,
     .rst_L,
-    .clear(sprPatRow_done),
+    .clear(sprPat_done),
     .en(sprPatRow_en),
     .count(sprPatRow_out)
   );
@@ -364,13 +366,14 @@ endmodule
 // Combination logic partitioning the 256B sprite read out of VRAM
 // into 4-byte pixel rows.
 module spritePartition(
-  input  logic              tallSprites,
-  input  logic [7:0]        bottomHalf,
-  input  logic [7:0]        validHPOS,
-  input  logic [7:0][2:0]   spriteOffset,
-  input  logic [7:0][255:0] sprPatLatch_out,
-  output logic [3:0][7:0]   currSprRow,
-  output logic [2:0]        currSprIndex
+  input  logic                    tallSprites,
+  input  logic [1:0][7:0]         bottomHalf,
+  input  logic [7:0]              validHPOS,
+  input  logic [7:0][2:0]         spriteOffset,
+  input  logic [1:0][15:0][255:0] sprPatLatch_out,
+  input  logic [8:0]              pixelRow,
+  output logic [3:0][7:0]         currSprRow,
+  output logic [2:0]              currSprIndex
 );
   
   logic [31:0][7:0] currSprPat;
@@ -408,9 +411,9 @@ module spritePartition(
   generate 
     genvar j;
     for (j = 0; j < 32; j++)
-      assign currSprPat[j] = (bottomHalf[currSprIndex]) ? 
-                             sprPatLatch_out[{1'b1, currSprIndex}][(j*8)+8-1:(j*8)] : 
-                             sprPatLatch_out[{1'b0, currSprIndex}][(j*8)+8-1:(j*8)];
+      assign currSprPat[j] = (bottomHalf[pixelRow[0]][currSprIndex]) ? 
+                             sprPatLatch_out[pixelRow[0]][{1'b1, currSprIndex}][(j*8)+8-1:(j*8)] : 
+                             sprPatLatch_out[pixelRow[0]][{1'b0, currSprIndex}][(j*8)+8-1:(j*8)];
   endgenerate
 
   always_comb begin
