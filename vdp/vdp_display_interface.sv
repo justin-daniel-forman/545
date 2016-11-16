@@ -45,11 +45,14 @@ module vdp_disp_interface(
   logic [2:0] sprPatRow, sprPatRow_1, sprPatRow_2;
   logic [2:0] sprCnt, sprCnt_1, sprCnt_2, sprCnt_3, sprCnt_4;  
 
-  logic [7:0][255:0] sprPatLatch_out;
+  logic [7:0][255:0] sprPatLatch_out; // 2 Buffers, 8 pairs of 2 entries, each 32*8 bytes
   logic [7:0]        validHPOS;
   logic [7:0][2:0]   spriteOffset;
   logic [2:0]        bgPatOffset;
-
+  logic [2:0]        currSprIndex;
+  logic [3:0]        sprColorIndex;
+  logic              bottomHalf_latched;
+  
   /******** Background Select Register ********/
  
   register #(14) bgSelReg(
@@ -72,8 +75,13 @@ module vdp_disp_interface(
   assign VRAM_VGA_addr[0] = bgSel_out;
   assign VRAM_VGA_addr[1] = bgSel_out + 14'd1;
 
-  // When bit 1 of R1 is set, add 32 for the bottom half - SPRITES ONLY
-  assign VRAM_VGA_addr[2] = (col < 10'd57) ? {regFile[6][2], sprPat, sprPatRow, 2'd0} : charPatternAddr;
+  always_comb begin
+    if (col < 10'd57) begin
+      VRAM_VGA_addr[2] = {regFile[6][2], (sprPat + bottomHalf_latched), sprPatRow, 2'd0}; 
+    end
+    else VRAM_VGA_addr[2] = charPatternAddr;
+  end
+
   assign VRAM_VGA_addr[3] = VRAM_VGA_addr[2] + 2'd1;  
   assign VRAM_VGA_addr[4] = VRAM_VGA_addr[2] + 2'd2; // Pixel colors are stored across 4 bytes each.
   assign VRAM_VGA_addr[5] = VRAM_VGA_addr[2] + 2'd3;
@@ -99,7 +107,7 @@ module vdp_disp_interface(
   assign patSelLatch1_in = VRAM_VGA_data_out[1];
   assign patSelLatch2_in = VRAM_VGA_data_out[0]; // Little Endian, MSB goes in first
 
-  /******** patSel Parsing ********/
+  /******** patSel Parsing *******/
   
   assign bgPatOffset =     (vertFlip) ? 3'd7 - pixelRow[3:1] : pixelRow[3:1];
   assign charPatternAddr = {patSelLatch1_out[0], patSelLatch2_out, bgPatOffset, 2'd0}; // 14-bit signal to differentiate 512 patterns of 32 bytes each
@@ -151,8 +159,6 @@ module vdp_disp_interface(
 
   /******* Disp FSM *******/
 
-  //logic [2:0] disp_state;
-
   disp_fsm DISP_FSM(
     .*,
     .row,
@@ -172,6 +178,7 @@ module vdp_disp_interface(
     .row,
     .col,
     .screenBusy,
+    .regFile,
     .VRAM_sprite_data(VRAM_VGA_data_out[7:2]),
     .VRAM_go(VRAM_go_SPR),
     .sprPat, 
@@ -180,7 +187,8 @@ module vdp_disp_interface(
     .VRAM_sprite_addr(VRAM_VGA_addr[7:6]),
     .sprPatRow_out(sprPatRow),
     .sprCnt,
-    .spriteOffset
+    .spriteOffset,
+    .bottomHalf_latched
   );
 
   // Sprite Pattern Latches - *******TODO: Need to enable the right registers at the right time
@@ -194,41 +202,40 @@ module vdp_disp_interface(
   register #(3) SPR_CNT_1(.*, .D(sprCnt),   .Q(sprCnt_1), .en(1'b1));
   register #(3) SPR_CNT_2(.*, .D(sprCnt_1),   .Q(sprCnt_2), .en(1'b1));
   register #(3) SPR_CNT_3(.*, .D(sprCnt_2),   .Q(sprCnt_3), .en(1'b1));
-  register #(3) SPR_CNT_4(.*, .D(sprCnt_3),   .Q(sprCnt_4), .en(1'b1)); // Might not be necessary
-
+  register #(3) SPR_CNT_4(.*, .D(sprCnt_3),   .Q(sprCnt_4), .en(1'b1));
+  
   // Sprite Pattern Row Buffer
   generate
-    genvar i;
-    genvar j;
-    for(i = 0; i < 8; i++) begin      // 8 Possible Sprites
+    genvar i, j;
+    for(i = 0; i < 8; i++) begin      // 8 Possible Sprite locations
       for(j = 0; j < 8; j++) begin    // 8 sets of 4 bytes, for a total of 32 bytes per pattern
         logic [3:0][7:0] B;
-        assign sprPatLatch_out[i][(j*4+1)*8-1:(j*4+0)*8] = B[0]; // Might be reversed
+        assign sprPatLatch_out[i][(j*4+1)*8-1:(j*4+0)*8] = B[0]; 
         assign sprPatLatch_out[i][(j*4+2)*8-1:(j*4+1)*8] = B[1];
         assign sprPatLatch_out[i][(j*4+3)*8-1:(j*4+2)*8] = B[2];
         assign sprPatLatch_out[i][(j*4+4)*8-1:(j*4+3)*8] = B[3];
-        register #(8) SPR_PAT_LATCH [3:0] (
+        register_clr #(8) SPR_PAT_LATCH [3:0] (
           .clk,
           .rst_L,
           .D(VRAM_VGA_data_out[5:2]),
           .Q(B),
-          .en((sprPatRow == j) && (sprCnt_4 == i))
-        );
+          .en((sprPatRow == j) & (sprCnt_4 == i)),
+          .clr(pixelRow > 9'd383)
+        ); // Probably need something more here... 
       end
     end
   endgenerate
- 
+
   logic [3:0][7:0]  currSprRow;
   
   spritePartition SPR_PARTITION(
     .sprPatLatch_out,
     .spriteOffset,
     .currSprRow,
-    .validHPOS
+    .validHPOS,
+    .currSprIndex
   );  
   
-  logic [3:0] sprColorIndex;
-
   assign CRAM_addr_SPR = {
     1'b0,
     currSprRow[0][sprColorIndex[3:1]],
@@ -271,12 +278,16 @@ module disp_fsm(
   output logic       VRAM_go // Read from VRAM signal
 );
 
-  enum logic [2:0] {WaitInit, PosFetch, WaitForPos, PatFetch, WaitForPat, RowLoad, Wait} cs, ns; 
+  enum logic [2:0] {WaitInit, PosFetch, WaitForPos, 
+                    PatFetch, WaitForPat, RowLoad, Wait} 
+                    cs, ns; 
 
   // Next State Logic
   always_comb begin
     case(cs)
-      WaitInit:   ns = ((row >= 48 && row < 432) && col < 58) ? PosFetch : WaitInit;
+      WaitInit: begin
+        ns = ((row >= 48 && row < 432) && col < 58) ? PosFetch : WaitInit;
+      end
       PosFetch:   ns = WaitForPos;
       WaitForPos: ns = PatFetch;
       PatFetch:   ns = WaitForPat;

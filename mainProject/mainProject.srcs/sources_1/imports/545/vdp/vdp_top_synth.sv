@@ -165,15 +165,18 @@ module vdp_top (
     .data_in(rf_data_in),
     .addr(rf_addr),
     .en(rf_en),
-    .data_out()
+    .data_out(rf_data_out)
   );
  
+  /*
   always_comb begin
     rf_data_out = 0;
     rf_data_out[0][4] = 1;
     rf_data_out[1][5] = 1;
     rf_data_out[10] = 8'd0;
+    rf_data_out[1][1] = 1;
   end
+  */
  
   /******** VRAM & CRAM ********/  
 
@@ -222,23 +225,6 @@ module vdp_top (
     .col(pixel_col),
     .regFile(rf_data_out)
   );
-
-/*
-  logic [5:0] intCount;
-
-  always_ff @(posedge clk_25, negedge rst_L) begin
-    if (~rst_L) begin
-      INT_L <= 1;
-      intCount <= 0;
-    end
-    else if (~IORQ_L && ~M1_L) begin
-      intCount <= (intCount == 6'd15) ? 6'd0 : intCount + 6'd1;
-      INT_L <= ~(intCount == 6'd15);
-    end
-    else if (pixel_row == 9'd431 && pixel_col == 10'd576) begin
-      INT_L <= 0;
-    end 
-  end*/
 
   /*
   ila_1 LOGIC_ANALYZER(

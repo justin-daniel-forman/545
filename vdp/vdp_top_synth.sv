@@ -16,7 +16,7 @@ module vdp_top (
   input  wire [7:0] addr_bus_in,
   output wire [7:0] data_bus_out,
   input  logic      IORQ_L,
-  input  logic      MREQ_L,
+  input  logic      M1_L,
   input  logic      RD_L,
   input  logic      WR_L,
 
@@ -155,14 +155,19 @@ module vdp_top (
     .data_in(rf_data_in),
     .addr(rf_addr),
     .en(rf_en),
-    .data_out(rf_data_out)
+    .data_out()
   );
+
+  always_comb begin
+    rf_data_out = 0;
+    rf_data_out[1][1] = 1;
+  end
  
   /******** VRAM & CRAM ********/  
 
   assign VRAM_go = (VRAM_go_VGA || (VRAM_go_io && ~BUSY));
 
-  CRAM colorRam(
+  mem #(8, 5) colorRam(
     .clka(clk_4),
     .wea(CRAM_io_we),
     .addra(CRAM_io_addr),
@@ -198,17 +203,7 @@ module vdp_top (
   
   /******* Interrupt Register *******/
 
-  always_ff @(posedge clk, negedge rst_L) begin
-    if (~rst_L) begin
-      INT_L <= 1;
-    end
-    else if (~IORQ_L && ~MREQ_L) begin
-      INT_L <= 1;
-    end
-    else if (pixel_row == 9'd431 && pixel_col == 10'd576) begin
-      INT_L <= 0;
-    end 
-  end
+   
 
   /*
   ila_1 LOGIC_ANALYZER(
