@@ -98,10 +98,22 @@ module project_top(
     mem_interface blkMem(.*, .data_in(mem_data_out)); //FUCK YOU
     z80_block proc_top(.*);
     clk_wiz_0 ClkMHzGen(.clk_in1(GCLK),.clk_out1(clk_8),.*);
-    ila_0 debug(.clk(GCLK),.probe0(addr_bus),.probe1(data_in),.probe2(data_out),.probe3(WR_L),.probe4(RD_L),.probe5(MREQ_L),
-        .probe6(IORQ_L),.probe7(rom_corrupted),.probe8(clk_4),.probe9(interrupt_count),.probe10({2'b0, interrupt_mask}),.probe11({2'b0,M1_L}),
-        .probe12(VRAM_VGA_addr), .probe13(VRAM_VGA_data_out), .probe14(CRAM_VGA_addr), .probe15(CRAM_VGA_data_out), 
-        .probe16(VRAM_io_addr), .probe17(VRAM_io_data_in), .probe18(CRAM_io_addr), .probe19(CRAM_io_data_in));
+    ila_0 debug(
+        .clk(GCLK),
+        .probe0(curr_state),
+        .probe1(addr_bus),
+        .probe2(data_out),
+        .probe3(data_in),
+        .probe4(MREQ_L),
+        .probe5(IORQ_L),
+        .probe6(M1_L),
+        .probe7(WR_L),
+        .probe8(RD_L),
+        .probe9(interrupt_mask),
+        .probe10(clk_4),
+        .probe11(1'b0)
+    );
+     
     logic clkDiv_25;
     
     // Divide the 100 MHz clk to get 25 MHz clk

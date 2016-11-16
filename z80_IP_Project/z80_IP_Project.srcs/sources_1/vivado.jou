@@ -1,0 +1,55 @@
+#-----------------------------------------------------------
+# Vivado v2015.2 (64-bit)
+# SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+# IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+# Start of session at: Wed Nov 16 18:06:28 2016
+# Process ID: 23237
+# Log file: /afs/ece.cmu.edu/usr/suyashb/Private/545/z80_IP_Project/z80_IP_Project.srcs/sources_1/vivado.log
+# Journal file: /afs/ece.cmu.edu/usr/suyashb/Private/545/z80_IP_Project/z80_IP_Project.srcs/sources_1/vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.xpr
+open_hw
+connect_hw_server
+open_hw_target [lindex [get_hw_targets -of_objects [get_hw_servers localhost]] 0]
+set_property PROGRAM.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/project_top.bit} [lindex [get_hw_devices] 1]
+set_property PROBES.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/debug_nets.ltx} [lindex [get_hw_devices] 1]
+current_hw_device [lindex [get_hw_devices] 1]
+refresh_hw_device [lindex [get_hw_devices] 1]
+display_hw_ila_data [ get_hw_ila_data hw_ila_data_1]
+set_property PROBES.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/debug_nets.ltx} [lindex [get_hw_devices] 1]
+set_property PROGRAM.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/project_top.bit} [lindex [get_hw_devices] 1]
+program_hw_devices [lindex [get_hw_devices] 1]
+refresh_hw_device [lindex [get_hw_devices] 1]
+set_property TRIGGER_COMPARE_VALUE eq1'bX [get_hw_probes MREQ_L -of_objects [get_hw_ilas hw_ila_1]]
+set_property TRIGGER_COMPARE_VALUE eq1'bR [get_hw_probes clk_4 -of_objects [get_hw_ilas hw_ila_1]]
+run_hw_ila hw_ila_1
+wait_on_hw_ila hw_ila_1
+display_hw_ila_data [upload_hw_ila_data hw_ila_1]
+add_wave -into {hw_ila_data_1.wcfg} -radix bin [get_hw_probes {clk_4}]
+add_wave -into {hw_ila_data_1.wcfg} -radix hex [get_hw_probes {curr_state}]
+set_property PROBES.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/debug_nets.ltx} [lindex [get_hw_devices] 1]
+set_property PROGRAM.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/project_top.bit} [lindex [get_hw_devices] 1]
+program_hw_devices [lindex [get_hw_devices] 1]
+refresh_hw_device [lindex [get_hw_devices] 1]
+run_hw_ila hw_ila_1
+wait_on_hw_ila hw_ila_1
+display_hw_ila_data [upload_hw_ila_data hw_ila_1]
+run_hw_ila hw_ila_1
+wait_on_hw_ila hw_ila_1
+display_hw_ila_data [upload_hw_ila_data hw_ila_1]
+set_property TRIGGER_COMPARE_VALUE eq1'b0 [get_hw_probes clk_4 -of_objects [get_hw_ilas hw_ila_1]]
+set_property TRIGGER_COMPARE_VALUE eq1'bX [get_hw_probes clk_4 -of_objects [get_hw_ilas hw_ila_1]]
+set_property TRIGGER_COMPARE_VALUE eq32'h0000_0000 [get_hw_probes curr_state -of_objects [get_hw_ilas hw_ila_1]]
+run_hw_ila hw_ila_1
+wait_on_hw_ila hw_ila_1
+display_hw_ila_data [upload_hw_ila_data hw_ila_1]
+set_property CONTROL.TRIGGER_POSITION 0 [get_hw_ilas hw_ila_1]
+run_hw_ila hw_ila_1
+wait_on_hw_ila hw_ila_1
+display_hw_ila_data [upload_hw_ila_data hw_ila_1]
+set_property CONTROL.TRIGGER_POSITION 1000 [get_hw_ilas hw_ila_1]
+run_hw_ila hw_ila_1
+wait_on_hw_ila hw_ila_1
+display_hw_ila_data [upload_hw_ila_data hw_ila_1]
+save_wave_config {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.hw/hw_1/wave/hw_ila_data_1/hw_ila_data_1.wcfg}

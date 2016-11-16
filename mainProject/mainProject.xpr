@@ -292,19 +292,6 @@
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
-    <FileSet Name="ila_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/ila_0">
-      <File Path="$PSRCDIR/sources_1/ip/ila_0/ila_0.xci">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <Config>
-        <Option Name="TopModule" Val="ila_0"/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-      </Config>
-    </FileSet>
     <FileSet Name="z80_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/z80_0">
       <File Path="$PSRCDIR/sources_1/ip/z80_0/z80_0.xci">
         <FileInfo>
@@ -329,6 +316,19 @@
       <File Path="$PPRDIR/../psg/audioSys_0/src/clk_wiz_0/clk_wiz_0.upgrade_log"/>
       <Config>
         <Option Name="TopModule" Val="audioSys_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="ila_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/ila_0">
+      <File Path="$PSRCDIR/sources_1/ip/ila_0/ila_0.xci">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <Config>
+        <Option Name="TopModule" Val="ila_0"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
@@ -376,13 +376,6 @@
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
     </Run>
-    <Run Id="ila_0_synth_1" Type="Ft3:Synth" SrcSet="ila_0" Part="xc7z020clg484-1" ConstrsSet="ila_0" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/ila_0_synth_1">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2015"/>
-        <Step Id="synth_design"/>
-      </Strategy>
-      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-    </Run>
     <Run Id="z80_0_synth_1" Type="Ft3:Synth" SrcSet="z80_0" Part="xc7z020clg484-1" ConstrsSet="z80_0" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/z80_0_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2015"/>
@@ -391,6 +384,13 @@
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
     </Run>
     <Run Id="audioSys_0_synth_1" Type="Ft3:Synth" SrcSet="audioSys_0" Part="xc7z020clg484-1" ConstrsSet="audioSys_0" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/audioSys_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2015"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+    </Run>
+    <Run Id="ila_0_synth_1" Type="Ft3:Synth" SrcSet="ila_0" Part="xc7z020clg484-1" ConstrsSet="ila_0" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/ila_0_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2015"/>
         <Step Id="synth_design"/>
@@ -440,20 +440,6 @@
         <Step Id="write_bitstream"/>
       </Strategy>
     </Run>
-    <Run Id="ila_0_impl_1" Type="Ft2:EntireDesign" Part="xc7z020clg484-1" ConstrsSet="ila_0" Description="Vivado Implementation Defaults" SynthRun="ila_0_synth_1">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2015"/>
-        <Step Id="init_design"/>
-        <Step Id="opt_design"/>
-        <Step Id="power_opt_design"/>
-        <Step Id="place_design"/>
-        <Step Id="post_place_power_opt_design"/>
-        <Step Id="phys_opt_design"/>
-        <Step Id="route_design"/>
-        <Step Id="post_route_phys_opt_design"/>
-        <Step Id="write_bitstream"/>
-      </Strategy>
-    </Run>
     <Run Id="z80_0_impl_1" Type="Ft2:EntireDesign" Part="xc7z020clg484-1" ConstrsSet="z80_0" Description="Vivado Implementation Defaults" SynthRun="z80_0_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2015"/>
@@ -482,5 +468,32 @@
         <Step Id="write_bitstream"/>
       </Strategy>
     </Run>
+    <Run Id="ila_0_impl_1" Type="Ft2:EntireDesign" Part="xc7z020clg484-1" ConstrsSet="ila_0" Description="Vivado Implementation Defaults" SynthRun="ila_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2015"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+    </Run>
   </Runs>
+  <MsgRule>
+    <MsgAttr Name="RuleType" Val="0"/>
+    <MsgAttr Name="Limit" Val="-1"/>
+    <MsgAttr Name="NewSeverity" Val="ANY"/>
+    <MsgAttr Name="Id" Val="IP_Flow 19-1663"/>
+    <MsgAttr Name="Severity" Val="ANY"/>
+    <MsgAttr Name="ShowRule" Val="1"/>
+    <MsgAttr Name="RuleSource" Val="8"/>
+    <MsgAttr Name="StringIsRegExp" Val="0"/>
+    <MsgAttr Name="StringsToMatch" Val="CRITICAL WARNING: [IP_Flow 19-1663] Duplicate IP found for &apos;user.org:user:z80:1.0&apos;. The one found in IP location &apos;/afs/ece.cmu.edu/usr/suyashb/Private/545/z80_IP_Project/z80_IP_Project.srcs/sources_1/imports&apos; will take precedence over the same IP in locations: 
+   /afs/ece.cmu.edu/usr/suyashb/Private/545/z80_IP_Block
+   /afs/ece.cmu.edu/usr/suyashb/Private/545/imports"/>
+  </MsgRule>
 </Project>
