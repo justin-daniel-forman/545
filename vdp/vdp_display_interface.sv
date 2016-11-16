@@ -8,7 +8,7 @@ module vdp_disp_interface(
   input  logic             clk, rst_L, // 25 MHz clock
   input  logic [7:0][7:0]  VRAM_VGA_data_out,
   input  logic      [5:0]  CRAM_VGA_data_out,
-  input  logic [9:0][7:0]  regFile, // Used for various things
+  input  logic [10:0][7:0] regFile, // Used for various things
   input  logic      [9:0]  col,
   input  logic      [8:0]  row,
   output logic [7:0][13:0] VRAM_VGA_addr,
