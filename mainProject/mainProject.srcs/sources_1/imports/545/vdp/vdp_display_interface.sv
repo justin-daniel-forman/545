@@ -8,9 +8,10 @@ module vdp_disp_interface(
   input  logic             clk, rst_L, // 25 MHz clock
   input  logic [7:0][7:0]  VRAM_VGA_data_out,
   input  logic      [5:0]  CRAM_VGA_data_out,
-  input  logic [9:0][7:0]  regFile, // Used for various things
+  input  logic [10:0][7:0] regFile, // Used for various things
   input  logic      [9:0]  col,
   input  logic      [8:0]  row,
+  input  logic      [7:0]  SW,
   output logic [7:0][13:0] VRAM_VGA_addr,
   output logic      [4:0]  CRAM_VGA_addr,
   output logic      [3:0]  VGA_R, VGA_G, VGA_B,
@@ -67,7 +68,9 @@ module vdp_disp_interface(
   assign pixelCol = col - 10'd64 + 10'd6; // Add 6 to pre-fetch pixel data for the pipeline
 
   // Each pixel position is 2 bytes, so -------------------|
-  assign bgSel_in = {3'b111, pixelRow[8:4], pixelCol[8:4], 1'b0}; // Either blank screen or iterating
+  assign bgSel_in = (SW[0]) ? {regFile[2][3:1], pixelRow[8:4], pixelCol[8:4], 1'b0} :
+                              {regFile[2][3:1], regFile[2][0] & pixelRow[8], pixelRow[7:4], pixelCol[8:4], 1'b0}; 
+                              // Either blank screen or iterating
 
   assign VRAM_VGA_addr[0] = bgSel_out;
   assign VRAM_VGA_addr[1] = bgSel_out + 14'd1;
@@ -180,7 +183,8 @@ module vdp_disp_interface(
     .VRAM_sprite_addr(VRAM_VGA_addr[7:6]),
     .sprPatRow_out(sprPatRow),
     .sprCnt,
-    .spriteOffset
+    .spriteOffset,
+    .regFile
   );
 
   // Sprite Pattern Latches - *******TODO: Need to enable the right registers at the right time
