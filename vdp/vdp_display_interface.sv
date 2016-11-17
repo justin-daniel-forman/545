@@ -2,7 +2,7 @@
  * Description: Interfaces between VRAM and the VGA output on the board.
  *              Specifically controls what pixel we should process and 
  *              outputs the corresponding colors depending on what the 
- *              screen looks like.
+ *              screen looks like. Specifically for Mode 4!
  */
 module vdp_disp_interface(
   input  logic             clk, rst_L, // 25 MHz clock
@@ -133,19 +133,19 @@ module vdp_disp_interface(
     if (horizFlip) begin
       CRAM_addr_BG = {
         paletteSel,
-        colorLatch_out[0][3'd7-colorLatchIndex[3:1]], 
-        colorLatch_out[1][3'd7-colorLatchIndex[3:1]],
-        colorLatch_out[2][3'd7-colorLatchIndex[3:1]],
-        colorLatch_out[3][3'd7-colorLatchIndex[3:1]]
+        colorLatch_out[0][colorLatchIndex[3:1]], 
+        colorLatch_out[1][colorLatchIndex[3:1]],
+        colorLatch_out[2][colorLatchIndex[3:1]],
+        colorLatch_out[3][colorLatchIndex[3:1]]
       };
     end
     else begin
       CRAM_addr_BG = {
         paletteSel,
-        colorLatch_out[0][colorLatchIndex[3:1]], 
-        colorLatch_out[1][colorLatchIndex[3:1]],
-        colorLatch_out[2][colorLatchIndex[3:1]],
-        colorLatch_out[3][colorLatchIndex[3:1]]
+        colorLatch_out[0][3'd7-colorLatchIndex[3:1]], 
+        colorLatch_out[1][3'd7-colorLatchIndex[3:1]],
+        colorLatch_out[2][3'd7-colorLatchIndex[3:1]],
+        colorLatch_out[3][3'd7-colorLatchIndex[3:1]]
       };
     end
   end

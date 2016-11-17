@@ -167,7 +167,7 @@ module vdp_top (
 
   assign VRAM_go = (VRAM_go_VGA || (VRAM_go_io && ~BUSY));
 
-  mem #(8, 5) colorRam(
+  CRAM colorRam(
     .clka(clk_4),
     .wea(CRAM_io_we),
     .addra(CRAM_io_addr),
