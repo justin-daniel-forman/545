@@ -46,7 +46,7 @@ module project_top(
     
     logic M1_L,INT_L,NMI_L,WAIT_L,RFSH_L,BUSACK_L,BUSREQ_L,HALT_L;
     
-    logic [31:0] interrupt_count;
+    logic [31:0] interrupt_count,clk_8_count;
       
     logic clk_4;
     logic clk_8;
@@ -56,6 +56,7 @@ module project_top(
     logic reset;
     logic locked;
     logic BUSY;
+    
     
     logic [9:0] freq;
     logic [2:0] atten_enable,enable;
@@ -129,10 +130,16 @@ module project_top(
     end  
     
     always_ff @(posedge clk_8,posedge reset) begin
-        if(reset)
+        if(reset) begin
             clk_4 <= 0;
-        else if(locked)
-            clk_4 <= ~clk_4;
+            clk_8_count <= 0;
+        end
+        else if(locked) begin
+            if(clk_8_count < 100) 
+                clk_8_count <= clk_8_count + 1;
+            else 
+                clk_4 <= ~clk_4;
+        end
     end
     
     //interrupt generation timer
