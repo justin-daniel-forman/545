@@ -62,7 +62,7 @@ module project_top(
     logic [2:0] atten_enable,enable;
     logic [3:0] atten_mag;
     logic [7:0] vdp_data_out, mem_data_out;
-    //logic [10:0][7:0] rf_data_out; // Debugging
+    logic [10:0][7:0] rf_data_out; // Debugging
     logic [7:0][13:0] VRAM_VGA_addr;
     logic [7:0][7:0]  VRAM_VGA_data_out;
     logic      [4:0]  CRAM_VGA_addr;
@@ -89,7 +89,8 @@ module project_top(
     assign AC_ADR1 = 1;
     assign WAIT_L = ~BUSY;
     
-    assign data_in = (~IORQ_L) ? vdp_data_out : mem_data_out;
+    //assign data_in = (~IORQ_L) ? vdp_data_out : mem_data_out;
+    assign data_in = (~IORQ_L) ? 8'h80 : mem_data_out;
 
     logic [31:0] curr_state;
     logic        interrupt_mask;
@@ -112,7 +113,10 @@ module project_top(
         .probe8(RD_L),
         .probe9(interrupt_mask),
         .probe10(clk_4),
-        .probe11(1'b0)
+        .probe11(1'b0),
+        .probe12(VRAM_VGA_addr),
+        .probe13(VRAM_VGA_data_out),
+        .probe14(rf_data_out)
     );
      
     logic clkDiv_25;
