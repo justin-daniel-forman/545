@@ -1,0 +1,15 @@
+#
+# An unexpected error has occurred (11)
+#
+Stack:
+/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/tps/lnx64/jre/lib/amd64/server/libjvm.so(+0x8e58a9) [0x7f70a74738a9]
+/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/tps/lnx64/jre/lib/amd64/server/libjvm.so(JVM_handle_linux_signal+0xb6) [0x7f70a74794f6]
+/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/tps/lnx64/jre/lib/amd64/server/libjvm.so(+0x8e2523) [0x7f70a7470523]
+/lib64/libc.so.6(+0x35670) [0x7f70dd71e670]
+/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/lib/lnx64.o/librdi_common.so(HATOptGroup::createAttrSpecIter() const+0) [0x7f70de4c3c70]
+/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/lib/lnx64.o/librdi_common.so(HATOptGroup::getAttrSpecByName(std::string const&) const+0xc) [0x7f70de4c3c9c]
+/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/lib/lnx64.o/librdi_labtoolstasks.so(+0x5b2809) [0x7f708c3ef809]
+/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/lib/lnx64.o/librdi_common.so(HCPProperty::ObjectInfo::getAttrSpec(hdi::tcltasks::tclany const&, std::string const&) const+0xf9) [0x7f70de635d39]
+/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/lib/lnx64.o/librdi_common.so(HCPProperty::Swig::getAttrSpec(hdi::tcltasks::tclany const&, std::string const&)+0x2c) [0x7f70de63aa8c]
+/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/lib/lnx64.o/librdi_common.so(Java_ui_frmwork_property_getAttrSpec+0x132) [0x7f70de64f342]
+[0x7f709b4a0787]

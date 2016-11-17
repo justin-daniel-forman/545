@@ -70,7 +70,9 @@ module z80_0 (
   RFSH_L,
   BUSACK_L,
   BUSREQ_L,
-  HALT_L
+  HALT_L,
+  interrupt_mask,
+  curr_state
 );
 
 (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 clk CLK" *)
@@ -91,6 +93,8 @@ output wire RFSH_L;
 output wire BUSACK_L;
 input wire BUSREQ_L;
 output wire HALT_L;
+output wire interrupt_mask;
+output wire [31 : 0] curr_state;
 
   z80 inst (
     .clk(clk),
@@ -109,6 +113,8 @@ output wire HALT_L;
     .RFSH_L(RFSH_L),
     .BUSACK_L(BUSACK_L),
     .BUSREQ_L(BUSREQ_L),
-    .HALT_L(HALT_L)
+    .HALT_L(HALT_L),
+    .interrupt_mask(interrupt_mask),
+    .curr_state(curr_state)
   );
 endmodule

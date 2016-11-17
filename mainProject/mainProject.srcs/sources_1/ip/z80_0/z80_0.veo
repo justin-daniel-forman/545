@@ -55,23 +55,25 @@
 
 //----------- Begin Cut here for INSTANTIATION Template ---// INST_TAG
 z80_0 your_instance_name (
-  .clk(clk),            // input wire clk
-  .rst_L(rst_L),        // input wire rst_L
-  .data_in(data_in),    // input wire [7 : 0] data_in
-  .data_out(data_out),  // output wire [7 : 0] data_out
-  .addr_bus(addr_bus),  // inout wire [15 : 0] addr_bus
-  .M1_L(M1_L),          // output wire M1_L
-  .INT_L(INT_L),        // input wire INT_L
-  .NMI_L(NMI_L),        // input wire NMI_L
-  .WAIT_L(WAIT_L),      // input wire WAIT_L
-  .MREQ_L(MREQ_L),      // output wire MREQ_L
-  .IORQ_L(IORQ_L),      // output wire IORQ_L
-  .RD_L(RD_L),          // output wire RD_L
-  .WR_L(WR_L),          // output wire WR_L
-  .RFSH_L(RFSH_L),      // output wire RFSH_L
-  .BUSACK_L(BUSACK_L),  // output wire BUSACK_L
-  .BUSREQ_L(BUSREQ_L),  // input wire BUSREQ_L
-  .HALT_L(HALT_L)      // output wire HALT_L
+  .clk(clk),                        // input wire clk
+  .rst_L(rst_L),                    // input wire rst_L
+  .data_in(data_in),                // input wire [7 : 0] data_in
+  .data_out(data_out),              // output wire [7 : 0] data_out
+  .addr_bus(addr_bus),              // inout wire [15 : 0] addr_bus
+  .M1_L(M1_L),                      // output wire M1_L
+  .INT_L(INT_L),                    // input wire INT_L
+  .NMI_L(NMI_L),                    // input wire NMI_L
+  .WAIT_L(WAIT_L),                  // input wire WAIT_L
+  .MREQ_L(MREQ_L),                  // output wire MREQ_L
+  .IORQ_L(IORQ_L),                  // output wire IORQ_L
+  .RD_L(RD_L),                      // output wire RD_L
+  .WR_L(WR_L),                      // output wire WR_L
+  .RFSH_L(RFSH_L),                  // output wire RFSH_L
+  .BUSACK_L(BUSACK_L),              // output wire BUSACK_L
+  .BUSREQ_L(BUSREQ_L),              // input wire BUSREQ_L
+  .HALT_L(HALT_L),                  // output wire HALT_L
+  .interrupt_mask(interrupt_mask),  // output wire interrupt_mask
+  .curr_state(curr_state)          // output wire [31 : 0] curr_state
 );
 // INST_TAG_END ------ End INSTANTIATION Template ---------
 

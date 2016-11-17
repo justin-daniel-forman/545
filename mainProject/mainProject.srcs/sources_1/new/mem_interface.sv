@@ -27,7 +27,8 @@ module mem_interface(
     input wire MREQ_L,
     input wire RD_L,
     input wire WR_L,
-    input wire clk_4
+    input wire clk_4,
+    output wire rom_corrupted
     );
     
     wire [7:0] douta;
@@ -43,9 +44,10 @@ module mem_interface(
 
     assign dina = data_out;
     assign data_in = douta;
-    assign wea = (!MREQ_L && !WR_L);
+    assign wea = (!MREQ_L && !WR_L && (addr_bus >= 16'hc000));
+    assign rom_corrupted = (!MREQ_L && !WR_L && (addr_bus < 16'hc000));
     assign clka = clk_4;
-    assign ena = (!MREQ_L);
+    assign ena = (!MREQ_L && (wea || !RD_L));
     assign addra = addr_bus;
     
     blk_mem_gen_0 progMem(.*);

@@ -18,6 +18,8 @@ module tb ();
   logic BUSACK_L;
   logic BUSREQ_L;
   logic HALT_L;
+  logic interrupt_mask;
+  logic [31:0] curr_state;
 
   z80 DUT(.*);
   memory m_DUT(.*);

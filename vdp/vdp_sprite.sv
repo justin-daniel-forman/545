@@ -3,7 +3,7 @@ module vdp_sprite_interface(
   input  logic [8:0]       row,
   input  logic [9:0]       col,
   input  logic             screenBusy,
-  input  logic [9:0][7:0]  regFile,
+  input  logic [10:0][7:0]  regFile,
   input  logic [5:0][7:0]  VRAM_sprite_data,
   output logic             VRAM_go,
   output logic [7:0]       sprPat, // Feeds into VRAM addr 2-5
@@ -60,10 +60,15 @@ module vdp_sprite_interface(
 
   /******* VRAM Addressing *******/
 
-  // VRAM_addr_6
+  /*
   assign VRAM_sprite_addr[0] = (~VPOSorHPOS) ? 
     {6'd0, posReg_out} + 14'h3F00 :
     {5'd0, posReg_out, 1'd0} + 14'h3F80;
+  */
+  // VRAM_addr_6
+  assign VRAM_sprite_addr[0] = (~VPOSorHPOS) ? 
+    {regFile[5][6:1], 2'd0, posReg_out} :
+    {regFile[5][6:1], 1'b1, posReg_out, 1'd0};
 
   assign VRAM_sprite_addr[1] = VRAM_sprite_addr[0] + 14'd1;
 
