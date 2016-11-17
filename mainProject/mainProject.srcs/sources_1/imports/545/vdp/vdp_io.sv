@@ -14,7 +14,6 @@ module vdp_io(
 
   input   logic [7:0] data_in, VRAM_io_data_out,
   output  logic [7:0] data_out,
-  output  logic [7:0] stat_reg_out,
   output  logic rf_en, VRAM_io_re, VRAM_io_we, CRAM_io_re, CRAM_io_we,
   output  logic [7:0] VRAM_io_data_in,
   output  logic [5:0] CRAM_io_data_in,
