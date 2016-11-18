@@ -44,7 +44,9 @@ module vdp_top (
   output logic      [13:0] VRAM_io_addr,
   output logic      [7:0]  VRAM_io_data_in,
   output logic      [4:0]  CRAM_io_addr,
-  output logic      [7:0]  CRAM_io_data_in
+  output logic      [7:0]  CRAM_io_data_in,
+  output logic [10:0][7:0] rf_data_out,
+  input  logic      [7:0]  SW
 );
 
   // Decoder logic
@@ -66,7 +68,7 @@ module vdp_top (
   logic             CRAM_VGA_re, CRAM_io_re, CRAM_io_we; // Set in io_FSM
 
   // RF logic
-  logic [10:0][7:0] rf_data_out;
+  //logic [10:0][7:0] rf_data_out;
   logic [7:0]      rf_data_in;
   logic [3:0]      rf_addr;
   logic            rf_en; // Set in FSM
@@ -145,7 +147,8 @@ module vdp_top (
       .VGA_B,
       .screenBusy,
       .VRAM_go(VRAM_go_VGA),
-      .regFile(rf_data_out)
+      .regFile(rf_data_out),
+      .SW
     );
   
   vga VGA(
@@ -170,11 +173,17 @@ module vdp_top (
  
   /*
   always_comb begin
-    rf_data_out = 0;
-    rf_data_out[0][4] = 1;
-    rf_data_out[1][5] = 1;
-    rf_data_out[10] = 8'd0;
-    rf_data_out[1][1] = 1;
+    rf_data_out[0] = 8'h36;
+    rf_data_out[1] = 8'hA0;
+    rf_data_out[2] = 8'hFF;
+    rf_data_out[3] = 8'hFF;
+    rf_data_out[4] = 8'hFF;
+    rf_data_out[5] = 8'hFF;    
+    rf_data_out[6] = 8'hFB;
+    rf_data_out[7] = 8'd0;
+    rf_data_out[8] = 8'd0;
+    rf_data_out[9] = 8'd0;            
+    rf_data_out[10] = 8'hFF;
   end
   */
  

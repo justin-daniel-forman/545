@@ -31,6 +31,7 @@ module project_top(
     inout AC_SDA,
     input GCLK,
     input BTNL,
+    input [7:0] SW,
     output [3:0] VGA_R, VGA_G, VGA_B,
     output       VGA_HS, VGA_VS
     );

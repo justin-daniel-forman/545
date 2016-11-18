@@ -11,6 +11,7 @@ module vdp_disp_interface(
   input  logic [10:0][7:0] regFile, // Used for various things
   input  logic      [9:0]  col,
   input  logic      [8:0]  row,
+  input  logic      [7:0]  SW,
   output logic [7:0][13:0] VRAM_VGA_addr,
   output logic      [4:0]  CRAM_VGA_addr,
   output logic      [3:0]  VGA_R, VGA_G, VGA_B,
@@ -104,8 +105,8 @@ module vdp_disp_interface(
     .en(patSelLatch_en)
   );
 
-  assign patSelLatch1_in = VRAM_VGA_data_out[1];
-  assign patSelLatch2_in = VRAM_VGA_data_out[0]; // Little Endian, MSB goes in first
+  assign patSelLatch1_in = SW[0] ? VRAM_VGA_data_out[1] : VRAM_VGA_data_out[0];
+  assign patSelLatch2_in = SW[0] ? VRAM_VGA_data_out[0] : VRAM_VGA_data_out[1]; // Little Endian, MSB goes in first
 
   /******** patSel Parsing ********/
   
