@@ -34,7 +34,10 @@ module vdp_top (
   //Board output interface
   //---------------------------------------------------------------------------
   output logic       VGA_HS, VGA_VS,
-  output logic [3:0] VGA_R, VGA_B, VGA_G
+  output logic [3:0] VGA_R, VGA_B, VGA_G,
+  
+  // Debugging Tools
+  input logic [7:0] SW
 );
 
   // Decoder logic
@@ -62,11 +65,13 @@ module vdp_top (
   logic            rf_en; // Set in FSM
    
   // VGA logic
-  logic [9:0] pixel_col;
-  logic [8:0] pixel_row;
+  logic [9:0] pixel_col, pixelCol, V_counter;
+  logic [8:0] pixel_row, pixelRow;
+  logic       scanline_en;
 
   // Stuff
   logic screenBusy;
+  logic [2:0] bgDispState;
 
   assign BUSY = screenBusy && (pixel_row > 48 && pixel_row <= 575);
 
@@ -136,6 +141,10 @@ module vdp_top (
       .screenBusy,
       .VRAM_go(VRAM_go_VGA),
       .regFile(rf_data_out)
+      //.pixelRow,
+      //.pixelCol,
+      //.SW,
+      //.bgDispState
     );
   
   vga VGA(
@@ -144,7 +153,8 @@ module vdp_top (
     .HSync(VGA_HS),
     .VSync(VGA_VS),
     .row(pixel_row),
-    .col(pixel_col)
+    .col(pixel_col),
+    .scanline_en
   );
 
   /******* Register File *******/ 
@@ -155,14 +165,62 @@ module vdp_top (
     .data_in(rf_data_in),
     .addr(rf_addr),
     .en(rf_en),
-    .data_out(rf_data_out)
+    .data_out()
   );
   
   /*
+  // Begin Debugging Code
+  
+  logic [7:0] h_scroll_count, v_scroll_count;
+  
   always_comb begin
     rf_data_out = 0;
-    rf_data_out[1][1] = 1;
+    rf_data_out[0] = {SW[7:6], 6'h16};
+    rf_data_out[1] = 8'h62;
+    rf_data_out[2] = 8'hFF;
+    rf_data_out[3] = 8'hFF;
+    rf_data_out[4] = 8'hFF;
+    rf_data_out[5] = 8'hFF;
+    rf_data_out[6] = 8'hFB; // FB = sprite patterns start at 0x0, FF = sprite patterns start at 0x2000
+    rf_data_out[7] = 8'h07; // Overscan color - Relevant?
+    rf_data_out[8] = h_scroll_count; // 0x60 is 6 * 16 pixels = 96 pixels = 192/2
+    rf_data_out[9] = v_scroll_count;
+    rf_data_out[10] = 8'hFF;
   end
+ 
+  logic h_scroll_count_en, v_scroll_count_en;
+  counter #(8) H_SCROLL_COUNTER(
+    .clk(clk_100), .rst_L,
+    .clear(1'b0),
+    .en(h_scroll_count_en),
+    .count(h_scroll_count)
+  );
+  counter #(8) V_SCROLL_COUNTER(
+      .clk(clk_100), .rst_L,
+      .clear(v_scroll_count == 191 && v_scroll_count_en),
+      .en(v_scroll_count_en),
+      .count(v_scroll_count)
+    );
+  
+  logic [16:0] h_scroll_count_en_tick, v_scroll_count_en_tick;
+  assign h_scroll_count_en = (h_scroll_count_en_tick == 17'd100000);
+  assign v_scroll_count_en = (v_scroll_count_en_tick == 17'd100000);
+  
+  counter #(17) H_SCROLL_COUNT_EN(
+    .clk(clk_100), .rst_L,
+    .clear(h_scroll_count_en),
+    .en(SW[1]),
+    .count(h_scroll_count_en_tick)
+  );
+  
+  counter #(17) V_SCROLL_COUNT_EN(
+    .clk(clk_100), .rst_L,
+    .clear(v_scroll_count_en),
+    .en(SW[0]),
+    .count(v_scroll_count_en_tick)
+  );
+  
+  // End Debugging Code
   */
  
   /******** VRAM & CRAM ********/  
@@ -199,22 +257,84 @@ module vdp_top (
   assign VRAM_VGA_re = 8'hFF;
 
   /******* Top Level I/O Interface *******/
-
-  //assign the data bus if we are writing to it
-  assign data_bus_out = (MODE & ~CSR_L) ? stat_reg_out : data_port_out;
   
-  /******* Interrupt Register *******/
+  //assign the data bus if we are writing to it
+  logic [7:0] data_bus_out_temp;
 
-  intGen INTERRUPT_LOGIC(
+  always_comb begin
+    case(addr_bus_in) 
+      8'hBF: data_bus_out_temp = stat_reg_out;
+      8'hBE: data_bus_out_temp = data_port_out;
+      8'h7E: data_bus_out_temp = V_counter[8:0];
+    endcase
+  end
+
+  assign data_bus_out = data_bus_out_temp;
+
+  //assign data_bus_out = (MODE) ? stat_reg_out : data_port_out;
+  
+  /******* Status Register *******/
+
+  logic frame_int_in, frame_int_out, frame_int_en;
+  logic spr_ovfw_in, spr_ovfw_out, spr_ovfw_en;
+  logic spr_coll_in, spr_coll_out, spr_coll_en;
+
+  register_clr #(1) FRAME_INT_REG(
     .clk(clk_25), .rst_L,
-    .IORQ_L, .M1_L, .INT_L, 
-    .row(pixel_row),
-    .col(pixel_col),
-    .regFile(rf_data_out)
+    .D(frame_int_in),
+    .Q(frame_int_out),
+    .en(frame_int_en),
+    .clr(int_ack)
+  );
+  
+  register_clr #(1) SPR_OVFW_REG(
+    .clk(clk_25), .rst_L,
+    .D(spr_ovfw_in),
+    .Q(spr_ovfw_out),
+    .en(spr_ovfw_en),
+    .clr(int_ack)
+  );
+  
+  register_clr #(1) SPR_COLL_REG(
+    .clk(clk_25), .rst_L,
+    .D(spr_coll_in),
+    .Q(spr_coll_out),
+    .en(spr_coll_en),
+    .clr(int_ack)
   );
 
-  /*
-  ila_1 LOGIC_ANALYZER(
+  frameInt FRAME_INTERRUPT_LOGIC(
+    .clk(clk_25), .rst_L,
+    .frame_int(frame_int_in), 
+    .row(pixel_row),
+    .col(pixel_col),
+    .regFile(rf_data_out),
+    .frame_int_en
+  );
+
+  assign spr_ovfw_in = 0;
+  assign spr_coll_in = 0;
+  assign spr_ovfw_en = 0;
+  assign spr_coll_en = 0;
+
+  assign stat_reg_out = {frame_int_out, spr_ovfw_out, spr_coll_out, 5'd0};
+  assign INT_L = ~frame_int_out & ~spr_ovfw_out & ~spr_coll_out;
+
+  /******* V Counter *******/
+
+  logic [8:0] scanline_count;
+
+  counter #(9) SCANLINE_REG(
+    .clk(clk_25), .rst_L,
+    .clear(scanline_count == 9'h104),
+    .en(scanline_en),
+    .count(scanline_count)
+  );
+
+  // Whoever thought this shit was funny...
+  assign V_counter = (scanline_count >= 8'hDA) ? scanline_count - 9'd5 : scanline_count;
+
+  ila_0 LOGIC_ANALYZER(
     .clk(clk_100),
     .probe0(VRAM_VGA_addr[0]), // 14 bits
     .probe1(VRAM_VGA_addr[1]), // 14 bits
@@ -222,22 +342,23 @@ module vdp_top (
     .probe3(VRAM_VGA_addr[3]), // 14 bits
     .probe4(VRAM_VGA_addr[4]), // 14 bits
     .probe5(VRAM_VGA_addr[5]), // 14 bits
-    .probe6(pixel_col), 
-    .probe7(pixel_row), 
-    .probe8(VRAM_VGA_data_out[0]), 
-    .probe9(VRAM_VGA_data_out[1]), 
-    .probe10(VRAM_VGA_data_out[2]),  
-    .probe11(VRAM_VGA_data_out[3]), 
-    .probe12(VRAM_VGA_data_out[4]), 
-    .probe13(VRAM_VGA_data_out[5]),                  
-    .probe14({VGA_R, VGA_G, VGA_B}),
-    .probe15({bitSliceSel[3:1], CRAM_VGA_addr}),
-    .probe16({5'd0, disp_state}),
-    .probe17(colorLatch_out[0]),
-    .probe18(colorLatch_out[1]),
-    .probe19(colorLatch_out[2]),
-    .probe20(colorLatch_out[3])
-  );*/
+    .probe6(VRAM_VGA_addr[6]),
+    .probe7(VRAM_VGA_addr[7]),
+    .probe8(pixel_col), 
+    .probe9(pixel_row), 
+    .probe10(VRAM_VGA_data_out[0]), 
+    .probe11(VRAM_VGA_data_out[1]), 
+    .probe12(VRAM_VGA_data_out[2]),  
+    .probe13(VRAM_VGA_data_out[3]), 
+    .probe14(VRAM_VGA_data_out[4]), 
+    .probe15(VRAM_VGA_data_out[5]),
+    .probe16(VRAM_VGA_data_out[6]),
+    .probe17(VRAM_VGA_data_out[7]),
+    .probe18(10'd0),
+    .probe19(9'd0)
+    //.probe18(pixelCol),
+    //.probe19({6'd0, bgDispState})
+  );
 
 endmodule: vdp_top
 
@@ -291,7 +412,8 @@ module vdp_port_decoder(
   output  logic CSW_L,
   output  logic CSR_L,
   output  logic MODE,
-  output  logic vdp_go
+  output  logic vdp_go,
+  output  logic int_ack
 );
 
   enum logic [2:0] {
@@ -313,6 +435,7 @@ module vdp_port_decoder(
     MODE   = 0; //Command port -> 1, data port -> 0
     CSR_L  = 1;
     CSW_L  = 1;
+    int_ack = 0;
      
     // next state logic
     case (state)
@@ -350,12 +473,13 @@ module vdp_port_decoder(
         CSR_L = 0;
         CSW_L = 1;
         vdp_go = 1;
+        int_ack = (addr_in == 8'hBF);
       end
       WR0, WR1: begin
         MODE  = (addr_in == 8'hBF); //Command port -> 1, data port -> 0
         CSR_L = 1;
         CSW_L = 0; 
-	    vdp_go = 1; 
+	      vdp_go = 1; 
       end
       default: begin
         vdp_go = 0;
@@ -397,77 +521,55 @@ module regFile (
 
 endmodule
 
-module intGen(
+module frameInt(
   input  logic clk, rst_L,
-  input  logic M1_L, IORQ_L,
   input  logic [8:0] row, 
   input  logic [9:0] col,
   input  logic [10:0][7:0] regFile,
-  output logic INT_L
+  output logic frame_int,
+  output logic frame_int_en
 );
-
-    enum logic [8:0] {
-        START, 
-        T1,
-        T2,
-        T3,
-        T4,
-        T5, 
-        T6, 
-        T7,
-        T8,
-        T9,
-        T10,
-        T11,
-        T12,
-        WAIT_TO_CLEAR
-    } curr_state, next_state;
+  
+  enum logic {
+    START,
+    SET_INT
+  } cs, ns;
+  
+  logic [8:0] pixelRow;
+  assign pixelRow = row - 9'd48;
     
-    logic [8:0] pixelRow;
-    assign pixelRow = row - 9'd48;
-    
-    // next state logic
-    always_comb begin
-        case(curr_state) 
-            START: begin
-              if(regFile[0][4]) begin
-                if(regFile[1][5]) next_state = ((row == 9'd432) && (col == 10'd576)) ? WAIT_TO_CLEAR : START;
-                else next_state = ((pixelRow[8:1] == regFile[10]) && (col == 10'd576)) ? WAIT_TO_CLEAR : START;
-              end
-              else next_state = START;
-            end
-            WAIT_TO_CLEAR: next_state = (~M1_L && ~IORQ_L) ? T1 : WAIT_TO_CLEAR;
-            T1: next_state = T2;
-            T2: next_state = T3;
-            T3: next_state = T4;
-            T4: next_state = T5;
-            T5: next_state = T6;
-            T6: next_state = T7;
-            T7: next_state = T8;
-            T8: next_state = T9;
-            T9: next_state = T10;
-            T10: next_state = T11;
-            T11: next_state = T12;
-            T12: next_state = START;
-            default: next_state = START;
-        endcase
-    end
+  // next state logic
+  always_comb begin
+    case(cs) 
+      START: begin
+        if(regFile[0][4])      ns = ((pixelRow[8:1] == regFile[10]) && (col == 10'd576)) ? SET_INT : START;
+        else if(regFile[1][5]) ns = ((row == 9'd432) && (col == 10'd576)) ? SET_INT : START; 
+        else                   ns = START;
+      end
+      SET_INT: ns = START;
+      default: ns = START;
+    endcase
+  end
 
-    // output logic
-    always_comb begin
-        INT_L = 0;
-        case(curr_state)
-             START: INT_L = 1;
-             default: INT_L = 0;
-        endcase
-    end
+  // output logic
+  always_comb begin
+    frame_int = 1; frame_int_en = 1;
+    case(cs)
+      START: begin   
+        frame_int = 1; frame_int_en = 1;
+      end
+      SET_INT: begin
+        frame_int = 0; frame_int_en = 0;
+      end
+      default: begin
+        frame_int = 1; frame_int_en = 1;
+      end
+    endcase
+  end
 
-    always_ff @(posedge clk, negedge rst_L) begin
-        if(~rst_L) begin
-            curr_state <= START;
-        end else begin
-            curr_state <= next_state;
-        end
-    end
+  always_ff @(posedge clk, negedge rst_L) begin
+    if(~rst_L) cs <= START;
+    else       cs <= ns;
+  end
 
-endmodule: intGen
+endmodule: frameInt
