@@ -67,18 +67,25 @@ module vdp_disp_interface(
   logic [8:0] pixelRow;
   logic [9:0] pixelCol;
 
-  assign pixelRow = row - 9'd48;
-  assign pixelCol = col - 10'd64 + 10'd6; // Add 6 to pre-fetch pixel data for the pipeline
+  // Offset for 256x192 aspect ratio
+  assign pixelRow = (regFile[0][7] & (col > 10'd448)) ?   // 64 + 8*2*24 = 448 
+                    row - 9'd48 : 
+                    row - 9'd48 + {regFile[9], 1'b0};
 
-  // Each pixel position is 2 bytes, so -------------------|
+  // Offset as above, but added functionality of horizontal scrolling. 8-bit value, multiplied by 2 for doubled aspect ratio.
+  // 6 added to pre-fetch pixel data for pipeline
+  assign pixelCol = (regFile[0][6] & (row < 9'd80)) ?                // 48 + 32 = 80 
+                    col - 10'd64 + 10'd6 :                           // If regFile[0][6] is set, don't scroll for scanlines 0-15 (rows 0-31)
+                    col - 10'd64 + {1'b0, regFile[8], 1'b0} + 10'd6; // Otherwise, do as above.
+
   assign bgSel_in = {regFile[2][3:1], pixelRow[8:4], pixelCol[8:4], 1'b0}; 
 
   assign VRAM_VGA_addr[0] = bgSel_out;
   assign VRAM_VGA_addr[1] = bgSel_out + 14'd1;
 
   always_comb begin
-    if (col < 10'd57) begin
-      VRAM_VGA_addr[2] = {regFile[6][2], (sprPat + bottomHalf_latched), sprPatRow, 2'd0}; 
+    if (col <= 10'd57) begin
+      VRAM_VGA_addr[2] = {regFile[6][2], (sprPat + (bottomHalf_latched & regFile[1][1])), sprPatRow, 2'd0}; 
     end
     else VRAM_VGA_addr[2] = charPatternAddr;
   end
@@ -128,7 +135,7 @@ module vdp_disp_interface(
   );  
   
   logic [9:0] colorLatchIndex; 
-  assign colorLatchIndex = col + 1;
+  assign colorLatchIndex = pixelCol - 10'd5;
   
   always_comb begin
     if (horizFlip) begin
@@ -173,6 +180,7 @@ module vdp_disp_interface(
 
   /******* Sprite Handling *******/
 
+  /*
   vdp_sprite_interface SPRITE_LOGIC(
     .clk, 
     .rst_L,
@@ -267,6 +275,11 @@ module vdp_disp_interface(
   //assign CRAM_VGA_addr = (~validSprite) ? CRAM_addr_BG : CRAM_addr_SPR;
   assign VRAM_go = VRAM_go_BG || VRAM_go_SPR;
 
+  */
+
+  assign VRAM_go = VRAM_go_BG;
+  assign CRAM_VGA_addr = CRAM_addr_BG;
+
 endmodule
 
 // FSM for vdp_disp_interface
@@ -287,7 +300,7 @@ module disp_fsm(
   always_comb begin
     case(cs)
       WaitInit: begin
-        ns = ((row >= 48 && row < 432) && col < 58) ? PosFetch : WaitInit;
+        ns = ((row >= 48 && row < 432) && (col > 57)) ? PosFetch : WaitInit;
       end
       PosFetch:   ns = WaitForPos;
       WaitForPos: ns = PatFetch;

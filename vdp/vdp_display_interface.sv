@@ -45,14 +45,14 @@ module vdp_disp_interface(
   logic [2:0] sprPatRow, sprPatRow_1, sprPatRow_2;
   logic [2:0] sprCnt, sprCnt_1, sprCnt_2, sprCnt_3, sprCnt_4;  
 
-  logic [7:0][255:0] sprPatLatch_out; // 2 Buffers, 8 pairs of 2 entries, each 32*8 bytes
+  logic [7:0][255:0] sprPatLatch_out;
   logic [7:0]        validHPOS;
   logic [7:0][2:0]   spriteOffset;
   logic [2:0]        bgPatOffset;
   logic [2:0]        currSprIndex;
   logic [3:0]        sprColorIndex;
   logic              bottomHalf_latched;
-  
+
   /******** Background Select Register ********/
  
   register #(14) bgSelReg(
@@ -66,18 +66,25 @@ module vdp_disp_interface(
   logic [8:0] pixelRow;
   logic [9:0] pixelCol;
 
-  assign pixelRow = row - 9'd48;
-  assign pixelCol = col - 10'd64 + 10'd6; // Add 6 to pre-fetch pixel data for the pipeline
+  // Offset for 256x192 aspect ratio
+  assign pixelRow = (regFile[0][7] & (col > 10'd448)) ?   // 64 + 8*2*24 = 448 
+                    row - 9'd48 : 
+                    row - 9'd48 + {regFile[9], 1'b0};
 
-  // Each pixel position is 2 bytes, so -------------------|
-  assign bgSel_in = {3'b111, pixelRow[8:4], pixelCol[8:4], 1'b0}; // Either blank screen or iterating
+  // Offset as above, but added functionality of horizontal scrolling. 8-bit value, multiplied by 2 for doubled aspect ratio.
+  // 6 added to pre-fetch pixel data for pipeline
+  assign pixelCol = (regFile[0][6] & (row < 9'd80)) ?                // 48 + 32 = 80 
+                    col - 10'd64 + 10'd6 :                           // If regFile[0][6] is set, don't scroll for scanlines 0-15 (rows 0-31)
+                    col - 10'd64 + {1'b0, regFile[8], 1'b0} + 10'd6; // Otherwise, do as above.
+
+  assign bgSel_in = {regFile[2][3:1], pixelRow[8:4], pixelCol[8:4], 1'b0}; 
 
   assign VRAM_VGA_addr[0] = bgSel_out;
   assign VRAM_VGA_addr[1] = bgSel_out + 14'd1;
 
   always_comb begin
-    if (col < 10'd57) begin
-      VRAM_VGA_addr[2] = {regFile[6][2], (sprPat + bottomHalf_latched), sprPatRow, 2'd0}; 
+    if (col <= 10'd57) begin
+      VRAM_VGA_addr[2] = {regFile[6][2], (sprPat + (bottomHalf_latched & regFile[1][1])), sprPatRow, 2'd0}; 
     end
     else VRAM_VGA_addr[2] = charPatternAddr;
   end
@@ -107,7 +114,7 @@ module vdp_disp_interface(
   assign patSelLatch1_in = VRAM_VGA_data_out[1];
   assign patSelLatch2_in = VRAM_VGA_data_out[0]; // Little Endian, MSB goes in first
 
-  /******** patSel Parsing *******/
+  /******** patSel Parsing ********/
   
   assign bgPatOffset =     (vertFlip) ? 3'd7 - pixelRow[3:1] : pixelRow[3:1];
   assign charPatternAddr = {patSelLatch1_out[0], patSelLatch2_out, bgPatOffset, 2'd0}; // 14-bit signal to differentiate 512 patterns of 32 bytes each
@@ -127,25 +134,25 @@ module vdp_disp_interface(
   );  
   
   logic [9:0] colorLatchIndex; 
-  assign colorLatchIndex = col + 1;
+  assign colorLatchIndex = pixelCol - 10'd5;
   
   always_comb begin
     if (horizFlip) begin
-      CRAM_addr_BG = {
-        paletteSel,
-        colorLatch_out[0][3'd7-colorLatchIndex[3:1]], 
-        colorLatch_out[1][3'd7-colorLatchIndex[3:1]],
-        colorLatch_out[2][3'd7-colorLatchIndex[3:1]],
-        colorLatch_out[3][3'd7-colorLatchIndex[3:1]]
-      };
-    end
-    else begin
       CRAM_addr_BG = {
         paletteSel,
         colorLatch_out[0][colorLatchIndex[3:1]], 
         colorLatch_out[1][colorLatchIndex[3:1]],
         colorLatch_out[2][colorLatchIndex[3:1]],
         colorLatch_out[3][colorLatchIndex[3:1]]
+      };
+    end
+    else begin
+      CRAM_addr_BG = {
+        paletteSel,
+        colorLatch_out[0][3'd7-colorLatchIndex[3:1]], 
+        colorLatch_out[1][3'd7-colorLatchIndex[3:1]],
+        colorLatch_out[2][3'd7-colorLatchIndex[3:1]],
+        colorLatch_out[3][3'd7-colorLatchIndex[3:1]]
       };
     end
   end
@@ -172,6 +179,7 @@ module vdp_disp_interface(
 
   /******* Sprite Handling *******/
 
+  /*
   vdp_sprite_interface SPRITE_LOGIC(
     .clk, 
     .rst_L,
@@ -203,7 +211,7 @@ module vdp_disp_interface(
   register #(3) SPR_CNT_2(.*, .D(sprCnt_1),   .Q(sprCnt_2), .en(1'b1));
   register #(3) SPR_CNT_3(.*, .D(sprCnt_2),   .Q(sprCnt_3), .en(1'b1));
   register #(3) SPR_CNT_4(.*, .D(sprCnt_3),   .Q(sprCnt_4), .en(1'b1));
-  
+
   // Sprite Pattern Row Buffer
   generate
     genvar i, j;
@@ -224,7 +232,7 @@ module vdp_disp_interface(
         ); // Probably need something more here... 
       end
     end
-  endgenerate
+  endgenerate 
 
   logic [3:0][7:0]  currSprRow;
   
@@ -235,7 +243,7 @@ module vdp_disp_interface(
     .validHPOS,
     .currSprIndex
   );  
-  
+
   assign CRAM_addr_SPR = {
     1'b0,
     currSprRow[0][sprColorIndex[3:1]],
@@ -266,6 +274,11 @@ module vdp_disp_interface(
   //assign CRAM_VGA_addr = (~validSprite) ? CRAM_addr_BG : CRAM_addr_SPR;
   assign VRAM_go = VRAM_go_BG || VRAM_go_SPR;
 
+  */
+
+  assign VRAM_go = VRAM_go_BG;
+  assign CRAM_VGA_addr = CRAM_addr_BG;
+
 endmodule
 
 // FSM for vdp_disp_interface
@@ -286,7 +299,7 @@ module disp_fsm(
   always_comb begin
     case(cs)
       WaitInit: begin
-        ns = ((row >= 48 && row < 432) && col < 58) ? PosFetch : WaitInit;
+        ns = ((row >= 48 && row < 432) && (col > 57)) ? PosFetch : WaitInit;
       end
       PosFetch:   ns = WaitForPos;
       WaitForPos: ns = PatFetch;

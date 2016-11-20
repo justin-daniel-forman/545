@@ -50,7 +50,7 @@ module vdp_top (
 );
 
   // Decoder logic
-  logic CSW_L, CSR_L, MODE, vdp_go;
+  logic CSW_L, CSR_L, MODE, vdp_go, int_ack;
   
   // RAM logic
   //logic [7:0][7:0]  VRAM_VGA_data_out; // 8 VGA read ports 
@@ -77,8 +77,11 @@ module vdp_top (
   logic [9:0] pixel_col;
   logic [8:0] pixel_row;
 
+  // V_counter logic
+  logic [8:0] V_counter;
+
   // Stuff
-  logic screenBusy;
+  logic screenBusy, scanline_en;
 
   assign BUSY = screenBusy && (pixel_row > 48 && pixel_row <= 575);
 
@@ -95,7 +98,8 @@ module vdp_top (
     .CSW_L(CSW_L),
     .CSR_L(CSR_L),
     .MODE(MODE),
-    .vdp_go(vdp_go)
+    .vdp_go(vdp_go),
+    .int_ack
   );
 
   logic [7:0] stat_reg_out;
@@ -114,7 +118,6 @@ module vdp_top (
     .vdp_go(vdp_go),
     .data_in(data_bus_in),
     .data_out(data_port_out),
-    .stat_reg_out(stat_reg_out),
     .screenBusy,
     .VRAM_io_re,
     .VRAM_io_we,
@@ -157,7 +160,8 @@ module vdp_top (
     .HSync(VGA_HS),
     .VSync(VGA_VS),
     .row(pixel_row),
-    .col(pixel_col)
+    .col(pixel_col),
+    .scanline_en
   );
 
   /******* Register File *******/ 
@@ -189,7 +193,7 @@ module vdp_top (
  
   /******** VRAM & CRAM ********/  
 
-  assign VRAM_go = (VRAM_go_VGA || (VRAM_go_io && ~BUSY));
+  assign VRAM_go = (VRAM_go_VGA || VRAM_go_io);
 
   CRAM colorRam(
     .clka(clk_4),
@@ -223,17 +227,80 @@ module vdp_top (
   /******* Top Level I/O Interface *******/
 
   //assign the data bus if we are writing to it
-  assign data_bus_out = (MODE & ~CSR_L) ? stat_reg_out : data_port_out;
-  
-  /******* Interrupt Register *******/
+  logic [7:0] data_bus_out_temp;
 
-  intGen INTERRUPT_LOGIC(
+  always_comb begin
+    case(addr_bus_in) 
+      8'hBF: data_bus_out_temp = stat_reg_out;
+      8'hBE: data_bus_out_temp = data_port_out;
+      8'h7E: data_bus_out_temp = V_counter[8:0];
+    endcase
+  end
+
+  assign data_bus_out = data_bus_out_temp;
+
+  //assign data_bus_out = (MODE) ? stat_reg_out : data_port_out;
+  
+  /******* Status Register *******/
+
+  logic frame_int_in, frame_int_out, frame_int_en;
+  logic spr_ovfw_in, spr_ovfw_out, spr_ovfw_en;
+  logic spr_coll_in, spr_coll_out, spr_coll_en;
+
+  register_clr #(1) FRAME_INT_REG(
     .clk(clk_25), .rst_L,
-    .IORQ_L, .M1_L, .INT_L, 
+    .D(frame_int_in),
+    .Q(frame_int_out),
+    .en(frame_int_en),
+    .clr(int_ack)
+  );
+  
+  register_clr #(1) SPR_OVFW_REG(
+    .clk(clk_25), .rst_L,
+    .D(spr_ovfw_in),
+    .Q(spr_ovfw_out),
+    .en(spr_ovfw_en),
+    .clr(int_ack)
+  );
+  
+  register_clr #(1) SPR_COLL_REG(
+    .clk(clk_25), .rst_L,
+    .D(spr_coll_in),
+    .Q(spr_coll_out),
+    .en(spr_coll_en),
+    .clr(int_ack)
+  );
+
+  frameInt FRAME_INTERRUPT_LOGIC(
+    .clk(clk_25), .rst_L,
+    .frame_int(frame_int_in), 
     .row(pixel_row),
     .col(pixel_col),
-    .regFile(rf_data_out)
+    .regFile(rf_data_out),
+    .frame_int_en
   );
+
+  assign spr_ovfw_in = 0;
+  assign spr_coll_in = 0;
+  assign spr_ovfw_en = 0;
+  assign spr_coll_en = 0;
+
+  assign stat_reg_out = {frame_int_out, spr_ovfw_out, spr_coll_out, 5'd0};
+  assign INT_L = ~frame_int_out & ~spr_ovfw_out & ~spr_coll_out;
+
+  /******* V Counter *******/
+
+  logic [8:0] scanline_count;
+
+  counter #(9) SCANLINE_REG(
+    .clk(clk_25), .rst_L,
+    .clear(scanline_count == 9'h104),
+    .en(scanline_en),
+    .count(scanline_count)
+  );
+
+  // Whoever thought this shit was funny...
+  assign V_counter = (scanline_count >= 8'hDA) ? scanline_count - 9'd5 : scanline_count;
 
   /*
   ila_1 LOGIC_ANALYZER(
@@ -313,7 +380,8 @@ module vdp_port_decoder(
   output  logic CSW_L,
   output  logic CSR_L,
   output  logic MODE,
-  output  logic vdp_go
+  output  logic vdp_go,
+  output  logic int_ack
 );
 
   enum logic [2:0] {
@@ -335,6 +403,7 @@ module vdp_port_decoder(
     MODE   = 0; //Command port -> 1, data port -> 0
     CSR_L  = 1;
     CSW_L  = 1;
+    int_ack = 0;
      
     // next state logic
     case (state)
@@ -367,17 +436,24 @@ module vdp_port_decoder(
         CSR_L    = 1;
         CSW_L    = 1;
       end
-      RD0, RD1: begin
+      RD0: begin
         MODE  = (addr_in == 8'hBF); //Command port -> 1, data port -> 0
         CSR_L = 0;
         CSW_L = 1;
         vdp_go = 1;
       end
+      RD1: begin
+        MODE  = (addr_in == 8'hBF); //Command port -> 1, data port -> 0
+        CSR_L = 0;
+        CSW_L = 1;
+        vdp_go = 1;
+        int_ack = (addr_in == 8'hBF); // Reading from $BF means we acknowledged interrupts
+      end
       WR0, WR1: begin
         MODE  = (addr_in == 8'hBF); //Command port -> 1, data port -> 0
         CSR_L = 1;
         CSW_L = 0; 
-	    vdp_go = 1; 
+	      vdp_go = 1; 
       end
       default: begin
         vdp_go = 0;
@@ -419,77 +495,55 @@ module regFile (
 
 endmodule
 
-module intGen(
+module frameInt(
   input  logic clk, rst_L,
-  input  logic M1_L, IORQ_L,
   input  logic [8:0] row, 
   input  logic [9:0] col,
   input  logic [10:0][7:0] regFile,
-  output logic INT_L
+  output logic frame_int,
+  output logic frame_int_en
 );
-
-    enum logic [8:0] {
-        START, 
-        T1,
-        T2,
-        T3,
-        T4,
-        T5, 
-        T6, 
-        T7,
-        T8,
-        T9,
-        T10,
-        T11,
-        T12,
-        WAIT_TO_CLEAR
-    } curr_state, next_state;
+  
+  enum logic {
+    START,
+    SET_INT
+  } cs, ns;
+  
+  logic [8:0] pixelRow;
+  assign pixelRow = row - 9'd48;
     
-    logic [8:0] pixelRow;
-    assign pixelRow = row - 9'd48;
-    
-    // next state logic
-    always_comb begin
-        case(curr_state) 
-            START: begin
-              if(regFile[0][4]) begin
-                if(regFile[1][5]) next_state = ((row == 9'd432) && (col == 10'd576)) ? WAIT_TO_CLEAR : START;
-                else next_state = ((pixelRow[8:1] == regFile[10]) && (col == 10'd576)) ? WAIT_TO_CLEAR : START;
-              end
-              else next_state = START;
-            end
-            WAIT_TO_CLEAR: next_state = (~M1_L && ~IORQ_L) ? T1 : WAIT_TO_CLEAR;
-            T1: next_state = T2;
-            T2: next_state = T3;
-            T3: next_state = T4;
-            T4: next_state = T5;
-            T5: next_state = T6;
-            T6: next_state = T7;
-            T7: next_state = T8;
-            T8: next_state = T9;
-            T9: next_state = T10;
-            T10: next_state = T11;
-            T11: next_state = T12;
-            T12: next_state = START;
-            default: next_state = START;
-        endcase
-    end
+  // next state logic
+  always_comb begin
+    case(cs) 
+      START: begin
+        if(regFile[0][4])      ns = ((pixelRow[8:1] == regFile[10]) && (col == 10'd576)) ? SET_INT : START;
+        else if(regFile[1][5]) ns = ((row == 9'd432) && (col == 10'd576)) ? SET_INT : START; 
+        else                   ns = START;
+      end
+      SET_INT: ns = START;
+      default: ns = START;
+    endcase
+  end
 
-    // output logic
-    always_comb begin
-        INT_L = 0;
-        case(curr_state)
-             START: INT_L = 1;
-             default: INT_L = 0;
-        endcase
-    end
+  // output logic
+  always_comb begin
+    frame_int = 1; frame_int_en = 1;
+    case(cs)
+      START: begin   
+        frame_int = 1; frame_int_en = 1;
+      end
+      SET_INT: begin
+        frame_int = 0; frame_int_en = 0;
+      end
+      default: begin
+        frame_int = 1; frame_int_en = 1;
+      end
+    endcase
+  end
 
-    always_ff @(posedge clk, negedge rst_L) begin
-        if(~rst_L) begin
-            curr_state <= START;
-        end else begin
-            curr_state <= next_state;
-        end
-    end
+  always_ff @(posedge clk, negedge rst_L) begin
+    if(~rst_L) cs <= START;
+    else       cs <= ns;
+  end
 
-endmodule: intGen
+endmodule: frameInt
