@@ -247,6 +247,12 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PSRCDIR/sources_1/ip/always_audio.coe">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
         <Option Name="TopModule" Val="project_top"/>
@@ -304,6 +310,45 @@
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
+    <FileSet Name="ila_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/ila_0">
+      <File Path="$PSRCDIR/sources_1/ip/ila_0/ila_0.xci">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="ila_0.veo"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="ila_0.xml"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="ila_0_funcsim.vhdl"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="ila_0_funcsim.v"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="ila_0_stub.vhdl"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="ila_0_stub.v"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="ila_0.dcp"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="synth/ila_0.v"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="ila_0_ooc.xdc"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="ila_v5_1/constraints/ila.xdc"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="ila_v5_1/hdl/verilog/ila_v5_1_ila_lib_function.v"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="ila_v5_1/hdl/verilog/ila_v5_1_ila_localparam_inc.v"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="ila_v5_1/hdl/verilog/ila_v5_1_ila_param_inc.v"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="ila_v5_1/hdl/verilog/ila_v5_1_ila_in_ports_inc.v"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="ila_v5_1/hdl/ila_v5_1_syn_rfs.v"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="ila_v5_1/hdl/verilog/ila_v5_1_ila_ver_inc.v"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2.vhd"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2_vhsyn_rfs.vhd"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="xsdbs_v1_0/hdl/xsdbs_v1_0_vl_rfs.v"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="xsdbs_v1_0/hdl/verilog/xsdbs_v1_0_inc.v"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="xsdbs_v1_0/hdl/verilog/xsdbs_v1_0_icon2xsdb_inc.v"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="ltlib_v1_0/hdl/ltlib_v1_0_vl_rfs.v"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="ltlib_v1_0/hdl/verilog/ltlib_v1_0_lib_function.v"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="ltlib_v1_0/hdl/verilog/ltlib_v1_0_ver_inc.v"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="sim/ila_0.v"/>
+        <CompFileExtendedInfo CompFileName="ila_0.xci" FileRelPathName="doc/ila_v5_1_changelog.txt"/>
+      </File>
+      <Config>
+        <Option Name="TopModule" Val="ila_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
     <FileSet Name="audioSys_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/audioSys_0">
       <File Path="$PPRDIR/../psg/audioSys_0/audioSys_0.xci">
         <FileInfo>
@@ -318,19 +363,6 @@
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
-    <FileSet Name="ila_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/ila_0">
-      <File Path="$PSRCDIR/sources_1/ip/ila_0/ila_0.xci">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <Config>
-        <Option Name="TopModule" Val="ila_0"/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-      </Config>
-    </FileSet>
     <FileSet Name="z80_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/z80_0">
       <File Path="$PSRCDIR/sources_1/ip/z80_0/z80_0.xci">
         <FileInfo>
@@ -338,6 +370,20 @@
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
+        <CompFileExtendedInfo CompFileName="z80_0.xci" FileRelPathName="z80_0.xml"/>
+        <CompFileExtendedInfo CompFileName="z80_0.xci" FileRelPathName="sim/z80_0.v"/>
+        <CompFileExtendedInfo CompFileName="z80_0.xci" FileRelPathName="/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/z80_IP_Block/src/z80_defines.vh"/>
+        <CompFileExtendedInfo CompFileName="z80_0.xci" FileRelPathName="z80_0_funcsim.v"/>
+        <CompFileExtendedInfo CompFileName="z80_0.xci" FileRelPathName="src/z80_top.sv"/>
+        <CompFileExtendedInfo CompFileName="z80_0.xci" FileRelPathName="synth/z80_0.v"/>
+        <CompFileExtendedInfo CompFileName="z80_0.xci" FileRelPathName="src/z80_datapath.sv"/>
+        <CompFileExtendedInfo CompFileName="z80_0.xci" FileRelPathName="z80_0_funcsim.vhdl"/>
+        <CompFileExtendedInfo CompFileName="z80_0.xci" FileRelPathName="z80_0_stub.v"/>
+        <CompFileExtendedInfo CompFileName="z80_0.xci" FileRelPathName="z80_0_stub.vhdl"/>
+        <CompFileExtendedInfo CompFileName="z80_0.xci" FileRelPathName="z80_0.veo"/>
+        <CompFileExtendedInfo CompFileName="z80_0.xci" FileRelPathName="z80_0.dcp"/>
+        <CompFileExtendedInfo CompFileName="z80_0.xci" FileRelPathName="library/library.sv"/>
+        <CompFileExtendedInfo CompFileName="z80_0.xci" FileRelPathName="src/z80_control.sv"/>
       </File>
       <Config>
         <Option Name="TopModule" Val="z80_0"/>
@@ -388,16 +434,18 @@
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
     </Run>
-    <Run Id="audioSys_0_synth_1" Type="Ft3:Synth" SrcSet="audioSys_0" Part="xc7z020clg484-1" ConstrsSet="audioSys_0" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/audioSys_0_synth_1">
+    <Run Id="ila_0_synth_1" Type="Ft3:Synth" SrcSet="ila_0" Part="xc7z020clg484-1" ConstrsSet="ila_0" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/ila_0_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2015"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
     </Run>
-    <Run Id="ila_0_synth_1" Type="Ft3:Synth" SrcSet="ila_0" Part="xc7z020clg484-1" ConstrsSet="ila_0" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/ila_0_synth_1">
+    <Run Id="audioSys_0_synth_1" Type="Ft3:Synth" SrcSet="audioSys_0" Part="xc7z020clg484-1" ConstrsSet="audioSys_0" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/audioSys_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2015"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2015">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -454,7 +502,7 @@
         <Step Id="write_bitstream"/>
       </Strategy>
     </Run>
-    <Run Id="audioSys_0_impl_1" Type="Ft2:EntireDesign" Part="xc7z020clg484-1" ConstrsSet="audioSys_0" Description="Vivado Implementation Defaults" SynthRun="audioSys_0_synth_1">
+    <Run Id="ila_0_impl_1" Type="Ft2:EntireDesign" Part="xc7z020clg484-1" ConstrsSet="ila_0" Description="Vivado Implementation Defaults" SynthRun="ila_0_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2015"/>
         <Step Id="init_design"/>
@@ -468,9 +516,11 @@
         <Step Id="write_bitstream"/>
       </Strategy>
     </Run>
-    <Run Id="ila_0_impl_1" Type="Ft2:EntireDesign" Part="xc7z020clg484-1" ConstrsSet="ila_0" Description="Vivado Implementation Defaults" SynthRun="ila_0_synth_1">
+    <Run Id="audioSys_0_impl_1" Type="Ft2:EntireDesign" Part="xc7z020clg484-1" ConstrsSet="audioSys_0" Description="Vivado Implementation Defaults" SynthRun="audioSys_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2015"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2015">
+          <Desc>Vivado Implementation Defaults</Desc>
+        </StratHandle>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>

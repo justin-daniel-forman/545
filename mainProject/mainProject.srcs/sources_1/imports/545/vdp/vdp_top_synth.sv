@@ -234,12 +234,24 @@ module vdp_top (
       8'hBF: data_bus_out_temp = stat_reg_out;
       8'hBE: data_bus_out_temp = data_port_out;
       8'h7E: data_bus_out_temp = V_counter[8:0];
+      default: data_bus_out_temp = 8'd0;
     endcase
   end
 
   assign data_bus_out = data_bus_out_temp;
 
   //assign data_bus_out = (MODE) ? stat_reg_out : data_port_out;
+  
+  /******* Interrupt Logic *******/
+  
+  intGen INTERRUPT_LOGIC(
+    .clk(clk_25), .rst_L,
+    .M1_L, .IORQ_L,
+    .row(pixel_row), 
+    .col(pixel_col),
+    .regFile(rf_data_out),
+    .INT_L
+  );
   
   /******* Status Register *******/
 
@@ -286,7 +298,7 @@ module vdp_top (
   assign spr_coll_en = 0;
 
   assign stat_reg_out = {frame_int_out, spr_ovfw_out, spr_coll_out, 5'd0};
-  assign INT_L = ~frame_int_out & ~spr_ovfw_out & ~spr_coll_out;
+  //assign INT_L = ~frame_int_out & ~spr_ovfw_out & ~spr_coll_out;
 
   /******* V Counter *******/
 
@@ -547,3 +559,78 @@ module frameInt(
   end
 
 endmodule: frameInt
+
+module intGen(
+   input  logic clk, rst_L,
+   input  logic M1_L, IORQ_L,
+   input  logic [8:0] row, 
+   input  logic [9:0] col,
+   input  logic [10:0][7:0] regFile,
+   output logic INT_L
+ );
+ 
+     enum logic [8:0] {
+         START, 
+         T1,
+         T2,
+         T3,
+         T4,
+         T5, 
+         T6, 
+         T7,
+         T8,
+         T9,
+         T10,
+         T11,
+         T12,
+         WAIT_TO_CLEAR
+     } curr_state, next_state;
+     
+     logic [8:0] pixelRow;
+     assign pixelRow = row - 9'd48;
+     
+     // next state logic
+     always_comb begin
+         case(curr_state) 
+             START: begin
+               if(regFile[0][4]) begin
+                 if(regFile[1][5]) next_state = ((row == 9'd432) && (col == 10'd576)) ? WAIT_TO_CLEAR : START;
+                 else next_state = ((pixelRow[8:1] == regFile[10]) && (col == 10'd576)) ? WAIT_TO_CLEAR : START;
+               end
+               else next_state = START;
+             end
+             WAIT_TO_CLEAR: next_state = (~M1_L && ~IORQ_L) ? T1 : WAIT_TO_CLEAR;
+             T1: next_state = T2;
+             T2: next_state = T3;
+             T3: next_state = T4;
+             T4: next_state = T5;
+             T5: next_state = T6;
+             T6: next_state = T7;
+             T7: next_state = T8;
+             T8: next_state = T9;
+             T9: next_state = T10;
+             T10: next_state = T11;
+             T11: next_state = T12;
+             T12: next_state = START;
+             default: next_state = START;
+         endcase
+     end
+ 
+     // output logic
+     always_comb begin
+         INT_L = 0;
+         case(curr_state)
+              START: INT_L = 1;
+              default: INT_L = 0;
+         endcase
+     end
+ 
+     always_ff @(posedge clk, negedge rst_L) begin
+         if(~rst_L) begin
+             curr_state <= START;
+         end else begin
+             curr_state <= next_state;
+         end
+     end
+ 
+ endmodule: intGen

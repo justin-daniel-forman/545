@@ -22,7 +22,7 @@ module vdp_sprite_interface(
   assign pixelCol = col - 10'd64; 
 
   // PosReg logic
-  logic [7:0] posReg_in, posReg_out;
+  logic [5:0] posReg_in, posReg_out;
   logic       posReg_en, posReg_incr;
 
   // VRAM addressing logic   
@@ -48,7 +48,7 @@ module vdp_sprite_interface(
   /******* Position Register *******/
   // Keeps track of where in the SAT we are
 
-  register #(8) posReg(
+  register #(6) posReg(
     .clk,
     .rst_L,
     .D(posReg_in),
@@ -56,7 +56,7 @@ module vdp_sprite_interface(
     .en(posReg_en)
   );
 
-  assign posReg_in = (posReg_incr) ? posReg_out + 8'd1 : 8'd0;
+  assign posReg_in = (posReg_incr) ? posReg_out + 6'd1 : 6'd0;
 
   /******* VRAM Addressing *******/
 

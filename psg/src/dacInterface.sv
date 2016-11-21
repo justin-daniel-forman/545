@@ -404,7 +404,7 @@ module serialInterface(
     input logic BCLK,
     input logic reset, 
     input logic [15:0] waveform,
-    input logic waveform_valid, 
+    input logic waveform_valid,
     output logic serialDone,
     output logic LRCLK, 
     output logic SDATA);

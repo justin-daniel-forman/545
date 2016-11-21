@@ -78,7 +78,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>ea895b99</spirit:value>
+            <spirit:value>42ddf912</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -108,7 +108,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>849f6a87</spirit:value>
+            <spirit:value>7d3e6516</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -649,7 +649,7 @@
       </xilinx:taxonomies>
       <xilinx:displayName>audioSys_v1_0</xilinx:displayName>
       <xilinx:coreRevision>1</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2016-11-11T18:06:25Z</xilinx:coreCreationDateTime>
+      <xilinx:coreCreationDateTime>2016-11-21T19:15:17Z</xilinx:coreCreationDateTime>
       <xilinx:tags>
         <xilinx:tag xilinx:name="user.org:user:audioSys:1.0_ARCHIVE_LOCATION">/afs/ece.cmu.edu/usr/suyashb/Private/545/psg</xilinx:tag>
       </xilinx:tags>
@@ -657,7 +657,7 @@
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2015.2</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="5bbf7d8b"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="6a3885a7"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="a73d241c"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="f578efd3"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="b81ee9ce"/>
     </xilinx:packagingInfo>

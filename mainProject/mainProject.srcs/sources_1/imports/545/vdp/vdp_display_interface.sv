@@ -180,7 +180,6 @@ module vdp_disp_interface(
 
   /******* Sprite Handling *******/
 
-  /*
   vdp_sprite_interface SPRITE_LOGIC(
     .clk, 
     .rst_L,
@@ -246,7 +245,7 @@ module vdp_disp_interface(
   );  
 
   assign CRAM_addr_SPR = {
-    1'b0,
+    1'b1,
     currSprRow[0][sprColorIndex[3:1]],
     currSprRow[1][sprColorIndex[3:1]],
     currSprRow[2][sprColorIndex[3:1]],
@@ -264,7 +263,7 @@ module vdp_disp_interface(
 
   always_comb begin
     if (validSprite) begin
-      if (CRAM_addr_SPR == 5'd0) begin
+      if (CRAM_addr_SPR == 5'd0 || patInBg) begin // Possible we need to latch these flags...
         CRAM_VGA_addr = CRAM_addr_BG;
       end
       else CRAM_VGA_addr = CRAM_addr_SPR;
@@ -275,10 +274,10 @@ module vdp_disp_interface(
   //assign CRAM_VGA_addr = (~validSprite) ? CRAM_addr_BG : CRAM_addr_SPR;
   assign VRAM_go = VRAM_go_BG || VRAM_go_SPR;
 
-  */
-
+  /*
   assign VRAM_go = VRAM_go_BG;
   assign CRAM_VGA_addr = CRAM_addr_BG;
+  */
 
 endmodule
 

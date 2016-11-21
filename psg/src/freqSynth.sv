@@ -126,7 +126,11 @@ module divider(input logic [9:0] data,
         end
         else begin
             if(div_en) begin
-                if(remainder_preview >= data) begin
+                if(data == 0) begin
+                    step_size <= 0;
+                    remainder <= 0;
+                end
+                else if(remainder_preview >= data) begin
                     remainder <= remainder_preview - data;
                     step_size <= (step_size << 1) | 1;
                 end
