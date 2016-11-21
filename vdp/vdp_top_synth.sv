@@ -41,7 +41,7 @@ module vdp_top (
 );
 
   // Decoder logic
-  logic CSW_L, CSR_L, MODE, vdp_go;
+  logic CSW_L, CSR_L, MODE, vdp_go, int_ack;
   
   // RAM logic
   logic [7:0][7:0]  VRAM_VGA_data_out; // 8 VGA read ports 
@@ -88,7 +88,8 @@ module vdp_top (
     .CSW_L(CSW_L),
     .CSR_L(CSR_L),
     .MODE(MODE),
-    .vdp_go(vdp_go)
+    .vdp_go(vdp_go),
+    .int_ack
   );
 
   logic [7:0] stat_reg_out;
@@ -107,7 +108,6 @@ module vdp_top (
     .vdp_go(vdp_go),
     .data_in(data_bus_in),
     .data_out(data_port_out),
-    .stat_reg_out(stat_reg_out),
     .screenBusy,
     .VRAM_io_re,
     .VRAM_io_we,
@@ -168,7 +168,6 @@ module vdp_top (
     .data_out()
   );
   
-  /*
   // Begin Debugging Code
   
   logic [7:0] h_scroll_count, v_scroll_count;
@@ -186,8 +185,12 @@ module vdp_top (
     rf_data_out[8] = h_scroll_count; // 0x60 is 6 * 16 pixels = 96 pixels = 192/2
     rf_data_out[9] = v_scroll_count;
     rf_data_out[10] = 8'hFF;
+    h_scroll_count = 8'd0;
+    v_scroll_count = 8'd0;
   end
- 
+  
+  /*
+  
   logic h_scroll_count_en, v_scroll_count_en;
   counter #(8) H_SCROLL_COUNTER(
     .clk(clk_100), .rst_L,
@@ -227,7 +230,7 @@ module vdp_top (
 
   assign VRAM_go = (VRAM_go_VGA || (VRAM_go_io && ~BUSY));
 
-  CRAM colorRam(
+  mem #(8, 5) colorRam(
     .clka(clk_4),
     .wea(CRAM_io_we),
     .addra(CRAM_io_addr),
@@ -334,6 +337,7 @@ module vdp_top (
   // Whoever thought this shit was funny...
   assign V_counter = (scanline_count >= 8'hDA) ? scanline_count - 9'd5 : scanline_count;
 
+  /*
   ila_0 LOGIC_ANALYZER(
     .clk(clk_100),
     .probe0(VRAM_VGA_addr[0]), // 14 bits
@@ -358,7 +362,7 @@ module vdp_top (
     .probe19(9'd0)
     //.probe18(pixelCol),
     //.probe19({6'd0, bgDispState})
-  );
+  );*/
 
 endmodule: vdp_top
 

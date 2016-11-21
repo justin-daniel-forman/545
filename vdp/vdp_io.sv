@@ -14,7 +14,6 @@ module vdp_io(
 
   input   logic [7:0] data_in, VRAM_io_data_out,
   output  logic [7:0] data_out,
-  output  logic [7:0] stat_reg_out,
   output  logic rf_en, VRAM_io_re, VRAM_io_we, CRAM_io_re, CRAM_io_we,
   output  logic [7:0] VRAM_io_data_in,
   output  logic [5:0] CRAM_io_data_in,
@@ -63,7 +62,6 @@ module vdp_io(
     .rf_en(rf_en),
     .wr_addr_sel(write_addr_sel),
     .wr_addr_en(write_addr_en),
-    .stat_en(),                    // Probably just remove this
     .data_in_sel(data_in_sel),
     .VRAM_re(VRAM_io_re), 
     .VRAM_we(VRAM_io_we),
@@ -123,7 +121,7 @@ module vdp_io_fsm(
   input  logic       MODE, CSR_L, CSW_L, go, screenBusy,
   input  logic [1:0] op,  
   output logic       wr_cmd_1, wr_cmd_2, rf_en,
-  output logic       wr_addr_sel, wr_addr_en, stat_en,
+  output logic       wr_addr_sel, wr_addr_en,
   output logic       data_in_sel, VRAM_re, VRAM_we, 
   output logic       CRAM_re, CRAM_we,
   output logic       VRAM_go
@@ -198,7 +196,6 @@ module vdp_io_fsm(
     rf_en = 0;
     wr_addr_sel = 0;
     wr_addr_en = 0;
-    stat_en = 0;
     data_in_sel = 0;
     VRAM_re = 0;
     VRAM_we = 0;
@@ -269,7 +266,6 @@ module vdp_io_fsm(
         rf_en = 0;
         wr_addr_sel = 0;
         wr_addr_en = 0;
-        stat_en = 0;
         data_in_sel = 0;
         VRAM_re = 0;
         VRAM_we = 0;

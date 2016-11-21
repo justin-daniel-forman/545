@@ -3,12 +3,12 @@ module vdp_sprite_interface(
   input  logic [8:0]       row,
   input  logic [9:0]       col,
   input  logic             screenBusy,
-  input  logic [10:0][7:0] regFile,
-  input  logic [5:0][7:0]  VRAM_sprite_data, 
+  input  logic [10:0][7:0]  regFile,
+  input  logic [5:0][7:0]  VRAM_sprite_data,
   output logic             VRAM_go,
   output logic [7:0]       sprPat, // Feeds into VRAM addr 2-5
   output logic [1:0][13:0] VRAM_sprite_addr,
-  output logic             validSprite,
+  output logic [7:0]       validSprite,
   output logic [7:0]       validHPOS,
   output logic [2:0]       sprPatRow_out,
   output logic [2:0]       sprCnt,
@@ -22,7 +22,7 @@ module vdp_sprite_interface(
   assign pixelCol = col - 10'd64; 
 
   // PosReg logic
-  logic [7:0] posReg_in, posReg_out;
+  logic [5:0] posReg_in, posReg_out;
   logic       posReg_en, posReg_incr;
 
   // VRAM addressing logic   
@@ -48,7 +48,7 @@ module vdp_sprite_interface(
   /******* Position Register *******/
   // Keeps track of where in the SAT we are
 
-  register #(8) posReg(
+  register #(6) posReg(
     .clk,
     .rst_L,
     .D(posReg_in),
@@ -56,10 +56,15 @@ module vdp_sprite_interface(
     .en(posReg_en)
   );
 
-  assign posReg_in = (posReg_incr) ? posReg_out + 8'd1 : 8'd0;
+  assign posReg_in = (posReg_incr) ? posReg_out + 6'd1 : 6'd0;
 
   /******* VRAM Addressing *******/
 
+  /*
+  assign VRAM_sprite_addr[0] = (~VPOSorHPOS) ? 
+    {6'd0, posReg_out} + 14'h3F00 :
+    {5'd0, posReg_out, 1'd0} + 14'h3F80;
+  */
   // VRAM_addr_6
   assign VRAM_sprite_addr[0] = (~VPOSorHPOS) ? 
     {regFile[5][6:1], 2'd0, posReg_out} :
@@ -120,24 +125,9 @@ module vdp_sprite_interface(
         .lo(HPOSlatch_out[i]),
         .inRange(validHPOS[i])
       );
+      assign validSprite[i] = validHPOS[i] & (col >= 64 && col < 576); 
     end
   endgenerate
-
-  always_comb begin
-    validSprite = 0;
-    case(sprCnt)
-      0: validSprite = 0;
-      1: validSprite = |validHPOS[0] & (col >= 64 && col < 576);
-      2: validSprite = |validHPOS[1:0] & (col >= 64 && col < 576);
-      3: validSprite = |validHPOS[2:0] & (col >= 64 && col < 576);
-      4: validSprite = |validHPOS[3:0] & (col >= 64 && col < 576);
-      5: validSprite = |validHPOS[4:0] & (col >= 64 && col < 576);
-      6: validSprite = |validHPOS[5:0] & (col >= 64 && col < 576);
-      7: validSprite = |validHPOS[6:0]  & (col >= 64 && col < 576);
-      // 8 valid sprites, may need to make sprCnt 4 bits
-      default: validSprite = 0;
-    endcase
-  end 
 
   // Register to latch the pattern address of the current sprite
   register #(8) sprLatch(
@@ -172,7 +162,7 @@ module vdp_sprite_interface(
     .sprPat_done
   );
 
-  /******* Various Counters *******/ 
+  /******* Sprite Fetch Counters *******/ 
 
   // Selects the current sprite
   counter #(3) SPRITE_COUNT(
@@ -331,7 +321,7 @@ module vdp_sprite_pattern_row_control(
 );
 
   enum logic [1:0] {Wait, getPat, incRow} cs, ns;
-
+  
   always_comb begin
     sprPatRow_en = 0;
     sprPat_done = 0;
@@ -339,9 +329,9 @@ module vdp_sprite_pattern_row_control(
     
     // NS logic
     case(cs)
-      Wait: ns = (sprLatch_en) ? getPat : Wait;
-      getPat: ns = incRow; 
-      incRow: ns = (sprPatRow_out == 3'd7) ? Wait : getPat;
+      Wait:    ns = (sprLatch_en) ? getPat : Wait;
+      getPat:  ns = incRow; 
+      incRow:  ns = (sprPatRow_out == 3'd7) ? Wait : getPat;
       default: ns = Wait;
     endcase
  
