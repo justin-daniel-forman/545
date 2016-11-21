@@ -14,7 +14,8 @@ module vdp_disp_interface(
   output logic [7:0][13:0] VRAM_VGA_addr,
   output logic      [4:0]  CRAM_VGA_addr,
   output logic      [3:0]  VGA_R, VGA_G, VGA_B,
-  output logic             VRAM_go, screenBusy
+  output logic             VRAM_go, screenBusy,
+  output logic             sprCollision, sprOverflow
 );
 
   logic       patSelLatch_en; // Set in disp_fsm
@@ -41,17 +42,18 @@ module vdp_disp_interface(
   logic [4:0] CRAM_addr_BG, CRAM_addr_SPR;
   logic       VRAM_go_BG, VRAM_go_SPR;
   logic [7:0] sprPat;  
-  logic       validSprite; // Used to let sprites hijack CRAM
+  logic [7:0] validSprite; // Used to let sprites hijack CRAM
   logic [2:0] sprPatRow, sprPatRow_1, sprPatRow_2;
-  logic [2:0] sprCnt, sprCnt_1, sprCnt_2, sprCnt_3, sprCnt_4;  
+  logic [3:0] sprCnt, sprCnt_1, sprCnt_2, sprCnt_3, sprCnt_4;  
 
   logic [7:0][255:0] sprPatLatch_out;
   logic [7:0]        validHPOS;
   logic [7:0][2:0]   spriteOffset;
   logic [2:0]        bgPatOffset;
   logic [2:0]        currSprIndex;
-  logic [3:0]        sprColorIndex;
+  logic [7:0][3:0]   sprColorIndex;
   logic              bottomHalf_latched;
+  logic [3:0]        sprCollisionCount;
 
   /******** Background Select Register ********/
  
@@ -159,7 +161,7 @@ module vdp_disp_interface(
 
   /******* RGB Generation *******/
 
-  assign colorToDisplay = (blank) ? 6'd0 : CRAM_VGA_data_out;
+  assign colorToDisplay = (blank | regFile[1][6]) ? 6'd0 : CRAM_VGA_data_out;
   colorGen c1(colorToDisplay[1:0], VGA_R);
   colorGen c2(colorToDisplay[3:2], VGA_G); 
   colorGen c3(colorToDisplay[5:4], VGA_B);
@@ -179,7 +181,6 @@ module vdp_disp_interface(
 
   /******* Sprite Handling *******/
 
-  /*
   vdp_sprite_interface SPRITE_LOGIC(
     .clk, 
     .rst_L,
@@ -207,10 +208,10 @@ module vdp_disp_interface(
   register #(3) SPR_PAT_ROW_2(.*, .D(sprPatRow_1), .Q(sprPatRow_2), .en(1'b1));
 
   // Delay the sprite count by 3 clock cycles to sync with the result from VRAM
-  register #(3) SPR_CNT_1(.*, .D(sprCnt),   .Q(sprCnt_1), .en(1'b1));
-  register #(3) SPR_CNT_2(.*, .D(sprCnt_1),   .Q(sprCnt_2), .en(1'b1));
-  register #(3) SPR_CNT_3(.*, .D(sprCnt_2),   .Q(sprCnt_3), .en(1'b1));
-  register #(3) SPR_CNT_4(.*, .D(sprCnt_3),   .Q(sprCnt_4), .en(1'b1));
+  register #(4) SPR_CNT_1(.*, .D(sprCnt),   .Q(sprCnt_1), .en(1'b1));
+  register #(4) SPR_CNT_2(.*, .D(sprCnt_1),   .Q(sprCnt_2), .en(1'b1));
+  register #(4) SPR_CNT_3(.*, .D(sprCnt_2),   .Q(sprCnt_3), .en(1'b1));
+  register #(4) SPR_CNT_4(.*, .D(sprCnt_3),   .Q(sprCnt_4), .en(1'b1));
 
   // Sprite Pattern Row Buffer
   generate
@@ -227,14 +228,22 @@ module vdp_disp_interface(
           .rst_L,
           .D(VRAM_VGA_data_out[5:2]),
           .Q(B),
-          .en((sprPatRow == j) & (sprCnt_4 == i)),
+          .en((sprPatRow == j) & (sprCnt_4[2:0] == i)),
           .clr(pixelRow > 9'd383)
         ); // Probably need something more here... 
       end
+      // Iterates over the bits in a 4-byte row to generate the palettes
+      counter #(4) SPR_COLOR_INDEX(
+        .clk,
+        .rst_L,
+        .en(validSprite[i]),
+        .clear(col > 10'd575), // Currently useless
+        .count(sprColorIndex[i])
+      );
     end
   endgenerate 
 
-  logic [3:0][7:0]  currSprRow;
+  logic [3:0][7:0] currSprRow;
   
   spritePartition SPR_PARTITION(
     .sprPatLatch_out,
@@ -245,24 +254,16 @@ module vdp_disp_interface(
   );  
 
   assign CRAM_addr_SPR = {
-    1'b0,
-    currSprRow[0][sprColorIndex[3:1]],
-    currSprRow[1][sprColorIndex[3:1]],
-    currSprRow[2][sprColorIndex[3:1]],
-    currSprRow[3][sprColorIndex[3:1]]
-  };
-  
-  // Iterates over the bits in a 4-byte row to generate the palettes
-  counter #(4) SPR_COLOR_INDEX(
-    .clk,
-    .rst_L,
-    .en(validSprite),
-    .clear(col > 10'd575),
-    .count(sprColorIndex)
-  );
+    1'b1,
+    currSprRow[0][sprColorIndex[currSprIndex][3:1]],
+    currSprRow[1][sprColorIndex[currSprIndex][3:1]],
+    currSprRow[2][sprColorIndex[currSprIndex][3:1]],
+    currSprRow[3][sprColorIndex[currSprIndex][3:1]]
+  }; 
 
   always_comb begin
-    if (validSprite) begin
+    if (regFile[0][5] & (col + 1 < 16)) CRAM_VGA_addr = {1'b0, regFile[7][3:0]};
+    else if (|validSprite) begin
       if (CRAM_addr_SPR == 5'd0) begin
         CRAM_VGA_addr = CRAM_addr_BG;
       end
@@ -271,13 +272,28 @@ module vdp_disp_interface(
     else CRAM_VGA_addr = CRAM_addr_BG;
   end
 
-  //assign CRAM_VGA_addr = (~validSprite) ? CRAM_addr_BG : CRAM_addr_SPR;
   assign VRAM_go = VRAM_go_BG || VRAM_go_SPR;
 
-  */
-
+  /*
   assign VRAM_go = VRAM_go_BG;
   assign CRAM_VGA_addr = CRAM_addr_BG;
+  */
+
+  /******* Interrupt Generation *******/
+
+  // E.g: If sprCnt is 4, sprite entries 0-3 are all valid, so count validSprites for 0-3  
+  assign sprCollisionCount = (validSprite[0] + 
+                             (validSprite[1] & (sprCnt_4 > 4'd1)) + 
+                             (validSprite[2] & (sprCnt_4 > 4'd2)) + 
+                             (validSprite[3] & (sprCnt_4 > 4'd3)) + 
+                             (validSprite[4] & (sprCnt_4 > 4'd4)) + 
+                             (validSprite[5] & (sprCnt_4 > 4'd5)) + 
+                             (validSprite[6] & (sprCnt_4 > 4'd6)) + 
+                             (validSprite[7] & (sprCnt_4 > 4'd7)));
+
+  assign sprCollision = (sprCollisionCount > 4'd1);
+
+  assign sprOverflow = sprCnt[3];
 
 endmodule
 
