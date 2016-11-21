@@ -68,9 +68,10 @@ module vdp_top (
   logic [9:0] pixel_col, pixelCol, V_counter;
   logic [8:0] pixel_row, pixelRow;
   logic       scanline_en;
+  logic [7:0] addr_latched;
 
   // Stuff
-  logic screenBusy;
+  logic screenBusy, sprCollision, sprOverflow;
   logic [2:0] bgDispState;
 
   assign BUSY = screenBusy && (pixel_row > 48 && pixel_row <= 575);
@@ -89,7 +90,8 @@ module vdp_top (
     .CSR_L(CSR_L),
     .MODE(MODE),
     .vdp_go(vdp_go),
-    .int_ack
+    .int_ack,
+    .addr_latched
   );
 
   logic [7:0] stat_reg_out;
@@ -140,7 +142,9 @@ module vdp_top (
       .VGA_B,
       .screenBusy,
       .VRAM_go(VRAM_go_VGA),
-      .regFile(rf_data_out)
+      .regFile(rf_data_out),
+      .sprCollision,
+      .sprOverflow
       //.pixelRow,
       //.pixelCol,
       //.SW,
@@ -265,10 +269,11 @@ module vdp_top (
   logic [7:0] data_bus_out_temp;
 
   always_comb begin
-    case(addr_bus_in) 
+    case(addr_latched) 
       8'hBF: data_bus_out_temp = stat_reg_out;
       8'hBE: data_bus_out_temp = data_port_out;
       8'h7E: data_bus_out_temp = V_counter[8:0];
+      default: data_bus_out_temp = data_port_out;
     endcase
   end
 
@@ -315,10 +320,10 @@ module vdp_top (
     .frame_int_en
   );
 
-  assign spr_ovfw_in = 0;
-  assign spr_coll_in = 0;
-  assign spr_ovfw_en = 0;
-  assign spr_coll_en = 0;
+  assign spr_ovfw_in = sprOverflow;
+  assign spr_coll_in = sprCollision;
+  assign spr_ovfw_en = sprOverflow; // Careful now...
+  assign spr_coll_en = sprCollision;
 
   assign stat_reg_out = {frame_int_out, spr_ovfw_out, spr_coll_out, 5'd0};
   assign INT_L = ~frame_int_out & ~spr_ovfw_out & ~spr_coll_out;
@@ -417,8 +422,11 @@ module vdp_port_decoder(
   output  logic CSR_L,
   output  logic MODE,
   output  logic vdp_go,
-  output  logic int_ack
+  output  logic int_ack,
+  output  logic [7:0] addr_latched
 );
+
+  logic addr_latch_en;
 
   enum logic [2:0] {
     WAIT = 3'b000,
@@ -440,6 +448,7 @@ module vdp_port_decoder(
     CSR_L  = 1;
     CSW_L  = 1;
     int_ack = 0;
+    addr_latch_en = 0;
      
     // next state logic
     case (state)
@@ -472,27 +481,50 @@ module vdp_port_decoder(
         CSR_L    = 1;
         CSW_L    = 1;
       end
-      RD0, RD1: begin
+      RD0: begin 
+        MODE  = (addr_in == 8'hBF); //Command port -> 1, data port -> 0
+        CSR_L = 0;
+        CSW_L = 1;
+        vdp_go = 1;
+        addr_latch_en = 1;
+      end
+      RD1: begin
         MODE  = (addr_in == 8'hBF); //Command port -> 1, data port -> 0
         CSR_L = 0;
         CSW_L = 1;
         vdp_go = 1;
         int_ack = (addr_in == 8'hBF);
       end
-      WR0, WR1: begin
+      WR0: begin
         MODE  = (addr_in == 8'hBF); //Command port -> 1, data port -> 0
         CSR_L = 1;
         CSW_L = 0; 
-	      vdp_go = 1; 
+	      vdp_go = 1;
+        addr_latch_en = 1;
+      end
+      WR1: begin
+        MODE  = (addr_in == 8'hBF); //Command port -> 1, data port -> 0
+        CSR_L = 1;
+        CSW_L = 0; 
+	      vdp_go = 1;
       end
       default: begin
         vdp_go = 0;
         MODE   = 0; //Command port -> 1, data port -> 0
         CSR_L  = 1;
         CSW_L  = 1;
+        int_ack = 0;
+        addr_latch_en = 0;
       end
     endcase
   end
+
+  register #(8) addr_latch(
+    .clk, .rst_L(reset_L),
+    .D(addr_in),
+    .Q(addr_latched),
+    .en(addr_latch_en)
+  );
 
 endmodule: vdp_port_decoder
 
@@ -557,16 +589,16 @@ module frameInt(
 
   // output logic
   always_comb begin
-    frame_int = 1; frame_int_en = 1;
+    frame_int = 0; frame_int_en = 0;
     case(cs)
       START: begin   
-        frame_int = 1; frame_int_en = 1;
-      end
-      SET_INT: begin
         frame_int = 0; frame_int_en = 0;
       end
-      default: begin
+      SET_INT: begin
         frame_int = 1; frame_int_en = 1;
+      end
+      default: begin
+        frame_int = 0; frame_int_en = 0;
       end
     endcase
   end

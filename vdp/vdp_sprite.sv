@@ -11,7 +11,7 @@ module vdp_sprite_interface(
   output logic [7:0]       validSprite,
   output logic [7:0]       validHPOS,
   output logic [2:0]       sprPatRow_out,
-  output logic [2:0]       sprCnt,
+  output logic [3:0]       sprCnt,
   output logic [7:0][2:0]  spriteOffset,
   output logic             bottomHalf_latched
 );
@@ -117,12 +117,12 @@ module vdp_sprite_interface(
         .clr(HPOSlatch_clr)
       );
       assign spriteOffset[i] = pixelRow[3:1] - VPOSlatch_out[i][2:0];
-      assign HPOSlatch_en[i] = (sprCnt == i) && HPOSlatch_set;
-      assign VPOSlatch_en[i] = (sprCnt == i) && VPOSlatch_set;
+      assign HPOSlatch_en[i] = (sprCnt[2:0] == i) && HPOSlatch_set;
+      assign VPOSlatch_en[i] = (sprCnt[2:0] == i) && VPOSlatch_set;
       inRange #(8) validHPOSCheck (
         .IN(pixelCol[8:1]),
-        .hi(HPOSlatch_out[i] + 8'd7),
-        .lo(HPOSlatch_out[i]),
+        .hi(regFile[0][3] ? HPOSlatch_out[i] : HPOSlatch_out[i] + 8'd7),
+        .lo(regFile[0][3] ? HPOSlatch_out[i] - 8'd7 : HPOSlatch_out[i]),
         .inRange(validHPOS[i])
       );
       assign validSprite[i] = validHPOS[i] & (col >= 64 && col < 576); 
@@ -165,7 +165,7 @@ module vdp_sprite_interface(
   /******* Sprite Fetch Counters *******/ 
 
   // Selects the current sprite
-  counter #(3) SPRITE_COUNT(
+  counter #(4) SPRITE_COUNT(
     .clk, .rst_L,
     .clear(sprCnt_clr),
     .en(sprCnt_en),
@@ -198,7 +198,8 @@ module vdp_sprite_interface(
     .sprLatch_en,
     .sprCnt_en,
     .sprCnt_clr,
-    .sprPat_done
+    .sprPat_done,
+    .sprCnt
   );
 
   assign VRAM_go = VRAM_go_SPR || VRAM_go_RC;
@@ -210,6 +211,7 @@ module vdp_sprite_fsm(
   input  logic [8:0] row, 
   input  logic [9:0] col,
   input  logic doneTable, validVPOS, sprPat_done,
+  input  logic [3:0] sprCnt,
   output logic posReg_en, posReg_incr, 
   output logic VPOSorHPOS, // VPOS = 0, HPOS = 1 
   output logic VPOSlatch_set, HPOSlatch_set,
@@ -229,7 +231,7 @@ module vdp_sprite_fsm(
       SetVPOS:  ns = WaitVPOS;
       WaitVPOS: ns = LoadVPOS;
       LoadVPOS: begin
-        ns = (doneTable) ?
+        ns = (doneTable | sprCnt[3]) ?
         WaitDone :  
         ((validVPOS) ? SetHPOS : SetVPOS);
       end
