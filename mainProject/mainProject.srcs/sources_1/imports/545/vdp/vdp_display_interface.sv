@@ -161,8 +161,8 @@ module vdp_disp_interface(
   end
 
   /******* RGB Generation *******/
-
-  assign colorToDisplay = (blank | regFile[1][6]) ? 6'd0 : CRAM_VGA_data_out;
+  assign colorToDisplay = (blank || !(regFile[1][6])) ? 6'd0 : CRAM_VGA_data_out;
+  //assign colorToDisplay = (blank | regFile[1][6]) ? 6'd0 : CRAM_VGA_data_out;
   colorGen c1(colorToDisplay[1:0], VGA_R);
   colorGen c2(colorToDisplay[3:2], VGA_G); 
   colorGen c3(colorToDisplay[5:4], VGA_B);
