@@ -728,7 +728,7 @@ module alu #(parameter w = 8)(
 
       end
 
-      `SUB, `SBC, `SUB_EX: begin
+      `SUB, `SBC, `SUB_EX, `SBC_16: begin
 
         if(op != `SBC) begin
           {upper_carry_out, C} = A[7:0] + {~B[7], ~B[6], ~B[5], ~B[4], ~B[3], ~B[2], ~B[1], ~B[0]} + 4'h1;
@@ -750,7 +750,11 @@ module alu #(parameter w = 8)(
         F_out[`S_flag] = C[(w-1)] ? 1 : 0;
 
         //Z flag is set when result is 0, otherwise reset
-        F_out[`Z_flag] = (C == 0) ? 1 : 0;
+        if(op == `SBC_16) begin
+          F_out[`Z_flag] = F_in[`Z_flag] && (C == 0);
+        end else begin
+          F_out[`Z_flag] = (C == 0) ? 1 : 0;
+        end
 
         //PV flag is set when there is overflow, which occurs when
         //output changes the MSB of the accumulator

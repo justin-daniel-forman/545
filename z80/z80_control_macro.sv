@@ -4927,7 +4927,7 @@ module decoder (
 
         //add the upper bytes together and set the carry flags
         ld_F_data      = 1;
-        alu_op         = `SBC;
+        alu_op         = `SBC_16;
         drive_alu_data = 1;
         MACRO_SET N
 
