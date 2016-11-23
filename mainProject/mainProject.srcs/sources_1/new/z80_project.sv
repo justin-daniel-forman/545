@@ -37,7 +37,9 @@ module z80_block(
     output wire RFSH_L,
     output wire BUSACK_L,
     input  wire BUSREQ_L,
-    output wire HALT_L
+    output wire HALT_L,
+    output wire interrupt_mask,
+    output wire [31:0] curr_state
  );
        
   z80_0 processor(.clk(clk_4),.*);

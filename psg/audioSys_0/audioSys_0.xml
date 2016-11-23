@@ -79,7 +79,7 @@
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Wed Nov 02 17:41:20 UTC 2016</spirit:value>
+            <spirit:value>Mon Nov 21 19:15:28 UTC 2016</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>StaleAtRelink</spirit:name>
@@ -113,7 +113,7 @@
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Wed Nov 02 17:41:35 UTC 2016</spirit:value>
+            <spirit:value>Mon Nov 21 19:17:36 UTC 2016</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>StaleAtRelink</spirit:name>
@@ -148,7 +148,7 @@
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Wed Nov 02 17:41:35 UTC 2016</spirit:value>
+            <spirit:value>Mon Nov 21 19:17:36 UTC 2016</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>StaleAtRelink</spirit:name>
@@ -484,7 +484,7 @@
       </xilinx:taxonomies>
       <xilinx:displayName>audioSys_v1_0</xilinx:displayName>
       <xilinx:coreRevision>1</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2016-11-02T17:41:02Z</xilinx:coreCreationDateTime>
+      <xilinx:coreCreationDateTime>2016-11-21T19:15:17Z</xilinx:coreCreationDateTime>
       <xilinx:tags>
         <xilinx:tag xilinx:name="user.org:user:audioSys:1.0_ARCHIVE_LOCATION">/afs/ece.cmu.edu/usr/suyashb/Private/545/psg</xilinx:tag>
       </xilinx:tags>
@@ -492,7 +492,7 @@
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2015.2</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="5bbf7d8b"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="faa810a5"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="a73d241c"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="f578efd3"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="b81ee9ce"/>
     </xilinx:packagingInfo>

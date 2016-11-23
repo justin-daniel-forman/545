@@ -3,15 +3,17 @@ module vdp_sprite_interface(
   input  logic [8:0]       row,
   input  logic [9:0]       col,
   input  logic             screenBusy,
+  input  logic [10:0][7:0]  regFile,
   input  logic [5:0][7:0]  VRAM_sprite_data,
   output logic             VRAM_go,
   output logic [7:0]       sprPat, // Feeds into VRAM addr 2-5
   output logic [1:0][13:0] VRAM_sprite_addr,
-  output logic             validSprite,
+  output logic [7:0]       validSprite,
   output logic [7:0]       validHPOS,
   output logic [2:0]       sprPatRow_out,
-  output logic [2:0]       sprCnt,
-  output logic [7:0][2:0]  spriteOffset
+  output logic [3:0]       sprCnt,
+  output logic [7:0][2:0]  spriteOffset,
+  output logic             bottomHalf_latched
 );
 
   logic [8:0] pixelRow;
@@ -20,7 +22,7 @@ module vdp_sprite_interface(
   assign pixelCol = col - 10'd64; 
 
   // PosReg logic
-  logic [7:0] posReg_in, posReg_out;
+  logic [5:0] posReg_in, posReg_out;
   logic       posReg_en, posReg_incr;
 
   // VRAM addressing logic   
@@ -33,6 +35,7 @@ module vdp_sprite_interface(
   logic [7:0]      HPOSlatch_en;
   logic            HPOSlatch_set, VPOSlatch_set, sprLatch_en;
   logic [7:0]      sprLatch_in, sprLatch_out;
+  logic            bottomHalf, bottomHalf_1, bottomHalf_2, bottomHalf_3;
 
   // FSM Status Points
   logic doneTable, validVPOS;
@@ -45,7 +48,7 @@ module vdp_sprite_interface(
   /******* Position Register *******/
   // Keeps track of where in the SAT we are
 
-  register #(8) posReg(
+  register #(6) posReg(
     .clk,
     .rst_L,
     .D(posReg_in),
@@ -53,14 +56,19 @@ module vdp_sprite_interface(
     .en(posReg_en)
   );
 
-  assign posReg_in = (posReg_incr) ? posReg_out + 8'd1 : 8'd0;
+  assign posReg_in = (posReg_incr) ? posReg_out + 6'd1 : 6'd0;
 
   /******* VRAM Addressing *******/
 
-  // VRAM_addr_6
+  /*
   assign VRAM_sprite_addr[0] = (~VPOSorHPOS) ? 
     {6'd0, posReg_out} + 14'h3F00 :
     {5'd0, posReg_out, 1'd0} + 14'h3F80;
+  */
+  // VRAM_addr_6
+  assign VRAM_sprite_addr[0] = (~VPOSorHPOS) ? 
+    {regFile[5][6:1], 2'd0, posReg_out} :
+    {regFile[5][6:1], 1'b1, posReg_out, 1'd0};
 
   assign VRAM_sprite_addr[1] = VRAM_sprite_addr[0] + 14'd1;
 
@@ -79,9 +87,16 @@ module vdp_sprite_interface(
 
   inRange #(8) validVPOSCheck(
     .IN(pixelRow[8:1]),
-    .hi(VRAM_sprite_data[4] + 8'd7),
+    .hi(VRAM_sprite_data[4] + (regFile[1][1] ? 8'd15 : 8'd7)),
     .lo(VRAM_sprite_data[4]),
     .inRange(validVPOS)
+  );
+
+  inRange #(8) bottomHalfFlag(
+    .IN(pixelRow[8:1]),
+    .hi(VRAM_sprite_data[4] + 8'd15),
+    .lo(VRAM_sprite_data[4] + 8'd8),
+    .inRange(bottomHalf)
   );
 
   generate
@@ -102,37 +117,34 @@ module vdp_sprite_interface(
         .clr(HPOSlatch_clr)
       );
       assign spriteOffset[i] = pixelRow[3:1] - VPOSlatch_out[i][2:0];
-      assign HPOSlatch_en[i] = (sprCnt == i) && HPOSlatch_set;
-      assign VPOSlatch_en[i] = (sprCnt == i) && VPOSlatch_set;
+      assign HPOSlatch_en[i] = (sprCnt[2:0] == i) && HPOSlatch_set;
+      assign VPOSlatch_en[i] = (sprCnt[2:0] == i) && VPOSlatch_set;
       inRange #(8) validHPOSCheck (
         .IN(pixelCol[8:1]),
-        .hi(HPOSlatch_out[i] + 8'd7),
-        .lo(HPOSlatch_out[i]),
+        .hi(regFile[0][3] ? HPOSlatch_out[i] : HPOSlatch_out[i] + 8'd7),
+        .lo(regFile[0][3] ? HPOSlatch_out[i] - 8'd7 : HPOSlatch_out[i]),
         .inRange(validHPOS[i])
       );
+      assign validSprite[i] = validHPOS[i] & (col >= 64 && col < 576); 
     end
   endgenerate
 
-  always_comb begin
-    validSprite = 0;
-    case(sprCnt)
-      0: validSprite = 0;
-      1: validSprite = |validHPOS[0] & (col >= 64 && col < 576);
-      2: validSprite = |validHPOS[1:0] & (col >= 64 && col < 576);
-      3: validSprite = |validHPOS[2:0] & (col >= 64 && col < 576);
-      4: validSprite = |validHPOS[3:0] & (col >= 64 && col < 576);
-      5: validSprite = |validHPOS[4:0] & (col >= 64 && col < 576);
-      6: validSprite = |validHPOS[5:0] & (col >= 64 && col < 576);
-      7: validSprite = |validHPOS[6:0]  & (col >= 64 && col < 576);
-      // 8 valid sprites, may need to make sprCnt 4 bits
-      default: validSprite = 0;
-    endcase
-  end 
-
+  // Register to latch the pattern address of the current sprite
   register #(8) sprLatch(
     .clk, .rst_L,
     .D(sprLatch_in),
     .Q(sprLatch_out),
+    .en(sprLatch_en)
+  );
+
+  register #(1) BH_DELAY_1(.*, .D(bottomHalf), .Q(bottomHalf_1), .en(1'b1));
+  register #(1) BH_DELAY_2(.*, .D(bottomHalf_1), .Q(bottomHalf_2), .en(1'b1));
+  register #(1) BH_DELAY_3(.*, .D(bottomHalf_2), .Q(bottomHalf_3), .en(1'b1));
+
+  register #(1) bottomHalfLatch(
+    .clk, .rst_L,
+    .D(bottomHalf_3),
+    .Q(bottomHalf_latched),
     .en(sprLatch_en)
   );
 
@@ -145,14 +157,15 @@ module vdp_sprite_interface(
     .rst_L,
     .sprLatch_en,
     .sprPatRow_en,
+    .sprPatRow_out,
     .VRAM_go(VRAM_go_RC),
     .sprPat_done
   );
 
-  /******* Various Counters *******/ 
+  /******* Sprite Fetch Counters *******/ 
 
   // Selects the current sprite
-  counter #(3) SPRITE_COUNT(
+  counter #(4) SPRITE_COUNT(
     .clk, .rst_L,
     .clear(sprCnt_clr),
     .en(sprCnt_en),
@@ -163,7 +176,7 @@ module vdp_sprite_interface(
   counter #(3) SPRITE_PAT_ROW(
     .clk,
     .rst_L,
-    .clear(~sprPatRow_en),
+    .clear(sprPat_done),
     .en(sprPatRow_en),
     .count(sprPatRow_out)
   );
@@ -185,7 +198,8 @@ module vdp_sprite_interface(
     .sprLatch_en,
     .sprCnt_en,
     .sprCnt_clr,
-    .sprPat_done
+    .sprPat_done,
+    .sprCnt
   );
 
   assign VRAM_go = VRAM_go_SPR || VRAM_go_RC;
@@ -197,6 +211,7 @@ module vdp_sprite_fsm(
   input  logic [8:0] row, 
   input  logic [9:0] col,
   input  logic doneTable, validVPOS, sprPat_done,
+  input  logic [3:0] sprCnt,
   output logic posReg_en, posReg_incr, 
   output logic VPOSorHPOS, // VPOS = 0, HPOS = 1 
   output logic VPOSlatch_set, HPOSlatch_set,
@@ -216,7 +231,7 @@ module vdp_sprite_fsm(
       SetVPOS:  ns = WaitVPOS;
       WaitVPOS: ns = LoadVPOS;
       LoadVPOS: begin
-        ns = (doneTable) ?
+        ns = (doneTable | sprCnt[3]) ?
         WaitDone :  
         ((validVPOS) ? SetHPOS : SetVPOS);
       end
@@ -300,23 +315,15 @@ endmodule
 // When the sprite pattern address gets latched, 
 // read out the 8 different rows of the corresponding pattern.
 module vdp_sprite_pattern_row_control(
-  input  logic clk, rst_L,
-  input  logic sprLatch_en,
-  output logic sprPatRow_en,
-  output logic VRAM_go, sprPat_done
+  input  logic       clk, rst_L,
+  input  logic       sprLatch_en,
+  input  logic [2:0] sprPatRow_out,
+  output logic       sprPatRow_en,
+  output logic       VRAM_go, sprPat_done
 );
 
-  enum logic [4:0] {Wait, 
-                    Row0, Row0_wait, 
-                    Row1, Row1_wait, 
-                    Row2, Row2_wait,      
-                    Row3, Row3_wait, 
-                    Row4, Row4_wait, 
-                    Row5, Row5_wait, 
-                    Row6, Row6_wait, 
-                    Row7, Row7_wait} 
-                    cs, ns;
-
+  enum logic [1:0] {Wait, getPat, incRow} cs, ns;
+  
   always_comb begin
     sprPatRow_en = 0;
     sprPat_done = 0;
@@ -324,31 +331,10 @@ module vdp_sprite_pattern_row_control(
     
     // NS logic
     case(cs)
-      Wait: begin
-        ns = (sprLatch_en) ? Row0 : Wait;
-        sprPatRow_en = 0;
-      end
-      Row0:      ns = Row0_wait;
-      Row0_wait: ns = Row1;
-      Row1:      ns = Row1_wait;
-      Row1_wait: ns = Row2;
-      Row2:      ns = Row2_wait;
-      Row2_wait: ns = Row3;
-      Row3:      ns = Row3_wait;
-      Row3_wait: ns = Row4;
-      Row4:      ns = Row4_wait;
-      Row4_wait: ns = Row5;
-      Row5:      ns = Row5_wait;
-      Row5_wait: ns = Row6;
-      Row6:      ns = Row6_wait;
-      Row6_wait: ns = Row7;
-      Row7:      ns = Row7_wait;
-      Row7_wait: ns = Wait;
-      default: begin
-        ns = Wait;
-        sprPatRow_en = 1;
-        VRAM_go = 0;
-      end
+      Wait:    ns = (sprLatch_en) ? getPat : Wait;
+      getPat:  ns = incRow; 
+      incRow:  ns = (sprPatRow_out == 3'd7) ? Wait : getPat;
+      default: ns = Wait;
     endcase
  
     // Output logic
@@ -356,54 +342,12 @@ module vdp_sprite_pattern_row_control(
       Wait: begin
         sprPatRow_en = 0;
       end
-      Row0: begin
+      getPat: begin
         VRAM_go = 1;
       end
-      Row0_wait: begin
+      incRow: begin
         sprPatRow_en = 1;
-      end     
-      Row1: begin
-        VRAM_go = 1;
-      end
-      Row1_wait: begin
-        sprPatRow_en = 1;
-      end  
-      Row2: begin
-        VRAM_go = 1;
-      end
-      Row2_wait: begin
-        sprPatRow_en = 1;
-      end
-      Row3: begin
-        VRAM_go = 1;
-      end
-      Row3_wait: begin
-        sprPatRow_en = 1;
-      end
-      Row4: begin
-        VRAM_go = 1;
-      end
-      Row4_wait: begin
-        sprPatRow_en = 1;
-      end
-      Row5: begin
-        VRAM_go = 1;
-      end
-      Row5_wait: begin
-        sprPatRow_en = 1;
-      end
-      Row6: begin
-        VRAM_go = 1;
-      end
-      Row6_wait: begin
-        sprPatRow_en = 1;
-      end
-      Row7: begin
-        VRAM_go = 1;
-      end
-      Row7_wait: begin
-        sprPatRow_en = 1;
-        sprPat_done = 1;
+        sprPat_done = (sprPatRow_out == 3'd7);
       end
       default: begin
         sprPatRow_en = 0;
@@ -425,11 +369,11 @@ module spritePartition(
   input  logic [7:0]        validHPOS,
   input  logic [7:0][2:0]   spriteOffset,
   input  logic [7:0][255:0] sprPatLatch_out,
-  output logic [3:0][7:0]   currSprRow
+  output logic [3:0][7:0]   currSprRow,
+  output logic [2:0]        currSprIndex
 );
   
   logic [31:0][7:0] currSprPat;
-  logic [2:0]       currSprIndex;
 
   always_comb
     if(validHPOS[0]) begin
@@ -464,7 +408,7 @@ module spritePartition(
   generate 
     genvar j;
     for (j = 0; j < 32; j++)
-      assign currSprPat[j] = sprPatLatch_out[currSprIndex][(j*8)+8-1:(j*8)]; 
+      assign currSprPat[j] = sprPatLatch_out[currSprIndex][(j*8)+8-1:(j*8)];
   endgenerate
 
   always_comb begin

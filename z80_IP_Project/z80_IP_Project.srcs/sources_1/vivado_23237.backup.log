@@ -1,0 +1,248 @@
+#-----------------------------------------------------------
+# Vivado v2015.2 (64-bit)
+# SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+# IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+# Start of session at: Wed Nov 16 16:44:07 2016
+# Process ID: 436
+# Log file: /afs/ece.cmu.edu/usr/suyashb/Private/545/z80_IP_Project/z80_IP_Project.srcs/sources_1/vivado.log
+# Journal file: /afs/ece.cmu.edu/usr/suyashb/Private/545/z80_IP_Project/z80_IP_Project.srcs/sources_1/vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.xpr
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/afs/ece.cmu.edu/usr/suyashb/Private/545'.
+WARNING: [IP_Flow 19-3656] If you move the project, the path for repository '/afs/ece.cmu.edu/usr/suyashb/Private/545' may become invalid. A better location for the repostory would be in a path adjacent to the project. (Current project location is '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject'.)
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/data/ip'.
+CRITICAL WARNING: [IP_Flow 19-1663] Duplicate IP found for 'user.org:user:z80:1.0'. The one found in IP location '/afs/ece.cmu.edu/usr/suyashb/Private/545/z80_IP_Project/z80_IP_Project.srcs/sources_1/imports' will take precedence over the same IP in locations: 
+   /afs/ece.cmu.edu/usr/suyashb/Private/545/z80_IP_Block
+   /afs/ece.cmu.edu/usr/suyashb/Private/545/imports
+open_project: Time (s): cpu = 00:00:25 ; elapsed = 00:00:15 . Memory (MB): peak = 6009.055 ; gain = 157.582 ; free physical = 2348 ; free virtual = 16792
+set_msg_config -suppress -id {IP_Flow 19-1663} -string {{CRITICAL WARNING: [IP_Flow 19-1663] Duplicate IP found for 'user.org:user:z80:1.0'. The one found in IP location '/afs/ece.cmu.edu/usr/suyashb/Private/545/z80_IP_Project/z80_IP_Project.srcs/sources_1/imports' will take precedence over the same IP in locations: 
+   /afs/ece.cmu.edu/usr/suyashb/Private/545/z80_IP_Block
+   /afs/ece.cmu.edu/usr/suyashb/Private/545/imports} } 
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 4
+[Wed Nov 16 16:46:25 2016] Launched synth_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/synth_1/runme.log
+[Wed Nov 16 16:46:25 2016] Launched impl_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/runme.log
+open_hw
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 4
+[Wed Nov 16 16:54:39 2016] Launched synth_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/synth_1/runme.log
+[Wed Nov 16 16:54:39 2016] Launched impl_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/runme.log
+reset_run impl_1 -prev_step 
+launch_runs impl_1 -to_step write_bitstream -jobs 4
+[Wed Nov 16 17:01:47 2016] Launched impl_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/runme.log
+reset_run impl_1 -prev_step 
+WARNING: [Vivado 12-1017] Problems encountered:
+1. PID not specified
+
+launch_runs impl_1 -to_step write_bitstream -jobs 4
+[Wed Nov 16 17:02:04 2016] Launched impl_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/runme.log
+reset_run impl_1 -prev_step 
+launch_runs impl_1 -to_step write_bitstream -jobs 4
+[Wed Nov 16 17:02:31 2016] Launched impl_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/runme.log
+connect_hw_server -url localhost:3121
+INFO: [Labtools 27-2285] Connecting to hw_server url TCP:localhost:3121
+INFO: [Labtools 27-2222] Launching hw_server...
+INFO: [Labtools 27-2221] Launch Output:
+
+****** Xilinx hw_server v2015.2
+  **** Build date : Jun 26 2015-16:42:45
+    ** Copyright 1986-1999, 2001-2015 Xilinx, Inc. All Rights Reserved.
+
+
+current_hw_target [get_hw_targets */xilinx_tcf/Xilinx/00001024278301]
+set_property PARAM.FREQUENCY 6000000 [get_hw_targets */xilinx_tcf/Xilinx/00001024278301]
+open_hw_target
+INFO: [Labtoolstcl 44-466] Opening hw_target localhost:3121/xilinx_tcf/Xilinx/00001024278301
+set_property PROGRAM.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/project_top.bit} [lindex [get_hw_devices] 1]
+set_property PROBES.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/debug_nets.ltx} [lindex [get_hw_devices] 1]
+current_hw_device [lindex [get_hw_devices] 1]
+refresh_hw_device [lindex [get_hw_devices] 1]
+INFO: [Labtools 27-2302] Device xc7z020 (JTAG device index = 1) is programmed with a design that has 1 ILA core(s).
+display_hw_ila_data [ get_hw_ila_data hw_ila_data_1]
+WARNING: Simulation object interrupt_count was not found in the design.
+set_property PROBES.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/debug_nets.ltx} [lindex [get_hw_devices] 1]
+set_property PROGRAM.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/project_top.bit} [lindex [get_hw_devices] 1]
+program_hw_devices [lindex [get_hw_devices] 1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+program_hw_devices: Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 6148.352 ; gain = 0.000 ; free physical = 2495 ; free virtual = 16710
+refresh_hw_device [lindex [get_hw_devices] 1]
+INFO: [Labtools 27-2302] Device xc7z020 (JTAG device index = 1) is programmed with a design that has 1 ILA core(s).
+set_property TRIGGER_COMPARE_VALUE eq1'bX [get_hw_probes MREQ_L -of_objects [get_hw_ilas hw_ila_1]]
+set_property TRIGGER_COMPARE_VALUE eq16'hXXXX [get_hw_probes addr_bus -of_objects [get_hw_ilas hw_ila_1]]
+set_property TRIGGER_COMPARE_VALUE eq1'bR [get_hw_probes clk_4 -of_objects [get_hw_ilas hw_ila_1]]
+run_hw_ila hw_ila_1
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2016-Nov-16 17:04:19
+wait_on_hw_ila hw_ila_1
+display_hw_ila_data [upload_hw_ila_data hw_ila_1]
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2016-Nov-16 17:04:19
+run_hw_ila hw_ila_1
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2016-Nov-16 17:04:31
+wait_on_hw_ila hw_ila_1
+display_hw_ila_data [upload_hw_ila_data hw_ila_1]
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2016-Nov-16 17:04:31
+reset_run impl_1 -prev_step 
+launch_runs impl_1 -to_step write_bitstream -jobs 4
+[Wed Nov 16 17:05:34 2016] Launched impl_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/runme.log
+add_wave -into {hw_ila_data_1.wcfg} -radix bin [get_hw_probes {data_out}]
+run_hw_ila hw_ila_1
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2016-Nov-16 17:06:12
+wait_on_hw_ila hw_ila_1
+display_hw_ila_data [upload_hw_ila_data hw_ila_1]
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2016-Nov-16 17:06:12
+add_wave -into {hw_ila_data_1.wcfg} -radix bin [get_hw_probes {interrupt_mask}]
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+run_hw_ila hw_ila_1
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2016-Nov-16 17:07:28
+wait_on_hw_ila hw_ila_1
+display_hw_ila_data [upload_hw_ila_data hw_ila_1]
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2016-Nov-16 17:07:29
+add_wave -into {hw_ila_data_1.wcfg} -radix bin [get_hw_probes {clk_4}]
+add_wave -into {hw_ila_data_1.wcfg} -radix bin [get_hw_probes {clk_4}]
+add_wave -into {hw_ila_data_1.wcfg} -radix bin [get_hw_probes {clk_4}]
+clk_4
+add_wave -into {hw_ila_data_1.wcfg} -radix bin [get_hw_probes {M1_L}]
+M1_L
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 4
+[Wed Nov 16 17:09:35 2016] Launched synth_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/synth_1/runme.log
+[Wed Nov 16 17:09:35 2016] Launched impl_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/runme.log
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {12} CONFIG.C_PROBE19_WIDTH {1} CONFIG.C_PROBE18_WIDTH {1} CONFIG.C_PROBE17_WIDTH {1} CONFIG.C_PROBE16_WIDTH {1} CONFIG.C_PROBE15_WIDTH {1} CONFIG.C_PROBE14_WIDTH {1} CONFIG.C_PROBE13_WIDTH {1} CONFIG.C_PROBE12_WIDTH {1}] [get_ips ila_0]
+generate_target all [get_files  /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/ila_0/ila_0.xci]
+INFO: [IP_Flow 19-1686] Generating 'Instantiation Template' target for IP 'ila_0'...
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'ila_0'...
+INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'ila_0'...
+INFO: [IP_Flow 19-1686] Generating 'Change Log' target for IP 'ila_0'...
+reset_run ila_0_synth_1
+launch_run -jobs 4 ila_0_synth_1
+[Wed Nov 16 17:14:12 2016] Launched ila_0_synth_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/ila_0_synth_1/runme.log
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+INFO: [Vivado 12-3702] IP 'ila_0.xci' is already generated and up-to-date, this IP will not be regenerated
+reset_run ila_0_synth_1
+launch_run -jobs 4 ila_0_synth_1
+[Wed Nov 16 17:16:56 2016] Launched ila_0_synth_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/ila_0_synth_1/runme.log
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+remove_files -fileset ila_0 /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/ila_0/ila_0.xci
+delete_fileset ila_0
+file delete -force /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/ila_0
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+create_ip -name ila -vendor xilinx.com -library ip -version 5.1 -module_name ila_0
+set_property -dict [list CONFIG.C_PROBE10_WIDTH {8} CONFIG.C_PROBE9_WIDTH {16} CONFIG.C_PROBE8_WIDTH {32} CONFIG.C_DATA_DEPTH {8192} CONFIG.C_NUM_OF_PROBES {12}] [get_ips ila_0]
+generate_target {instantiation_template} [get_files /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/ila_0/ila_0.xci]
+INFO: [IP_Flow 19-1686] Generating 'Instantiation Template' target for IP 'ila_0'...
+generate_target all [get_files  /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/ila_0/ila_0.xci]
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'ila_0'...
+INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'ila_0'...
+INFO: [IP_Flow 19-1686] Generating 'Change Log' target for IP 'ila_0'...
+create_ip_run [get_files -of_objects [get_fileset sources_1] /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/ila_0/ila_0.xci]
+launch_run -jobs 4 ila_0_synth_1
+[Wed Nov 16 17:23:47 2016] Launched ila_0_synth_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/ila_0_synth_1/runme.log
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+set_property -dict [list CONFIG.C_PROBE3_WIDTH {8} CONFIG.C_PROBE2_WIDTH {8} CONFIG.C_PROBE1_WIDTH {16} CONFIG.C_PROBE0_WIDTH {32}] [get_ips ila_0]
+generate_target all [get_files  /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/ila_0/ila_0.xci]
+INFO: [IP_Flow 19-1686] Generating 'Instantiation Template' target for IP 'ila_0'...
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'ila_0'...
+INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'ila_0'...
+INFO: [IP_Flow 19-1686] Generating 'Change Log' target for IP 'ila_0'...
+reset_run ila_0_synth_1
+launch_run -jobs 4 ila_0_synth_1
+[Wed Nov 16 17:30:52 2016] Launched ila_0_synth_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/ila_0_synth_1/runme.log
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 4
+[Wed Nov 16 17:34:09 2016] Launched synth_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/synth_1/runme.log
+[Wed Nov 16 17:34:09 2016] Launched impl_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/runme.log
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 4
+[Wed Nov 16 17:37:53 2016] Launched synth_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/synth_1/runme.log
+[Wed Nov 16 17:37:53 2016] Launched impl_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/runme.log
+set_property PROBES.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/debug_nets.ltx} [lindex [get_hw_devices] 1]
+set_property PROGRAM.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/project_top.bit} [lindex [get_hw_devices] 1]
+program_hw_devices [lindex [get_hw_devices] 1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+program_hw_devices: Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 6244.816 ; gain = 0.000 ; free physical = 2302 ; free virtual = 16511
+refresh_hw_device [lindex [get_hw_devices] 1]
+INFO: [Labtools 27-2302] Device xc7z020 (JTAG device index = 1) is programmed with a design that has 1 ILA core(s).
+add_wave -into {hw_ila_data_1.wcfg} -radix bin [get_hw_probes {clk_4}]
+run_hw_ila hw_ila_1
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2016-Nov-16 17:44:32
+wait_on_hw_ila hw_ila_1
+display_hw_ila_data [upload_hw_ila_data hw_ila_1]
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2016-Nov-16 17:44:32
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+add_wave -into {hw_ila_data_1.wcfg} -radix bin [get_hw_probes {interrupt_mask}]
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+set_property PROBES.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/debug_nets.ltx} [lindex [get_hw_devices] 1]
+set_property PROGRAM.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/project_top.bit} [lindex [get_hw_devices] 1]
+program_hw_devices [lindex [get_hw_devices] 1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+program_hw_devices: Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 6246.168 ; gain = 0.000 ; free physical = 2291 ; free virtual = 16497
+refresh_hw_device [lindex [get_hw_devices] 1]
+INFO: [Labtools 27-2302] Device xc7z020 (JTAG device index = 1) is programmed with a design that has 1 ILA core(s).
+run_hw_ila hw_ila_1
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2016-Nov-16 17:53:05
+wait_on_hw_ila hw_ila_1
+display_hw_ila_data [upload_hw_ila_data hw_ila_1]
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2016-Nov-16 17:53:05
+run_hw_ila hw_ila_1
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2016-Nov-16 17:53:08
+wait_on_hw_ila -timeout 0 hw_ila_1
+display_hw_ila_data [upload_hw_ila_data hw_ila_1]
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2016-Nov-16 17:53:08
+add_wave -into {hw_ila_data_1.wcfg} -radix bin [get_hw_probes {<const0>_16}]
+set_property TRIGGER_COMPARE_VALUE eq1'bX [get_hw_probes clk_4 -of_objects [get_hw_ilas hw_ila_1]]
+run_hw_ila hw_ila_1
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2016-Nov-16 17:55:41
+wait_on_hw_ila hw_ila_1
+display_hw_ila_data [upload_hw_ila_data hw_ila_1]
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2016-Nov-16 17:55:41
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+set_property -dict [list CONFIG.C_PROBE10_WIDTH {1} CONFIG.C_PROBE9_WIDTH {1} CONFIG.C_PROBE8_WIDTH {1}] [get_ips ila_0]
+generate_target all [get_files  /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/ila_0/ila_0.xci]
+INFO: [IP_Flow 19-1686] Generating 'Instantiation Template' target for IP 'ila_0'...
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'ila_0'...
+INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'ila_0'...
+INFO: [IP_Flow 19-1686] Generating 'Change Log' target for IP 'ila_0'...
+reset_run ila_0_synth_1
+launch_run -jobs 4 ila_0_synth_1
+[Wed Nov 16 17:57:13 2016] Launched ila_0_synth_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/ila_0_synth_1/runme.log
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 4
+[Wed Nov 16 17:58:45 2016] Launched ila_0_synth_1, synth_1...
+Run output will be captured here:
+ila_0_synth_1: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/ila_0_synth_1/runme.log
+synth_1: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/synth_1/runme.log
+[Wed Nov 16 17:58:45 2016] Launched impl_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/runme.log
+set_property PROBES.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/debug_nets.ltx} [lindex [get_hw_devices] 1]
+set_property PROGRAM.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/project_top.bit} [lindex [get_hw_devices] 1]
+program_hw_devices [lindex [get_hw_devices] 1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+program_hw_devices: Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 6254.605 ; gain = 0.000 ; free physical = 2182 ; free virtual = 16459
+refresh_hw_device [lindex [get_hw_devices] 1]
+INFO: [Labtools 27-2302] Device xc7z020 (JTAG device index = 1) is programmed with a design that has 1 ILA core(s).

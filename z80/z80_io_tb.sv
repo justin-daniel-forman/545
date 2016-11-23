@@ -1,9 +1,9 @@
 module io_tb();
 
   logic         clk_100, clk_25, clk_4, rst_L;
-  wire  [7:0]   data_bus;
-  wire  [15:0]  addr_bus;
-  logic         IORQ_L, RD_L, WR_L, BUSY;
+  wire  [7:0]   data_bus_in, data_bus_out;
+  wire  [15:0]  addr_bus_in;
+  logic         IORQ_L, RD_L, WR_L, BUSY, M1_L, INT_L;
 
   logic       clkDiv_25;
   logic [3:0] clkDiv_4;
@@ -16,8 +16,9 @@ module io_tb();
     .clk_25,
     .clk_4,
     .rst_L(rst_L),
-    .data_bus(data_bus),
-    .addr_bus(addr_bus[7:0]),
+    .data_bus_in(data_bus_in),
+    .addr_bus_in(addr_bus_in[7:0]),
+    .data_bus_out(data_bus_out),
     .IORQ_L(IORQ_L),
     .RD_L(RD_L),
     .WR_L(WR_L),
@@ -26,7 +27,10 @@ module io_tb();
     .VGA_B(),
     .VGA_HS(),
     .VGA_VS(),
-    .BUSY
+    .BUSY,
+    .M1_L, 
+    .INT_L,
+    .SW(8'd0)
   );
 
   logic [7:0] read_data;
@@ -34,9 +38,9 @@ module io_tb();
   logic [7:0] data_bus_out_w, data_bus_out_r;
   logic [15:0] addr_bus_out_w, addr_bus_out_r;
 
-  assign data_bus =
+  assign data_bus_in =
     (read_in_prog) ? data_bus_out_r : ((write_in_prog) ? data_bus_out_w : 8'bz);
-  assign addr_bus =
+  assign addr_bus_in =
     (read_in_prog) ? addr_bus_out_r : ((write_in_prog) ? addr_bus_out_w : 16'bz);
 
   //clock generation block
@@ -64,7 +68,7 @@ module io_tb();
   end 
 
   initial begin
-    $readmemb("VRAM.bin", VDP.VRAM.cp.memory);
+    $readmemb("VRAM.bin", VDP.VRAM.videoRam.memory);
     data_bus_out_w = 8'bz;
     data_bus_out_r = 8'bz;
     addr_bus_out_w = 16'bz;
@@ -219,11 +223,11 @@ module io_tb();
     //-------------------------------------------------------------------------
     #5 IORQ_L = 1;
        RD_L   = 1;
-    port_data <= data_bus; //sample the data bus on the end of cycle T3
     @(posedge clk_4); //ends T3
-
-    read_in_prog = 0;
-    $display("Data received from I/O read to %h: %h\n", port_addr, port_data);
+    #5 port_data <= data_bus_out; //sample the data bus on the end of cycle T3
+    
+    read_in_prog <= 0;
+    #0 $strobe("Data received from I/O read to %h: %h\n", port_addr, port_data);
 
   endtask
 

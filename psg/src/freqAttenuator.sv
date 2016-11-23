@@ -168,7 +168,7 @@ module multLookup(
                 multVal = 5;
                 shift = 2;
             end
-            15: multVal = 1;
+            15: multVal = 0;
             default: begin
                 multVal = 1;
                 shift = 0;

@@ -92,7 +92,7 @@ module vram(
   assign io_data_out = vga_data_out[0];
  
   // Memory
-  blk_mem_gen_0 cp(
+  mem #(8, 14) videoRam(
     .clka(clk_100), // A-port is for io writes and VGA reads
     .wea(we),
     .addra(addr_a),

@@ -42,7 +42,7 @@ module comInterface(
     logic decode_enable;
     logic [7:0] received_byte;
     
-    assign activated = (addr >= 16'h40 && addr <= 16'h7f) && !MREQ_N && !WR_N;
+    assign activated = (addr[7:0] == 8'h7f) && !MREQ_N && !WR_N;
         
     regReceiver received_stored (.*);
     commandDecoder command_stored (.*);
