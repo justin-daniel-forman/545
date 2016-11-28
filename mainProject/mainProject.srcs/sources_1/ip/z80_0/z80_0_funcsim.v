@@ -1,7 +1,7 @@
 // Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2015.2 (lin64) Build 1266856 Fri Jun 26 16:35:25 MDT 2015
-// Date        : Wed Nov 23 13:41:18 2016
+// Date        : Mon Nov 28 13:48:26 2016
 // Host        : mittlefrueh.andrew.cmu.edu running 64-bit Red Hat Enterprise Linux Server release 7.2 (Maipo)
 // Command     : write_verilog -force -mode funcsim
 //               /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/z80_0/z80_0_funcsim.v
@@ -120,12 +120,12 @@ endmodule
 module z80_0_INT_fsm
    (Q,
     INT_start,
-    rst_L,
-    clk);
+    clk,
+    rst_L);
   output [1:0]Q;
   input INT_start;
-  input rst_L;
   input clk;
+  input rst_L;
 
   wire INT_start;
   wire [1:0]Q;
@@ -149,30 +149,30 @@ module z80_0_INT_fsm
        (.I0(Q[0]),
         .I1(Q[1]),
         .O(\state[1]_i_1__3_n_0 ));
-  FDRE \state_reg[0] 
+  FDCE \state_reg[0] 
        (.C(clk),
         .CE(1'b1),
+        .CLR(rst_L),
         .D(\state[0]_i_1__2_n_0 ),
-        .Q(Q[0]),
-        .R(rst_L));
-  FDRE \state_reg[1] 
+        .Q(Q[0]));
+  FDCE \state_reg[1] 
        (.C(clk),
         .CE(1'b1),
+        .CLR(rst_L),
         .D(\state[1]_i_1__3_n_0 ),
-        .Q(Q[1]),
-        .R(rst_L));
+        .Q(Q[1]));
 endmodule
 
 (* ORIG_REF_NAME = "IN_fsm" *) 
 module z80_0_IN_fsm
    (RD_L,
     IN_start,
-    rst_L,
-    clk);
+    clk,
+    rst_L);
   output RD_L;
   input IN_start;
-  input rst_L;
   input clk;
+  input rst_L;
 
   wire IN_start;
   wire RD_L;
@@ -203,18 +203,18 @@ module z80_0_IN_fsm
        (.I0(state[0]),
         .I1(state[1]),
         .O(next_state[1]));
-  FDRE \state_reg[0] 
+  FDCE \state_reg[0] 
        (.C(clk),
         .CE(1'b1),
+        .CLR(rst_L),
         .D(next_state[0]),
-        .Q(state[0]),
-        .R(rst_L));
-  FDRE \state_reg[1] 
+        .Q(state[0]));
+  FDCE \state_reg[1] 
        (.C(clk),
         .CE(1'b1),
+        .CLR(rst_L),
         .D(next_state[1]),
-        .Q(state[1]),
-        .R(rst_L));
+        .Q(state[1]));
 endmodule
 
 (* ORIG_REF_NAME = "MRD_fsm" *) 
@@ -265,14 +265,16 @@ endmodule
 
 (* ORIG_REF_NAME = "MWR_fsm" *) 
 module z80_0_MWR_fsm
-   (WR_L,
+   (\state_reg[0]_0 ,
+    WR_L,
+    rst_L,
     MWR_start,
-    clk,
-    rst_L);
+    clk);
+  output \state_reg[0]_0 ;
   output WR_L;
+  input rst_L;
   input MWR_start;
   input clk;
-  input rst_L;
 
   wire MWR_start;
   wire WR_L;
@@ -280,6 +282,7 @@ module z80_0_MWR_fsm
   wire [1:0]next_state;
   wire rst_L;
   wire [1:0]state;
+  wire \state_reg[0]_0 ;
 
   (* SOFT_HLUTNM = "soft_lutpair280" *) 
   LUT3 #(
@@ -306,15 +309,20 @@ module z80_0_MWR_fsm
   FDCE \state_reg[0] 
        (.C(clk),
         .CE(1'b1),
-        .CLR(rst_L),
+        .CLR(\state_reg[0]_0 ),
         .D(next_state[0]),
         .Q(state[0]));
   FDCE \state_reg[1] 
        (.C(clk),
         .CE(1'b1),
-        .CLR(rst_L),
+        .CLR(\state_reg[0]_0 ),
         .D(next_state[1]),
         .Q(state[1]));
+  LUT1 #(
+    .INIT(2'h1)) 
+    \value[7]_i_3 
+       (.I0(rst_L),
+        .O(\state_reg[0]_0 ));
 endmodule
 
 (* ORIG_REF_NAME = "OCF_fsm" *) 
@@ -377,12 +385,12 @@ endmodule
 module z80_0_OUT_fsm
    (Q,
     D,
-    rst_L,
-    clk);
+    clk,
+    rst_L);
   output [1:0]Q;
   input [0:0]D;
-  input rst_L;
   input clk;
+  input rst_L;
 
   wire [0:0]D;
   wire [1:0]Q;
@@ -396,18 +404,18 @@ module z80_0_OUT_fsm
        (.I0(Q[0]),
         .I1(Q[1]),
         .O(next_state));
-  FDRE \state_reg[0] 
+  FDCE \state_reg[0] 
        (.C(clk),
         .CE(1'b1),
+        .CLR(rst_L),
         .D(D),
-        .Q(Q[0]),
-        .R(rst_L));
-  FDRE \state_reg[1] 
+        .Q(Q[0]));
+  FDCE \state_reg[1] 
        (.C(clk),
         .CE(1'b1),
+        .CLR(rst_L),
         .D(next_state),
-        .Q(Q[1]),
-        .R(rst_L));
+        .Q(Q[1]));
 endmodule
 
 (* ORIG_REF_NAME = "control_logic" *) 
@@ -515,6 +523,7 @@ module z80_0_control_logic
     drive_B,
     drive_STRL,
     \value_reg[0]_1 ,
+    \state_reg[0] ,
     p_0_in,
     \value_reg[1]_0 ,
     \value_reg[2]_0 ,
@@ -659,6 +668,7 @@ module z80_0_control_logic
     \value_reg[7]_68 ,
     \value_reg[7]_69 ,
     \value_reg[7]_70 ,
+    rst_L,
     \value_reg[7]_71 ,
     \value_reg[0]_19 ,
     \value_reg[1]_12 ,
@@ -794,7 +804,7 @@ module z80_0_control_logic
     \value_reg[0]_55 ,
     \value_reg[0]_56 ,
     clk,
-    rst_L,
+    rst_L_0,
     \value_reg[3]_25 ,
     \value_reg[7]_93 );
   output [1:0]out;
@@ -900,6 +910,7 @@ module z80_0_control_logic
   output drive_B;
   output drive_STRL;
   output \value_reg[0]_1 ;
+  output \state_reg[0] ;
   output [0:0]p_0_in;
   output \value_reg[1]_0 ;
   output \value_reg[2]_0 ;
@@ -1044,6 +1055,7 @@ module z80_0_control_logic
   input \value_reg[7]_68 ;
   input \value_reg[7]_69 ;
   input \value_reg[7]_70 ;
+  input rst_L;
   input \value_reg[7]_71 ;
   input \value_reg[0]_19 ;
   input \value_reg[1]_12 ;
@@ -1179,7 +1191,7 @@ module z80_0_control_logic
   input \value_reg[0]_55 ;
   input \value_reg[0]_56 ;
   input clk;
-  input rst_L;
+  input rst_L_0;
   input [3:0]\value_reg[3]_25 ;
   input [3:0]\value_reg[7]_93 ;
 
@@ -1257,7 +1269,7 @@ module z80_0_control_logic
   wire ld_E;
   wire ld_H;
   wire ld_L;
-  wire memory_write_n_0;
+  wire memory_write_n_1;
   wire [0:0]next_state;
   wire \op1_reg[5]_rep ;
   wire [1:0]out;
@@ -1266,9 +1278,11 @@ module z80_0_control_logic
   wire port_in_n_0;
   wire [7:0]reg_data_out;
   wire rst_L;
+  wire rst_L_0;
   wire [1:0]state;
   wire [1:0]state_0;
   wire [1:0]state_1;
+  wire \state_reg[0] ;
   wire swap_reg;
   wire [3:0]\value_reg[0] ;
   wire \value_reg[0]_0 ;
@@ -1636,9 +1650,9 @@ module z80_0_control_logic
         .out(out),
         .p_0_in(p_0_in),
         .reg_data_out(reg_data_out),
-        .rst_L(rst_L),
+        .rst_L(rst_L_0),
         .\state_reg[0] (next_state),
-        .\state_reg[0]_0 (memory_write_n_0),
+        .\state_reg[0]_0 (memory_write_n_1),
         .\state_reg[1] (state_1),
         .\state_reg[1]_0 (port_in_n_0),
         .\state_reg[1]_1 (state_0),
@@ -2002,32 +2016,33 @@ module z80_0_control_logic
        (.INT_start(INT_start),
         .Q(state),
         .clk(clk),
-        .rst_L(rst_L));
+        .rst_L(rst_L_0));
   z80_0_OCF_fsm machine_fetch
        (.OCF_RD_L(OCF_RD_L),
         .OCF_start(OCF_start),
         .clk(clk),
-        .rst_L(rst_L));
+        .rst_L(\state_reg[0] ));
   z80_0_MRD_fsm memory_read
        (.MRD_start(MRD_start),
         .Q(state_0),
         .clk(clk),
-        .rst_L(rst_L));
+        .rst_L(\state_reg[0] ));
   z80_0_MWR_fsm memory_write
        (.MWR_start(MWR_start),
-        .WR_L(memory_write_n_0),
+        .WR_L(memory_write_n_1),
         .clk(clk),
-        .rst_L(rst_L));
+        .rst_L(rst_L),
+        .\state_reg[0]_0 (\state_reg[0] ));
   z80_0_IN_fsm port_in
        (.IN_start(IN_start),
         .RD_L(port_in_n_0),
         .clk(clk),
-        .rst_L(rst_L));
+        .rst_L(\state_reg[0] ));
   z80_0_OUT_fsm port_out
        (.D(next_state),
         .Q(state_1),
         .clk(clk),
-        .rst_L(rst_L));
+        .rst_L(rst_L_0));
 endmodule
 
 (* ORIG_REF_NAME = "datapath" *) 
@@ -2373,6 +2388,7 @@ module z80_0_datapath
     \FSM_sequential_state_reg[1]_6 ,
     \value_reg[7]_49 ,
     \FSM_sequential_state_reg[1]_7 ,
+    rst_L_0,
     \FSM_sequential_state_reg[0]_6 ,
     \value_reg[7]_50 ,
     \FSM_sequential_state_reg[0]_7 ,
@@ -2749,6 +2765,7 @@ module z80_0_datapath
   input [0:0]\FSM_sequential_state_reg[1]_6 ;
   input [7:0]\value_reg[7]_49 ;
   input [7:0]\FSM_sequential_state_reg[1]_7 ;
+  input rst_L_0;
   input [0:0]\FSM_sequential_state_reg[0]_6 ;
   input [7:0]\value_reg[7]_50 ;
   input [0:0]\FSM_sequential_state_reg[0]_7 ;
@@ -2867,6 +2884,8 @@ module z80_0_datapath
   wire MDR2_n_6;
   wire MDR2_n_7;
   wire [7:0]Q;
+  wire RFILE_n_232;
+  wire RFILE_n_233;
   wire [3:0]S;
   wire TEMP_n_46;
   wire [7:0]alu_b_in;
@@ -2909,6 +2928,7 @@ module z80_0_datapath
   wire [2:0]p_0_in_1;
   wire [7:0]reg_data_out;
   wire rst_L;
+  wire rst_L_0;
   wire swap_reg;
   wire \value_reg[0] ;
   wire [3:0]\value_reg[0]_0 ;
@@ -3331,6 +3351,7 @@ module z80_0_datapath
         .D(F_not_in),
         .clk(clk),
         .rst_L(\value_reg[7] ),
+        .rst_L_0(RFILE_n_233),
         .\value_reg[0]_0 (\value_reg[0]_26 ),
         .\value_reg[7]_0 (\value_reg[7]_38 ));
   z80_0_register__parameterized1 IFF1
@@ -3351,6 +3372,7 @@ module z80_0_datapath
        (.\FSM_sequential_state_reg[10] (\FSM_sequential_state_reg[10]_17 ),
         .clk(clk),
         .rst_L(\value_reg[7] ),
+        .rst_L_0(RFILE_n_232),
         .\value_reg[15]_0 (\value_reg[15] ),
         .\value_reg[15]_1 (\value_reg[15]_0 ));
   z80_0_register_3 MDR1
@@ -3462,6 +3484,7 @@ module z80_0_datapath
         .ld_L(ld_L),
         .reg_data_out(reg_data_out),
         .rst_L(rst_L),
+        .rst_L_0(rst_L_0),
         .swap_reg(swap_reg),
         .\value_reg[0] (\value_reg[0]_2 ),
         .\value_reg[0]_0 (\value_reg[0]_3 ),
@@ -3507,6 +3530,7 @@ module z80_0_datapath
         .\value_reg[3]_0 (\value_reg[3]_1 ),
         .\value_reg[3]_1 (\value_reg[3]_2 ),
         .\value_reg[3]_10 (\value_reg[3]_11 ),
+        .\value_reg[3]_11 (RFILE_n_232),
         .\value_reg[3]_2 (\value_reg[3]_3 ),
         .\value_reg[3]_3 (\value_reg[3]_4 ),
         .\value_reg[3]_4 (\value_reg[3]_5 ),
@@ -3567,19 +3591,20 @@ module z80_0_datapath
         .\value_reg[7]_13 (\value_reg[7]_15 ),
         .\value_reg[7]_14 (\value_reg[7]_16 ),
         .\value_reg[7]_15 (\value_reg[7]_17 ),
-        .\value_reg[7]_16 (\value_reg[7] ),
-        .\value_reg[7]_17 (\value_reg[7]_34 ),
-        .\value_reg[7]_18 (\value_reg[7]_35 ),
-        .\value_reg[7]_19 (\value_reg[7]_36 ),
+        .\value_reg[7]_16 (RFILE_n_233),
+        .\value_reg[7]_17 (\value_reg[7] ),
+        .\value_reg[7]_18 (\value_reg[7]_34 ),
+        .\value_reg[7]_19 (\value_reg[7]_35 ),
         .\value_reg[7]_2 (data2[7:0]),
-        .\value_reg[7]_20 (\value_reg[7]_44 ),
-        .\value_reg[7]_21 (\value_reg[7]_45 ),
-        .\value_reg[7]_22 (\value_reg[7]_46 ),
-        .\value_reg[7]_23 (\value_reg[7]_47 ),
-        .\value_reg[7]_24 (\value_reg[7]_48 ),
-        .\value_reg[7]_25 (\value_reg[7]_49 ),
-        .\value_reg[7]_26 (\value_reg[7]_50 ),
-        .\value_reg[7]_27 (\value_reg[7]_51 ),
+        .\value_reg[7]_20 (\value_reg[7]_36 ),
+        .\value_reg[7]_21 (\value_reg[7]_44 ),
+        .\value_reg[7]_22 (\value_reg[7]_45 ),
+        .\value_reg[7]_23 (\value_reg[7]_46 ),
+        .\value_reg[7]_24 (\value_reg[7]_47 ),
+        .\value_reg[7]_25 (\value_reg[7]_48 ),
+        .\value_reg[7]_26 (\value_reg[7]_49 ),
+        .\value_reg[7]_27 (\value_reg[7]_50 ),
+        .\value_reg[7]_28 (\value_reg[7]_51 ),
         .\value_reg[7]_3 (\value_reg[7]_7 ),
         .\value_reg[7]_4 (\value_reg[7]_8 ),
         .\value_reg[7]_5 (\value_reg[7]_9 ),
@@ -7894,8 +7919,8 @@ module z80_0_decoder
   wire \value[2]_i_2__2_n_0 ;
   wire \value[2]_i_2__3_n_0 ;
   wire \value[2]_i_2__4_n_0 ;
-  wire \value[2]_i_2__7_n_0 ;
   wire \value[2]_i_2__8_n_0 ;
+  wire \value[2]_i_2__9_n_0 ;
   wire \value[2]_i_2_n_0 ;
   wire \value[2]_i_30__0_n_0 ;
   wire \value[2]_i_30_n_0 ;
@@ -8648,26 +8673,25 @@ module z80_0_decoder
   wire \value[7]_i_38__3_n_0 ;
   wire \value[7]_i_38__4_n_0 ;
   wire \value[7]_i_38_n_0 ;
-  wire \value[7]_i_39__0_n_0 ;
+  wire \value[7]_i_39__1_n_0 ;
   wire \value[7]_i_39__2_n_0 ;
   wire \value[7]_i_39__3_n_0 ;
   wire \value[7]_i_39__4_n_0 ;
   wire \value[7]_i_3__10_n_0 ;
   wire \value[7]_i_3__11_n_0 ;
   wire \value[7]_i_3__12_n_0 ;
-  wire \value[7]_i_3__2_n_0 ;
+  wire \value[7]_i_3__13_n_0 ;
   wire \value[7]_i_3__4_n_0 ;
-  wire \value[7]_i_3__8_n_0 ;
-  wire \value[7]_i_3__9_n_0 ;
+  wire \value[7]_i_3__6_n_0 ;
   wire \value[7]_i_40__0_n_0 ;
   wire \value[7]_i_40__1_n_0 ;
   wire \value[7]_i_40__2_n_0 ;
+  wire \value[7]_i_40__3_n_0 ;
   wire \value[7]_i_40_n_0 ;
   wire \value[7]_i_41__0_n_0 ;
   wire \value[7]_i_41__1_n_0 ;
   wire \value[7]_i_41__2_n_0 ;
   wire \value[7]_i_41__3_n_0 ;
-  wire \value[7]_i_41__4_n_0 ;
   wire \value[7]_i_41_n_0 ;
   wire \value[7]_i_42__0_n_0 ;
   wire \value[7]_i_42__1_n_0 ;
@@ -8707,10 +8731,12 @@ module z80_0_decoder
   wire \value[7]_i_48_n_0 ;
   wire \value[7]_i_49__1_n_0 ;
   wire \value[7]_i_49__2_n_0 ;
+  wire \value[7]_i_49__3_n_0 ;
   wire \value[7]_i_4__10_n_0 ;
   wire \value[7]_i_4__11_n_0 ;
   wire \value[7]_i_4__12_n_0 ;
   wire \value[7]_i_4__13_n_0 ;
+  wire \value[7]_i_4__15_n_0 ;
   wire \value[7]_i_4__2_n_0 ;
   wire \value[7]_i_4__4_n_0 ;
   wire \value[7]_i_4__7_n_0 ;
@@ -8760,7 +8786,6 @@ module z80_0_decoder
   wire \value[7]_i_5__6_n_0 ;
   wire \value[7]_i_5__7_n_0 ;
   wire \value[7]_i_5__8_n_0 ;
-  wire \value[7]_i_5__9_n_0 ;
   wire \value[7]_i_60__0_n_0 ;
   wire \value[7]_i_60__1_n_0 ;
   wire \value[7]_i_60__2_n_0 ;
@@ -8791,7 +8816,7 @@ module z80_0_decoder
   wire \value[7]_i_6__1_n_0 ;
   wire \value[7]_i_6__2_n_0 ;
   wire \value[7]_i_6__3_n_0 ;
-  wire \value[7]_i_6__4_n_0 ;
+  wire \value[7]_i_6__5_n_0 ;
   wire \value[7]_i_6__6_n_0 ;
   wire \value[7]_i_6__7_n_0 ;
   wire \value[7]_i_6__8_n_0 ;
@@ -8807,10 +8832,11 @@ module z80_0_decoder
   wire \value[7]_i_76_n_0 ;
   wire \value[7]_i_77_n_0 ;
   wire \value[7]_i_79_n_0 ;
+  wire \value[7]_i_7__0_n_0 ;
   wire \value[7]_i_7__10_n_0 ;
   wire \value[7]_i_7__11_n_0 ;
   wire \value[7]_i_7__12_n_0 ;
-  wire \value[7]_i_7__1_n_0 ;
+  wire \value[7]_i_7__2_n_0 ;
   wire \value[7]_i_7__3_n_0 ;
   wire \value[7]_i_7__4_n_0 ;
   wire \value[7]_i_7__5_n_0 ;
@@ -8837,7 +8863,6 @@ module z80_0_decoder
   wire \value[7]_i_8__7_n_0 ;
   wire \value[7]_i_8__8_n_0 ;
   wire \value[7]_i_8__9_n_0 ;
-  wire \value[7]_i_8_n_0 ;
   wire \value[7]_i_90_n_0 ;
   wire \value[7]_i_91_n_0 ;
   wire \value[7]_i_92_n_0 ;
@@ -9298,13 +9323,13 @@ module z80_0_decoder
   wire \value_reg[7]_i_3__1_n_0 ;
   wire \value_reg[7]_i_3_n_0 ;
   wire \value_reg[7]_i_40_n_0 ;
-  wire \value_reg[7]_i_4__0_n_0 ;
   wire \value_reg[7]_i_4_n_0 ;
   wire \value_reg[7]_i_5__0_n_0 ;
   wire \value_reg[7]_i_5__1_n_0 ;
   wire \value_reg[7]_i_5__2_n_0 ;
   wire \value_reg[7]_i_5__3_n_0 ;
   wire \value_reg[7]_i_5__4_n_0 ;
+  wire \value_reg[7]_i_5__5_n_0 ;
   wire \value_reg[7]_i_5_n_0 ;
   wire \value_reg[7]_i_78_n_0 ;
   wire \value_reg[7]_i_7__0_n_0 ;
@@ -9709,7 +9734,7 @@ module z80_0_decoder
     \FSM_sequential_state[10]_i_22 
        (.I0(\FSM_sequential_state[10]_i_39_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
-        .I2(\value[7]_i_26__3_n_0 ),
+        .I2(\value[7]_i_27__4_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
         .I4(\addr_bus[15]_INST_0_i_19_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
@@ -10425,7 +10450,7 @@ module z80_0_decoder
     \FSM_sequential_state[1]_i_4 
        (.I0(\FSM_sequential_state_reg_n_0_[6] ),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
-        .I2(\value[7]_i_26__3_n_0 ),
+        .I2(\value[7]_i_27__4_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
         .I4(\FSM_sequential_state_reg_n_0_[7] ),
         .I5(\FSM_sequential_state_reg_n_0_[5] ),
@@ -15497,7 +15522,7 @@ module z80_0_decoder
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
         .I2(\value[7]_i_6__13_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
-        .I4(\value[7]_i_27__6_n_0 ),
+        .I4(\value[7]_i_27__7_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(MREQ_L_INST_0_i_71_n_0));
   LUT6 #(
@@ -15781,7 +15806,7 @@ module z80_0_decoder
     RD_L_INST_0_i_24
        (.I0(RD_L_INST_0_i_32_n_0),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
-        .I2(\value[7]_i_27__6_n_0 ),
+        .I2(\value[7]_i_27__7_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
         .I4(\FSM_sequential_state_reg_n_0_[7] ),
         .I5(RD_L_INST_0_i_33_n_0),
@@ -15823,7 +15848,7 @@ module z80_0_decoder
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
         .I2(\value[7]_i_51__2_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
-        .I4(\value[7]_i_27__6_n_0 ),
+        .I4(\value[7]_i_27__7_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(RD_L_INST_0_i_28_n_0));
   LUT6 #(
@@ -16949,7 +16974,7 @@ module z80_0_decoder
         .I2(\value_reg[7]_3 ),
         .I3(\op0_reg_n_0_[6] ),
         .I4(\op0_reg_n_0_[7] ),
-        .I5(\value[7]_i_23__10_n_0 ),
+        .I5(\value[7]_i_24__10_n_0 ),
         .O(\addr_bus[15]_INST_0_i_1003_n_0 ));
   LUT6 #(
     .INIT(64'h4040EA4540404040)) 
@@ -17540,7 +17565,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h00000000AAAA2AAA)) 
     \addr_bus[15]_INST_0_i_1063 
-       (.I0(\value[7]_i_23__10_n_0 ),
+       (.I0(\value[7]_i_24__10_n_0 ),
         .I1(\op0_reg_n_0_[7] ),
         .I2(\op0_reg_n_0_[6] ),
         .I3(\value_reg[7]_4 ),
@@ -17658,7 +17683,7 @@ module z80_0_decoder
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
         .I2(\addr_bus[15]_INST_0_i_799_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
-        .I4(\value[7]_i_21__4_n_0 ),
+        .I4(\value[7]_i_21__5_n_0 ),
         .I5(\addr_bus[15]_INST_0_i_1156_n_0 ),
         .O(\addr_bus[15]_INST_0_i_1075_n_0 ));
   LUT4 #(
@@ -17809,7 +17834,7 @@ module z80_0_decoder
         .I2(\op1_reg_n_0_[2] ),
         .I3(\addr_bus[15]_INST_0_i_1166_n_0 ),
         .I4(\op0_reg_n_0_[7] ),
-        .I5(\value[7]_i_23__10_n_0 ),
+        .I5(\value[7]_i_24__10_n_0 ),
         .O(\addr_bus[15]_INST_0_i_1091_n_0 ));
   LUT6 #(
     .INIT(64'hCF0FCC4F3B337F33)) 
@@ -18078,7 +18103,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h30B3333300800000)) 
     \addr_bus[15]_INST_0_i_1118 
-       (.I0(\value[7]_i_45__2_n_0 ),
+       (.I0(\value[7]_i_46__3_n_0 ),
         .I1(\op0_reg_n_0_[6] ),
         .I2(\op0_reg_n_0_[0] ),
         .I3(\op0_reg_n_0_[1] ),
@@ -18276,7 +18301,7 @@ module z80_0_decoder
         .I2(\value_reg[7]_3 ),
         .I3(\op0_reg_n_0_[6] ),
         .I4(\op0_reg_n_0_[7] ),
-        .I5(\value[7]_i_23__10_n_0 ),
+        .I5(\value[7]_i_24__10_n_0 ),
         .O(\addr_bus[15]_INST_0_i_1137_n_0 ));
   LUT6 #(
     .INIT(64'hEFFFFFFF40000000)) 
@@ -19663,7 +19688,7 @@ module z80_0_decoder
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(\addr_bus[15]_INST_0_i_287_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
-        .I4(\value[7]_i_28__7_n_0 ),
+        .I4(\value[7]_i_28__6_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\addr_bus[15]_INST_0_i_178_n_0 ));
   LUT6 #(
@@ -19674,7 +19699,7 @@ module z80_0_decoder
         .I2(\FSM_sequential_state_reg_n_0_[6] ),
         .I3(\addr_bus[15]_INST_0_i_290_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[7] ),
-        .I5(\value[7]_i_35__3_n_0 ),
+        .I5(\value[7]_i_36__4_n_0 ),
         .O(\addr_bus[15]_INST_0_i_179_n_0 ));
   LUT2 #(
     .INIT(4'h1)) 
@@ -19689,13 +19714,13 @@ module z80_0_decoder
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
         .I2(\addr_bus[15]_INST_0_i_291_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
-        .I4(\value[7]_i_21__4_n_0 ),
+        .I4(\value[7]_i_21__5_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
         .O(\addr_bus[15]_INST_0_i_180_n_0 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
     \addr_bus[15]_INST_0_i_181 
-       (.I0(\value[7]_i_24__4_n_0 ),
+       (.I0(\value[7]_i_24__3_n_0 ),
         .I1(\addr_bus[15]_INST_0_i_287_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[6] ),
         .I3(\addr_bus[15]_INST_0_i_292_n_0 ),
@@ -20719,7 +20744,7 @@ module z80_0_decoder
     \addr_bus[15]_INST_0_i_294 
        (.I0(\FSM_sequential_state_reg_n_0_[7] ),
         .I1(\FSM_sequential_state_reg_n_0_[9] ),
-        .I2(\value[7]_i_11__7_n_0 ),
+        .I2(\value[7]_i_11__6_n_0 ),
         .I3(out[0]),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
@@ -22144,7 +22169,7 @@ module z80_0_decoder
         .I1(\addr_bus[15]_INST_0_i_666_n_0 ),
         .I2(p_1_in[4]),
         .I3(\addr_bus[15]_INST_0_i_667_n_0 ),
-        .I4(\value[7]_i_28__8_n_0 ),
+        .I4(\value[7]_i_28__7_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\addr_bus[15]_INST_0_i_466_n_0 ));
   LUT5 #(
@@ -23362,7 +23387,7 @@ module z80_0_decoder
     \addr_bus[15]_INST_0_i_596 
        (.I0(\addr_bus[15]_INST_0_i_799_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
-        .I2(\value[7]_i_21__4_n_0 ),
+        .I2(\value[7]_i_21__5_n_0 ),
         .I3(\addr_bus[15]_INST_0_i_800_n_0 ),
         .I4(p_1_in[4]),
         .I5(\addr_bus[15]_INST_0_i_801_n_0 ),
@@ -24581,7 +24606,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
     \addr_bus[15]_INST_0_i_723 
-       (.I0(\value[7]_i_26__6_n_0 ),
+       (.I0(\value[7]_i_26__5_n_0 ),
         .I1(\addr_bus[15]_INST_0_i_897_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
         .I3(MREQ_L_INST_0_i_84_n_0),
@@ -24918,7 +24943,7 @@ module z80_0_decoder
     \addr_bus[15]_INST_0_i_758 
        (.I0(p_1_in[5]),
         .I1(\op1_reg_n_0_[1] ),
-        .I2(\value[7]_i_23__10_n_0 ),
+        .I2(\value[7]_i_24__10_n_0 ),
         .I3(\op1_reg_n_0_[2] ),
         .I4(\op1_reg_n_0_[0] ),
         .I5(p_1_in[4]),
@@ -24981,7 +25006,7 @@ module z80_0_decoder
        (.I0(\addr_bus[15]_INST_0_i_923_n_0 ),
         .I1(p_1_in[4]),
         .I2(\addr_bus[15]_INST_0_i_924_n_0 ),
-        .I3(\value[7]_i_11__7_n_0 ),
+        .I3(\value[7]_i_11__6_n_0 ),
         .I4(out[0]),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\addr_bus[15]_INST_0_i_764_n_0 ));
@@ -25422,10 +25447,10 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h000000000000B080)) 
     \addr_bus[15]_INST_0_i_81 
-       (.I0(\value[7]_i_15__7_n_0 ),
+       (.I0(\value[7]_i_15__8_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
-        .I3(\value[7]_i_11__10_n_0 ),
+        .I3(\value[7]_i_11__9_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
         .O(\addr_bus[15]_INST_0_i_81_n_0 ));
@@ -25633,7 +25658,7 @@ module z80_0_decoder
     \addr_bus[15]_INST_0_i_83 
        (.I0(\FSM_sequential_state_reg_n_0_[7] ),
         .I1(\FSM_sequential_state_reg_n_0_[9] ),
-        .I2(\value[7]_i_11__7_n_0 ),
+        .I2(\value[7]_i_11__6_n_0 ),
         .I3(out[0]),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
@@ -25838,7 +25863,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h008F008000000000)) 
     \addr_bus[15]_INST_0_i_85 
-       (.I0(\value[7]_i_28__7_n_0 ),
+       (.I0(\value[7]_i_28__6_n_0 ),
         .I1(\addr_bus[15]_INST_0_i_138_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[6] ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
@@ -27144,7 +27169,7 @@ module z80_0_decoder
     \addr_bus[15]_INST_0_i_98 
        (.I0(\value[0]_i_5__5_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
-        .I2(\value[7]_i_28__8_n_0 ),
+        .I2(\value[7]_i_28__7_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
         .I4(\FSM_sequential_state_reg_n_0_[6] ),
         .I5(\addr_bus[15]_INST_0_i_137_n_0 ),
@@ -32242,7 +32267,7 @@ module z80_0_decoder
        (.I0(\data_out[7]_INST_0_i_196_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(\FSM_sequential_state_reg_n_0_[8] ),
-        .I3(\value[7]_i_26__8_n_0 ),
+        .I3(\value[7]_i_26__7_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[9] ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\data_out[7]_INST_0_i_138_n_0 ));
@@ -32265,7 +32290,7 @@ module z80_0_decoder
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
     \data_out[7]_INST_0_i_140 
        (.I0(\data_out[7]_INST_0_i_199_n_0 ),
-        .I1(\value[7]_i_36__3_n_0 ),
+        .I1(\value[7]_i_37__2_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[6] ),
         .I3(\data_out[7]_INST_0_i_200_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[7] ),
@@ -32310,7 +32335,7 @@ module z80_0_decoder
     .INIT(64'hAAFFAA00C000C000)) 
     \data_out[7]_INST_0_i_145 
        (.I0(\data_out[7]_INST_0_i_206_n_0 ),
-        .I1(\value[7]_i_28__7_n_0 ),
+        .I1(\value[7]_i_28__6_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[8] ),
         .I3(\FSM_sequential_state_reg_n_0_[6] ),
         .I4(\data_out[7]_INST_0_i_207_n_0 ),
@@ -32325,7 +32350,7 @@ module z80_0_decoder
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
     \data_out[7]_INST_0_i_147 
        (.I0(\data_out[7]_INST_0_i_210_n_0 ),
-        .I1(\value[7]_i_36__3_n_0 ),
+        .I1(\value[7]_i_37__2_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[6] ),
         .I3(\data_out[7]_INST_0_i_211_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[7] ),
@@ -32338,14 +32363,14 @@ module z80_0_decoder
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(\data_out[7]_INST_0_i_213_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
-        .I4(\value[7]_i_26__6_n_0 ),
+        .I4(\value[7]_i_26__5_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\data_out[7]_INST_0_i_148_n_0 ));
   LUT6 #(
     .INIT(64'hAAFFAA000C000C00)) 
     \data_out[7]_INST_0_i_149 
        (.I0(\data_out[7]_INST_0_i_214_n_0 ),
-        .I1(\value[7]_i_28__8_n_0 ),
+        .I1(\value[7]_i_28__7_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[8] ),
         .I3(\FSM_sequential_state_reg_n_0_[6] ),
         .I4(\data_out[7]_INST_0_i_215_n_0 ),
@@ -32399,7 +32424,7 @@ module z80_0_decoder
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
     \data_out[7]_INST_0_i_155 
        (.I0(\data_out[7]_INST_0_i_226_n_0 ),
-        .I1(\value[7]_i_4__10_n_0 ),
+        .I1(\value[7]_i_4__11_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[1] ),
         .I3(\data_out[7]_INST_0_i_227_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[5] ),
@@ -32436,7 +32461,7 @@ module z80_0_decoder
        (.I0(\data_out[7]_INST_0_i_239_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
-        .I3(\value[7]_i_32__8_n_0 ),
+        .I3(\value[7]_i_33__4_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
         .O(\data_out[7]_INST_0_i_159_n_0 ));
@@ -32444,7 +32469,7 @@ module z80_0_decoder
     .INIT(64'h0F000000C0A0C0A0)) 
     \data_out[7]_INST_0_i_16 
        (.I0(\data_out[7]_INST_0_i_38_n_0 ),
-        .I1(\value[7]_i_8__9_n_0 ),
+        .I1(\value[7]_i_9__12_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[1] ),
         .I3(\FSM_sequential_state_reg_n_0_[6] ),
         .I4(\data_out[7]_INST_0_i_39_n_0 ),
@@ -32579,7 +32604,7 @@ module z80_0_decoder
        (.I0(\data_out[7]_INST_0_i_279_n_0 ),
         .I1(\data_out[7]_INST_0_i_280_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[5] ),
-        .I3(\value[7]_i_11__11_n_0 ),
+        .I3(\value[7]_i_11__10_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[6] ),
         .I5(\data_out[7]_INST_0_i_281_n_0 ),
         .O(\data_out[7]_INST_0_i_175_n_0 ));
@@ -32609,7 +32634,7 @@ module z80_0_decoder
        (.I0(\addr_bus[15]_INST_0_i_6_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[0] ),
         .I2(\FSM_sequential_state_reg_n_0_[5] ),
-        .I3(\value[7]_i_11__11_n_0 ),
+        .I3(\value[7]_i_11__10_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[6] ),
         .I5(\FSM_sequential_state_reg_n_0_[1] ),
         .O(\data_out[7]_INST_0_i_179_n_0 ));
@@ -32641,7 +32666,7 @@ module z80_0_decoder
         .I2(\FSM_sequential_state_reg_n_0_[5] ),
         .I3(\data_out[7]_INST_0_i_293_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[6] ),
-        .I5(\value[7]_i_36__3_n_0 ),
+        .I5(\value[7]_i_37__2_n_0 ),
         .O(\data_out[7]_INST_0_i_181_n_0 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
@@ -32790,7 +32815,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h00000000BB308830)) 
     \data_out[7]_INST_0_i_197 
-       (.I0(\value[7]_i_15__7_n_0 ),
+       (.I0(\value[7]_i_15__8_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
         .I2(\data_out[7]_INST_0_i_317_n_0 ),
         .I3(\value[7]_i_22__11_n_0 ),
@@ -32848,7 +32873,7 @@ module z80_0_decoder
        (.I0(out[0]),
         .I1(\data_out[7]_INST_0_i_320_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[9] ),
-        .I3(\value[7]_i_26__8_n_0 ),
+        .I3(\value[7]_i_26__7_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\data_out[7]_INST_0_i_201_n_0 ));
   LUT6 #(
@@ -32868,7 +32893,7 @@ module z80_0_decoder
         .I1(\data_out[7]_INST_0_i_316_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
-        .I4(\value[7]_i_27__6_n_0 ),
+        .I4(\value[7]_i_27__7_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\data_out[7]_INST_0_i_203_n_0 ));
   LUT6 #(
@@ -32915,7 +32940,7 @@ module z80_0_decoder
     \data_out[7]_INST_0_i_208 
        (.I0(p_1_in[1]),
         .I1(p_1_in[2]),
-        .I2(\value[7]_i_28__7_n_0 ),
+        .I2(\value[7]_i_28__6_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
         .I4(\data_out[7]_INST_0_i_329_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
@@ -32964,7 +32989,7 @@ module z80_0_decoder
     .INIT(32'hD8880000)) 
     \data_out[7]_INST_0_i_212 
        (.I0(\FSM_sequential_state_reg_n_0_[9] ),
-        .I1(\value[7]_i_26__8_n_0 ),
+        .I1(\value[7]_i_26__7_n_0 ),
         .I2(\data_out[7]_INST_0_i_331_n_0 ),
         .I3(\FSM_sequential_state[7]_i_25_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
@@ -33124,7 +33149,7 @@ module z80_0_decoder
     \data_out[7]_INST_0_i_229 
        (.I0(\data_out[7]_INST_0_i_356_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
-        .I2(\value[7]_i_26__3_n_0 ),
+        .I2(\value[7]_i_27__4_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\data_out[7]_INST_0_i_357_n_0 ),
@@ -33132,7 +33157,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h0000000038080000)) 
     \data_out[7]_INST_0_i_23 
-       (.I0(\value[7]_i_15__7_n_0 ),
+       (.I0(\value[7]_i_15__8_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
         .I3(\FSM_sequential_state[3]_i_4_n_0 ),
@@ -33142,7 +33167,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'hF0FFF00088008800)) 
     \data_out[7]_INST_0_i_230 
-       (.I0(\value[7]_i_32__8_n_0 ),
+       (.I0(\value[7]_i_33__4_n_0 ),
         .I1(\data_out[7]_INST_0_i_358_n_0 ),
         .I2(\data_out[7]_INST_0_i_359_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
@@ -33155,7 +33180,7 @@ module z80_0_decoder
        (.I0(M1_L_INST_0_i_23_n_0),
         .I1(drive_IXH0),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
-        .I3(\value[7]_i_21__4_n_0 ),
+        .I3(\value[7]_i_21__5_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\data_out[7]_INST_0_i_361_n_0 ),
         .O(\data_out[7]_INST_0_i_231_n_0 ));
@@ -33165,7 +33190,7 @@ module z80_0_decoder
        (.I0(\addr_bus[15]_INST_0_i_20_n_0 ),
         .I1(\data_out[7]_INST_0_i_358_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[8] ),
-        .I3(\value[7]_i_26__3_n_0 ),
+        .I3(\value[7]_i_27__4_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[9] ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\data_out[7]_INST_0_i_232_n_0 ));
@@ -33204,16 +33229,16 @@ module z80_0_decoder
        (.I0(\data_out[7]_INST_0_i_367_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
         .I2(\FSM_sequential_state_reg_n_0_[9] ),
-        .I3(\value[7]_i_26__3_n_0 ),
+        .I3(\value[7]_i_27__4_n_0 ),
         .I4(\FSM_sequential_state[7]_i_39_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\data_out[7]_INST_0_i_236_n_0 ));
   LUT6 #(
     .INIT(64'h88008800F0FFF000)) 
     \data_out[7]_INST_0_i_237 
-       (.I0(\value[7]_i_21__4_n_0 ),
+       (.I0(\value[7]_i_21__5_n_0 ),
         .I1(drive_IYH0),
-        .I2(\value[7]_i_5__5_n_0 ),
+        .I2(\value[7]_i_5__4_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
         .I4(\data_out[7]_INST_0_i_369_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
@@ -33304,7 +33329,7 @@ module z80_0_decoder
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(\data_out[7]_INST_0_i_390_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
-        .I4(\value[7]_i_32__8_n_0 ),
+        .I4(\value[7]_i_33__4_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\data_out[7]_INST_0_i_246_n_0 ));
   LUT6 #(
@@ -33315,7 +33340,7 @@ module z80_0_decoder
         .I2(\FSM_sequential_state_reg_n_0_[6] ),
         .I3(\data_out[7]_INST_0_i_393_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[7] ),
-        .I5(\value[7]_i_35__3_n_0 ),
+        .I5(\value[7]_i_36__4_n_0 ),
         .O(\data_out[7]_INST_0_i_247_n_0 ));
   LUT6 #(
     .INIT(64'hB8BBB888B888B888)) 
@@ -33324,7 +33349,7 @@ module z80_0_decoder
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(\data_out[7]_INST_0_i_394_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
-        .I4(\value[7]_i_26__6_n_0 ),
+        .I4(\value[7]_i_26__5_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\data_out[7]_INST_0_i_248_n_0 ));
   LUT6 #(
@@ -33350,7 +33375,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h0B08080800000000)) 
     \data_out[7]_INST_0_i_251 
-       (.I0(\value[7]_i_32__8_n_0 ),
+       (.I0(\value[7]_i_33__4_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(\FSM_sequential_state_reg_n_0_[8] ),
         .I3(\value[0]_i_5__5_n_0 ),
@@ -33377,7 +33402,7 @@ module z80_0_decoder
     \data_out[7]_INST_0_i_254 
        (.I0(\data_out[7]_INST_0_i_375_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
-        .I2(\value[7]_i_22__6_n_0 ),
+        .I2(\value[7]_i_22__7_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
         .I4(\value[0]_i_7__8_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
@@ -33450,7 +33475,7 @@ module z80_0_decoder
     .INIT(64'h00000000D5808080)) 
     \data_out[7]_INST_0_i_261 
        (.I0(\FSM_sequential_state_reg_n_0_[9] ),
-        .I1(\value[7]_i_26__3_n_0 ),
+        .I1(\value[7]_i_27__4_n_0 ),
         .I2(\FSM_sequential_state[1]_i_29_n_0 ),
         .I3(\data_out[7]_INST_0_i_412_n_0 ),
         .I4(\addr_bus[15]_INST_0_i_19_n_0 ),
@@ -33627,7 +33652,7 @@ module z80_0_decoder
         .I2(\FSM_sequential_state_reg_n_0_[6] ),
         .I3(\data_out[7]_INST_0_i_440_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[7] ),
-        .I5(\value[7]_i_24__4_n_0 ),
+        .I5(\value[7]_i_24__3_n_0 ),
         .O(\data_out[7]_INST_0_i_278_n_0 ));
   LUT5 #(
     .INIT(32'hE2220000)) 
@@ -33663,7 +33688,7 @@ module z80_0_decoder
        (.I0(\FSM_sequential_state_reg_n_0_[8] ),
         .I1(p_1_in[1]),
         .I2(p_1_in[2]),
-        .I3(\value[7]_i_26__3_n_0 ),
+        .I3(\value[7]_i_27__4_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[9] ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\data_out[7]_INST_0_i_281_n_0 ));
@@ -33828,7 +33853,7 @@ module z80_0_decoder
     \data_out[7]_INST_0_i_297 
        (.I0(\data_out[7]_INST_0_i_471_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
-        .I2(\value[7]_i_21__4_n_0 ),
+        .I2(\value[7]_i_21__5_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
         .I4(M1_L_INST_0_i_39_n_0),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
@@ -33845,11 +33870,11 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'hAAFFAA00C000C000)) 
     \data_out[7]_INST_0_i_299 
-       (.I0(\value[7]_i_33__5_n_0 ),
+       (.I0(\value[7]_i_33__6_n_0 ),
         .I1(\FSM_sequential_state[3]_i_4_n_0 ),
         .I2(\value[7]_i_20__12_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
-        .I4(\value[7]_i_5__5_n_0 ),
+        .I4(\value[7]_i_5__4_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\data_out[7]_INST_0_i_299_n_0 ));
   LUT6 #(
@@ -33899,7 +33924,7 @@ module z80_0_decoder
     .INIT(64'hA0A0A0A000CF00C0)) 
     \data_out[7]_INST_0_i_303 
        (.I0(\data_out[7]_INST_0_i_307_n_0 ),
-        .I1(\value[7]_i_28__7_n_0 ),
+        .I1(\value[7]_i_28__6_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[6] ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
         .I4(M1_L_INST_0_i_23_n_0),
@@ -33918,11 +33943,11 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'hA00FA00000C000C0)) 
     \data_out[7]_INST_0_i_305 
-       (.I0(\value[7]_i_28__7_n_0 ),
-        .I1(\value[7]_i_15__7_n_0 ),
+       (.I0(\value[7]_i_28__6_n_0 ),
+        .I1(\value[7]_i_15__8_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[6] ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
-        .I4(\value[7]_i_26__6_n_0 ),
+        .I4(\value[7]_i_26__5_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\data_out[7]_INST_0_i_305_n_0 ));
   LUT6 #(
@@ -34065,7 +34090,7 @@ module z80_0_decoder
     \data_out[7]_INST_0_i_32 
        (.I0(\data_out[7]_INST_0_i_64_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
-        .I2(\value[7]_i_36__3_n_0 ),
+        .I2(\value[7]_i_37__2_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
         .I4(\FSM_sequential_state_reg_n_0_[6] ),
         .I5(\data_out[7]_INST_0_i_65_n_0 ),
@@ -34286,10 +34311,10 @@ module z80_0_decoder
     .INIT(64'hF000F000F0BBF088)) 
     \data_out[7]_INST_0_i_342 
        (.I0(\data_out[7]_INST_0_i_496_n_0 ),
-        .I1(\value[7]_i_23__10_n_0 ),
+        .I1(\value[7]_i_24__10_n_0 ),
         .I2(\data_out[7]_INST_0_i_497_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
-        .I4(\value[7]_i_27__6_n_0 ),
+        .I4(\value[7]_i_27__7_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\data_out[7]_INST_0_i_342_n_0 ));
   LUT6 #(
@@ -34315,7 +34340,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'hAF00A00000C000C0)) 
     \data_out[7]_INST_0_i_345 
-       (.I0(\value[7]_i_40__0_n_0 ),
+       (.I0(\value[7]_i_40__1_n_0 ),
         .I1(\data_out[7]_INST_0_i_501_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
@@ -34373,7 +34398,7 @@ module z80_0_decoder
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
         .I2(\FSM_sequential_state_reg_n_0_[8] ),
         .I3(\FSM_sequential_state[1]_i_29_n_0 ),
-        .I4(\value[7]_i_26__3_n_0 ),
+        .I4(\value[7]_i_27__4_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\data_out[7]_INST_0_i_350_n_0 ));
   LUT6 #(
@@ -34422,14 +34447,14 @@ module z80_0_decoder
         .I1(\addr_bus[15]_INST_0_i_20_n_0 ),
         .I2(\data_out[7]_INST_0_i_508_n_0 ),
         .I3(\FSM_sequential_state[1]_i_29_n_0 ),
-        .I4(\value[7]_i_26__3_n_0 ),
+        .I4(\value[7]_i_27__4_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\data_out[7]_INST_0_i_355_n_0 ));
   LUT6 #(
     .INIT(64'h0040000000000000)) 
     \data_out[7]_INST_0_i_356 
        (.I0(out[0]),
-        .I1(\value[7]_i_11__7_n_0 ),
+        .I1(\value[7]_i_11__6_n_0 ),
         .I2(\op0_reg_n_0_[7] ),
         .I3(\op1_reg[5]_rep_0 ),
         .I4(\value_reg[7]_3 ),
@@ -34491,7 +34516,7 @@ module z80_0_decoder
         .I1(\value_reg[7]_3 ),
         .I2(\op1_reg[5]_rep_0 ),
         .I3(\op0_reg_n_0_[7] ),
-        .I4(\value[7]_i_26__3_n_0 ),
+        .I4(\value[7]_i_27__4_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\data_out[7]_INST_0_i_361_n_0 ));
   MUXF7 \data_out[7]_INST_0_i_362 
@@ -34624,7 +34649,7 @@ module z80_0_decoder
     \data_out[7]_INST_0_i_374 
        (.I0(\data_out[7]_INST_0_i_520_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
-        .I2(\value[7]_i_26__3_n_0 ),
+        .I2(\value[7]_i_27__4_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
         .I4(\data_out[7]_INST_0_i_521_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
@@ -34826,11 +34851,11 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'hB888B888BBBB8888)) 
     \data_out[7]_INST_0_i_393 
-       (.I0(\value[7]_i_25__6_n_0 ),
+       (.I0(\value[7]_i_25__7_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
         .I2(MREQ_L_INST_0_i_70_n_0),
         .I3(drive_H0),
-        .I4(\value[7]_i_27__6_n_0 ),
+        .I4(\value[7]_i_27__7_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\data_out[7]_INST_0_i_393_n_0 ));
   LUT6 #(
@@ -34881,7 +34906,7 @@ module z80_0_decoder
     .INIT(64'hAA00AA00C0FFC000)) 
     \data_out[7]_INST_0_i_399 
        (.I0(\data_out[7]_INST_0_i_535_n_0 ),
-        .I1(\value[7]_i_32__8_n_0 ),
+        .I1(\value[7]_i_33__4_n_0 ),
         .I2(\data_out[7]_INST_0_i_401_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
         .I4(\data_out[7]_INST_0_i_536_n_0 ),
@@ -34910,7 +34935,7 @@ module z80_0_decoder
        (.I0(\addr_bus[15]_INST_0_i_19_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
         .I2(\FSM_sequential_state_reg_n_0_[9] ),
-        .I3(\value[7]_i_26__3_n_0 ),
+        .I3(\value[7]_i_27__4_n_0 ),
         .I4(\FSM_sequential_state[7]_i_39_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\data_out[7]_INST_0_i_400_n_0 ));
@@ -34990,7 +35015,7 @@ module z80_0_decoder
        (.I0(\data_out[7]_INST_0_i_401_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
         .I2(\FSM_sequential_state_reg_n_0_[9] ),
-        .I3(\value[7]_i_11__7_n_0 ),
+        .I3(\value[7]_i_11__6_n_0 ),
         .I4(out[0]),
         .I5(\data_out[7]_INST_0_i_537_n_0 ),
         .O(\data_out[7]_INST_0_i_408_n_0 ));
@@ -35057,7 +35082,7 @@ module z80_0_decoder
        (.I0(\addr_bus[15]_INST_0_i_19_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
         .I2(\FSM_sequential_state_reg_n_0_[9] ),
-        .I3(\value[7]_i_26__3_n_0 ),
+        .I3(\value[7]_i_27__4_n_0 ),
         .I4(\FSM_sequential_state[1]_i_29_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\data_out[7]_INST_0_i_414_n_0 ));
@@ -35103,7 +35128,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h8F80FFFF8F800000)) 
     \data_out[7]_INST_0_i_419 
-       (.I0(\value[7]_i_28__7_n_0 ),
+       (.I0(\value[7]_i_28__6_n_0 ),
         .I1(\data_out[7]_INST_0_i_415_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[8] ),
         .I3(\data_out[7]_INST_0_i_541_n_0 ),
@@ -35115,7 +35140,7 @@ module z80_0_decoder
     \data_out[7]_INST_0_i_42 
        (.I0(\data_out[7]_INST_0_i_72_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
-        .I2(\value[7]_i_28__7_n_0 ),
+        .I2(\value[7]_i_28__6_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
         .I4(\FSM_sequential_state_reg_n_0_[6] ),
         .I5(\data_out[7]_INST_0_i_73_n_0 ),
@@ -35157,7 +35182,7 @@ module z80_0_decoder
         .I1(\data_out[7]_INST_0_i_544_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
-        .I4(\value[7]_i_27__6_n_0 ),
+        .I4(\value[7]_i_27__7_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\data_out[7]_INST_0_i_423_n_0 ));
   LUT5 #(
@@ -35196,7 +35221,7 @@ module z80_0_decoder
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
         .I2(p_1_in[1]),
         .I3(p_1_in[2]),
-        .I4(\value[7]_i_26__3_n_0 ),
+        .I4(\value[7]_i_27__4_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\data_out[7]_INST_0_i_427_n_0 ));
   LUT6 #(
@@ -35269,7 +35294,7 @@ module z80_0_decoder
        (.I0(\value[7]_i_6__13_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
         .I2(\FSM_sequential_state_reg_n_0_[9] ),
-        .I3(\value[7]_i_26__3_n_0 ),
+        .I3(\value[7]_i_27__4_n_0 ),
         .I4(\data_out[7]_INST_0_i_430_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\data_out[7]_INST_0_i_434_n_0 ));
@@ -35292,10 +35317,10 @@ module z80_0_decoder
     .INIT(64'hA0A0A0A0C0CFC0C0)) 
     \data_out[7]_INST_0_i_437 
        (.I0(\value[7]_i_20__1_n_0 ),
-        .I1(\value[7]_i_35__2_n_0 ),
+        .I1(\value[7]_i_35__3_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
-        .I4(\value[7]_i_27__6_n_0 ),
+        .I4(\value[7]_i_27__7_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\data_out[7]_INST_0_i_437_n_0 ));
   LUT5 #(
@@ -35363,7 +35388,7 @@ module z80_0_decoder
     \data_out[7]_INST_0_i_444 
        (.I0(\data_out[7]_INST_0_i_551_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
-        .I2(\value[7]_i_32__8_n_0 ),
+        .I2(\value[7]_i_33__4_n_0 ),
         .I3(\value[7]_i_20__12_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[7] ),
         .I5(\data_out[7]_INST_0_i_552_n_0 ),
@@ -35443,7 +35468,7 @@ module z80_0_decoder
     \data_out[7]_INST_0_i_451 
        (.I0(\data_out[7]_INST_0_i_556_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
-        .I2(\value[7]_i_15__7_n_0 ),
+        .I2(\value[7]_i_15__8_n_0 ),
         .I3(\value[7]_i_20__12_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[7] ),
         .I5(\data_out[7]_INST_0_i_552_n_0 ),
@@ -35662,7 +35687,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h3330003088008800)) 
     \data_out[7]_INST_0_i_474 
-       (.I0(\value[7]_i_26__6_n_0 ),
+       (.I0(\value[7]_i_26__5_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(\data_out[7]_INST_0_i_568_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
@@ -35987,7 +36012,7 @@ module z80_0_decoder
     .INIT(64'hF0FFF000F088F088)) 
     \data_out[7]_INST_0_i_505 
        (.I0(\addr_bus[15]_INST_0_i_19_n_0 ),
-        .I1(\value[7]_i_23__10_n_0 ),
+        .I1(\value[7]_i_24__10_n_0 ),
         .I2(MREQ_L_INST_0_i_84_n_0),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
         .I4(\data_out[7]_INST_0_i_583_n_0 ),
@@ -36047,7 +36072,7 @@ module z80_0_decoder
     \data_out[7]_INST_0_i_510 
        (.I0(\FSM_sequential_state_reg_n_0_[7] ),
         .I1(\FSM_sequential_state_reg_n_0_[9] ),
-        .I2(\value[7]_i_11__7_n_0 ),
+        .I2(\value[7]_i_11__6_n_0 ),
         .I3(out[0]),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
@@ -36119,14 +36144,14 @@ module z80_0_decoder
         .I1(\value_reg[7]_3 ),
         .I2(\op1_reg[5]_rep_0 ),
         .I3(\op0_reg_n_0_[7] ),
-        .I4(\value[7]_i_26__3_n_0 ),
+        .I4(\value[7]_i_27__4_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\data_out[7]_INST_0_i_517_n_0 ));
   LUT6 #(
     .INIT(64'h4000000000000000)) 
     \data_out[7]_INST_0_i_518 
        (.I0(out[0]),
-        .I1(\value[7]_i_11__7_n_0 ),
+        .I1(\value[7]_i_11__6_n_0 ),
         .I2(\op0_reg_n_0_[7] ),
         .I3(\op1_reg[5]_rep_0 ),
         .I4(\value_reg[7]_3 ),
@@ -36186,7 +36211,7 @@ module z80_0_decoder
         .I1(\data_out[7]_INST_0_i_531_n_0 ),
         .I2(out[0]),
         .I3(out[1]),
-        .I4(\value[7]_i_45__1_n_0 ),
+        .I4(\value[7]_i_45__2_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\data_out[7]_INST_0_i_523_n_0 ));
   LUT4 #(
@@ -36210,11 +36235,11 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h080008000F000000)) 
     \data_out[7]_INST_0_i_526 
-       (.I0(\value[7]_i_47__3_n_0 ),
+       (.I0(\value[7]_i_48__3_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
         .I2(\FSM_sequential_state_reg_n_0_[10] ),
         .I3(\FSM_sequential_state_reg_n_0_[1] ),
-        .I4(\value[7]_i_48__3_n_0 ),
+        .I4(\value[7]_i_49__3_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[0] ),
         .O(drive_H0));
   LUT6 #(
@@ -36661,7 +36686,7 @@ module z80_0_decoder
        (.I0(\FSM_sequential_state[7]_i_25_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
         .I2(\FSM_sequential_state_reg_n_0_[9] ),
-        .I3(\value[7]_i_26__3_n_0 ),
+        .I3(\value[7]_i_27__4_n_0 ),
         .I4(\op1_reg[4]_rep_n_0 ),
         .I5(\op1_reg[5]_rep_n_0 ),
         .O(\data_out[7]_INST_0_i_571_n_0 ));
@@ -36678,11 +36703,11 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h00080008000F0000)) 
     \data_out[7]_INST_0_i_573 
-       (.I0(\value[7]_i_47__3_n_0 ),
+       (.I0(\value[7]_i_48__3_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
         .I2(\FSM_sequential_state_reg_n_0_[10] ),
         .I3(\FSM_sequential_state_reg_n_0_[1] ),
-        .I4(\value[7]_i_48__3_n_0 ),
+        .I4(\value[7]_i_49__3_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[0] ),
         .O(drive_L0));
   LUT6 #(
@@ -36692,7 +36717,7 @@ module z80_0_decoder
         .I1(p_1_in[2]),
         .I2(\FSM_sequential_state_reg_n_0_[10] ),
         .I3(\FSM_sequential_state_reg_n_0_[1] ),
-        .I4(\value[7]_i_48__3_n_0 ),
+        .I4(\value[7]_i_49__3_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[0] ),
         .O(\data_out[7]_INST_0_i_574_n_0 ));
   LUT4 #(
@@ -36877,7 +36902,7 @@ module z80_0_decoder
     \data_out[7]_INST_0_i_64 
        (.I0(\data_out[7]_INST_0_i_113_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
-        .I2(\value[7]_i_5__5_n_0 ),
+        .I2(\value[7]_i_5__4_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
         .I4(IORQ_L_INST_0_i_8_n_0),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
@@ -36996,7 +37021,7 @@ module z80_0_decoder
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
         .I3(\data_out[7]_INST_0_i_121_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
-        .I5(\value[7]_i_28__7_n_0 ),
+        .I5(\value[7]_i_28__6_n_0 ),
         .O(\data_out[7]_INST_0_i_76_n_0 ));
   LUT6 #(
     .INIT(64'hF0FFF000F088F088)) 
@@ -37114,7 +37139,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h80008000FFFF0000)) 
     \data_out[7]_INST_0_i_88 
-       (.I0(\value[7]_i_5__5_n_0 ),
+       (.I0(\value[7]_i_5__4_n_0 ),
         .I1(\op1_reg_n_0_[2] ),
         .I2(\op1_reg_n_0_[1] ),
         .I3(\op1_reg_n_0_[0] ),
@@ -37712,7 +37737,7 @@ module z80_0_decoder
         .I1(\FSM_sequential_state_reg_n_0_[1] ),
         .I2(\op1[7]_i_7_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[5] ),
-        .I4(\value[7]_i_8__9_n_0 ),
+        .I4(\value[7]_i_9__12_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
         .O(\op1[7]_i_4_n_0 ));
   LUT6 #(
@@ -38035,7 +38060,7 @@ module z80_0_decoder
         .I2(ld_IYH),
         .I3(ld_IYL),
         .I4(\DP/reg_data_in [0]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_22 [0]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -38045,7 +38070,7 @@ module z80_0_decoder
         .I2(ld_IYH),
         .I3(ld_IYL),
         .I4(\DP/reg_data_in [0]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_63 [0]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -38055,7 +38080,7 @@ module z80_0_decoder
         .I2(ld_SPH),
         .I3(ld_SPL),
         .I4(\DP/reg_data_in [0]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_23 [0]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -38065,7 +38090,7 @@ module z80_0_decoder
         .I2(ld_SPH),
         .I3(ld_SPL),
         .I4(\DP/reg_data_in [0]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_64 [0]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -38075,7 +38100,7 @@ module z80_0_decoder
         .I2(ld_PCH),
         .I3(ld_PCL),
         .I4(\DP/reg_data_in [0]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_24 [0]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -38085,7 +38110,7 @@ module z80_0_decoder
         .I2(ld_PCH),
         .I3(ld_PCL),
         .I4(\DP/reg_data_in [0]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_65 [0]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -38095,7 +38120,7 @@ module z80_0_decoder
         .I2(ld_STRL),
         .I3(ld_STRH),
         .I4(\DP/reg_data_in [0]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_66 [0]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -38105,7 +38130,7 @@ module z80_0_decoder
         .I2(ld_STRL),
         .I3(ld_STRH),
         .I4(\DP/reg_data_in [0]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_25 [0]));
   LUT6 #(
     .INIT(64'hBBBBBBBABABABBBA)) 
@@ -38193,7 +38218,7 @@ module z80_0_decoder
         .I2(ld_IXH),
         .I3(ld_IXL),
         .I4(\DP/reg_data_in [0]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(D[0]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -38203,7 +38228,7 @@ module z80_0_decoder
         .I2(ld_IXH),
         .I3(ld_IXL),
         .I4(\DP/reg_data_in [0]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_62 [0]));
   LUT6 #(
     .INIT(64'h8F80FFFF8F800000)) 
@@ -38855,7 +38880,7 @@ module z80_0_decoder
        (.I0(\value[7]_i_21__7_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
-        .I3(\value[7]_i_15__7_n_0 ),
+        .I3(\value[7]_i_15__8_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
         .O(\value[15]_i_11_n_0 ));
@@ -38865,7 +38890,7 @@ module z80_0_decoder
        (.I0(\value[7]_i_14__7_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
-        .I3(\value[7]_i_5__5_n_0 ),
+        .I3(\value[7]_i_5__4_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
         .O(\value[15]_i_12_n_0 ));
@@ -39158,7 +39183,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h00E2FFFF00E20000)) 
     \value[1]_i_11__1 
-       (.I0(\value[7]_i_5__5_n_0 ),
+       (.I0(\value[7]_i_5__4_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
         .I2(\value[0]_i_7__8_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
@@ -39181,7 +39206,7 @@ module z80_0_decoder
        (.I0(\FSM_sequential_state[7]_i_25_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(\FSM_sequential_state_reg_n_0_[8] ),
-        .I3(\value[7]_i_27__6_n_0 ),
+        .I3(\value[7]_i_27__7_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[9] ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[1]_i_12__1_n_0 ));
@@ -39208,9 +39233,9 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'hFFE200E200000000)) 
     \value[1]_i_14__1 
-       (.I0(\value[7]_i_28__8_n_0 ),
+       (.I0(\value[7]_i_28__7_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
-        .I2(\value[7]_i_28__7_n_0 ),
+        .I2(\value[7]_i_28__6_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
         .I4(\value[1]_i_24__0_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
@@ -39327,7 +39352,7 @@ module z80_0_decoder
         .I2(ld_IYH),
         .I3(ld_IYL),
         .I4(\DP/reg_data_in [1]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_22 [1]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -39337,7 +39362,7 @@ module z80_0_decoder
         .I2(ld_IYH),
         .I3(ld_IYL),
         .I4(\DP/reg_data_in [1]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_63 [1]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -39347,7 +39372,7 @@ module z80_0_decoder
         .I2(ld_SPH),
         .I3(ld_SPL),
         .I4(\DP/reg_data_in [1]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_23 [1]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -39357,7 +39382,7 @@ module z80_0_decoder
         .I2(ld_SPH),
         .I3(ld_SPL),
         .I4(\DP/reg_data_in [1]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_64 [1]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -39367,7 +39392,7 @@ module z80_0_decoder
         .I2(ld_PCH),
         .I3(ld_PCL),
         .I4(\DP/reg_data_in [1]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_24 [1]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -39377,7 +39402,7 @@ module z80_0_decoder
         .I2(ld_PCH),
         .I3(ld_PCL),
         .I4(\DP/reg_data_in [1]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_65 [1]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -39387,7 +39412,7 @@ module z80_0_decoder
         .I2(ld_STRL),
         .I3(ld_STRH),
         .I4(\DP/reg_data_in [1]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_66 [1]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -39397,7 +39422,7 @@ module z80_0_decoder
         .I2(ld_STRL),
         .I3(ld_STRH),
         .I4(\DP/reg_data_in [1]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_25 [1]));
   (* SOFT_HLUTNM = "soft_lutpair198" *) 
   LUT3 #(
@@ -39485,7 +39510,7 @@ module z80_0_decoder
         .I2(ld_IXH),
         .I3(ld_IXL),
         .I4(\DP/reg_data_in [1]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(D[1]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -39495,7 +39520,7 @@ module z80_0_decoder
         .I2(ld_IXH),
         .I3(ld_IXL),
         .I4(\DP/reg_data_in [1]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_62 [1]));
   LUT6 #(
     .INIT(64'h8F80FFFF8F800000)) 
@@ -39540,7 +39565,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h00E2FFFF00E20000)) 
     \value[1]_i_22 
-       (.I0(\value[7]_i_26__3_n_0 ),
+       (.I0(\value[7]_i_27__4_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[9] ),
         .I2(\value[1]_i_27__0_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
@@ -39595,7 +39620,7 @@ module z80_0_decoder
        (.I0(alu_op16_out),
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
         .I2(\FSM_sequential_state_reg_n_0_[9] ),
-        .I3(\value[7]_i_11__7_n_0 ),
+        .I3(\value[7]_i_11__6_n_0 ),
         .I4(out[0]),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[1]_i_25_n_0 ));
@@ -39953,7 +39978,7 @@ module z80_0_decoder
     \value[1]_i_6__7 
        (.I0(\value[1]_i_15__1_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
-        .I2(\value[7]_i_24__4_n_0 ),
+        .I2(\value[7]_i_24__3_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[6] ),
         .I4(\FSM_sequential_state_reg_n_0_[5] ),
         .I5(\value[1]_i_16__0_n_0 ),
@@ -40048,7 +40073,7 @@ module z80_0_decoder
     .INIT(64'h33F33033FFFFF3FB)) 
     \value[1]_i_9__2 
        (.I0(\value_reg[5] ),
-        .I1(\value[7]_i_18__2_n_0 ),
+        .I1(\value[7]_i_18__1_n_0 ),
         .I2(\value[7]_i_19__0_n_0 ),
         .I3(\value_reg[5]_4 ),
         .I4(\value_reg[5]_5 ),
@@ -40254,7 +40279,7 @@ module z80_0_decoder
         .I2(ld_IYH),
         .I3(ld_IYL),
         .I4(\DP/reg_data_in [2]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_22 [2]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -40264,7 +40289,7 @@ module z80_0_decoder
         .I2(ld_IYH),
         .I3(ld_IYL),
         .I4(\DP/reg_data_in [2]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_63 [2]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -40274,7 +40299,7 @@ module z80_0_decoder
         .I2(ld_SPH),
         .I3(ld_SPL),
         .I4(\DP/reg_data_in [2]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_23 [2]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -40284,7 +40309,7 @@ module z80_0_decoder
         .I2(ld_SPH),
         .I3(ld_SPL),
         .I4(\DP/reg_data_in [2]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_64 [2]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -40294,7 +40319,7 @@ module z80_0_decoder
         .I2(ld_PCH),
         .I3(ld_PCL),
         .I4(\DP/reg_data_in [2]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_24 [2]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -40304,7 +40329,7 @@ module z80_0_decoder
         .I2(ld_PCH),
         .I3(ld_PCL),
         .I4(\DP/reg_data_in [2]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_65 [2]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -40314,7 +40339,7 @@ module z80_0_decoder
         .I2(ld_STRL),
         .I3(ld_STRH),
         .I4(\DP/reg_data_in [2]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_66 [2]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -40324,7 +40349,7 @@ module z80_0_decoder
         .I2(ld_STRL),
         .I3(ld_STRH),
         .I4(\DP/reg_data_in [2]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_25 [2]));
   LUT5 #(
     .INIT(32'hB8BBB888)) 
@@ -40341,7 +40366,7 @@ module z80_0_decoder
     \value[2]_i_1__19 
        (.I0(\value_reg[7]_114 [2]),
         .I1(\value_reg[0]_3 ),
-        .I2(\value[2]_i_2__8_n_0 ),
+        .I2(\value[2]_i_2__9_n_0 ),
         .O(\value_reg[7]_72 [2]));
   (* SOFT_HLUTNM = "soft_lutpair257" *) 
   LUT3 #(
@@ -40354,7 +40379,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'hFFFFF888F888F888)) 
     \value[2]_i_1__22 
-       (.I0(\value[2]_i_2__7_n_0 ),
+       (.I0(\value[2]_i_2__8_n_0 ),
         .I1(\value[14]_i_3_n_0 ),
         .I2(1'b0),
         .I3(1'b0),
@@ -40411,7 +40436,7 @@ module z80_0_decoder
         .I2(ld_IXH),
         .I3(ld_IXL),
         .I4(\DP/reg_data_in [2]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(D[2]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -40421,7 +40446,7 @@ module z80_0_decoder
         .I2(ld_IXH),
         .I3(ld_IXL),
         .I4(\DP/reg_data_in [2]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_62 [2]));
   LUT6 #(
     .INIT(64'h8F80FFFF8F800000)) 
@@ -40607,17 +40632,17 @@ module z80_0_decoder
         .O(\value[2]_i_2__4_n_0 ));
   LUT6 #(
     .INIT(64'hAFA08F8FAFA08080)) 
-    \value[2]_i_2__5 
+    \value[2]_i_2__6 
        (.I0(\value[2]_i_4__4_n_0 ),
         .I1(\value[2]_i_5__5_n_0 ),
-        .I2(\value[7]_i_18__2_n_0 ),
+        .I2(\value[7]_i_18__1_n_0 ),
         .I3(\value_reg[7]_74 [2]),
         .I4(\value[7]_i_19__0_n_0 ),
         .I5(\value[2]_i_6__5_n_0 ),
         .O(\DP/alu_flag_data [2]));
   LUT6 #(
     .INIT(64'hBBB8FFFFBBB80000)) 
-    \value[2]_i_2__6 
+    \value[2]_i_2__7 
        (.I0(\value[2]_i_3__6_n_0 ),
         .I1(alu_op[5]),
         .I2(\value[2]_i_4__5_n_0 ),
@@ -40627,24 +40652,24 @@ module z80_0_decoder
         .O(\DP/reg_data_in [2]));
   LUT6 #(
     .INIT(64'h44F444F4FFFF44F4)) 
-    \value[2]_i_2__7 
+    \value[2]_i_2__8 
        (.I0(\value[15]_i_9_n_0 ),
         .I1(\value_reg[2]_1 ),
         .I2(\DP/drive_value_addr [2]),
         .I3(\value[15]_i_7_n_0 ),
         .I4(\value_reg[15]_0 [2]),
         .I5(\value[15]_i_8_n_0 ),
-        .O(\value[2]_i_2__7_n_0 ));
+        .O(\value[2]_i_2__8_n_0 ));
   LUT6 #(
     .INIT(64'hFFF7A8A05F570800)) 
-    \value[2]_i_2__8 
+    \value[2]_i_2__9 
        (.I0(\value_reg[7]_28 ),
         .I1(drive_alu_data),
         .I2(\value_reg[7]_5 ),
         .I3(\DP/alu_out_data [2]),
         .I4(\value_reg[2]_1 ),
         .I5(reg_data_out[2]),
-        .O(\value[2]_i_2__8_n_0 ));
+        .O(\value[2]_i_2__9_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair2" *) 
   LUT2 #(
     .INIT(4'h2)) 
@@ -41526,7 +41551,7 @@ module z80_0_decoder
         .I2(ld_IYH),
         .I3(ld_IYL),
         .I4(\DP/reg_data_in [3]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_22 [3]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -41536,7 +41561,7 @@ module z80_0_decoder
         .I2(ld_IYH),
         .I3(ld_IYL),
         .I4(\DP/reg_data_in [3]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_63 [3]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -41546,7 +41571,7 @@ module z80_0_decoder
         .I2(ld_SPH),
         .I3(ld_SPL),
         .I4(\DP/reg_data_in [3]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_23 [3]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -41556,7 +41581,7 @@ module z80_0_decoder
         .I2(ld_SPH),
         .I3(ld_SPL),
         .I4(\DP/reg_data_in [3]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_64 [3]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -41566,7 +41591,7 @@ module z80_0_decoder
         .I2(ld_PCH),
         .I3(ld_PCL),
         .I4(\DP/reg_data_in [3]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_24 [3]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -41576,7 +41601,7 @@ module z80_0_decoder
         .I2(ld_PCH),
         .I3(ld_PCL),
         .I4(\DP/reg_data_in [3]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_65 [3]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -41586,7 +41611,7 @@ module z80_0_decoder
         .I2(ld_STRL),
         .I3(ld_STRH),
         .I4(\DP/reg_data_in [3]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_66 [3]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -41596,7 +41621,7 @@ module z80_0_decoder
         .I2(ld_STRL),
         .I3(ld_STRH),
         .I4(\DP/reg_data_in [3]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_25 [3]));
   (* SOFT_HLUTNM = "soft_lutpair216" *) 
   LUT3 #(
@@ -41682,7 +41707,7 @@ module z80_0_decoder
         .I2(ld_IXH),
         .I3(ld_IXL),
         .I4(\DP/reg_data_in [3]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(D[3]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -41692,7 +41717,7 @@ module z80_0_decoder
         .I2(ld_IXH),
         .I3(ld_IXL),
         .I4(\DP/reg_data_in [3]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_62 [3]));
   LUT6 #(
     .INIT(64'h8F80FFFF8F800000)) 
@@ -42495,7 +42520,7 @@ module z80_0_decoder
         .I2(ld_IXH),
         .I3(ld_IXL),
         .I4(\DP/reg_data_in [4]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(D[4]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -42505,7 +42530,7 @@ module z80_0_decoder
         .I2(ld_IXH),
         .I3(ld_IXL),
         .I4(\DP/reg_data_in [4]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_62 [4]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -42515,7 +42540,7 @@ module z80_0_decoder
         .I2(ld_IYH),
         .I3(ld_IYL),
         .I4(\DP/reg_data_in [4]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_22 [4]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -42525,7 +42550,7 @@ module z80_0_decoder
         .I2(ld_IYH),
         .I3(ld_IYL),
         .I4(\DP/reg_data_in [4]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_63 [4]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -42535,7 +42560,7 @@ module z80_0_decoder
         .I2(ld_SPH),
         .I3(ld_SPL),
         .I4(\DP/reg_data_in [4]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_23 [4]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -42545,7 +42570,7 @@ module z80_0_decoder
         .I2(ld_SPH),
         .I3(ld_SPL),
         .I4(\DP/reg_data_in [4]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_64 [4]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -42555,7 +42580,7 @@ module z80_0_decoder
         .I2(ld_PCH),
         .I3(ld_PCL),
         .I4(\DP/reg_data_in [4]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_24 [4]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -42565,7 +42590,7 @@ module z80_0_decoder
         .I2(ld_PCH),
         .I3(ld_PCL),
         .I4(\DP/reg_data_in [4]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_65 [4]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -42575,7 +42600,7 @@ module z80_0_decoder
         .I2(ld_STRL),
         .I3(ld_STRH),
         .I4(\DP/reg_data_in [4]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_66 [4]));
   LUT6 #(
     .INIT(64'h8F808F8F8F808080)) 
@@ -42595,7 +42620,7 @@ module z80_0_decoder
         .I2(ld_STRL),
         .I3(ld_STRH),
         .I4(\DP/reg_data_in [4]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_25 [4]));
   LUT6 #(
     .INIT(64'h88B8BBBB88B88888)) 
@@ -42987,7 +43012,7 @@ module z80_0_decoder
        (.I0(\value[4]_i_8__5_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[1] ),
         .I2(\FSM_sequential_state_reg_n_0_[6] ),
-        .I3(\value[7]_i_36__4_n_0 ),
+        .I3(\value[7]_i_36__3_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[7] ),
         .I5(\FSM_sequential_state_reg_n_0_[5] ),
         .O(\value[4]_i_4__7_n_0 ));
@@ -43139,7 +43164,7 @@ module z80_0_decoder
        (.I0(\value[4]_i_13_n_0 ),
         .I1(\value[7]_i_19__0_n_0 ),
         .I2(\value_reg[4]_i_14_n_0 ),
-        .I3(\value[7]_i_18__2_n_0 ),
+        .I3(\value[7]_i_18__1_n_0 ),
         .I4(\value[4]_i_15_n_0 ),
         .O(\DP/alu_flag_data [4]));
   LUT6 #(
@@ -43325,7 +43350,7 @@ module z80_0_decoder
         .I2(ld_IYH),
         .I3(ld_IYL),
         .I4(\DP/reg_data_in [5]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_22 [5]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -43335,7 +43360,7 @@ module z80_0_decoder
         .I2(ld_IYH),
         .I3(ld_IYL),
         .I4(\DP/reg_data_in [5]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_63 [5]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -43345,7 +43370,7 @@ module z80_0_decoder
         .I2(ld_SPH),
         .I3(ld_SPL),
         .I4(\DP/reg_data_in [5]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_23 [5]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -43355,7 +43380,7 @@ module z80_0_decoder
         .I2(ld_SPH),
         .I3(ld_SPL),
         .I4(\DP/reg_data_in [5]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_64 [5]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -43365,7 +43390,7 @@ module z80_0_decoder
         .I2(ld_PCH),
         .I3(ld_PCL),
         .I4(\DP/reg_data_in [5]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_24 [5]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -43375,7 +43400,7 @@ module z80_0_decoder
         .I2(ld_PCH),
         .I3(ld_PCL),
         .I4(\DP/reg_data_in [5]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_65 [5]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -43385,7 +43410,7 @@ module z80_0_decoder
         .I2(ld_STRL),
         .I3(ld_STRH),
         .I4(\DP/reg_data_in [5]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_66 [5]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -43395,7 +43420,7 @@ module z80_0_decoder
         .I2(ld_STRL),
         .I3(ld_STRH),
         .I4(\DP/reg_data_in [5]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_25 [5]));
   (* SOFT_HLUTNM = "soft_lutpair217" *) 
   LUT3 #(
@@ -43481,7 +43506,7 @@ module z80_0_decoder
         .I2(ld_IXH),
         .I3(ld_IXL),
         .I4(\DP/reg_data_in [5]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(D[5]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -43491,7 +43516,7 @@ module z80_0_decoder
         .I2(ld_IXH),
         .I3(ld_IXL),
         .I4(\DP/reg_data_in [5]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_62 [5]));
   LUT6 #(
     .INIT(64'h8F80FFFF8F800000)) 
@@ -43750,7 +43775,7 @@ module z80_0_decoder
        (.I0(\value_reg[5]_5 ),
         .I1(\value_reg[5]_4 ),
         .I2(\value[7]_i_19__0_n_0 ),
-        .I3(\value[7]_i_18__2_n_0 ),
+        .I3(\value[7]_i_18__1_n_0 ),
         .O(\value[5]_i_4__4_n_0 ));
   LUT4 #(
     .INIT(16'hB800)) 
@@ -44226,7 +44251,7 @@ module z80_0_decoder
         .I2(ld_IXH),
         .I3(ld_IXL),
         .I4(\DP/reg_data_in [6]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(D[6]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -44236,7 +44261,7 @@ module z80_0_decoder
         .I2(ld_IXH),
         .I3(ld_IXL),
         .I4(\DP/reg_data_in [6]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_62 [6]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -44246,7 +44271,7 @@ module z80_0_decoder
         .I2(ld_IYH),
         .I3(ld_IYL),
         .I4(\DP/reg_data_in [6]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_22 [6]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -44256,7 +44281,7 @@ module z80_0_decoder
         .I2(ld_IYH),
         .I3(ld_IYL),
         .I4(\DP/reg_data_in [6]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_63 [6]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -44266,7 +44291,7 @@ module z80_0_decoder
         .I2(ld_SPH),
         .I3(ld_SPL),
         .I4(\DP/reg_data_in [6]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_23 [6]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -44276,7 +44301,7 @@ module z80_0_decoder
         .I2(ld_SPH),
         .I3(ld_SPL),
         .I4(\DP/reg_data_in [6]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_64 [6]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -44286,7 +44311,7 @@ module z80_0_decoder
         .I2(ld_PCH),
         .I3(ld_PCL),
         .I4(\DP/reg_data_in [6]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_24 [6]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -44296,7 +44321,7 @@ module z80_0_decoder
         .I2(ld_PCH),
         .I3(ld_PCL),
         .I4(\DP/reg_data_in [6]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_65 [6]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -44306,7 +44331,7 @@ module z80_0_decoder
         .I2(ld_STRL),
         .I3(ld_STRH),
         .I4(\DP/reg_data_in [6]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_66 [6]));
   LUT6 #(
     .INIT(64'h8F808F8F8F808080)) 
@@ -44326,7 +44351,7 @@ module z80_0_decoder
         .I2(ld_STRL),
         .I3(ld_STRH),
         .I4(\DP/reg_data_in [6]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_25 [6]));
   LUT5 #(
     .INIT(32'hB8BBB888)) 
@@ -44612,7 +44637,7 @@ module z80_0_decoder
     \value[6]_i_2__5 
        (.I0(\value[6]_i_4__4_n_0 ),
         .I1(\value_reg[6]_i_5__0_n_0 ),
-        .I2(\value[7]_i_18__2_n_0 ),
+        .I2(\value[7]_i_18__1_n_0 ),
         .I3(\value_reg[6]_i_6_n_0 ),
         .I4(\value[7]_i_19__0_n_0 ),
         .I5(\value[6]_i_7__4_n_0 ),
@@ -45541,7 +45566,7 @@ module z80_0_decoder
     .INIT(4'h2)) 
     \value[7]_i_1 
        (.I0(ld_IXH),
-        .I1(\value[7]_i_4__13_n_0 ),
+        .I1(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_34 ));
   LUT5 #(
     .INIT(32'hFFFF0047)) 
@@ -45637,36 +45662,38 @@ module z80_0_decoder
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(\value[7]_i_25_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
-        .I4(\value[7]_i_5__5_n_0 ),
+        .I4(\value[7]_i_5__4_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_10__0_n_0 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
     \value[7]_i_10__1 
        (.I0(\value_reg[7]_i_20_n_0 ),
-        .I1(\value[7]_i_21__3_n_0 ),
+        .I1(\value[7]_i_21__4_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[1] ),
         .I3(\value[7]_i_22__0_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[5] ),
         .I5(\value[7]_i_23__2_n_0 ),
         .O(\value[7]_i_10__1_n_0 ));
   LUT6 #(
-    .INIT(64'h08FF080000000000)) 
+    .INIT(64'h0004FFFF00040000)) 
     \value[7]_i_10__10 
+       (.I0(\FSM_sequential_state_reg_n_0_[8] ),
+        .I1(\addr_bus[15]_INST_0_i_20_n_0 ),
+        .I2(\FSM_sequential_state_reg_n_0_[9] ),
+        .I3(\FSM_sequential_state_reg_n_0_[7] ),
+        .I4(\FSM_sequential_state_reg_n_0_[6] ),
+        .I5(\value[7]_i_23__6_n_0 ),
+        .O(\value[7]_i_10__10_n_0 ));
+  LUT6 #(
+    .INIT(64'h08FF080000000000)) 
+    \value[7]_i_10__11 
        (.I0(out[0]),
-        .I1(\value[7]_i_23__8_n_0 ),
+        .I1(\value[7]_i_23__9_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[3] ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
         .I4(\value[7]_i_21__10_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_10__10_n_0 ));
-  LUT4 #(
-    .INIT(16'h0080)) 
-    \value[7]_i_10__11 
-       (.I0(\FSM_sequential_state_reg_n_0_[8] ),
-        .I1(\value[7]_i_25__9_n_0 ),
-        .I2(\FSM_sequential_state_reg_n_0_[9] ),
-        .I3(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_10__11_n_0 ));
   LUT6 #(
     .INIT(64'h8800040008101000)) 
@@ -45685,14 +45712,14 @@ module z80_0_decoder
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(M1_L_INST_0_i_21_n_0),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
-        .I4(\value[7]_i_26__6_n_0 ),
+        .I4(\value[7]_i_26__5_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_10__3_n_0 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
     \value[7]_i_10__4 
        (.I0(\value[7]_i_20__8_n_0 ),
-        .I1(\value[7]_i_21__0_n_0 ),
+        .I1(\value[7]_i_21__1_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[6] ),
         .I3(\value[7]_i_7__8_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[7] ),
@@ -45711,7 +45738,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h0300000080800000)) 
     \value[7]_i_10__6 
-       (.I0(\value[7]_i_21__4_n_0 ),
+       (.I0(\value[7]_i_21__5_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
         .I3(\value[7]_i_22__5_n_0 ),
@@ -45719,43 +45746,43 @@ module z80_0_decoder
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
         .O(\value[7]_i_10__6_n_0 ));
   LUT6 #(
-    .INIT(64'hF0FFF00088008800)) 
+    .INIT(64'hF3E2C0E200000000)) 
     \value[7]_i_10__7 
-       (.I0(M1_L_INST_0_i_23_n_0),
-        .I1(ld_H0),
-        .I2(\value[7]_i_24__7_n_0 ),
-        .I3(\FSM_sequential_state_reg_n_0_[7] ),
-        .I4(\value[7]_i_25__6_n_0 ),
-        .I5(\FSM_sequential_state_reg_n_0_[8] ),
+       (.I0(\value[7]_i_22__6_n_0 ),
+        .I1(\FSM_sequential_state_reg_n_0_[8] ),
+        .I2(\value[7]_i_23__8_n_0 ),
+        .I3(\value[7]_i_24__10_n_0 ),
+        .I4(\value[7]_i_25__5_n_0 ),
+        .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_10__7_n_0 ));
   LUT6 #(
-    .INIT(64'hA000A00000CF00C0)) 
+    .INIT(64'hF0FFF00088008800)) 
     \value[7]_i_10__8 
-       (.I0(\value[7]_i_24__10_n_0 ),
-        .I1(\addr_bus[15]_INST_0_i_20_n_0 ),
-        .I2(\FSM_sequential_state_reg_n_0_[7] ),
-        .I3(\FSM_sequential_state_reg_n_0_[9] ),
-        .I4(\value[7]_i_27__6_n_0 ),
+       (.I0(M1_L_INST_0_i_23_n_0),
+        .I1(ld_H0),
+        .I2(\value[7]_i_24__6_n_0 ),
+        .I3(\FSM_sequential_state_reg_n_0_[7] ),
+        .I4(\value[7]_i_25__7_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_10__8_n_0 ));
   LUT6 #(
-    .INIT(64'h0004FFFF00040000)) 
+    .INIT(64'hA000A00000CF00C0)) 
     \value[7]_i_10__9 
-       (.I0(\FSM_sequential_state_reg_n_0_[8] ),
+       (.I0(\value[7]_i_24__9_n_0 ),
         .I1(\addr_bus[15]_INST_0_i_20_n_0 ),
-        .I2(\FSM_sequential_state_reg_n_0_[9] ),
-        .I3(\FSM_sequential_state_reg_n_0_[7] ),
-        .I4(\FSM_sequential_state_reg_n_0_[6] ),
-        .I5(\value[7]_i_23__6_n_0 ),
+        .I2(\FSM_sequential_state_reg_n_0_[7] ),
+        .I3(\FSM_sequential_state_reg_n_0_[9] ),
+        .I4(\value[7]_i_27__7_n_0 ),
+        .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_10__9_n_0 ));
   LUT6 #(
     .INIT(64'hB888B888B8BBB888)) 
     \value[7]_i_11 
        (.I0(\value[7]_i_26__0_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
-        .I2(\value[7]_i_28__7_n_0 ),
+        .I2(\value[7]_i_28__6_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
-        .I4(\value[7]_i_32__8_n_0 ),
+        .I4(\value[7]_i_33__4_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_11_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair31" *) 
@@ -45771,7 +45798,7 @@ module z80_0_decoder
        (.I0(\FSM_sequential_state_reg_n_0_[8] ),
         .I1(IORQ_L_INST_0_i_8_n_0),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
-        .I3(\value[7]_i_5__5_n_0 ),
+        .I3(\value[7]_i_5__4_n_0 ),
         .I4(\value[7]_i_19__7_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
         .O(\value[7]_i_11__0_n_0 ));
@@ -45785,32 +45812,32 @@ module z80_0_decoder
         .I4(\FSM_sequential_state_reg_n_0_[5] ),
         .I5(\value[7]_i_23__0_n_0 ),
         .O(\value[7]_i_11__1_n_0 ));
-  LUT4 #(
-    .INIT(16'h0008)) 
-    \value[7]_i_11__10 
-       (.I0(out[0]),
-        .I1(\FSM_sequential_state_reg_n_0_[3] ),
-        .I2(out[1]),
-        .I3(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_11__10_n_0 ));
   LUT5 #(
     .INIT(32'h00000001)) 
-    \value[7]_i_11__11 
+    \value[7]_i_11__10 
        (.I0(\FSM_sequential_state_reg_n_0_[8] ),
         .I1(out[0]),
         .I2(out[1]),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
         .I4(\FSM_sequential_state_reg_n_0_[7] ),
-        .O(\value[7]_i_11__11_n_0 ));
+        .O(\value[7]_i_11__10_n_0 ));
   LUT6 #(
     .INIT(64'h0000008000000000)) 
-    \value[7]_i_11__12 
+    \value[7]_i_11__11 
        (.I0(out[0]),
         .I1(out[1]),
         .I2(\value_reg[7]_4 ),
         .I3(\op1_reg[3]_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[3] ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
+        .O(\value[7]_i_11__11_n_0 ));
+  LUT4 #(
+    .INIT(16'h0080)) 
+    \value[7]_i_11__12 
+       (.I0(\FSM_sequential_state_reg_n_0_[8] ),
+        .I1(\value[7]_i_26__10_n_0 ),
+        .I2(\FSM_sequential_state_reg_n_0_[9] ),
+        .I3(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_11__12_n_0 ));
   LUT6 #(
     .INIT(64'hAAAAABFBFFFFABFB)) 
@@ -45839,7 +45866,7 @@ module z80_0_decoder
         .I1(\value[7]_i_16__11_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[6] ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
-        .I4(\value[7]_i_24__8_n_0 ),
+        .I4(\value[7]_i_24__7_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_11__3_n_0 ));
   LUT6 #(
@@ -45853,50 +45880,48 @@ module z80_0_decoder
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_11__4_n_0 ));
   LUT6 #(
-    .INIT(64'hA0FFA0000C000C00)) 
-    \value[7]_i_11__5 
-       (.I0(\addr_bus[15]_INST_0_i_20_n_0 ),
-        .I1(\value[7]_i_26__3_n_0 ),
-        .I2(\FSM_sequential_state_reg_n_0_[9] ),
-        .I3(\FSM_sequential_state_reg_n_0_[7] ),
-        .I4(\value[7]_i_25__6_n_0 ),
-        .I5(\FSM_sequential_state_reg_n_0_[8] ),
-        .O(\value[7]_i_11__5_n_0 ));
-  LUT6 #(
     .INIT(64'h0200000000001000)) 
-    \value[7]_i_11__6 
+    \value[7]_i_11__5 
        (.I0(\FSM_sequential_state_reg_n_0_[6] ),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
         .I2(out[0]),
-        .I3(\value[7]_i_11__7_n_0 ),
+        .I3(\value[7]_i_11__6_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[9] ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
-        .O(\value[7]_i_11__6_n_0 ));
+        .O(\value[7]_i_11__5_n_0 ));
   LUT2 #(
     .INIT(4'h2)) 
-    \value[7]_i_11__7 
+    \value[7]_i_11__6 
        (.I0(out[1]),
         .I1(\FSM_sequential_state_reg_n_0_[3] ),
-        .O(\value[7]_i_11__7_n_0 ));
+        .O(\value[7]_i_11__6_n_0 ));
   LUT6 #(
     .INIT(64'hA0A0A0A0C0CFC0C0)) 
-    \value[7]_i_11__8 
-       (.I0(\value[7]_i_26__7_n_0 ),
+    \value[7]_i_11__7 
+       (.I0(\value[7]_i_26__6_n_0 ),
         .I1(\value[7]_i_27__8_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
-        .I4(\value[7]_i_27__6_n_0 ),
+        .I4(\value[7]_i_27__7_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
-        .O(\value[7]_i_11__8_n_0 ));
+        .O(\value[7]_i_11__7_n_0 ));
   LUT6 #(
     .INIT(64'h0000000020FF2000)) 
-    \value[7]_i_11__9 
+    \value[7]_i_11__8 
        (.I0(\value[7]_i_24__11_n_0 ),
         .I1(p_1_in[2]),
         .I2(M1_L_INST_0_i_40_n_0),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
         .I4(\addr_bus[15]_INST_0_i_19_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
+        .O(\value[7]_i_11__8_n_0 ));
+  LUT4 #(
+    .INIT(16'h0008)) 
+    \value[7]_i_11__9 
+       (.I0(out[0]),
+        .I1(\FSM_sequential_state_reg_n_0_[3] ),
+        .I2(out[1]),
+        .I3(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\value[7]_i_11__9_n_0 ));
   LUT6 #(
     .INIT(64'h1FDF1F1F13D31313)) 
@@ -45905,7 +45930,7 @@ module z80_0_decoder
         .I1(\value_reg[0]_0 ),
         .I2(alu_op[4]),
         .I3(\value[7]_i_38__1_n_0 ),
-        .I4(\value[7]_i_39__2_n_0 ),
+        .I4(\value[7]_i_39__1_n_0 ),
         .I5(\value_reg[7]_i_40_n_0 ),
         .O(\value[7]_i_12_n_0 ));
   LUT6 #(
@@ -45916,12 +45941,12 @@ module z80_0_decoder
         .I2(\FSM_sequential_state_reg_n_0_[5] ),
         .I3(\value[7]_i_26__1_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[6] ),
-        .I5(\value[7]_i_27__5_n_0 ),
+        .I5(\value[7]_i_27__6_n_0 ),
         .O(\value[7]_i_12__0_n_0 ));
   LUT6 #(
     .INIT(64'h3838080803000000)) 
     \value[7]_i_12__1 
-       (.I0(\value[7]_i_26__6_n_0 ),
+       (.I0(\value[7]_i_26__5_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
         .I3(\value[7]_i_20__12_n_0 ),
@@ -45931,9 +45956,9 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'hB800FFFFB8000000)) 
     \value[7]_i_12__10 
-       (.I0(\value[7]_i_22__6_n_0 ),
+       (.I0(\value[7]_i_22__7_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
-        .I2(\value[7]_i_27__4_n_0 ),
+        .I2(\value[7]_i_27__5_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
         .I4(\FSM_sequential_state_reg_n_0_[6] ),
         .I5(\value[7]_i_28__9_n_0 ),
@@ -45941,11 +45966,11 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'hA000A000C00FC000)) 
     \value[7]_i_12__11 
-       (.I0(\value[7]_i_25__7_n_0 ),
-        .I1(\value[7]_i_26__8_n_0 ),
+       (.I0(\value[7]_i_25__8_n_0 ),
+        .I1(\value[7]_i_26__7_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
-        .I4(\value[7]_i_27__6_n_0 ),
+        .I4(\value[7]_i_27__7_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_12__11_n_0 ));
   LUT6 #(
@@ -45961,7 +45986,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h0000000080808380)) 
     \value[7]_i_12__13 
-       (.I0(\value[7]_i_25__8_n_0 ),
+       (.I0(\value[7]_i_25__9_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(\FSM_sequential_state_reg_n_0_[8] ),
         .I3(\addr_bus[15]_INST_0_i_20_n_0 ),
@@ -45969,80 +45994,80 @@ module z80_0_decoder
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_12__13_n_0 ));
   LUT6 #(
-    .INIT(64'h22002200F0FFF000)) 
-    \value[7]_i_12__2 
-       (.I0(M1_L_INST_0_i_39_n_0),
-        .I1(\FSM_sequential_state_reg_n_0_[8] ),
-        .I2(\value[7]_i_13__13_n_0 ),
-        .I3(\FSM_sequential_state_reg_n_0_[6] ),
-        .I4(\value[7]_i_27__7_n_0 ),
-        .I5(\FSM_sequential_state_reg_n_0_[7] ),
-        .O(\value[7]_i_12__2_n_0 ));
-  LUT6 #(
     .INIT(64'hC0A0C0A00F000000)) 
-    \value[7]_i_12__3 
+    \value[7]_i_12__2 
        (.I0(\value[7]_i_14__7_n_0 ),
         .I1(\data_out[7]_INST_0_i_35_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[5] ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
         .I4(\value[7]_i_20__5_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
-        .O(\value[7]_i_12__3_n_0 ));
+        .O(\value[7]_i_12__2_n_0 ));
   LUT6 #(
     .INIT(64'h0000000000800000)) 
-    \value[7]_i_12__4 
+    \value[7]_i_12__3 
        (.I0(\FSM_sequential_state_reg_n_0_[7] ),
-        .I1(\value[7]_i_5__5_n_0 ),
+        .I1(\value[7]_i_5__4_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[8] ),
         .I3(\op1_reg_n_0_[0] ),
         .I4(\op1_reg_n_0_[2] ),
         .I5(\op1_reg_n_0_[1] ),
-        .O(\value[7]_i_12__4_n_0 ));
+        .O(\value[7]_i_12__3_n_0 ));
   LUT6 #(
     .INIT(64'h4000070000A00020)) 
-    \value[7]_i_12__5 
+    \value[7]_i_12__4 
        (.I0(\FSM_sequential_state_reg_n_0_[7] ),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
         .I2(out[0]),
         .I3(out[1]),
         .I4(\FSM_sequential_state_reg_n_0_[3] ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_12__5_n_0 ));
+        .O(\value[7]_i_12__4_n_0 ));
   LUT6 #(
     .INIT(64'h0020FFFF00200000)) 
-    \value[7]_i_12__6 
+    \value[7]_i_12__5 
        (.I0(p_1_in[1]),
         .I1(p_1_in[0]),
         .I2(M1_L_INST_0_i_40_n_0),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\value[7]_i_25__2_n_0 ),
-        .O(\value[7]_i_12__6_n_0 ));
+        .O(\value[7]_i_12__5_n_0 ));
   LUT6 #(
     .INIT(64'h0080FFFF00800000)) 
-    \value[7]_i_12__7 
+    \value[7]_i_12__6 
        (.I0(\value[7]_i_25__11_n_0 ),
         .I1(\value[7]_i_26__11_n_0 ),
         .I2(out[0]),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\value[7]_i_27__3_n_0 ),
-        .O(\value[7]_i_12__7_n_0 ));
+        .O(\value[7]_i_12__6_n_0 ));
   LUT6 #(
     .INIT(64'h0020001000000401)) 
-    \value[7]_i_12__8 
+    \value[7]_i_12__7 
        (.I0(\FSM_sequential_state_reg_n_0_[7] ),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
         .I2(\FSM_sequential_state_reg_n_0_[9] ),
         .I3(\FSM_sequential_state_reg_n_0_[3] ),
         .I4(out[1]),
         .I5(out[0]),
+        .O(\value[7]_i_12__7_n_0 ));
+  LUT6 #(
+    .INIT(64'hA0FFA0000C000C00)) 
+    \value[7]_i_12__8 
+       (.I0(\addr_bus[15]_INST_0_i_20_n_0 ),
+        .I1(\value[7]_i_27__4_n_0 ),
+        .I2(\FSM_sequential_state_reg_n_0_[9] ),
+        .I3(\FSM_sequential_state_reg_n_0_[7] ),
+        .I4(\value[7]_i_25__7_n_0 ),
+        .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_12__8_n_0 ));
   LUT6 #(
     .INIT(64'h00AF00A0C000C000)) 
     \value[7]_i_12__9 
-       (.I0(\value[7]_i_31__7_n_0 ),
-        .I1(\value[7]_i_24__3_n_0 ),
+       (.I0(\value[7]_i_31__8_n_0 ),
+        .I1(\value[7]_i_24__2_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[5] ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
         .I4(\value[7]_i_25__3_n_0 ),
@@ -46081,11 +46106,11 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'hC0A0C0A0000F0000)) 
     \value[7]_i_13__10 
-       (.I0(\value[7]_i_26__10_n_0 ),
+       (.I0(\value[7]_i_26__9_n_0 ),
         .I1(\value[7]_i_27__10_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[6] ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
-        .I4(\value[7]_i_28__8_n_0 ),
+        .I4(\value[7]_i_28__7_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_13__10_n_0 ));
   LUT6 #(
@@ -46094,14 +46119,14 @@ module z80_0_decoder
        (.I0(\value[7]_i_28__10_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(\FSM_sequential_state_reg_n_0_[8] ),
-        .I3(\value[7]_i_27__6_n_0 ),
+        .I3(\value[7]_i_27__7_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[9] ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_13__11_n_0 ));
   LUT6 #(
     .INIT(64'h0000000080808380)) 
     \value[7]_i_13__12 
-       (.I0(\value[7]_i_26__9_n_0 ),
+       (.I0(\value[7]_i_26__8_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(\FSM_sequential_state_reg_n_0_[8] ),
         .I3(\addr_bus[15]_INST_0_i_20_n_0 ),
@@ -46121,39 +46146,39 @@ module z80_0_decoder
     \value[7]_i_13__2 
        (.I0(\value_reg[7]_i_20_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
-        .I2(\value[7]_i_28__5_n_0 ),
+        .I2(\value[7]_i_28__4_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[6] ),
-        .I4(\value[7]_i_29__4_n_0 ),
+        .I4(\value[7]_i_29__5_n_0 ),
         .O(\value[7]_i_13__2_n_0 ));
   LUT6 #(
     .INIT(64'h33B800B800000000)) 
     \value[7]_i_13__3 
-       (.I0(\value[7]_i_26__6_n_0 ),
+       (.I0(\value[7]_i_26__5_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(M1_L_INST_0_i_39_n_0),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
-        .I4(\value[7]_i_15__7_n_0 ),
+        .I4(\value[7]_i_15__8_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_13__3_n_0 ));
   LUT6 #(
-    .INIT(64'h0000000000080300)) 
+    .INIT(64'h22002200F0FFF000)) 
     \value[7]_i_13__4 
+       (.I0(M1_L_INST_0_i_39_n_0),
+        .I1(\FSM_sequential_state_reg_n_0_[8] ),
+        .I2(\value[7]_i_13__13_n_0 ),
+        .I3(\FSM_sequential_state_reg_n_0_[6] ),
+        .I4(\value[7]_i_28__8_n_0 ),
+        .I5(\FSM_sequential_state_reg_n_0_[7] ),
+        .O(\value[7]_i_13__4_n_0 ));
+  LUT6 #(
+    .INIT(64'h0000000000080300)) 
+    \value[7]_i_13__5 
        (.I0(\FSM_sequential_state_reg_n_0_[3] ),
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
         .I2(\FSM_sequential_state_reg_n_0_[9] ),
         .I3(out[0]),
         .I4(out[1]),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
-        .O(\value[7]_i_13__4_n_0 ));
-  LUT6 #(
-    .INIT(64'hB888888888888888)) 
-    \value[7]_i_13__5 
-       (.I0(\value[7]_i_28__3_n_0 ),
-        .I1(\FSM_sequential_state_reg_n_0_[6] ),
-        .I2(\FSM_sequential_state_reg_n_0_[8] ),
-        .I3(\value[7]_i_29__5_n_0 ),
-        .I4(\FSM_sequential_state_reg_n_0_[9] ),
-        .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_13__5_n_0 ));
   LUT6 #(
     .INIT(64'h0000006020030300)) 
@@ -46188,20 +46213,20 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'hA000A000C0CFC0C0)) 
     \value[7]_i_13__9 
-       (.I0(\value[7]_i_21__2_n_0 ),
-        .I1(\value[7]_i_22__7_n_0 ),
+       (.I0(\value[7]_i_21__3_n_0 ),
+        .I1(\value[7]_i_22__8_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[5] ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
-        .I4(\value[7]_i_23__9_n_0 ),
+        .I4(\value[7]_i_23__10_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
         .O(\value[7]_i_13__9_n_0 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
     \value[7]_i_14 
-       (.I0(\value[7]_i_31__7_n_0 ),
+       (.I0(\value[7]_i_31__8_n_0 ),
         .I1(\value[7]_i_32__3_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[6] ),
-        .I3(\value[7]_i_33__4_n_0 ),
+        .I3(\value[7]_i_33__5_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[7] ),
         .I5(\value[7]_i_34__2_n_0 ),
         .O(\value[7]_i_14_n_0 ));
@@ -46209,21 +46234,21 @@ module z80_0_decoder
     .INIT(64'hA0AFA0A000C000C0)) 
     \value[7]_i_14__0 
        (.I0(\value[7]_i_23__1_n_0 ),
-        .I1(\value[7]_i_36__4_n_0 ),
+        .I1(\value[7]_i_36__3_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[5] ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
         .I4(\value[7]_i_25__4_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
         .O(\value[7]_i_14__0_n_0 ));
   LUT6 #(
-    .INIT(64'hCFA0C0A000000000)) 
+    .INIT(64'h8182421080100048)) 
     \value[7]_i_14__1 
-       (.I0(\value[7]_i_30__7_n_0 ),
-        .I1(\value[7]_i_31__8_n_0 ),
-        .I2(\FSM_sequential_state_reg_n_0_[6] ),
-        .I3(\FSM_sequential_state_reg_n_0_[8] ),
-        .I4(\value[0]_i_7__8_n_0 ),
-        .I5(\FSM_sequential_state_reg_n_0_[7] ),
+       (.I0(\FSM_sequential_state_reg_n_0_[7] ),
+        .I1(\FSM_sequential_state_reg_n_0_[8] ),
+        .I2(\FSM_sequential_state_reg_n_0_[9] ),
+        .I3(\FSM_sequential_state_reg_n_0_[3] ),
+        .I4(out[1]),
+        .I5(out[0]),
         .O(\value[7]_i_14__1_n_0 ));
   LUT6 #(
     .INIT(64'h0000002000000000)) 
@@ -46240,7 +46265,7 @@ module z80_0_decoder
     \value[7]_i_14__11 
        (.I0(\FSM_sequential_state_reg_n_0_[10] ),
         .I1(\FSM_sequential_state_reg_n_0_[1] ),
-        .I2(\value[7]_i_26__4_n_0 ),
+        .I2(\value[7]_i_26__3_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[5] ),
         .I4(\FSM_sequential_state_reg_n_0_[0] ),
         .I5(ld_H0),
@@ -46254,14 +46279,14 @@ module z80_0_decoder
         .I2(\value_reg[7]_20 ),
         .O(\value[7]_i_14__12_n_0 ));
   LUT6 #(
-    .INIT(64'h8182421080100048)) 
+    .INIT(64'hB888888888888888)) 
     \value[7]_i_14__2 
-       (.I0(\FSM_sequential_state_reg_n_0_[7] ),
-        .I1(\FSM_sequential_state_reg_n_0_[8] ),
-        .I2(\FSM_sequential_state_reg_n_0_[9] ),
-        .I3(\FSM_sequential_state_reg_n_0_[3] ),
-        .I4(out[1]),
-        .I5(out[0]),
+       (.I0(\value[7]_i_29__3_n_0 ),
+        .I1(\FSM_sequential_state_reg_n_0_[6] ),
+        .I2(\FSM_sequential_state_reg_n_0_[8] ),
+        .I3(\value[7]_i_30__6_n_0 ),
+        .I4(\FSM_sequential_state_reg_n_0_[9] ),
+        .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_14__2_n_0 ));
   LUT5 #(
     .INIT(32'h10010000)) 
@@ -46285,9 +46310,9 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'hBBB888B800000000)) 
     \value[7]_i_14__5 
-       (.I0(\value[7]_i_28__7_n_0 ),
+       (.I0(\value[7]_i_28__6_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
-        .I2(\value[7]_i_25__6_n_0 ),
+        .I2(\value[7]_i_25__7_n_0 ),
         .I3(\value[7]_i_29__10_n_0 ),
         .I4(\value[7]_i_30__8_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
@@ -46317,7 +46342,7 @@ module z80_0_decoder
        (.I0(\value[7]_i_19__10_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(\FSM_sequential_state_reg_n_0_[8] ),
-        .I3(\value[7]_i_27__6_n_0 ),
+        .I3(\value[7]_i_27__7_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[9] ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_14__8_n_0 ));
@@ -46361,7 +46386,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'hB888FFFFB8880000)) 
     \value[7]_i_15__2 
-       (.I0(\value[7]_i_26__5_n_0 ),
+       (.I0(\value[7]_i_26__4_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
         .I2(M1_L_INST_0_i_39_n_0),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
@@ -46379,60 +46404,60 @@ module z80_0_decoder
         .I5(\value[7]_i_34__4_n_0 ),
         .O(\value[7]_i_15__3_n_0 ));
   LUT6 #(
-    .INIT(64'h0000844000000088)) 
+    .INIT(64'hCFA0C0A000000000)) 
     \value[7]_i_15__4 
+       (.I0(\value[7]_i_31__7_n_0 ),
+        .I1(\value[7]_i_32__8_n_0 ),
+        .I2(\FSM_sequential_state_reg_n_0_[6] ),
+        .I3(\FSM_sequential_state_reg_n_0_[8] ),
+        .I4(\value[0]_i_7__8_n_0 ),
+        .I5(\FSM_sequential_state_reg_n_0_[7] ),
+        .O(\value[7]_i_15__4_n_0 ));
+  LUT6 #(
+    .INIT(64'h0000844000000088)) 
+    \value[7]_i_15__5 
        (.I0(\FSM_sequential_state_reg_n_0_[7] ),
         .I1(\FSM_sequential_state_reg_n_0_[9] ),
         .I2(out[1]),
         .I3(\FSM_sequential_state_reg_n_0_[3] ),
         .I4(out[0]),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
-        .O(\value[7]_i_15__4_n_0 ));
-  LUT6 #(
-    .INIT(64'hB800B80088FF8800)) 
-    \value[7]_i_15__5 
-       (.I0(\addr_bus[15]_INST_0_i_141_n_0 ),
-        .I1(\value[7]_i_25__10_n_0 ),
-        .I2(\value[7]_i_28__7_n_0 ),
-        .I3(\FSM_sequential_state_reg_n_0_[7] ),
-        .I4(\value[7]_i_5__5_n_0 ),
-        .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_15__5_n_0 ));
   LUT6 #(
-    .INIT(64'h00330000B800B800)) 
+    .INIT(64'hB800B80088FF8800)) 
     \value[7]_i_15__6 
-       (.I0(\value[7]_i_16__10_n_0 ),
-        .I1(\FSM_sequential_state_reg_n_0_[6] ),
-        .I2(\value[7]_i_28__7_n_0 ),
+       (.I0(\addr_bus[15]_INST_0_i_141_n_0 ),
+        .I1(\value[7]_i_25__10_n_0 ),
+        .I2(\value[7]_i_28__6_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
-        .I4(\value[7]_i_11__10_n_0 ),
+        .I4(\value[7]_i_5__4_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_15__6_n_0 ));
+  LUT6 #(
+    .INIT(64'h00330000B800B800)) 
+    \value[7]_i_15__7 
+       (.I0(\value[7]_i_16__10_n_0 ),
+        .I1(\FSM_sequential_state_reg_n_0_[6] ),
+        .I2(\value[7]_i_28__6_n_0 ),
+        .I3(\FSM_sequential_state_reg_n_0_[7] ),
+        .I4(\value[7]_i_11__9_n_0 ),
+        .I5(\FSM_sequential_state_reg_n_0_[8] ),
+        .O(\value[7]_i_15__7_n_0 ));
   LUT4 #(
     .INIT(16'h0800)) 
-    \value[7]_i_15__7 
+    \value[7]_i_15__8 
        (.I0(out[0]),
         .I1(out[1]),
         .I2(\FSM_sequential_state_reg_n_0_[3] ),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_15__7_n_0 ));
+        .O(\value[7]_i_15__8_n_0 ));
   LUT4 #(
     .INIT(16'h0900)) 
-    \value[7]_i_15__8 
+    \value[7]_i_15__9 
        (.I0(\FSM_sequential_state_reg_n_0_[9] ),
         .I1(\FSM_sequential_state_reg_n_0_[3] ),
         .I2(out[1]),
         .I3(out[0]),
-        .O(\value[7]_i_15__8_n_0 ));
-  LUT6 #(
-    .INIT(64'hB888B88888BB8888)) 
-    \value[7]_i_15__9 
-       (.I0(\value[7]_i_10__11_n_0 ),
-        .I1(\FSM_sequential_state_reg_n_0_[6] ),
-        .I2(\value[7]_i_32__8_n_0 ),
-        .I3(\FSM_sequential_state_reg_n_0_[7] ),
-        .I4(\value[0]_i_5__5_n_0 ),
-        .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_15__9_n_0 ));
   LUT6 #(
     .INIT(64'hCFCACFCFC5C0C0C0)) 
@@ -46448,7 +46473,7 @@ module z80_0_decoder
     .INIT(64'h0FFF0F0044444444)) 
     \value[7]_i_16__1 
        (.I0(\value[7]_i_39__4_n_0 ),
-        .I1(\value[7]_i_40_n_0 ),
+        .I1(\value[7]_i_40__0_n_0 ),
         .I2(\value[7]_i_41_n_0 ),
         .I3(\value[7]_i_42__4_n_0 ),
         .I4(\value_reg[7]_74 [7]),
@@ -46493,12 +46518,12 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'hB800FFFFB8000000)) 
     \value[7]_i_16__4 
-       (.I0(\value[7]_i_35__1_n_0 ),
+       (.I0(\value[7]_i_35__2_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(\value[7]_i_36__1_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
         .I4(\FSM_sequential_state_reg_n_0_[5] ),
-        .I5(\value[7]_i_37__2_n_0 ),
+        .I5(\value[7]_i_37__3_n_0 ),
         .O(\value[7]_i_16__4_n_0 ));
   LUT6 #(
     .INIT(64'h000000008F008000)) 
@@ -46513,7 +46538,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h88B8BBBB88B88888)) 
     \value[7]_i_16__6 
-       (.I0(\value[7]_i_24__9_n_0 ),
+       (.I0(\value[7]_i_24__8_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
         .I2(\value[7]_i_49__2_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
@@ -46531,24 +46556,24 @@ module z80_0_decoder
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_16__7_n_0 ));
   LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \value[7]_i_16__8 
-       (.I0(\value[7]_i_33__6_n_0 ),
-        .I1(\op0[7]_i_4_n_0 ),
-        .I2(\FSM_sequential_state_reg_n_0_[6] ),
-        .I3(\value[7]_i_34__5_n_0 ),
-        .I4(\FSM_sequential_state_reg_n_0_[7] ),
-        .I5(\value[7]_i_35__3_n_0 ),
-        .O(\value[7]_i_16__8_n_0 ));
-  LUT6 #(
     .INIT(64'h0000000008200000)) 
-    \value[7]_i_16__9 
+    \value[7]_i_16__8 
        (.I0(\FSM_sequential_state_reg_n_0_[8] ),
         .I1(out[1]),
         .I2(\FSM_sequential_state_reg_n_0_[3] ),
         .I3(out[0]),
         .I4(\FSM_sequential_state_reg_n_0_[9] ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
+        .O(\value[7]_i_16__8_n_0 ));
+  LUT6 #(
+    .INIT(64'hB888B88888BB8888)) 
+    \value[7]_i_16__9 
+       (.I0(\value[7]_i_11__12_n_0 ),
+        .I1(\FSM_sequential_state_reg_n_0_[6] ),
+        .I2(\value[7]_i_33__4_n_0 ),
+        .I3(\FSM_sequential_state_reg_n_0_[7] ),
+        .I4(\value[0]_i_5__5_n_0 ),
+        .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_16__9_n_0 ));
   LUT6 #(
     .INIT(64'hC5C0FFFFC5C00000)) 
@@ -46633,44 +46658,44 @@ module z80_0_decoder
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_17__4_n_0 ));
   LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \value[7]_i_17__5 
-       (.I0(\value[7]_i_13__13_n_0 ),
-        .I1(\value[7]_i_36__3_n_0 ),
-        .I2(\FSM_sequential_state_reg_n_0_[6] ),
-        .I3(\value[7]_i_37__3_n_0 ),
-        .I4(\FSM_sequential_state_reg_n_0_[7] ),
-        .I5(\value[7]_i_38__4_n_0 ),
-        .O(\value[7]_i_17__5_n_0 ));
-  LUT6 #(
     .INIT(64'h0200001000040000)) 
-    \value[7]_i_17__6 
+    \value[7]_i_17__5 
        (.I0(\FSM_sequential_state_reg_n_0_[7] ),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
         .I2(out[0]),
         .I3(out[1]),
         .I4(\FSM_sequential_state_reg_n_0_[3] ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_17__6_n_0 ));
+        .O(\value[7]_i_17__5_n_0 ));
   LUT6 #(
     .INIT(64'h0000000002000800)) 
-    \value[7]_i_17__7 
+    \value[7]_i_17__6 
        (.I0(\FSM_sequential_state_reg_n_0_[7] ),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
         .I2(out[0]),
-        .I3(\value[7]_i_11__7_n_0 ),
+        .I3(\value[7]_i_11__6_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[9] ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
-        .O(\value[7]_i_17__7_n_0 ));
+        .O(\value[7]_i_17__6_n_0 ));
   LUT6 #(
     .INIT(64'h0000100400020000)) 
-    \value[7]_i_17__8 
+    \value[7]_i_17__7 
        (.I0(\FSM_sequential_state_reg_n_0_[7] ),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
         .I2(out[0]),
         .I3(\FSM_sequential_state_reg_n_0_[3] ),
         .I4(out[1]),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
+        .O(\value[7]_i_17__7_n_0 ));
+  LUT6 #(
+    .INIT(64'hAFA0CFCFAFA0C0C0)) 
+    \value[7]_i_17__8 
+       (.I0(\value[7]_i_34__6_n_0 ),
+        .I1(\op0[7]_i_4_n_0 ),
+        .I2(\FSM_sequential_state_reg_n_0_[6] ),
+        .I3(\value[7]_i_35__1_n_0 ),
+        .I4(\FSM_sequential_state_reg_n_0_[7] ),
+        .I5(\value[7]_i_36__4_n_0 ),
         .O(\value[7]_i_17__8_n_0 ));
   LUT6 #(
     .INIT(64'h0808300000000000)) 
@@ -46678,7 +46703,7 @@ module z80_0_decoder
        (.I0(MREQ_L_INST_0_i_70_n_0),
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(\FSM_sequential_state_reg_n_0_[8] ),
-        .I3(\value[7]_i_27__6_n_0 ),
+        .I3(\value[7]_i_27__7_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[9] ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_17__9_n_0 ));
@@ -46692,23 +46717,24 @@ module z80_0_decoder
         .I4(\value[7]_i_33_n_0 ),
         .I5(\value_reg[7]_18 ),
         .O(\value[7]_i_18_n_0 ));
-  LUT5 #(
-    .INIT(32'h00008F80)) 
-    \value[7]_i_18__0 
-       (.I0(\value[4]_i_4__4_n_0 ),
-        .I1(\value_reg[7]_78 [7]),
-        .I2(\value_reg[7]_18 ),
-        .I3(\value[7]_i_17__0_n_0 ),
-        .I4(\value_reg[7]_19 ),
-        .O(\value[7]_i_18__0_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair143" *) 
   LUT4 #(
     .INIT(16'hBF80)) 
-    \value[7]_i_18__1 
+    \value[7]_i_18__0 
        (.I0(\DP/drive_value_addr [7]),
         .I1(\value_reg[7]_20 ),
         .I2(\value_reg[7]_21 ),
         .I3(\DP/reg_data_in [7]),
+        .O(\value[7]_i_18__0_n_0 ));
+  LUT6 #(
+    .INIT(64'hA7FFFF0180FFFFFF)) 
+    \value[7]_i_18__1 
+       (.I0(\value_reg[5]_1 ),
+        .I1(\value_reg[3] ),
+        .I2(\value_reg[5]_3 ),
+        .I3(alu_op[5]),
+        .I4(\value_reg[0]_0 ),
+        .I5(alu_op[4]),
         .O(\value[7]_i_18__1_n_0 ));
   LUT6 #(
     .INIT(64'h0000000080808380)) 
@@ -46741,34 +46767,34 @@ module z80_0_decoder
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\value[7]_i_18__12_n_0 ));
   LUT6 #(
-    .INIT(64'hA7FFFF0180FFFFFF)) 
-    \value[7]_i_18__2 
-       (.I0(\value_reg[5]_1 ),
-        .I1(\value_reg[3] ),
-        .I2(\value_reg[5]_3 ),
-        .I3(alu_op[5]),
-        .I4(\value_reg[0]_0 ),
-        .I5(alu_op[4]),
-        .O(\value[7]_i_18__2_n_0 ));
-  LUT6 #(
     .INIT(64'h0000200020000110)) 
-    \value[7]_i_18__3 
+    \value[7]_i_18__2 
        (.I0(\FSM_sequential_state_reg_n_0_[7] ),
         .I1(\FSM_sequential_state_reg_n_0_[9] ),
         .I2(out[1]),
         .I3(\FSM_sequential_state_reg_n_0_[3] ),
         .I4(out[0]),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
-        .O(\value[7]_i_18__3_n_0 ));
+        .O(\value[7]_i_18__2_n_0 ));
   LUT6 #(
     .INIT(64'h00000000FF800080)) 
-    \value[7]_i_18__4 
+    \value[7]_i_18__3 
        (.I0(p_1_in[2]),
         .I1(p_1_in[1]),
         .I2(M1_L_INST_0_i_39_n_0),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
         .I4(\value[7]_i_27__11_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
+        .O(\value[7]_i_18__3_n_0 ));
+  LUT6 #(
+    .INIT(64'hAFA0CFCFAFA0C0C0)) 
+    \value[7]_i_18__4 
+       (.I0(\value[7]_i_13__13_n_0 ),
+        .I1(\value[7]_i_37__2_n_0 ),
+        .I2(\FSM_sequential_state_reg_n_0_[6] ),
+        .I3(\value[7]_i_38__4_n_0 ),
+        .I4(\FSM_sequential_state_reg_n_0_[7] ),
+        .I5(\value[7]_i_39__3_n_0 ),
         .O(\value[7]_i_18__4_n_0 ));
   LUT6 #(
     .INIT(64'hB800FFFFB8000000)) 
@@ -46783,7 +46809,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h0B08000000000000)) 
     \value[7]_i_18__6 
-       (.I0(\value[7]_i_28__6_n_0 ),
+       (.I0(\value[7]_i_28__5_n_0 ),
         .I1(\value[7]_i_17__12_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[8] ),
         .I3(\value[7]_i_29__6_n_0 ),
@@ -46797,7 +46823,7 @@ module z80_0_decoder
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
         .I2(\data_out[7]_INST_0_i_35_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[5] ),
-        .I4(\value[7]_i_21__1_n_0 ),
+        .I4(\value[7]_i_21__2_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
         .O(\value[7]_i_18__7_n_0 ));
   LUT6 #(
@@ -46805,7 +46831,7 @@ module z80_0_decoder
     \value[7]_i_18__8 
        (.I0(M1_L_INST_0_i_40_n_0),
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
-        .I2(\value[7]_i_27__4_n_0 ),
+        .I2(\value[7]_i_27__5_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
         .I4(\value[7]_i_6__13_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
@@ -46820,14 +46846,14 @@ module z80_0_decoder
         .I4(\FSM_sequential_state_reg_n_0_[9] ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_18__9_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair139" *) 
-  LUT4 #(
-    .INIT(16'hB800)) 
+  LUT5 #(
+    .INIT(32'h00008F80)) 
     \value[7]_i_19 
-       (.I0(\value[7]_i_39__0_n_0 ),
-        .I1(\value_reg[7]_19 ),
-        .I2(\value_reg[7]_85 ),
-        .I3(\value_reg[7]_18 ),
+       (.I0(\value[4]_i_4__4_n_0 ),
+        .I1(\value_reg[7]_78 [7]),
+        .I2(\value_reg[7]_18 ),
+        .I3(\value[7]_i_17__0_n_0 ),
+        .I4(\value_reg[7]_19 ),
         .O(\value[7]_i_19_n_0 ));
   LUT6 #(
     .INIT(64'h73B77F37FB2B7AFF)) 
@@ -46876,7 +46902,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h00000000AFC0A000)) 
     \value[7]_i_19__2 
-       (.I0(\value[7]_i_40__0_n_0 ),
+       (.I0(\value[7]_i_40__1_n_0 ),
         .I1(\value[7]_i_20__12_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
@@ -46953,14 +46979,14 @@ module z80_0_decoder
     .INIT(4'h2)) 
     \value[7]_i_1__0 
        (.I0(ld_IXL),
-        .I1(\value[7]_i_4__13_n_0 ),
+        .I1(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_35 ));
   (* SOFT_HLUTNM = "soft_lutpair269" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \value[7]_i_1__1 
        (.I0(ld_IYH),
-        .I1(\value[7]_i_4__13_n_0 ),
+        .I1(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_36 ));
   (* SOFT_HLUTNM = "soft_lutpair143" *) 
   LUT2 #(
@@ -47010,11 +47036,11 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h00000000EEE222E2)) 
     \value[7]_i_1__17 
-       (.I0(\value[7]_i_3__2_n_0 ),
+       (.I0(\value[7]_i_3__4_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[0] ),
         .I2(\value[7]_i_4__8_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[1] ),
-        .I4(\value_reg[7]_i_5__4_n_0 ),
+        .I4(\value_reg[7]_i_5__5_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[10] ),
         .O(\value_reg[7]_1 ));
   LUT4 #(
@@ -47022,7 +47048,7 @@ module z80_0_decoder
     \value[7]_i_1__18 
        (.I0(\value[7]_i_2__17_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[0] ),
-        .I2(\value[7]_i_3__4_n_0 ),
+        .I2(\value[7]_i_3__6_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[10] ),
         .O(\value_reg[0]_11 ));
   LUT6 #(
@@ -47030,7 +47056,7 @@ module z80_0_decoder
     \value[7]_i_1__19 
        (.I0(\value_reg[7]_i_2__2_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[0] ),
-        .I2(\value[7]_i_3__9_n_0 ),
+        .I2(\value[7]_i_3__11_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[1] ),
         .I4(\value[7]_i_4__2_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[10] ),
@@ -47040,12 +47066,12 @@ module z80_0_decoder
     .INIT(4'h2)) 
     \value[7]_i_1__2 
        (.I0(ld_IYL),
-        .I1(\value[7]_i_4__13_n_0 ),
+        .I1(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_37 ));
   LUT6 #(
     .INIT(64'h00000000FFE200E2)) 
     \value[7]_i_1__20 
-       (.I0(\value[7]_i_3__11_n_0 ),
+       (.I0(\value[7]_i_3__12_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[1] ),
         .I2(\value[7]_i_4__7_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[0] ),
@@ -47055,11 +47081,11 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h00000000FFE200E2)) 
     \value[7]_i_1__21 
-       (.I0(\value[7]_i_3__10_n_0 ),
+       (.I0(\value[7]_i_4__9_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[1] ),
-        .I2(\value_reg[7]_i_4__0_n_0 ),
+        .I2(\value_reg[7]_i_5__3_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[0] ),
-        .I4(\value[7]_i_5__4_n_0 ),
+        .I4(\value[7]_i_6__6_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[10] ),
         .O(\value_reg[7]_18 ));
   LUT6 #(
@@ -47067,19 +47093,19 @@ module z80_0_decoder
     \value[7]_i_1__22 
        (.I0(\value_reg[7]_i_3__0_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[0] ),
-        .I2(\value[7]_i_4__12_n_0 ),
+        .I2(\value[7]_i_4__13_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[1] ),
-        .I4(\value_reg[7]_i_5__3_n_0 ),
+        .I4(\value_reg[7]_i_5__4_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[10] ),
         .O(\value_reg[7]_2 ));
   LUT6 #(
     .INIT(64'h00000000EEE222E2)) 
     \value[7]_i_1__23 
-       (.I0(\value[7]_i_3__8_n_0 ),
+       (.I0(\value[7]_i_3__10_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[0] ),
-        .I2(\value[7]_i_4__11_n_0 ),
+        .I2(\value[7]_i_4__12_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[1] ),
-        .I4(\value[7]_i_5__9_n_0 ),
+        .I4(\value[7]_i_5__8_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[10] ),
         .O(\value_reg[7]_20 ));
   LUT6 #(
@@ -47089,7 +47115,7 @@ module z80_0_decoder
         .I1(\FSM_sequential_state_reg_n_0_[0] ),
         .I2(\value[7]_i_4__4_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[1] ),
-        .I4(\value[7]_i_5__8_n_0 ),
+        .I4(\value[7]_i_5__7_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[10] ),
         .O(\value_reg[7]_21 ));
   LUT6 #(
@@ -47097,9 +47123,9 @@ module z80_0_decoder
     \value[7]_i_1__25 
        (.I0(\value[7]_i_2__18_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[1] ),
-        .I2(\value[7]_i_3__12_n_0 ),
+        .I2(\value[7]_i_3__13_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[0] ),
-        .I4(\value[7]_i_4__9_n_0 ),
+        .I4(\value[7]_i_4__10_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[10] ),
         .O(\value_reg[0]_13 ));
   (* SOFT_HLUTNM = "soft_lutpair127" *) 
@@ -47109,7 +47135,7 @@ module z80_0_decoder
        (.I0(ld_F_data),
         .I1(ld_F_addr),
         .I2(\value_reg[7]_28 ),
-        .I3(\value[7]_i_4__13_n_0 ),
+        .I3(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[0]_3 ));
   LUT5 #(
     .INIT(32'hFFFFFFFE)) 
@@ -47134,28 +47160,28 @@ module z80_0_decoder
     .INIT(4'h2)) 
     \value[7]_i_1__3 
        (.I0(ld_SPH),
-        .I1(\value[7]_i_4__13_n_0 ),
+        .I1(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_38 ));
   (* SOFT_HLUTNM = "soft_lutpair270" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \value[7]_i_1__4 
        (.I0(ld_SPL),
-        .I1(\value[7]_i_4__13_n_0 ),
+        .I1(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_39 ));
   (* SOFT_HLUTNM = "soft_lutpair269" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \value[7]_i_1__5 
        (.I0(ld_PCH),
-        .I1(\value[7]_i_4__13_n_0 ),
+        .I1(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_40 ));
   (* SOFT_HLUTNM = "soft_lutpair268" *) 
   LUT2 #(
     .INIT(4'h2)) 
     \value[7]_i_1__6 
        (.I0(ld_PCL),
-        .I1(\value[7]_i_4__13_n_0 ),
+        .I1(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_41 ));
   (* SOFT_HLUTNM = "soft_lutpair195" *) 
   LUT3 #(
@@ -47163,7 +47189,7 @@ module z80_0_decoder
     \value[7]_i_1__7 
        (.I0(\value_reg[7]_5 ),
         .I1(ld_STRL),
-        .I2(\value[7]_i_4__13_n_0 ),
+        .I2(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_42 ));
   (* SOFT_HLUTNM = "soft_lutpair219" *) 
   LUT3 #(
@@ -47171,7 +47197,7 @@ module z80_0_decoder
     \value[7]_i_1__8 
        (.I0(\value_reg[7]_5 ),
         .I1(ld_STRH),
-        .I2(\value[7]_i_4__13_n_0 ),
+        .I2(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_43 ));
   (* SOFT_HLUTNM = "soft_lutpair199" *) 
   LUT2 #(
@@ -47188,13 +47214,14 @@ module z80_0_decoder
         .I1(\value_reg[7]_76 [7]),
         .I2(switch_context),
         .O(\value_reg[7]_50 [7]));
+  (* SOFT_HLUTNM = "soft_lutpair139" *) 
   LUT4 #(
-    .INIT(16'hBF80)) 
+    .INIT(16'hB800)) 
     \value[7]_i_20 
-       (.I0(\DP/drive_value_addr [7]),
-        .I1(\value_reg[7]_18 ),
-        .I2(\value_reg[7]_19 ),
-        .I3(\DP/reg_data_in [7]),
+       (.I0(\value[7]_i_40_n_0 ),
+        .I1(\value_reg[7]_19 ),
+        .I2(\value_reg[7]_85 ),
+        .I3(\value_reg[7]_18 ),
         .O(\value[7]_i_20_n_0 ));
   LUT6 #(
     .INIT(64'hFFAACA0C00AACA0C)) 
@@ -47257,7 +47284,7 @@ module z80_0_decoder
     \value[7]_i_20__3 
        (.I0(\value[7]_i_29__2_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
-        .I2(\value[7]_i_30__6_n_0 ),
+        .I2(\value[7]_i_30__7_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
         .I4(\FSM_sequential_state_reg_n_0_[6] ),
         .I5(\addr_bus[15]_INST_0_i_137_n_0 ),
@@ -47286,7 +47313,7 @@ module z80_0_decoder
     \value[7]_i_20__6 
        (.I0(\FSM_sequential_state_reg_n_0_[7] ),
         .I1(\FSM_sequential_state_reg_n_0_[9] ),
-        .I2(\value[7]_i_11__7_n_0 ),
+        .I2(\value[7]_i_11__6_n_0 ),
         .I3(out[0]),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
@@ -47320,34 +47347,32 @@ module z80_0_decoder
         .I4(out[0]),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\value[7]_i_20__9_n_0 ));
+  LUT4 #(
+    .INIT(16'hBF80)) 
+    \value[7]_i_21 
+       (.I0(\DP/drive_value_addr [7]),
+        .I1(\value_reg[7]_18 ),
+        .I2(\value_reg[7]_19 ),
+        .I3(\DP/reg_data_in [7]),
+        .O(\value[7]_i_21_n_0 ));
   LUT6 #(
     .INIT(64'h0000800000000000)) 
-    \value[7]_i_21 
+    \value[7]_i_21__0 
        (.I0(\FSM_sequential_state_reg_n_0_[9] ),
         .I1(M1_L_INST_0_i_45_n_0),
         .I2(\op1_reg_n_0_[0] ),
         .I3(\op1_reg_n_0_[1] ),
         .I4(\op1_reg_n_0_[2] ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
-        .O(\value[7]_i_21_n_0 ));
+        .O(\value[7]_i_21__0_n_0 ));
   LUT5 #(
     .INIT(32'h00000020)) 
-    \value[7]_i_21__0 
+    \value[7]_i_21__1 
        (.I0(\FSM_sequential_state_reg_n_0_[9] ),
         .I1(out[1]),
         .I2(\FSM_sequential_state_reg_n_0_[3] ),
         .I3(out[0]),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
-        .O(\value[7]_i_21__0_n_0 ));
-  LUT6 #(
-    .INIT(64'h0000040000000008)) 
-    \value[7]_i_21__1 
-       (.I0(\FSM_sequential_state_reg_n_0_[7] ),
-        .I1(\FSM_sequential_state_reg_n_0_[9] ),
-        .I2(out[1]),
-        .I3(\FSM_sequential_state_reg_n_0_[3] ),
-        .I4(out[0]),
-        .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_21__1_n_0 ));
   LUT5 #(
     .INIT(32'h10000000)) 
@@ -47359,40 +47384,41 @@ module z80_0_decoder
         .I4(out[0]),
         .O(\value[7]_i_21__10_n_0 ));
   LUT6 #(
-    .INIT(64'h00000000000080A0)) 
+    .INIT(64'h0000040000000008)) 
     \value[7]_i_21__2 
+       (.I0(\FSM_sequential_state_reg_n_0_[7] ),
+        .I1(\FSM_sequential_state_reg_n_0_[9] ),
+        .I2(out[1]),
+        .I3(\FSM_sequential_state_reg_n_0_[3] ),
+        .I4(out[0]),
+        .I5(\FSM_sequential_state_reg_n_0_[8] ),
+        .O(\value[7]_i_21__2_n_0 ));
+  LUT6 #(
+    .INIT(64'h00000000000080A0)) 
+    \value[7]_i_21__3 
        (.I0(\FSM_sequential_state_reg_n_0_[9] ),
         .I1(out[0]),
         .I2(out[1]),
         .I3(\value[7]_i_29__9_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[3] ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
-        .O(\value[7]_i_21__2_n_0 ));
+        .O(\value[7]_i_21__3_n_0 ));
   LUT5 #(
     .INIT(32'hB8FFB800)) 
-    \value[7]_i_21__3 
+    \value[7]_i_21__4 
        (.I0(\value[7]_i_44__3_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
         .I2(\value[7]_i_45__0_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[6] ),
-        .I4(\value[7]_i_29__4_n_0 ),
-        .O(\value[7]_i_21__3_n_0 ));
+        .I4(\value[7]_i_29__5_n_0 ),
+        .O(\value[7]_i_21__4_n_0 ));
   LUT4 #(
     .INIT(16'h0004)) 
-    \value[7]_i_21__4 
+    \value[7]_i_21__5 
        (.I0(out[0]),
         .I1(out[1]),
         .I2(\FSM_sequential_state_reg_n_0_[3] ),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_21__4_n_0 ));
-  LUT5 #(
-    .INIT(32'h40000F00)) 
-    \value[7]_i_21__5 
-       (.I0(\FSM_sequential_state_reg_n_0_[3] ),
-        .I1(ld_L0),
-        .I2(\FSM_sequential_state_reg_n_0_[9] ),
-        .I3(out[1]),
-        .I4(out[0]),
         .O(\value[7]_i_21__5_n_0 ));
   LUT4 #(
     .INIT(16'h2400)) 
@@ -47425,7 +47451,7 @@ module z80_0_decoder
     .INIT(16'h0080)) 
     \value[7]_i_21__9 
        (.I0(\FSM_sequential_state_reg_n_0_[8] ),
-        .I1(\value[7]_i_26__8_n_0 ),
+        .I1(\value[7]_i_26__7_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[9] ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_21__9_n_0 ));
@@ -47452,7 +47478,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h8888888888B88888)) 
     \value[7]_i_22__1 
-       (.I0(\value[7]_i_34__6_n_0 ),
+       (.I0(\value[7]_i_34__5_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
         .I2(p_1_in[1]),
         .I3(p_1_in[2]),
@@ -47519,33 +47545,32 @@ module z80_0_decoder
         .I2(out[1]),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\value[7]_i_22__5_n_0 ));
+  LUT5 #(
+    .INIT(32'h40000F00)) 
+    \value[7]_i_22__6 
+       (.I0(\FSM_sequential_state_reg_n_0_[3] ),
+        .I1(ld_L0),
+        .I2(\FSM_sequential_state_reg_n_0_[9] ),
+        .I3(out[1]),
+        .I4(out[0]),
+        .O(\value[7]_i_22__6_n_0 ));
   LUT4 #(
     .INIT(16'h0008)) 
-    \value[7]_i_22__6 
+    \value[7]_i_22__7 
        (.I0(out[0]),
         .I1(out[1]),
         .I2(\FSM_sequential_state_reg_n_0_[3] ),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_22__6_n_0 ));
+        .O(\value[7]_i_22__7_n_0 ));
   LUT6 #(
     .INIT(64'h0000088000000000)) 
-    \value[7]_i_22__7 
+    \value[7]_i_22__8 
        (.I0(\FSM_sequential_state_reg_n_0_[8] ),
         .I1(out[0]),
         .I2(\FSM_sequential_state_reg_n_0_[3] ),
         .I3(out[1]),
         .I4(\FSM_sequential_state_reg_n_0_[9] ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
-        .O(\value[7]_i_22__7_n_0 ));
-  LUT6 #(
-    .INIT(64'h8A00000000000000)) 
-    \value[7]_i_22__8 
-       (.I0(out[0]),
-        .I1(p_1_in[5]),
-        .I2(p_1_in[4]),
-        .I3(out[1]),
-        .I4(\FSM_sequential_state_reg_n_0_[3] ),
-        .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\value[7]_i_22__8_n_0 ));
   LUT6 #(
     .INIT(64'h0000002000000000)) 
@@ -47587,18 +47612,20 @@ module z80_0_decoder
         .I4(out[0]),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_23__1_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair258" *) 
-  LUT3 #(
-    .INIT(8'h40)) 
+  LUT6 #(
+    .INIT(64'h0200000000000000)) 
     \value[7]_i_23__10 
-       (.I0(\op1_reg[4]_rep_n_0 ),
-        .I1(p_1_in[0]),
-        .I2(\op1_reg[5]_rep_n_0 ),
+       (.I0(\FSM_sequential_state_reg_n_0_[9] ),
+        .I1(\FSM_sequential_state_reg_n_0_[3] ),
+        .I2(\value[7]_i_29__9_n_0 ),
+        .I3(out[1]),
+        .I4(out[0]),
+        .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_23__10_n_0 ));
   LUT6 #(
     .INIT(64'h0202000000000300)) 
     \value[7]_i_23__11 
-       (.I0(\value[7]_i_25__5_n_0 ),
+       (.I0(\value[7]_i_25__6_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[10] ),
         .I2(\FSM_sequential_state_reg_n_0_[1] ),
         .I3(\value[7]_i_42__2_n_0 ),
@@ -47612,7 +47639,7 @@ module z80_0_decoder
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(\value[7]_i_19__7_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
-        .I4(\value[7]_i_22__6_n_0 ),
+        .I4(\value[7]_i_22__7_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_23__2_n_0 ));
   LUT6 #(
@@ -47658,30 +47685,30 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h00E2FFFF00E20000)) 
     \value[7]_i_23__7 
-       (.I0(\value[7]_i_33__5_n_0 ),
+       (.I0(\value[7]_i_33__6_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
-        .I2(\value[7]_i_26__9_n_0 ),
+        .I2(\value[7]_i_26__8_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
         .I4(\FSM_sequential_state_reg_n_0_[6] ),
         .I5(\value[7]_i_19__9_n_0 ),
         .O(\value[7]_i_23__7_n_0 ));
+  LUT6 #(
+    .INIT(64'h8A00000000000000)) 
+    \value[7]_i_23__8 
+       (.I0(out[0]),
+        .I1(p_1_in[5]),
+        .I2(p_1_in[4]),
+        .I3(out[1]),
+        .I4(\FSM_sequential_state_reg_n_0_[3] ),
+        .I5(\FSM_sequential_state_reg_n_0_[9] ),
+        .O(\value[7]_i_23__8_n_0 ));
   LUT4 #(
     .INIT(16'h0800)) 
-    \value[7]_i_23__8 
+    \value[7]_i_23__9 
        (.I0(\value_reg[7]_3 ),
         .I1(\op1_reg[3]_0 ),
         .I2(\op1_reg[5]_rep_0 ),
         .I3(out[1]),
-        .O(\value[7]_i_23__8_n_0 ));
-  LUT6 #(
-    .INIT(64'h0200000000000000)) 
-    \value[7]_i_23__9 
-       (.I0(\FSM_sequential_state_reg_n_0_[9] ),
-        .I1(\FSM_sequential_state_reg_n_0_[3] ),
-        .I2(\value[7]_i_29__9_n_0 ),
-        .I3(out[1]),
-        .I4(out[0]),
-        .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_23__9_n_0 ));
   LUT6 #(
     .INIT(64'h888888888B888888)) 
@@ -47713,15 +47740,13 @@ module z80_0_decoder
         .I4(\FSM_sequential_state[7]_i_25_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\value[7]_i_24__1_n_0 ));
-  LUT6 #(
-    .INIT(64'h0000000400000000)) 
+  (* SOFT_HLUTNM = "soft_lutpair258" *) 
+  LUT3 #(
+    .INIT(8'h40)) 
     \value[7]_i_24__10 
-       (.I0(\FSM_sequential_state_reg_n_0_[3] ),
-        .I1(out[1]),
-        .I2(\value_reg[7]_3 ),
-        .I3(\op1_reg[3]_0 ),
-        .I4(\op0_reg[5]_rep_n_0 ),
-        .I5(out[0]),
+       (.I0(\op1_reg[4]_rep_n_0 ),
+        .I1(p_1_in[0]),
+        .I2(\op1_reg[5]_rep_n_0 ),
         .O(\value[7]_i_24__10_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair267" *) 
   LUT2 #(
@@ -47731,78 +47756,79 @@ module z80_0_decoder
         .I1(\op1_reg[4]_rep_n_0 ),
         .O(\value[7]_i_24__11_n_0 ));
   LUT5 #(
-    .INIT(32'h08330300)) 
-    \value[7]_i_24__2 
-       (.I0(ld_L0),
-        .I1(\FSM_sequential_state_reg_n_0_[9] ),
-        .I2(\FSM_sequential_state_reg_n_0_[3] ),
-        .I3(out[0]),
-        .I4(out[1]),
-        .O(\value[7]_i_24__2_n_0 ));
-  LUT5 #(
     .INIT(32'h10000000)) 
-    \value[7]_i_24__3 
+    \value[7]_i_24__2 
        (.I0(\FSM_sequential_state_reg_n_0_[9] ),
         .I1(\FSM_sequential_state_reg_n_0_[3] ),
         .I2(out[1]),
         .I3(out[0]),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
-        .O(\value[7]_i_24__3_n_0 ));
+        .O(\value[7]_i_24__2_n_0 ));
   LUT5 #(
     .INIT(32'h00001400)) 
-    \value[7]_i_24__4 
+    \value[7]_i_24__3 
        (.I0(\FSM_sequential_state_reg_n_0_[9] ),
         .I1(out[1]),
         .I2(\FSM_sequential_state_reg_n_0_[3] ),
         .I3(out[0]),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
-        .O(\value[7]_i_24__4_n_0 ));
+        .O(\value[7]_i_24__3_n_0 ));
   LUT5 #(
     .INIT(32'h0B080000)) 
-    \value[7]_i_24__5 
+    \value[7]_i_24__4 
        (.I0(\value[7]_i_34__7_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(\FSM_sequential_state_reg_n_0_[8] ),
-        .I3(\value[7]_i_35__2_n_0 ),
+        .I3(\value[7]_i_35__3_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[7] ),
-        .O(\value[7]_i_24__5_n_0 ));
+        .O(\value[7]_i_24__4_n_0 ));
   LUT6 #(
     .INIT(64'h0000000000100418)) 
-    \value[7]_i_24__6 
+    \value[7]_i_24__5 
        (.I0(\FSM_sequential_state_reg_n_0_[7] ),
         .I1(out[0]),
         .I2(out[1]),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
         .I4(\FSM_sequential_state_reg_n_0_[3] ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
-        .O(\value[7]_i_24__6_n_0 ));
+        .O(\value[7]_i_24__5_n_0 ));
   LUT4 #(
     .INIT(16'h2100)) 
-    \value[7]_i_24__7 
+    \value[7]_i_24__6 
        (.I0(\FSM_sequential_state_reg_n_0_[3] ),
         .I1(out[1]),
         .I2(out[0]),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_24__7_n_0 ));
+        .O(\value[7]_i_24__6_n_0 ));
   LUT6 #(
     .INIT(64'h0000000800000000)) 
-    \value[7]_i_24__8 
+    \value[7]_i_24__7 
        (.I0(out[0]),
         .I1(out[1]),
         .I2(\value_reg[7]_4 ),
         .I3(\op0_reg[5]_rep_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[3] ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_24__8_n_0 ));
+        .O(\value[7]_i_24__7_n_0 ));
   LUT6 #(
     .INIT(64'h0000000000000008)) 
-    \value[7]_i_24__9 
+    \value[7]_i_24__8 
        (.I0(\FSM_sequential_state_reg_n_0_[7] ),
         .I1(\FSM_sequential_state_reg_n_0_[9] ),
         .I2(out[1]),
         .I3(\FSM_sequential_state_reg_n_0_[3] ),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
+        .O(\value[7]_i_24__8_n_0 ));
+  LUT6 #(
+    .INIT(64'h0000000400000000)) 
+    \value[7]_i_24__9 
+       (.I0(\FSM_sequential_state_reg_n_0_[3] ),
+        .I1(out[1]),
+        .I2(\value_reg[7]_3 ),
+        .I3(\op1_reg[3]_0 ),
+        .I4(\op0_reg[5]_rep_n_0 ),
+        .I5(out[0]),
         .O(\value[7]_i_24__9_n_0 ));
   LUT6 #(
     .INIT(64'hEF20FFFFEF200000)) 
@@ -47810,9 +47836,9 @@ module z80_0_decoder
        (.I0(\value[7]_i_44__0_n_0 ),
         .I1(\value[7]_i_45__4_n_0 ),
         .I2(\op1_reg_n_0_[0] ),
-        .I3(\value[7]_i_15__7_n_0 ),
+        .I3(\value[7]_i_15__8_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
-        .I5(\value[7]_i_32__8_n_0 ),
+        .I5(\value[7]_i_33__4_n_0 ),
         .O(\value[7]_i_25_n_0 ));
   LUT6 #(
     .INIT(64'h0800003000000000)) 
@@ -47832,7 +47858,7 @@ module z80_0_decoder
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
         .I3(\value[7]_i_53__2_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
-        .I5(\value[7]_i_43__4_n_0 ),
+        .I5(\value[7]_i_44__4_n_0 ),
         .O(\value[7]_i_25__1_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair131" *) 
   LUT3 #(
@@ -47878,55 +47904,54 @@ module z80_0_decoder
         .I3(out[0]),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_25__4_n_0 ));
+  LUT5 #(
+    .INIT(32'h08330300)) 
+    \value[7]_i_25__5 
+       (.I0(ld_L0),
+        .I1(\FSM_sequential_state_reg_n_0_[9] ),
+        .I2(\FSM_sequential_state_reg_n_0_[3] ),
+        .I3(out[0]),
+        .I4(out[1]),
+        .O(\value[7]_i_25__5_n_0 ));
   LUT6 #(
     .INIT(64'h0000000080000000)) 
-    \value[7]_i_25__5 
+    \value[7]_i_25__6 
        (.I0(\FSM_sequential_state_reg_n_0_[7] ),
         .I1(\FSM_sequential_state_reg_n_0_[9] ),
-        .I2(\value[7]_i_11__7_n_0 ),
+        .I2(\value[7]_i_11__6_n_0 ),
         .I3(out[0]),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
-        .O(\value[7]_i_25__5_n_0 ));
+        .O(\value[7]_i_25__6_n_0 ));
   LUT6 #(
     .INIT(64'h0000008000000000)) 
-    \value[7]_i_25__6 
+    \value[7]_i_25__7 
        (.I0(out[0]),
         .I1(out[1]),
         .I2(\op0_reg[5]_rep_n_0 ),
         .I3(\value_reg[7]_4 ),
         .I4(\FSM_sequential_state_reg_n_0_[3] ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_25__6_n_0 ));
+        .O(\value[7]_i_25__7_n_0 ));
   LUT6 #(
     .INIT(64'h0010000000000000)) 
-    \value[7]_i_25__7 
+    \value[7]_i_25__8 
        (.I0(\FSM_sequential_state_reg_n_0_[3] ),
         .I1(\value_reg[7]_3 ),
         .I2(\op1_reg[3]_0 ),
         .I3(\op0_reg[5]_rep_n_0 ),
         .I4(out[1]),
         .I5(out[0]),
-        .O(\value[7]_i_25__7_n_0 ));
+        .O(\value[7]_i_25__8_n_0 ));
   LUT6 #(
     .INIT(64'h0000200000000000)) 
-    \value[7]_i_25__8 
+    \value[7]_i_25__9 
        (.I0(out[0]),
         .I1(out[1]),
         .I2(\value[7]_i_31__9_n_0 ),
         .I3(\value_reg[7]_4 ),
         .I4(\FSM_sequential_state_reg_n_0_[3] ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_25__8_n_0 ));
-  LUT6 #(
-    .INIT(64'h0000100000000000)) 
-    \value[7]_i_25__9 
-       (.I0(\FSM_sequential_state_reg_n_0_[3] ),
-        .I1(\value_reg[7]_4 ),
-        .I2(\op1_reg[3]_0 ),
-        .I3(\op0_reg[5]_rep_n_0 ),
-        .I4(out[1]),
-        .I5(out[0]),
         .O(\value[7]_i_25__9_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair108" *) 
   LUT4 #(
@@ -47957,14 +47982,14 @@ module z80_0_decoder
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\value[7]_i_26__1_n_0 ));
   LUT6 #(
-    .INIT(64'h0020000000000000)) 
+    .INIT(64'h0000100000000000)) 
     \value[7]_i_26__10 
-       (.I0(out[0]),
-        .I1(out[1]),
-        .I2(\value_reg[7]_4 ),
+       (.I0(\FSM_sequential_state_reg_n_0_[3] ),
+        .I1(\value_reg[7]_4 ),
+        .I2(\op1_reg[3]_0 ),
         .I3(\op0_reg[5]_rep_n_0 ),
-        .I4(\FSM_sequential_state_reg_n_0_[3] ),
-        .I5(\FSM_sequential_state_reg_n_0_[9] ),
+        .I4(out[1]),
+        .I5(out[0]),
         .O(\value[7]_i_26__10_n_0 ));
   LUT2 #(
     .INIT(4'h2)) 
@@ -47980,67 +48005,70 @@ module z80_0_decoder
         .I2(out[0]),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\value[7]_i_26__2_n_0 ));
-  LUT3 #(
-    .INIT(8'h04)) 
-    \value[7]_i_26__3 
-       (.I0(out[1]),
-        .I1(\FSM_sequential_state_reg_n_0_[3] ),
-        .I2(out[0]),
-        .O(\value[7]_i_26__3_n_0 ));
   LUT6 #(
     .INIT(64'hFFFFFFFFFFFFFF7F)) 
-    \value[7]_i_26__4 
+    \value[7]_i_26__3 
        (.I0(\FSM_sequential_state_reg_n_0_[7] ),
         .I1(\FSM_sequential_state_reg_n_0_[9] ),
-        .I2(\value[7]_i_11__7_n_0 ),
+        .I2(\value[7]_i_11__6_n_0 ),
         .I3(out[0]),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
-        .O(\value[7]_i_26__4_n_0 ));
+        .O(\value[7]_i_26__3_n_0 ));
   LUT6 #(
     .INIT(64'h0004020200000000)) 
-    \value[7]_i_26__5 
+    \value[7]_i_26__4 
        (.I0(\FSM_sequential_state_reg_n_0_[8] ),
         .I1(out[0]),
         .I2(out[1]),
         .I3(\value[7]_i_29__9_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[3] ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_26__5_n_0 ));
+        .O(\value[7]_i_26__4_n_0 ));
   LUT4 #(
     .INIT(16'h0100)) 
-    \value[7]_i_26__6 
+    \value[7]_i_26__5 
        (.I0(out[0]),
         .I1(out[1]),
         .I2(\FSM_sequential_state_reg_n_0_[3] ),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_26__6_n_0 ));
+        .O(\value[7]_i_26__5_n_0 ));
   LUT6 #(
     .INIT(64'h0080000000000000)) 
-    \value[7]_i_26__7 
+    \value[7]_i_26__6 
        (.I0(out[0]),
         .I1(out[1]),
         .I2(\op0_reg[5]_rep_n_0 ),
         .I3(\op1_reg[3]_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[3] ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_26__7_n_0 ));
+        .O(\value[7]_i_26__6_n_0 ));
   LUT5 #(
     .INIT(32'h01000000)) 
-    \value[7]_i_26__8 
+    \value[7]_i_26__7 
        (.I0(\FSM_sequential_state_reg_n_0_[3] ),
         .I1(\op0_reg[5]_rep_n_0 ),
         .I2(\value_reg[7]_3 ),
         .I3(out[1]),
         .I4(out[0]),
-        .O(\value[7]_i_26__8_n_0 ));
+        .O(\value[7]_i_26__7_n_0 ));
   LUT6 #(
     .INIT(64'h0000002000000000)) 
-    \value[7]_i_26__9 
+    \value[7]_i_26__8 
        (.I0(out[0]),
         .I1(out[1]),
         .I2(\value_reg[7]_3 ),
         .I3(\op1_reg[3]_0 ),
+        .I4(\FSM_sequential_state_reg_n_0_[3] ),
+        .I5(\FSM_sequential_state_reg_n_0_[9] ),
+        .O(\value[7]_i_26__8_n_0 ));
+  LUT6 #(
+    .INIT(64'h0020000000000000)) 
+    \value[7]_i_26__9 
+       (.I0(out[0]),
+        .I1(out[1]),
+        .I2(\value_reg[7]_4 ),
+        .I3(\op0_reg[5]_rep_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[3] ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\value[7]_i_26__9_n_0 ));
@@ -48108,42 +48136,39 @@ module z80_0_decoder
         .I4(\FSM_sequential_state_reg_n_0_[3] ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\value[7]_i_27__3_n_0 ));
+  LUT3 #(
+    .INIT(8'h04)) 
+    \value[7]_i_27__4 
+       (.I0(out[1]),
+        .I1(\FSM_sequential_state_reg_n_0_[3] ),
+        .I2(out[0]),
+        .O(\value[7]_i_27__4_n_0 ));
   LUT6 #(
     .INIT(64'h9484848400000000)) 
-    \value[7]_i_27__4 
+    \value[7]_i_27__5 
        (.I0(\FSM_sequential_state_reg_n_0_[3] ),
         .I1(out[1]),
         .I2(out[0]),
         .I3(\value_reg[7]_3 ),
         .I4(\op1_reg[5]_rep_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_27__4_n_0 ));
+        .O(\value[7]_i_27__5_n_0 ));
   LUT6 #(
     .INIT(64'h0000000001080000)) 
-    \value[7]_i_27__5 
+    \value[7]_i_27__6 
        (.I0(\FSM_sequential_state_reg_n_0_[7] ),
         .I1(\FSM_sequential_state_reg_n_0_[9] ),
         .I2(\FSM_sequential_state_reg_n_0_[3] ),
         .I3(out[1]),
         .I4(out[0]),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
-        .O(\value[7]_i_27__5_n_0 ));
+        .O(\value[7]_i_27__6_n_0 ));
   LUT3 #(
     .INIT(8'h60)) 
-    \value[7]_i_27__6 
+    \value[7]_i_27__7 
        (.I0(out[1]),
         .I1(\FSM_sequential_state_reg_n_0_[3] ),
         .I2(out[0]),
-        .O(\value[7]_i_27__6_n_0 ));
-  LUT6 #(
-    .INIT(64'hF088FFFFF0880000)) 
-    \value[7]_i_27__7 
-       (.I0(\addr_bus[15]_INST_0_i_20_n_0 ),
-        .I1(\value[7]_i_23__10_n_0 ),
-        .I2(\value[7]_i_41__4_n_0 ),
-        .I3(\FSM_sequential_state_reg_n_0_[9] ),
-        .I4(\FSM_sequential_state_reg_n_0_[8] ),
-        .I5(\value[7]_i_42__3_n_0 ),
         .O(\value[7]_i_27__7_n_0 ));
   LUT6 #(
     .INIT(64'h000000000040000F)) 
@@ -48221,56 +48246,56 @@ module z80_0_decoder
         .I5(out[0]),
         .O(\value[7]_i_28__2_n_0 ));
   LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \value[7]_i_28__3 
-       (.I0(\value[7]_i_31__8_n_0 ),
-        .I1(\value[7]_i_43__4_n_0 ),
-        .I2(\FSM_sequential_state_reg_n_0_[7] ),
-        .I3(\value[7]_i_5__5_n_0 ),
-        .I4(\FSM_sequential_state_reg_n_0_[8] ),
-        .I5(\value[7]_i_28__8_n_0 ),
-        .O(\value[7]_i_28__3_n_0 ));
-  LUT6 #(
     .INIT(64'h8888888888888B88)) 
-    \value[7]_i_28__4 
+    \value[7]_i_28__3 
        (.I0(\value[7]_i_55__0_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
         .I3(M1_L_INST_0_i_23_n_0),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
-        .O(\value[7]_i_28__4_n_0 ));
+        .O(\value[7]_i_28__3_n_0 ));
   LUT5 #(
     .INIT(32'hB8FFB800)) 
-    \value[7]_i_28__5 
+    \value[7]_i_28__4 
        (.I0(\value[7]_i_54__2_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
         .I2(\value[7]_i_55__1_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
         .I4(\value[7]_i_45__0_n_0 ),
-        .O(\value[7]_i_28__5_n_0 ));
+        .O(\value[7]_i_28__4_n_0 ));
   LUT3 #(
     .INIT(8'h0E)) 
-    \value[7]_i_28__6 
+    \value[7]_i_28__5 
        (.I0(out[0]),
         .I1(\FSM_sequential_state_reg_n_0_[3] ),
         .I2(out[1]),
-        .O(\value[7]_i_28__6_n_0 ));
+        .O(\value[7]_i_28__5_n_0 ));
   LUT4 #(
     .INIT(16'h0400)) 
-    \value[7]_i_28__7 
+    \value[7]_i_28__6 
        (.I0(out[0]),
         .I1(out[1]),
         .I2(\FSM_sequential_state_reg_n_0_[3] ),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_28__7_n_0 ));
+        .O(\value[7]_i_28__6_n_0 ));
   LUT4 #(
     .INIT(16'h0028)) 
-    \value[7]_i_28__8 
+    \value[7]_i_28__7 
        (.I0(out[0]),
         .I1(\FSM_sequential_state_reg_n_0_[3] ),
         .I2(out[1]),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
+        .O(\value[7]_i_28__7_n_0 ));
+  LUT6 #(
+    .INIT(64'hF088FFFFF0880000)) 
+    \value[7]_i_28__8 
+       (.I0(\addr_bus[15]_INST_0_i_20_n_0 ),
+        .I1(\value[7]_i_24__10_n_0 ),
+        .I2(\value[7]_i_42__3_n_0 ),
+        .I3(\FSM_sequential_state_reg_n_0_[9] ),
+        .I4(\FSM_sequential_state_reg_n_0_[8] ),
+        .I5(\value[7]_i_43__4_n_0 ),
         .O(\value[7]_i_28__8_n_0 ));
   LUT6 #(
     .INIT(64'h000000000001000C)) 
@@ -48313,34 +48338,34 @@ module z80_0_decoder
         .I5(out[0]),
         .O(\value[7]_i_29__2_n_0 ));
   LUT6 #(
-    .INIT(64'h0008080800000000)) 
+    .INIT(64'hAFA0CFCFAFA0C0C0)) 
     \value[7]_i_29__3 
+       (.I0(\value[7]_i_32__8_n_0 ),
+        .I1(\value[7]_i_44__4_n_0 ),
+        .I2(\FSM_sequential_state_reg_n_0_[7] ),
+        .I3(\value[7]_i_5__4_n_0 ),
+        .I4(\FSM_sequential_state_reg_n_0_[8] ),
+        .I5(\value[7]_i_28__7_n_0 ),
+        .O(\value[7]_i_29__3_n_0 ));
+  LUT6 #(
+    .INIT(64'h0008080800000000)) 
+    \value[7]_i_29__4 
        (.I0(\FSM_sequential_state_reg_n_0_[9] ),
         .I1(out[1]),
         .I2(\FSM_sequential_state_reg_n_0_[3] ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
         .I4(out[0]),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
-        .O(\value[7]_i_29__3_n_0 ));
+        .O(\value[7]_i_29__4_n_0 ));
   LUT6 #(
     .INIT(64'h0008108000040000)) 
-    \value[7]_i_29__4 
+    \value[7]_i_29__5 
        (.I0(\FSM_sequential_state_reg_n_0_[7] ),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
         .I2(out[0]),
         .I3(\FSM_sequential_state_reg_n_0_[3] ),
         .I4(out[1]),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_29__4_n_0 ));
-  LUT6 #(
-    .INIT(64'h00000000C8080808)) 
-    \value[7]_i_29__5 
-       (.I0(ld_L0),
-        .I1(out[1]),
-        .I2(\FSM_sequential_state_reg_n_0_[3] ),
-        .I3(\value[7]_i_44__4_n_0 ),
-        .I4(\op1_reg_n_0_[0] ),
-        .I5(out[0]),
         .O(\value[7]_i_29__5_n_0 ));
   LUT3 #(
     .INIT(8'h06)) 
@@ -48379,7 +48404,7 @@ module z80_0_decoder
         .I2(switch_context),
         .I3(\value[7]_i_6__0_n_0 ),
         .I4(\value_reg[7]_5 ),
-        .I5(\value[7]_i_7__1_n_0 ),
+        .I5(\value[7]_i_7__2_n_0 ),
         .O(\value_reg[7]_52 [7]));
   LUT6 #(
     .INIT(64'h8F808F8F8F808080)) 
@@ -48399,7 +48424,7 @@ module z80_0_decoder
         .I2(ld_SPH),
         .I3(ld_SPL),
         .I4(\DP/reg_data_in [7]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_64 [7]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -48409,7 +48434,7 @@ module z80_0_decoder
         .I2(ld_PCH),
         .I3(ld_PCL),
         .I4(\DP/reg_data_in [7]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_65 [7]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -48419,7 +48444,7 @@ module z80_0_decoder
         .I2(ld_STRL),
         .I3(ld_STRH),
         .I4(\DP/reg_data_in [7]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_66 [7]));
   LUT5 #(
     .INIT(32'hB8BBB888)) 
@@ -48451,7 +48476,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
     \value[7]_i_2__17 
-       (.I0(\value[7]_i_4__10_n_0 ),
+       (.I0(\value[7]_i_4__11_n_0 ),
         .I1(\value_reg[7]_i_5__0_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[1] ),
         .I3(\value[7]_i_6__10_n_0 ),
@@ -48465,7 +48490,7 @@ module z80_0_decoder
         .I1(M1_L_INST_0_i_23_n_0),
         .I2(\FSM_sequential_state_reg_n_0_[8] ),
         .I3(\FSM_sequential_state_reg_n_0_[6] ),
-        .I4(\value[7]_i_5__5_n_0 ),
+        .I4(\value[7]_i_5__4_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[5] ),
         .O(\value[7]_i_2__18_n_0 ));
   LUT6 #(
@@ -48476,7 +48501,7 @@ module z80_0_decoder
         .I2(addr_bus),
         .I3(\value_reg[7]_5 ),
         .I4(ld_IXL),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(D[7]));
   (* SOFT_HLUTNM = "soft_lutpair226" *) 
   LUT3 #(
@@ -48494,7 +48519,7 @@ module z80_0_decoder
         .I2(addr_bus),
         .I3(\value_reg[7]_5 ),
         .I4(ld_IYL),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_22 [7]));
   LUT6 #(
     .INIT(64'h0000000000E400CC)) 
@@ -48504,7 +48529,7 @@ module z80_0_decoder
         .I2(addr_bus),
         .I3(\value_reg[7]_5 ),
         .I4(ld_SPL),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_23 [7]));
   LUT6 #(
     .INIT(64'h0000000000E400CC)) 
@@ -48514,7 +48539,7 @@ module z80_0_decoder
         .I2(addr_bus),
         .I3(\value_reg[7]_5 ),
         .I4(ld_PCL),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_24 [7]));
   LUT6 #(
     .INIT(64'h0000000000E400CC)) 
@@ -48524,7 +48549,7 @@ module z80_0_decoder
         .I2(addr_bus),
         .I3(\value_reg[7]_5 ),
         .I4(ld_STRH),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_25 [7]));
   LUT6 #(
     .INIT(64'h8F808F8F8F808080)) 
@@ -48532,7 +48557,7 @@ module z80_0_decoder
        (.I0(\value_reg[7]_90 [7]),
         .I1(\value_reg[7]_1 ),
         .I2(switch_context),
-        .I3(\value[7]_i_6__4_n_0 ),
+        .I3(\value[7]_i_6__3_n_0 ),
         .I4(\value_reg[7]_5 ),
         .I5(\value[7]_i_7__11_n_0 ),
         .O(\value_reg[7]_57 [7]));
@@ -48576,7 +48601,7 @@ module z80_0_decoder
         .I2(ld_IXH),
         .I3(ld_IXL),
         .I4(\DP/reg_data_in [7]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_62 [7]));
   LUT6 #(
     .INIT(64'h0000000045554000)) 
@@ -48586,17 +48611,8 @@ module z80_0_decoder
         .I2(ld_IYH),
         .I3(ld_IYL),
         .I4(\DP/reg_data_in [7]),
-        .I5(\value[7]_i_4__13_n_0 ),
+        .I5(\value[7]_i_4__15_n_0 ),
         .O(\value_reg[7]_63 [7]));
-  LUT5 #(
-    .INIT(32'hB8BBB888)) 
-    \value[7]_i_3 
-       (.I0(\value[15]_i_5_n_0 ),
-        .I1(\FSM_sequential_state_reg_n_0_[10] ),
-        .I2(\value[7]_i_5__0_n_0 ),
-        .I3(\FSM_sequential_state_reg_n_0_[0] ),
-        .I4(\value[7]_i_6__6_n_0 ),
-        .O(ld_SPH));
   LUT6 #(
     .INIT(64'hB3B0838080808080)) 
     \value[7]_i_30__0 
@@ -48646,23 +48662,23 @@ module z80_0_decoder
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\value[7]_i_57__1_n_0 ),
         .O(\value[7]_i_30__5_n_0 ));
+  LUT6 #(
+    .INIT(64'h00000000C8080808)) 
+    \value[7]_i_30__6 
+       (.I0(ld_L0),
+        .I1(out[1]),
+        .I2(\FSM_sequential_state_reg_n_0_[3] ),
+        .I3(\value[7]_i_45__1_n_0 ),
+        .I4(\op1_reg_n_0_[0] ),
+        .I5(out[0]),
+        .O(\value[7]_i_30__6_n_0 ));
   LUT4 #(
     .INIT(16'h1400)) 
-    \value[7]_i_30__6 
+    \value[7]_i_30__7 
        (.I0(\FSM_sequential_state_reg_n_0_[3] ),
         .I1(out[1]),
         .I2(out[0]),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_30__6_n_0 ));
-  LUT6 #(
-    .INIT(64'h004F0F0000000000)) 
-    \value[7]_i_30__7 
-       (.I0(\value_reg[7]_4 ),
-        .I1(\op0_reg[5]_rep_n_0 ),
-        .I2(\FSM_sequential_state_reg_n_0_[9] ),
-        .I3(out[1]),
-        .I4(\FSM_sequential_state_reg_n_0_[3] ),
-        .I5(out[0]),
         .O(\value[7]_i_30__7_n_0 ));
   LUT6 #(
     .INIT(64'h004000000000000F)) 
@@ -48736,29 +48752,29 @@ module z80_0_decoder
     \value[7]_i_31__6 
        (.I0(\value[7]_i_21__6_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
-        .I2(\value[7]_i_32__8_n_0 ),
+        .I2(\value[7]_i_33__4_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
-        .I4(\value[7]_i_26__6_n_0 ),
+        .I4(\value[7]_i_26__5_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_31__6_n_0 ));
+  LUT6 #(
+    .INIT(64'h004F0F0000000000)) 
+    \value[7]_i_31__7 
+       (.I0(\value_reg[7]_4 ),
+        .I1(\op0_reg[5]_rep_n_0 ),
+        .I2(\FSM_sequential_state_reg_n_0_[9] ),
+        .I3(out[1]),
+        .I4(\FSM_sequential_state_reg_n_0_[3] ),
+        .I5(out[0]),
+        .O(\value[7]_i_31__7_n_0 ));
   LUT5 #(
     .INIT(32'h00010000)) 
-    \value[7]_i_31__7 
+    \value[7]_i_31__8 
        (.I0(\FSM_sequential_state_reg_n_0_[9] ),
         .I1(\FSM_sequential_state_reg_n_0_[3] ),
         .I2(out[1]),
         .I3(out[0]),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
-        .O(\value[7]_i_31__7_n_0 ));
-  LUT6 #(
-    .INIT(64'h0080000000000000)) 
-    \value[7]_i_31__8 
-       (.I0(out[0]),
-        .I1(out[1]),
-        .I2(\value[7]_i_45__2_n_0 ),
-        .I3(\value_reg[7]_4 ),
-        .I4(\FSM_sequential_state_reg_n_0_[3] ),
-        .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\value[7]_i_31__8_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair253" *) 
   LUT2 #(
@@ -48809,7 +48825,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h888888888B888888)) 
     \value[7]_i_32__5 
-       (.I0(\value[7]_i_14__2_n_0 ),
+       (.I0(\value[7]_i_14__1_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(\FSM_sequential_state_reg_n_0_[8] ),
         .I3(M1_L_INST_0_i_45_n_0),
@@ -48832,13 +48848,15 @@ module z80_0_decoder
         .I4(\value[7]_i_36__5_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_32__7_n_0 ));
-  LUT4 #(
-    .INIT(16'h0800)) 
+  LUT6 #(
+    .INIT(64'h0080000000000000)) 
     \value[7]_i_32__8 
        (.I0(out[0]),
-        .I1(\FSM_sequential_state_reg_n_0_[3] ),
-        .I2(out[1]),
-        .I3(\FSM_sequential_state_reg_n_0_[9] ),
+        .I1(out[1]),
+        .I2(\value[7]_i_46__3_n_0 ),
+        .I3(\value_reg[7]_4 ),
+        .I4(\FSM_sequential_state_reg_n_0_[3] ),
+        .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\value[7]_i_32__8_n_0 ));
   LUT5 #(
     .INIT(32'h00000200)) 
@@ -48895,31 +48913,29 @@ module z80_0_decoder
         .I4(\FSM_sequential_state_reg_n_0_[3] ),
         .I5(out[0]),
         .O(\value[7]_i_33__3_n_0 ));
+  LUT4 #(
+    .INIT(16'h0800)) 
+    \value[7]_i_33__4 
+       (.I0(out[0]),
+        .I1(\FSM_sequential_state_reg_n_0_[3] ),
+        .I2(out[1]),
+        .I3(\FSM_sequential_state_reg_n_0_[9] ),
+        .O(\value[7]_i_33__4_n_0 ));
   LUT5 #(
     .INIT(32'h00000014)) 
-    \value[7]_i_33__4 
+    \value[7]_i_33__5 
        (.I0(\FSM_sequential_state_reg_n_0_[9] ),
         .I1(out[0]),
         .I2(\FSM_sequential_state_reg_n_0_[3] ),
         .I3(out[1]),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
-        .O(\value[7]_i_33__4_n_0 ));
+        .O(\value[7]_i_33__5_n_0 ));
   LUT3 #(
     .INIT(8'h04)) 
-    \value[7]_i_33__5 
+    \value[7]_i_33__6 
        (.I0(out[1]),
         .I1(out[0]),
         .I2(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_33__5_n_0 ));
-  LUT6 #(
-    .INIT(64'h0800FFFF08000000)) 
-    \value[7]_i_33__6 
-       (.I0(out[0]),
-        .I1(\value[7]_i_46__3_n_0 ),
-        .I2(\FSM_sequential_state_reg_n_0_[3] ),
-        .I3(\FSM_sequential_state_reg_n_0_[9] ),
-        .I4(\FSM_sequential_state_reg_n_0_[8] ),
-        .I5(\value[7]_i_25__6_n_0 ),
         .O(\value[7]_i_33__6_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair255" *) 
   LUT3 #(
@@ -48976,28 +48992,28 @@ module z80_0_decoder
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
         .I2(\op1_reg[5]_rep_n_0 ),
         .I3(p_1_in[0]),
-        .I4(\value[7]_i_11__10_n_0 ),
+        .I4(\value[7]_i_11__9_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_34__4_n_0 ));
   LUT6 #(
-    .INIT(64'h0C08000000000000)) 
-    \value[7]_i_34__5 
-       (.I0(\FSM_sequential_state_reg_n_0_[8] ),
-        .I1(out[0]),
-        .I2(out[1]),
-        .I3(ld_L0),
-        .I4(\FSM_sequential_state_reg_n_0_[3] ),
-        .I5(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_34__5_n_0 ));
-  LUT6 #(
     .INIT(64'h88B8888888888888)) 
-    \value[7]_i_34__6 
+    \value[7]_i_34__5 
        (.I0(\value[7]_i_21__10_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[9] ),
         .I2(\addr_bus[15]_INST_0_i_20_n_0 ),
         .I3(p_1_in[2]),
         .I4(p_1_in[0]),
         .I5(p_1_in[1]),
+        .O(\value[7]_i_34__5_n_0 ));
+  LUT6 #(
+    .INIT(64'h0800FFFF08000000)) 
+    \value[7]_i_34__6 
+       (.I0(out[0]),
+        .I1(\value[7]_i_47__3_n_0 ),
+        .I2(\FSM_sequential_state_reg_n_0_[3] ),
+        .I3(\FSM_sequential_state_reg_n_0_[9] ),
+        .I4(\FSM_sequential_state_reg_n_0_[8] ),
+        .I5(\value[7]_i_25__7_n_0 ),
         .O(\value[7]_i_34__6_n_0 ));
   LUT6 #(
     .INIT(64'h0040000000000000)) 
@@ -49036,32 +49052,34 @@ module z80_0_decoder
         .I5(\value[7]_i_59__2_n_0 ),
         .O(\value[7]_i_35__0_n_0 ));
   LUT6 #(
-    .INIT(64'h4000000000303000)) 
+    .INIT(64'h0C08000000000000)) 
     \value[7]_i_35__1 
-       (.I0(\value[7]_i_45__1_n_0 ),
+       (.I0(\FSM_sequential_state_reg_n_0_[8] ),
+        .I1(out[0]),
+        .I2(out[1]),
+        .I3(ld_L0),
+        .I4(\FSM_sequential_state_reg_n_0_[3] ),
+        .I5(\FSM_sequential_state_reg_n_0_[9] ),
+        .O(\value[7]_i_35__1_n_0 ));
+  LUT6 #(
+    .INIT(64'h4000000000303000)) 
+    \value[7]_i_35__2 
+       (.I0(\value[7]_i_45__2_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
         .I2(out[0]),
         .I3(\FSM_sequential_state_reg_n_0_[3] ),
         .I4(out[1]),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_35__1_n_0 ));
+        .O(\value[7]_i_35__2_n_0 ));
   LUT6 #(
     .INIT(64'h0000000000020000)) 
-    \value[7]_i_35__2 
+    \value[7]_i_35__3 
        (.I0(p_1_in[1]),
         .I1(p_1_in[0]),
         .I2(\FSM_sequential_state_reg_n_0_[3] ),
         .I3(out[1]),
         .I4(out[0]),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_35__2_n_0 ));
-  LUT4 #(
-    .INIT(16'h0004)) 
-    \value[7]_i_35__3 
-       (.I0(\FSM_sequential_state_reg_n_0_[9] ),
-        .I1(out[1]),
-        .I2(out[0]),
-        .I3(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_35__3_n_0 ));
   LUT2 #(
     .INIT(4'hE)) 
@@ -49073,7 +49091,7 @@ module z80_0_decoder
     .INIT(64'h3F33555500000000)) 
     \value[7]_i_36 
        (.I0(\value_reg[7]_i_40_n_0 ),
-        .I1(\value[7]_i_39__2_n_0 ),
+        .I1(\value[7]_i_39__1_n_0 ),
         .I2(\value[7]_i_41_n_0 ),
         .I3(\value_reg[6] ),
         .I4(alu_op[4]),
@@ -49099,7 +49117,7 @@ module z80_0_decoder
         .I4(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\value[7]_i_36__2_n_0 ));
   LUT5 #(
-    .INIT(32'h00000040)) 
+    .INIT(32'h00000200)) 
     \value[7]_i_36__3 
        (.I0(\FSM_sequential_state_reg_n_0_[9] ),
         .I1(\FSM_sequential_state_reg_n_0_[3] ),
@@ -49107,14 +49125,13 @@ module z80_0_decoder
         .I3(out[0]),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_36__3_n_0 ));
-  LUT5 #(
-    .INIT(32'h00000200)) 
+  LUT4 #(
+    .INIT(16'h0004)) 
     \value[7]_i_36__4 
        (.I0(\FSM_sequential_state_reg_n_0_[9] ),
-        .I1(\FSM_sequential_state_reg_n_0_[3] ),
-        .I2(out[1]),
-        .I3(out[0]),
-        .I4(\FSM_sequential_state_reg_n_0_[8] ),
+        .I1(out[1]),
+        .I2(out[0]),
+        .I3(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_36__4_n_0 ));
   LUT2 #(
     .INIT(4'h2)) 
@@ -49149,25 +49166,24 @@ module z80_0_decoder
         .I4(\FSM_sequential_state_reg_n_0_[6] ),
         .I5(\value[7]_i_54__1_n_0 ),
         .O(\value[7]_i_37__1_n_0 ));
+  LUT5 #(
+    .INIT(32'h00000040)) 
+    \value[7]_i_37__2 
+       (.I0(\FSM_sequential_state_reg_n_0_[9] ),
+        .I1(\FSM_sequential_state_reg_n_0_[3] ),
+        .I2(out[1]),
+        .I3(out[0]),
+        .I4(\FSM_sequential_state_reg_n_0_[8] ),
+        .O(\value[7]_i_37__2_n_0 ));
   LUT6 #(
     .INIT(64'h0088008830333000)) 
-    \value[7]_i_37__2 
+    \value[7]_i_37__3 
        (.I0(\value[7]_i_22__9_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(\FSM_sequential_state[3]_i_4_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
         .I4(\value[0]_i_5__5_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
-        .O(\value[7]_i_37__2_n_0 ));
-  LUT6 #(
-    .INIT(64'h0202000000000100)) 
-    \value[7]_i_37__3 
-       (.I0(\FSM_sequential_state_reg_n_0_[8] ),
-        .I1(out[0]),
-        .I2(out[1]),
-        .I3(ld_L0),
-        .I4(\FSM_sequential_state_reg_n_0_[3] ),
-        .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\value[7]_i_37__3_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair99" *) 
   LUT2 #(
@@ -49216,28 +49232,18 @@ module z80_0_decoder
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\value[7]_i_38__3_n_0 ));
   LUT6 #(
-    .INIT(64'h0020000000030000)) 
+    .INIT(64'h0202000000000100)) 
     \value[7]_i_38__4 
-       (.I0(\value[7]_i_23__10_n_0 ),
-        .I1(\FSM_sequential_state_reg_n_0_[9] ),
-        .I2(\FSM_sequential_state_reg_n_0_[3] ),
-        .I3(out[1]),
-        .I4(out[0]),
-        .I5(\FSM_sequential_state_reg_n_0_[8] ),
+       (.I0(\FSM_sequential_state_reg_n_0_[8] ),
+        .I1(out[0]),
+        .I2(out[1]),
+        .I3(ld_L0),
+        .I4(\FSM_sequential_state_reg_n_0_[3] ),
+        .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\value[7]_i_38__4_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair30" *) 
-  LUT5 #(
-    .INIT(32'h0000A404)) 
-    \value[7]_i_39__0 
-       (.I0(\value_reg[7]_1 ),
-        .I1(data2[15]),
-        .I2(\value_reg[7]_2 ),
-        .I3(data1[7]),
-        .I4(\value_reg[7]_20 ),
-        .O(\value[7]_i_39__0_n_0 ));
   LUT6 #(
     .INIT(64'hFFCCFBCBFFCCF8C8)) 
-    \value[7]_i_39__1 
+    \value[7]_i_39__0 
        (.I0(\value[7]_i_50_n_0 ),
         .I1(drive_reg_data),
         .I2(\value_reg[7]_68 ),
@@ -49247,23 +49253,33 @@ module z80_0_decoder
         .O(\value_reg[0]_7 ));
   LUT6 #(
     .INIT(64'h0222222202022202)) 
-    \value[7]_i_39__2 
+    \value[7]_i_39__1 
        (.I0(\value[7]_i_67_n_0 ),
         .I1(\value[7]_i_68__0_n_0 ),
         .I2(\value[7]_i_69_n_0 ),
         .I3(\value_reg[5]_1 ),
         .I4(\value[7]_i_70_n_0 ),
         .I5(\value_reg[7]_100 ),
-        .O(\value[7]_i_39__2_n_0 ));
+        .O(\value[7]_i_39__1_n_0 ));
   LUT6 #(
     .INIT(64'h10001000000D0008)) 
-    \value[7]_i_39__3 
+    \value[7]_i_39__2 
        (.I0(\FSM_sequential_state_reg_n_0_[7] ),
         .I1(\value[7]_i_32__6_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[8] ),
         .I3(out[0]),
         .I4(\value[7]_i_60__2_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
+        .O(\value[7]_i_39__2_n_0 ));
+  LUT6 #(
+    .INIT(64'h0020000000030000)) 
+    \value[7]_i_39__3 
+       (.I0(\value[7]_i_24__10_n_0 ),
+        .I1(\FSM_sequential_state_reg_n_0_[9] ),
+        .I2(\FSM_sequential_state_reg_n_0_[3] ),
+        .I3(out[1]),
+        .I4(out[0]),
+        .I5(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_39__3_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair43" *) 
   LUT5 #(
@@ -49275,19 +49291,67 @@ module z80_0_decoder
         .I3(\value[6]_i_11_n_0 ),
         .I4(\value[7]_i_42__4_n_0 ),
         .O(\value[7]_i_39__4_n_0 ));
+  LUT5 #(
+    .INIT(32'hB8BBB888)) 
+    \value[7]_i_3__1 
+       (.I0(\value[15]_i_5_n_0 ),
+        .I1(\FSM_sequential_state_reg_n_0_[10] ),
+        .I2(\value[7]_i_5__0_n_0 ),
+        .I3(\FSM_sequential_state_reg_n_0_[0] ),
+        .I4(\value[7]_i_6__5_n_0 ),
+        .O(ld_SPH));
+  LUT6 #(
+    .INIT(64'hAFA0CFCFAFA0C0C0)) 
+    \value[7]_i_3__10 
+       (.I0(\value[7]_i_8__11_n_0 ),
+        .I1(\value[7]_i_9__4_n_0 ),
+        .I2(\FSM_sequential_state_reg_n_0_[1] ),
+        .I3(\value[7]_i_10__10_n_0 ),
+        .I4(\FSM_sequential_state_reg_n_0_[5] ),
+        .I5(\value[7]_i_11__3_n_0 ),
+        .O(\value[7]_i_3__10_n_0 ));
+  LUT6 #(
+    .INIT(64'h3033300030883088)) 
+    \value[7]_i_3__11 
+       (.I0(\value[7]_i_7__8_n_0 ),
+        .I1(\FSM_sequential_state_reg_n_0_[5] ),
+        .I2(\value[7]_i_8__7_n_0 ),
+        .I3(\FSM_sequential_state_reg_n_0_[6] ),
+        .I4(\value[7]_i_9__6_n_0 ),
+        .I5(\FSM_sequential_state_reg_n_0_[7] ),
+        .O(\value[7]_i_3__11_n_0 ));
+  LUT5 #(
+    .INIT(32'hB8BBB888)) 
+    \value[7]_i_3__12 
+       (.I0(\value[7]_i_8__9_n_0 ),
+        .I1(\FSM_sequential_state_reg_n_0_[5] ),
+        .I2(\value[7]_i_9__14_n_0 ),
+        .I3(\FSM_sequential_state_reg_n_0_[6] ),
+        .I4(\value[7]_i_10__8_n_0 ),
+        .O(\value[7]_i_3__12_n_0 ));
+  LUT6 #(
+    .INIT(64'h4000000000000000)) 
+    \value[7]_i_3__13 
+       (.I0(\FSM_sequential_state_reg_n_0_[6] ),
+        .I1(\FSM_sequential_state_reg_n_0_[8] ),
+        .I2(\addr_bus[15]_INST_0_i_19_n_0 ),
+        .I3(\FSM_sequential_state_reg_n_0_[9] ),
+        .I4(\FSM_sequential_state_reg_n_0_[7] ),
+        .I5(\FSM_sequential_state_reg_n_0_[5] ),
+        .O(\value[7]_i_3__13_n_0 ));
   LUT6 #(
     .INIT(64'h00000000FFE200E2)) 
-    \value[7]_i_3__0 
+    \value[7]_i_3__2 
        (.I0(\value[7]_i_7__10_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[1] ),
-        .I2(\value[7]_i_8__7_n_0 ),
+        .I2(\value[7]_i_8__8_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[0] ),
         .I4(\value[7]_i_9__0_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[10] ),
         .O(ld_IXH));
   LUT6 #(
     .INIT(64'h00B8FFFF00B80000)) 
-    \value[7]_i_3__1 
+    \value[7]_i_3__3 
        (.I0(\addr_bus[15]_INST_0_i_5_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[0] ),
         .I2(\addr_bus[15]_INST_0_i_7_n_0 ),
@@ -49296,57 +49360,18 @@ module z80_0_decoder
         .I5(\value_reg[7]_i_5_n_0 ),
         .O(ld_PCH));
   LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \value[7]_i_3__10 
-       (.I0(\value[7]_i_8__9_n_0 ),
-        .I1(\value[7]_i_9__10_n_0 ),
-        .I2(\FSM_sequential_state_reg_n_0_[5] ),
-        .I3(\value[7]_i_10__11_n_0 ),
-        .I4(\FSM_sequential_state_reg_n_0_[6] ),
-        .I5(\value[7]_i_11__5_n_0 ),
-        .O(\value[7]_i_3__10_n_0 ));
-  LUT5 #(
-    .INIT(32'hB8BBB888)) 
-    \value[7]_i_3__11 
-       (.I0(\value[7]_i_8__8_n_0 ),
-        .I1(\FSM_sequential_state_reg_n_0_[5] ),
-        .I2(\value[7]_i_9__14_n_0 ),
-        .I3(\FSM_sequential_state_reg_n_0_[6] ),
-        .I4(\value[7]_i_10__7_n_0 ),
-        .O(\value[7]_i_3__11_n_0 ));
-  LUT6 #(
-    .INIT(64'h4000000000000000)) 
-    \value[7]_i_3__12 
-       (.I0(\FSM_sequential_state_reg_n_0_[6] ),
-        .I1(\FSM_sequential_state_reg_n_0_[8] ),
-        .I2(\addr_bus[15]_INST_0_i_19_n_0 ),
-        .I3(\FSM_sequential_state_reg_n_0_[9] ),
-        .I4(\FSM_sequential_state_reg_n_0_[7] ),
-        .I5(\FSM_sequential_state_reg_n_0_[5] ),
-        .O(\value[7]_i_3__12_n_0 ));
-  LUT6 #(
-    .INIT(64'h0000000000000010)) 
-    \value[7]_i_3__13 
-       (.I0(\FSM_sequential_state_reg_n_0_[1] ),
-        .I1(\FSM_sequential_state_reg_n_0_[6] ),
-        .I2(M1_L_INST_0_i_28_n_0),
-        .I3(\FSM_sequential_state_reg_n_0_[7] ),
-        .I4(\FSM_sequential_state_reg_n_0_[5] ),
-        .I5(\FSM_sequential_state_reg_n_0_[10] ),
-        .O(switch_context));
-  LUT6 #(
     .INIT(64'h88B8FFFF88B80000)) 
-    \value[7]_i_3__2 
-       (.I0(\value[7]_i_8_n_0 ),
+    \value[7]_i_3__4 
+       (.I0(\value[7]_i_8__0_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
         .I2(\value[7]_i_9__13_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[6] ),
         .I4(\FSM_sequential_state_reg_n_0_[1] ),
         .I5(\value_reg[7]_i_10__1_n_0 ),
-        .O(\value[7]_i_3__2_n_0 ));
+        .O(\value[7]_i_3__4_n_0 ));
   LUT6 #(
     .INIT(64'h00000000FFE200E2)) 
-    \value[7]_i_3__3 
+    \value[7]_i_3__5 
        (.I0(\value[7]_i_5__2_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[1] ),
         .I2(\value[7]_i_6__7_n_0 ),
@@ -49356,17 +49381,17 @@ module z80_0_decoder
         .O(ld_F_data));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \value[7]_i_3__4 
+    \value[7]_i_3__6 
        (.I0(\value_reg[7]_i_8__0_n_0 ),
         .I1(\value[7]_i_9__9_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[1] ),
         .I3(\value[7]_i_10__4_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[5] ),
-        .I5(\value[7]_i_4__10_n_0 ),
-        .O(\value[7]_i_3__4_n_0 ));
+        .I5(\value[7]_i_4__11_n_0 ),
+        .O(\value[7]_i_3__6_n_0 ));
   LUT6 #(
     .INIT(64'h00000000EEE222E2)) 
-    \value[7]_i_3__5 
+    \value[7]_i_3__7 
        (.I0(\value_reg[7]_i_5__1_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[0] ),
         .I2(\value[7]_i_6__8_n_0 ),
@@ -49376,8 +49401,8 @@ module z80_0_decoder
         .O(ld_IYH));
   LUT6 #(
     .INIT(64'h00000000FFE200E2)) 
-    \value[7]_i_3__6 
-       (.I0(\value[7]_i_8__2_n_0 ),
+    \value[7]_i_3__8 
+       (.I0(\value[7]_i_8__3_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[1] ),
         .I2(\value[7]_i_9__8_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[0] ),
@@ -49386,34 +49411,14 @@ module z80_0_decoder
         .O(set_H));
   LUT6 #(
     .INIT(64'h00000000FFE200E2)) 
-    \value[7]_i_3__7 
-       (.I0(\value[7]_i_5__7_n_0 ),
+    \value[7]_i_3__9 
+       (.I0(\value[7]_i_5__6_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[1] ),
         .I2(\value[7]_i_6__9_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[0] ),
         .I4(\value[7]_i_7__7_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[10] ),
         .O(ld_STRL));
-  LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \value[7]_i_3__8 
-       (.I0(\value[7]_i_8__11_n_0 ),
-        .I1(\value[7]_i_9__4_n_0 ),
-        .I2(\FSM_sequential_state_reg_n_0_[1] ),
-        .I3(\value[7]_i_10__9_n_0 ),
-        .I4(\FSM_sequential_state_reg_n_0_[5] ),
-        .I5(\value[7]_i_11__3_n_0 ),
-        .O(\value[7]_i_3__8_n_0 ));
-  LUT6 #(
-    .INIT(64'h3033300030883088)) 
-    \value[7]_i_3__9 
-       (.I0(\value[7]_i_7__8_n_0 ),
-        .I1(\FSM_sequential_state_reg_n_0_[5] ),
-        .I2(\value[7]_i_8__6_n_0 ),
-        .I3(\FSM_sequential_state_reg_n_0_[6] ),
-        .I4(\value[7]_i_9__6_n_0 ),
-        .I5(\FSM_sequential_state_reg_n_0_[7] ),
-        .O(\value[7]_i_3__9_n_0 ));
   LUT5 #(
     .INIT(32'hB8BBB888)) 
     \value[7]_i_4 
@@ -49421,54 +49426,54 @@ module z80_0_decoder
         .I1(\FSM_sequential_state_reg_n_0_[10] ),
         .I2(\value[7]_i_7__4_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[0] ),
-        .I4(\value[7]_i_8__0_n_0 ),
+        .I4(\value[7]_i_8__1_n_0 ),
         .O(ld_SPL));
+  (* SOFT_HLUTNM = "soft_lutpair30" *) 
+  LUT5 #(
+    .INIT(32'h0000A404)) 
+    \value[7]_i_40 
+       (.I0(\value_reg[7]_1 ),
+        .I1(data2[15]),
+        .I2(\value_reg[7]_2 ),
+        .I3(data1[7]),
+        .I4(\value_reg[7]_20 ),
+        .O(\value[7]_i_40_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair102" *) 
   LUT4 #(
     .INIT(16'hFDDD)) 
-    \value[7]_i_40 
+    \value[7]_i_40__0 
        (.I0(\value[2]_i_10__2_n_0 ),
         .I1(\value[7]_i_42__4_n_0 ),
         .I2(\value_reg[5]_5 ),
         .I3(\value_reg[7]_74 [7]),
-        .O(\value[7]_i_40_n_0 ));
+        .O(\value[7]_i_40__0_n_0 ));
   LUT3 #(
     .INIT(8'h60)) 
-    \value[7]_i_40__0 
+    \value[7]_i_40__1 
        (.I0(out[0]),
         .I1(out[1]),
         .I2(\FSM_sequential_state_reg_n_0_[3] ),
-        .O(\value[7]_i_40__0_n_0 ));
+        .O(\value[7]_i_40__1_n_0 ));
   LUT6 #(
     .INIT(64'hE200FFFFE2000000)) 
-    \value[7]_i_40__1 
+    \value[7]_i_40__2 
        (.I0(M1_L_INST_0_i_40_n_0),
         .I1(\FSM_sequential_state_reg_n_0_[9] ),
         .I2(\addr_bus[15]_INST_0_i_19_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
         .I4(\FSM_sequential_state_reg_n_0_[7] ),
         .I5(\value[7]_i_58__1_n_0 ),
-        .O(\value[7]_i_40__1_n_0 ));
+        .O(\value[7]_i_40__2_n_0 ));
   LUT6 #(
     .INIT(64'h0000880000551000)) 
-    \value[7]_i_40__2 
+    \value[7]_i_40__3 
        (.I0(\FSM_sequential_state_reg_n_0_[8] ),
         .I1(\FSM_sequential_state_reg_n_0_[3] ),
         .I2(\value[7]_i_29__10_n_0 ),
         .I3(out[0]),
         .I4(out[1]),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_40__2_n_0 ));
-  LUT6 #(
-    .INIT(64'h000F000008000800)) 
-    \value[7]_i_40__3 
-       (.I0(\value[7]_i_47__3_n_0 ),
-        .I1(\FSM_sequential_state_reg_n_0_[5] ),
-        .I2(\FSM_sequential_state_reg_n_0_[10] ),
-        .I3(\FSM_sequential_state_reg_n_0_[1] ),
-        .I4(\value[7]_i_48__3_n_0 ),
-        .I5(\FSM_sequential_state_reg_n_0_[0] ),
-        .O(ld_L0));
+        .O(\value[7]_i_40__3_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair21" *) 
   LUT5 #(
     .INIT(32'h88877787)) 
@@ -49494,7 +49499,7 @@ module z80_0_decoder
     \value[7]_i_41__1 
        (.I0(\value[7]_i_74_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
-        .I2(\value[7]_i_12__5_n_0 ),
+        .I2(\value[7]_i_12__4_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[6] ),
         .I4(\value[7]_i_75_n_0 ),
         .O(\value[7]_i_41__1_n_0 ));
@@ -49517,22 +49522,23 @@ module z80_0_decoder
         .I4(out[1]),
         .I5(out[0]),
         .O(\value[7]_i_41__3_n_0 ));
-  LUT5 #(
-    .INIT(32'h10000000)) 
+  LUT6 #(
+    .INIT(64'h000F000008000800)) 
     \value[7]_i_41__4 
-       (.I0(\FSM_sequential_state_reg_n_0_[3] ),
-        .I1(\value_reg[7]_4 ),
-        .I2(\op0_reg[5]_rep_n_0 ),
-        .I3(out[1]),
-        .I4(out[0]),
-        .O(\value[7]_i_41__4_n_0 ));
+       (.I0(\value[7]_i_48__3_n_0 ),
+        .I1(\FSM_sequential_state_reg_n_0_[5] ),
+        .I2(\FSM_sequential_state_reg_n_0_[10] ),
+        .I3(\FSM_sequential_state_reg_n_0_[1] ),
+        .I4(\value[7]_i_49__3_n_0 ),
+        .I5(\FSM_sequential_state_reg_n_0_[0] ),
+        .O(ld_L0));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
     \value[7]_i_42 
        (.I0(\value[7]_i_76_n_0 ),
-        .I1(\value[7]_i_15__5_n_0 ),
+        .I1(\value[7]_i_15__6_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[5] ),
-        .I3(\value[7]_i_16__9_n_0 ),
+        .I3(\value[7]_i_16__8_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[6] ),
         .I5(\value[7]_i_77_n_0 ),
         .O(\value[7]_i_42_n_0 ));
@@ -49563,15 +49569,14 @@ module z80_0_decoder
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
         .O(\value[7]_i_42__2_n_0 ));
-  LUT6 #(
-    .INIT(64'h0000000000400000)) 
+  LUT5 #(
+    .INIT(32'h10000000)) 
     \value[7]_i_42__3 
-       (.I0(out[0]),
-        .I1(out[1]),
-        .I2(\op1_reg[5]_rep_n_0 ),
-        .I3(\op1_reg[4]_rep_n_0 ),
-        .I4(\FSM_sequential_state_reg_n_0_[3] ),
-        .I5(\FSM_sequential_state_reg_n_0_[9] ),
+       (.I0(\FSM_sequential_state_reg_n_0_[3] ),
+        .I1(\value_reg[7]_4 ),
+        .I2(\op0_reg[5]_rep_n_0 ),
+        .I3(out[1]),
+        .I4(out[0]),
         .O(\value[7]_i_42__3_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair220" *) 
   LUT2 #(
@@ -49610,7 +49615,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h0040030000000000)) 
     \value[7]_i_43__2 
-       (.I0(\value[7]_i_45__1_n_0 ),
+       (.I0(\value[7]_i_45__2_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
         .I2(out[0]),
         .I3(\FSM_sequential_state_reg_n_0_[3] ),
@@ -49627,13 +49632,15 @@ module z80_0_decoder
         .I4(out[1]),
         .I5(out[0]),
         .O(\value[7]_i_43__3_n_0 ));
-  LUT4 #(
-    .INIT(16'h0201)) 
+  LUT6 #(
+    .INIT(64'h0000000000400000)) 
     \value[7]_i_43__4 
-       (.I0(\FSM_sequential_state_reg_n_0_[9] ),
-        .I1(\FSM_sequential_state_reg_n_0_[3] ),
-        .I2(out[1]),
-        .I3(out[0]),
+       (.I0(out[0]),
+        .I1(out[1]),
+        .I2(\op1_reg[5]_rep_n_0 ),
+        .I3(\op1_reg[4]_rep_n_0 ),
+        .I4(\FSM_sequential_state_reg_n_0_[3] ),
+        .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\value[7]_i_43__4_n_0 ));
   LUT6 #(
     .INIT(64'hA0AF30F0A0AF3FFF)) 
@@ -49682,12 +49689,13 @@ module z80_0_decoder
         .I3(\FSM_sequential_state_reg_n_0_[3] ),
         .I4(out[0]),
         .O(\value[7]_i_44__3_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair58" *) 
-  LUT2 #(
-    .INIT(4'h2)) 
+  LUT4 #(
+    .INIT(16'h0201)) 
     \value[7]_i_44__4 
-       (.I0(\op1_reg_n_0_[2] ),
-        .I1(\op1_reg_n_0_[1] ),
+       (.I0(\FSM_sequential_state_reg_n_0_[9] ),
+        .I1(\FSM_sequential_state_reg_n_0_[3] ),
+        .I2(out[1]),
+        .I3(out[0]),
         .O(\value[7]_i_44__4_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair6" *) 
   LUT5 #(
@@ -49709,16 +49717,16 @@ module z80_0_decoder
         .I4(\FSM_sequential_state_reg_n_0_[3] ),
         .I5(\FSM_sequential_state_reg_n_0_[9] ),
         .O(\value[7]_i_45__0_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair277" *) 
+  (* SOFT_HLUTNM = "soft_lutpair58" *) 
   LUT2 #(
-    .INIT(4'hB)) 
+    .INIT(4'h2)) 
     \value[7]_i_45__1 
-       (.I0(\op1_reg[3]_0 ),
-        .I1(\op0_reg[5]_rep_n_0 ),
+       (.I0(\op1_reg_n_0_[2] ),
+        .I1(\op1_reg_n_0_[1] ),
         .O(\value[7]_i_45__1_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair277" *) 
   LUT2 #(
-    .INIT(4'h8)) 
+    .INIT(4'hB)) 
     \value[7]_i_45__2 
        (.I0(\op1_reg[3]_0 ),
         .I1(\op0_reg[5]_rep_n_0 ),
@@ -49777,13 +49785,12 @@ module z80_0_decoder
         .I4(\FSM_sequential_state_reg_n_0_[9] ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_46__2_n_0 ));
-  LUT4 #(
-    .INIT(16'h4000)) 
+  (* SOFT_HLUTNM = "soft_lutpair277" *) 
+  LUT2 #(
+    .INIT(4'h8)) 
     \value[7]_i_46__3 
-       (.I0(\value_reg[7]_4 ),
-        .I1(\op1_reg[3]_0 ),
-        .I2(\op0_reg[5]_rep_n_0 ),
-        .I3(out[1]),
+       (.I0(\op1_reg[3]_0 ),
+        .I1(\op0_reg[5]_rep_n_0 ),
         .O(\value[7]_i_46__3_n_0 ));
   LUT3 #(
     .INIT(8'hB8)) 
@@ -49820,15 +49827,13 @@ module z80_0_decoder
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
         .O(\value[7]_i_47__2_n_0 ));
-  LUT6 #(
-    .INIT(64'h0000000000800000)) 
+  LUT4 #(
+    .INIT(16'h4000)) 
     \value[7]_i_47__3 
-       (.I0(\FSM_sequential_state_reg_n_0_[7] ),
-        .I1(\FSM_sequential_state_reg_n_0_[9] ),
-        .I2(\value[7]_i_11__7_n_0 ),
-        .I3(out[0]),
-        .I4(\FSM_sequential_state_reg_n_0_[8] ),
-        .I5(\FSM_sequential_state_reg_n_0_[6] ),
+       (.I0(\value_reg[7]_4 ),
+        .I1(\op1_reg[3]_0 ),
+        .I2(\op0_reg[5]_rep_n_0 ),
+        .I3(out[1]),
         .O(\value[7]_i_47__3_n_0 ));
   LUT6 #(
     .INIT(64'hB8BBB8B8B8B8B8BB)) 
@@ -49869,14 +49874,14 @@ module z80_0_decoder
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
         .O(\value[7]_i_48__2_n_0 ));
   LUT6 #(
-    .INIT(64'h0000000000100000)) 
+    .INIT(64'h0000000000800000)) 
     \value[7]_i_48__3 
-       (.I0(\FSM_sequential_state_reg_n_0_[6] ),
-        .I1(\FSM_sequential_state_reg_n_0_[8] ),
-        .I2(\addr_bus[15]_INST_0_i_20_n_0 ),
-        .I3(\FSM_sequential_state_reg_n_0_[9] ),
-        .I4(\FSM_sequential_state_reg_n_0_[7] ),
-        .I5(\FSM_sequential_state_reg_n_0_[5] ),
+       (.I0(\FSM_sequential_state_reg_n_0_[7] ),
+        .I1(\FSM_sequential_state_reg_n_0_[9] ),
+        .I2(\value[7]_i_11__6_n_0 ),
+        .I3(out[0]),
+        .I4(\FSM_sequential_state_reg_n_0_[8] ),
+        .I5(\FSM_sequential_state_reg_n_0_[6] ),
         .O(\value[7]_i_48__3_n_0 ));
   LUT6 #(
     .INIT(64'h000000F000C08C03)) 
@@ -49897,6 +49902,16 @@ module z80_0_decoder
         .I3(out[0]),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .O(\value[7]_i_49__2_n_0 ));
+  LUT6 #(
+    .INIT(64'h0000000000100000)) 
+    \value[7]_i_49__3 
+       (.I0(\FSM_sequential_state_reg_n_0_[6] ),
+        .I1(\FSM_sequential_state_reg_n_0_[8] ),
+        .I2(\addr_bus[15]_INST_0_i_20_n_0 ),
+        .I3(\FSM_sequential_state_reg_n_0_[9] ),
+        .I4(\FSM_sequential_state_reg_n_0_[7] ),
+        .I5(\FSM_sequential_state_reg_n_0_[5] ),
+        .O(\value[7]_i_49__3_n_0 ));
   LUT5 #(
     .INIT(32'hB8BBB888)) 
     \value[7]_i_4__0 
@@ -49904,7 +49919,7 @@ module z80_0_decoder
         .I1(\FSM_sequential_state_reg_n_0_[10] ),
         .I2(\value_reg[7]_i_7_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[0] ),
-        .I4(\value[7]_i_8__1_n_0 ),
+        .I4(\value[7]_i_8__2_n_0 ),
         .O(ld_PCL));
   LUT6 #(
     .INIT(64'h00000000FFE200E2)) 
@@ -49917,58 +49932,78 @@ module z80_0_decoder
         .I5(\FSM_sequential_state_reg_n_0_[10] ),
         .O(set_N));
   LUT6 #(
-    .INIT(64'h0000000001004000)) 
+    .INIT(64'h0000000024000000)) 
     \value[7]_i_4__10 
-       (.I0(\FSM_sequential_state_reg_n_0_[7] ),
-        .I1(\FSM_sequential_state_reg_n_0_[8] ),
-        .I2(out[0]),
-        .I3(\value[7]_i_11__7_n_0 ),
-        .I4(\FSM_sequential_state_reg_n_0_[9] ),
+       (.I0(\FSM_sequential_state_reg_n_0_[5] ),
+        .I1(\FSM_sequential_state_reg_n_0_[7] ),
+        .I2(\FSM_sequential_state_reg_n_0_[9] ),
+        .I3(\value[7]_i_6__13_n_0 ),
+        .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
         .O(\value[7]_i_4__10_n_0 ));
   LUT6 #(
-    .INIT(64'h88008800B833B800)) 
+    .INIT(64'h0000000001004000)) 
     \value[7]_i_4__11 
+       (.I0(\FSM_sequential_state_reg_n_0_[7] ),
+        .I1(\FSM_sequential_state_reg_n_0_[8] ),
+        .I2(out[0]),
+        .I3(\value[7]_i_11__6_n_0 ),
+        .I4(\FSM_sequential_state_reg_n_0_[9] ),
+        .I5(\FSM_sequential_state_reg_n_0_[6] ),
+        .O(\value[7]_i_4__11_n_0 ));
+  LUT6 #(
+    .INIT(64'h88008800B833B800)) 
+    \value[7]_i_4__12 
        (.I0(\value[7]_i_12__11_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
         .I2(\value[7]_i_13__13_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[6] ),
         .I4(\value[7]_i_14__9_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
-        .O(\value[7]_i_4__11_n_0 ));
+        .O(\value[7]_i_4__12_n_0 ));
   LUT5 #(
     .INIT(32'h80800300)) 
-    \value[7]_i_4__12 
-       (.I0(\value[7]_i_10__10_n_0 ),
+    \value[7]_i_4__13 
+       (.I0(\value[7]_i_10__11_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
-        .I3(\value[7]_i_11__9_n_0 ),
+        .I3(\value[7]_i_11__8_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[6] ),
-        .O(\value[7]_i_4__12_n_0 ));
+        .O(\value[7]_i_4__13_n_0 ));
   LUT6 #(
     .INIT(64'h0000000000000010)) 
-    \value[7]_i_4__13 
+    \value[7]_i_4__14 
        (.I0(\FSM_sequential_state_reg_n_0_[1] ),
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(M1_L_INST_0_i_28_n_0),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
         .I4(\FSM_sequential_state_reg_n_0_[5] ),
         .I5(\FSM_sequential_state_reg_n_0_[10] ),
-        .O(\value[7]_i_4__13_n_0 ));
+        .O(switch_context));
+  LUT6 #(
+    .INIT(64'h0000000000000010)) 
+    \value[7]_i_4__15 
+       (.I0(\FSM_sequential_state_reg_n_0_[1] ),
+        .I1(\FSM_sequential_state_reg_n_0_[6] ),
+        .I2(M1_L_INST_0_i_28_n_0),
+        .I3(\FSM_sequential_state_reg_n_0_[7] ),
+        .I4(\FSM_sequential_state_reg_n_0_[5] ),
+        .I5(\FSM_sequential_state_reg_n_0_[10] ),
+        .O(\value[7]_i_4__15_n_0 ));
   LUT6 #(
     .INIT(64'h888888888888B888)) 
     \value[7]_i_4__2 
        (.I0(\value[7]_i_10__3_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
-        .I3(\value[7]_i_11__10_n_0 ),
+        .I3(\value[7]_i_11__9_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
         .O(\value[7]_i_4__2_n_0 ));
   LUT6 #(
     .INIT(64'h00000000FFE200E2)) 
     \value[7]_i_4__3 
-       (.I0(\value[7]_i_8__5_n_0 ),
+       (.I0(\value[7]_i_8__6_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[1] ),
         .I2(\value[7]_i_9__2_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[0] ),
@@ -49978,17 +50013,17 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'hB800B800B833B800)) 
     \value[7]_i_4__4 
-       (.I0(\value[7]_i_10__8_n_0 ),
+       (.I0(\value[7]_i_10__9_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
         .I2(\value[7]_i_11__4_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[6] ),
-        .I4(\value[7]_i_12__7_n_0 ),
+        .I4(\value[7]_i_12__6_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_4__4_n_0 ));
   LUT6 #(
     .INIT(64'h00000000EEE222E2)) 
     \value[7]_i_4__5 
-       (.I0(\value[7]_i_8__4_n_0 ),
+       (.I0(\value[7]_i_8__5_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[0] ),
         .I2(\value[7]_i_9__5_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[1] ),
@@ -50001,38 +50036,38 @@ module z80_0_decoder
        (.I0(\FSM_sequential_state_reg_n_0_[1] ),
         .I1(\value_reg[7]_i_8__1_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[0] ),
-        .I3(\value[7]_i_9__12_n_0 ),
+        .I3(\value[7]_i_9__11_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[10] ),
         .O(ld_F_addr));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
     \value[7]_i_4__7 
-       (.I0(\value[7]_i_11__8_n_0 ),
-        .I1(\value[7]_i_12__4_n_0 ),
+       (.I0(\value[7]_i_11__7_n_0 ),
+        .I1(\value[7]_i_12__3_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[5] ),
-        .I3(\value[7]_i_13__4_n_0 ),
+        .I3(\value[7]_i_13__5_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[6] ),
         .I5(\value[7]_i_14__5_n_0 ),
         .O(\value[7]_i_4__7_n_0 ));
   LUT6 #(
     .INIT(64'h80008000000F0000)) 
     \value[7]_i_4__8 
-       (.I0(\value[7]_i_11__12_n_0 ),
+       (.I0(\value[7]_i_11__11_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[8] ),
         .I2(\FSM_sequential_state_reg_n_0_[5] ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
-        .I4(\value[7]_i_12__6_n_0 ),
+        .I4(\value[7]_i_12__5_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
         .O(\value[7]_i_4__8_n_0 ));
   LUT6 #(
-    .INIT(64'h0000000024000000)) 
+    .INIT(64'hAFA0CFCFAFA0C0C0)) 
     \value[7]_i_4__9 
-       (.I0(\FSM_sequential_state_reg_n_0_[5] ),
-        .I1(\FSM_sequential_state_reg_n_0_[7] ),
-        .I2(\FSM_sequential_state_reg_n_0_[9] ),
-        .I3(\value[7]_i_6__13_n_0 ),
-        .I4(\FSM_sequential_state_reg_n_0_[8] ),
-        .I5(\FSM_sequential_state_reg_n_0_[6] ),
+       (.I0(\value[7]_i_9__12_n_0 ),
+        .I1(\value[7]_i_10__7_n_0 ),
+        .I2(\FSM_sequential_state_reg_n_0_[5] ),
+        .I3(\value[7]_i_11__12_n_0 ),
+        .I4(\FSM_sequential_state_reg_n_0_[6] ),
+        .I5(\value[7]_i_12__8_n_0 ),
         .O(\value[7]_i_4__9_n_0 ));
   LUT6 #(
     .INIT(64'hAA2AFFFFAA2A0000)) 
@@ -50221,11 +50256,11 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'hA000A000C00FC000)) 
     \value[7]_i_55__0 
-       (.I0(\value[7]_i_5__5_n_0 ),
+       (.I0(\value[7]_i_5__4_n_0 ),
         .I1(M1_L_INST_0_i_21_n_0),
         .I2(\FSM_sequential_state_reg_n_0_[6] ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
-        .I4(\value[7]_i_32__8_n_0 ),
+        .I4(\value[7]_i_33__4_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_55__0_n_0 ));
   LUT4 #(
@@ -50403,7 +50438,7 @@ module z80_0_decoder
        (.I0(\value[7]_i_10__2_n_0 ),
         .I1(\value[7]_i_11__2_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[5] ),
-        .I3(\value[7]_i_12__5_n_0 ),
+        .I3(\value[7]_i_12__4_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[6] ),
         .I5(\value[7]_i_13__6_n_0 ),
         .O(\value[7]_i_5__2_n_0 ));
@@ -50417,64 +50452,54 @@ module z80_0_decoder
         .I4(\value_reg[7]_i_15__1_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[10] ),
         .O(set_C));
-  LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \value[7]_i_5__4 
-       (.I0(\value[7]_i_14__1_n_0 ),
-        .I1(\value[7]_i_15__9_n_0 ),
-        .I2(\FSM_sequential_state_reg_n_0_[1] ),
-        .I3(\value[7]_i_16__8_n_0 ),
-        .I4(\FSM_sequential_state_reg_n_0_[5] ),
-        .I5(\value[7]_i_17__5_n_0 ),
-        .O(\value[7]_i_5__4_n_0 ));
   LUT4 #(
     .INIT(16'h4000)) 
-    \value[7]_i_5__5 
+    \value[7]_i_5__4 
        (.I0(out[0]),
         .I1(out[1]),
         .I2(\FSM_sequential_state_reg_n_0_[3] ),
         .I3(\FSM_sequential_state_reg_n_0_[9] ),
-        .O(\value[7]_i_5__5_n_0 ));
+        .O(\value[7]_i_5__4_n_0 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \value[7]_i_5__6 
+    \value[7]_i_5__5 
        (.I0(\value[7]_i_12__12_n_0 ),
         .I1(M1_L_INST_0_i_26_n_0),
         .I2(\FSM_sequential_state_reg_n_0_[5] ),
         .I3(\value[7]_i_13__7_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[6] ),
         .I5(\value[7]_i_14__4_n_0 ),
-        .O(\value[7]_i_5__6_n_0 ));
+        .O(\value[7]_i_5__5_n_0 ));
   LUT6 #(
     .INIT(64'h8830FFFF88300000)) 
-    \value[7]_i_5__7 
+    \value[7]_i_5__6 
        (.I0(M1_L_INST_0_i_37_n_0),
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
         .I2(\op0[7]_i_4_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
         .I4(\FSM_sequential_state_reg_n_0_[5] ),
-        .I5(\value[7]_i_11__6_n_0 ),
-        .O(\value[7]_i_5__7_n_0 ));
+        .I5(\value[7]_i_11__5_n_0 ),
+        .O(\value[7]_i_5__6_n_0 ));
   LUT6 #(
     .INIT(64'h8B88888888888888)) 
-    \value[7]_i_5__8 
+    \value[7]_i_5__7 
        (.I0(\value[7]_i_13__11_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
         .I3(\value[7]_i_14__10_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
-        .O(\value[7]_i_5__8_n_0 ));
+        .O(\value[7]_i_5__7_n_0 ));
   LUT6 #(
     .INIT(64'h8380808000000000)) 
-    \value[7]_i_5__9 
+    \value[7]_i_5__8 
        (.I0(\value[7]_i_15__10_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
         .I3(\value[7]_i_16__11_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
-        .O(\value[7]_i_5__9_n_0 ));
+        .O(\value[7]_i_5__8_n_0 ));
   LUT6 #(
     .INIT(64'h8F80FFFF8F800000)) 
     \value[7]_i_6 
@@ -50483,7 +50508,7 @@ module z80_0_decoder
         .I2(\value_reg[7]_21 ),
         .I3(\value[7]_i_17_n_0 ),
         .I4(\value_reg[7]_5 ),
-        .I5(\value[7]_i_18__1_n_0 ),
+        .I5(\value[7]_i_18__0_n_0 ),
         .O(\value[7]_i_6_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair91" *) 
   LUT4 #(
@@ -50696,8 +50721,8 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'hA000A0000CFF0C00)) 
     \value[7]_i_6__10 
-       (.I0(\value[7]_i_21__4_n_0 ),
-        .I1(\value[7]_i_5__5_n_0 ),
+       (.I0(\value[7]_i_21__5_n_0 ),
+        .I1(\value[7]_i_5__4_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[8] ),
         .I3(\FSM_sequential_state_reg_n_0_[6] ),
         .I4(\value[7]_i_14__3_n_0 ),
@@ -50716,7 +50741,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h888888888888B888)) 
     \value[7]_i_6__12 
-       (.I0(\value[7]_i_15__6_n_0 ),
+       (.I0(\value[7]_i_15__7_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
         .I3(M1_L_INST_0_i_23_n_0),
@@ -50733,7 +50758,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h0000000000000B08)) 
     \value[7]_i_6__14 
-       (.I0(\value[7]_i_11__11_n_0 ),
+       (.I0(\value[7]_i_11__10_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[0] ),
         .I2(\FSM_sequential_state_reg_n_0_[5] ),
         .I3(M1_L_INST_0_i_36_n_0),
@@ -50760,51 +50785,52 @@ module z80_0_decoder
         .I4(\value_reg[7]_5 ),
         .I5(\value[7]_i_19__12_n_0 ),
         .O(\value[7]_i_6__2_n_0 ));
-  LUT5 #(
-    .INIT(32'hB8FFB800)) 
-    \value[7]_i_6__3 
-       (.I0(\value[7]_i_18__0_n_0 ),
-        .I1(\value_reg[7]_21 ),
-        .I2(\value[7]_i_19_n_0 ),
-        .I3(\value_reg[7]_5 ),
-        .I4(\value[7]_i_20_n_0 ),
-        .O(\value[7]_i_6__3_n_0 ));
   LUT6 #(
     .INIT(64'h8F808F8F8F808080)) 
-    \value[7]_i_6__4 
+    \value[7]_i_6__3 
        (.I0(\value[7]_i_15__0_n_0 ),
         .I1(\value_reg[7]_78 [7]),
         .I2(\value_reg[7]_21 ),
         .I3(\value[7]_i_16__0_n_0 ),
         .I4(\value_reg[7]_19 ),
         .I5(\value_reg[7]_i_17_n_0 ),
-        .O(\value[7]_i_6__4_n_0 ));
+        .O(\value[7]_i_6__3_n_0 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \value[7]_i_6__5 
+    \value[7]_i_6__4 
        (.I0(\value[7]_i_16__1_n_0 ),
         .I1(\value[7]_i_17__2_n_0 ),
-        .I2(\value[7]_i_18__2_n_0 ),
+        .I2(\value[7]_i_18__1_n_0 ),
         .I3(\value_reg[7]_74 [7]),
         .I4(\value[7]_i_19__0_n_0 ),
         .I5(\value[7]_i_20__0_n_0 ),
         .O(\DP/alu_flag_data [7]));
   LUT3 #(
     .INIT(8'hB8)) 
-    \value[7]_i_6__6 
+    \value[7]_i_6__5 
        (.I0(\value[7]_i_13__9_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[1] ),
         .I2(\value_reg[7]_i_14_n_0 ),
+        .O(\value[7]_i_6__5_n_0 ));
+  LUT6 #(
+    .INIT(64'hAFA0CFCFAFA0C0C0)) 
+    \value[7]_i_6__6 
+       (.I0(\value[7]_i_15__4_n_0 ),
+        .I1(\value[7]_i_16__9_n_0 ),
+        .I2(\FSM_sequential_state_reg_n_0_[1] ),
+        .I3(\value[7]_i_17__8_n_0 ),
+        .I4(\FSM_sequential_state_reg_n_0_[5] ),
+        .I5(\value[7]_i_18__4_n_0 ),
         .O(\value[7]_i_6__6_n_0 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
     \value[7]_i_6__7 
-       (.I0(\value[7]_i_14__2_n_0 ),
-        .I1(\value[7]_i_15__5_n_0 ),
+       (.I0(\value[7]_i_14__1_n_0 ),
+        .I1(\value[7]_i_15__6_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[5] ),
-        .I3(\value[7]_i_16__9_n_0 ),
+        .I3(\value[7]_i_16__8_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[6] ),
-        .I5(\value[7]_i_17__8_n_0 ),
+        .I5(\value[7]_i_17__7_n_0 ),
         .O(\value[7]_i_6__7_n_0 ));
   LUT6 #(
     .INIT(64'h00000000B0808080)) 
@@ -50874,7 +50900,7 @@ module z80_0_decoder
         .I2(\FSM_sequential_state_reg_n_0_[6] ),
         .I3(\value[7]_i_102_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[7] ),
-        .I5(\value[7]_i_36__4_n_0 ),
+        .I5(\value[7]_i_36__3_n_0 ),
         .O(\value[7]_i_74_n_0 ));
   LUT6 #(
     .INIT(64'h0000040020020820)) 
@@ -50911,24 +50937,24 @@ module z80_0_decoder
     \value[7]_i_79 
        (.I0(\value[7]_i_105_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[6] ),
-        .I2(\value[7]_i_32__8_n_0 ),
+        .I2(\value[7]_i_33__4_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
-        .I4(\value[7]_i_15__7_n_0 ),
+        .I4(\value[7]_i_15__8_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_79_n_0 ));
-  (* SOFT_HLUTNM = "soft_lutpair184" *) 
-  LUT4 #(
-    .INIT(16'hBF80)) 
-    \value[7]_i_7__1 
-       (.I0(\DP/drive_value_addr [7]),
-        .I1(\value_reg[7]_1 ),
-        .I2(\value_reg[7]_2 ),
-        .I3(\DP/reg_data_in [7]),
-        .O(\value[7]_i_7__1_n_0 ));
+  LUT5 #(
+    .INIT(32'hB8FFB800)) 
+    \value[7]_i_7__0 
+       (.I0(\value[7]_i_19_n_0 ),
+        .I1(\value_reg[7]_21 ),
+        .I2(\value[7]_i_20_n_0 ),
+        .I3(\value_reg[7]_5 ),
+        .I4(\value[7]_i_21_n_0 ),
+        .O(\value[7]_i_7__0_n_0 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
     \value[7]_i_7__10 
-       (.I0(\value[7]_i_17__7_n_0 ),
+       (.I0(\value[7]_i_17__6_n_0 ),
         .I1(\value[7]_i_18__9_n_0 ),
         .I2(\value[7]_i_19__11_n_0 ),
         .I3(\value[7]_i_20__6_n_0 ),
@@ -50951,6 +50977,15 @@ module z80_0_decoder
         .I2(addr_bus),
         .I3(\value_reg[7]_21 ),
         .O(\value[7]_i_7__12_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair184" *) 
+  LUT4 #(
+    .INIT(16'hBF80)) 
+    \value[7]_i_7__2 
+       (.I0(\DP/drive_value_addr [7]),
+        .I1(\value_reg[7]_1 ),
+        .I2(\value_reg[7]_2 ),
+        .I3(\DP/reg_data_in [7]),
+        .O(\value[7]_i_7__2_n_0 ));
   LUT6 #(
     .INIT(64'hBFB0FFFF8F800000)) 
     \value[7]_i_7__3 
@@ -50984,7 +51019,7 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'hA000A00000CF00C0)) 
     \value[7]_i_7__6 
-       (.I0(\value[7]_i_15__8_n_0 ),
+       (.I0(\value[7]_i_15__9_n_0 ),
         .I1(M1_L_INST_0_i_21_n_0),
         .I2(\FSM_sequential_state_reg_n_0_[6] ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
@@ -50994,7 +51029,7 @@ module z80_0_decoder
   LUT5 #(
     .INIT(32'hB8BBB888)) 
     \value[7]_i_7__7 
-       (.I0(\value[7]_i_12__3_n_0 ),
+       (.I0(\value[7]_i_12__2_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[1] ),
         .I2(\value[7]_i_21__7_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[5] ),
@@ -51014,21 +51049,11 @@ module z80_0_decoder
     \value[7]_i_7__9 
        (.I0(\FSM_sequential_state_reg_n_0_[6] ),
         .I1(\value[7]_i_14__11_n_0 ),
-        .I2(\value[7]_i_15__7_n_0 ),
+        .I2(\value[7]_i_15__8_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
         .I4(\FSM_sequential_state_reg_n_0_[7] ),
         .I5(\FSM_sequential_state_reg_n_0_[5] ),
         .O(\value[7]_i_7__9_n_0 ));
-  LUT6 #(
-    .INIT(64'hCFA0C0A000000000)) 
-    \value[7]_i_8 
-       (.I0(\value[7]_i_18__12_n_0 ),
-        .I1(\value[7]_i_19__10_n_0 ),
-        .I2(\FSM_sequential_state_reg_n_0_[6] ),
-        .I3(\FSM_sequential_state_reg_n_0_[8] ),
-        .I4(\value[7]_i_20__1_n_0 ),
-        .I5(\FSM_sequential_state_reg_n_0_[7] ),
-        .O(\value[7]_i_8_n_0 ));
   LUT6 #(
     .INIT(64'h1000000000000000)) 
     \value[7]_i_81 
@@ -51090,24 +51115,24 @@ module z80_0_decoder
         .I5(\value_reg[2]_20 ),
         .O(\value[7]_i_88_n_0 ));
   LUT6 #(
-    .INIT(64'h88B8FFFF88B80000)) 
+    .INIT(64'hCFA0C0A000000000)) 
     \value[7]_i_8__0 
+       (.I0(\value[7]_i_18__12_n_0 ),
+        .I1(\value[7]_i_19__10_n_0 ),
+        .I2(\FSM_sequential_state_reg_n_0_[6] ),
+        .I3(\FSM_sequential_state_reg_n_0_[8] ),
+        .I4(\value[7]_i_20__1_n_0 ),
+        .I5(\FSM_sequential_state_reg_n_0_[7] ),
+        .O(\value[7]_i_8__0_n_0 ));
+  LUT6 #(
+    .INIT(64'h88B8FFFF88B80000)) 
+    \value[7]_i_8__1 
        (.I0(\value[7]_i_17__9_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
-        .I2(\value[7]_i_18__4_n_0 ),
+        .I2(\value[7]_i_18__3_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[6] ),
         .I4(\FSM_sequential_state_reg_n_0_[1] ),
         .I5(\value_reg[7]_i_14_n_0 ),
-        .O(\value[7]_i_8__0_n_0 ));
-  LUT6 #(
-    .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \value[7]_i_8__1 
-       (.I0(\value_reg[7]_i_14__0_n_0 ),
-        .I1(\value_reg[7]_i_15__0_n_0 ),
-        .I2(\FSM_sequential_state_reg_n_0_[1] ),
-        .I3(\value_reg[7]_i_16__0_n_0 ),
-        .I4(\FSM_sequential_state_reg_n_0_[5] ),
-        .I5(\value[7]_i_17__3_n_0 ),
         .O(\value[7]_i_8__1_n_0 ));
   LUT6 #(
     .INIT(64'h0030BB3300308800)) 
@@ -51130,87 +51155,87 @@ module z80_0_decoder
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_8__11_n_0 ));
   LUT6 #(
-    .INIT(64'hA0AFA0A0C0C0C0C0)) 
+    .INIT(64'hAFA0CFCFAFA0C0C0)) 
     \value[7]_i_8__2 
+       (.I0(\value_reg[7]_i_14__0_n_0 ),
+        .I1(\value_reg[7]_i_15__0_n_0 ),
+        .I2(\FSM_sequential_state_reg_n_0_[1] ),
+        .I3(\value_reg[7]_i_16__0_n_0 ),
+        .I4(\FSM_sequential_state_reg_n_0_[5] ),
+        .I5(\value[7]_i_17__3_n_0 ),
+        .O(\value[7]_i_8__2_n_0 ));
+  LUT6 #(
+    .INIT(64'hA0AFA0A0C0C0C0C0)) 
+    \value[7]_i_8__3 
        (.I0(\value[7]_i_23__1_n_0 ),
-        .I1(\value[7]_i_24__6_n_0 ),
+        .I1(\value[7]_i_24__5_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[5] ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
         .I4(\value[7]_i_25__4_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
-        .O(\value[7]_i_8__2_n_0 ));
+        .O(\value[7]_i_8__3_n_0 ));
   LUT6 #(
     .INIT(64'hAFA0CFCFAFA0C0C0)) 
-    \value[7]_i_8__3 
+    \value[7]_i_8__4 
        (.I0(\value[7]_i_18__10_n_0 ),
         .I1(\value[7]_i_19__6_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[5] ),
         .I3(\value[7]_i_20__4_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[6] ),
         .I5(\value[7]_i_21__9_n_0 ),
-        .O(\value[7]_i_8__3_n_0 ));
+        .O(\value[7]_i_8__4_n_0 ));
   LUT6 #(
     .INIT(64'h8B88888888888888)) 
-    \value[7]_i_8__4 
+    \value[7]_i_8__5 
        (.I0(\value[7]_i_16__5_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[1] ),
         .I2(\FSM_sequential_state_reg_n_0_[6] ),
         .I3(\value[7]_i_46__2_n_0 ),
         .I4(\value[7]_i_17__12_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[5] ),
-        .O(\value[7]_i_8__4_n_0 ));
+        .O(\value[7]_i_8__5_n_0 ));
   LUT5 #(
     .INIT(32'h40400F00)) 
-    \value[7]_i_8__5 
+    \value[7]_i_8__6 
        (.I0(\FSM_sequential_state_reg_n_0_[7] ),
         .I1(\value[7]_i_14__7_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[5] ),
-        .I3(\value[7]_i_15__4_n_0 ),
+        .I3(\value[7]_i_15__5_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[6] ),
-        .O(\value[7]_i_8__5_n_0 ));
+        .O(\value[7]_i_8__6_n_0 ));
   LUT6 #(
     .INIT(64'h400000000C00000F)) 
-    \value[7]_i_8__6 
+    \value[7]_i_8__7 
        (.I0(\FSM_sequential_state_reg_n_0_[3] ),
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
         .I2(\FSM_sequential_state_reg_n_0_[9] ),
         .I3(out[1]),
         .I4(out[0]),
         .I5(\FSM_sequential_state_reg_n_0_[8] ),
-        .O(\value[7]_i_8__6_n_0 ));
+        .O(\value[7]_i_8__7_n_0 ));
   LUT6 #(
     .INIT(64'h0000000050800080)) 
-    \value[7]_i_8__7 
+    \value[7]_i_8__8 
        (.I0(\FSM_sequential_state_reg_n_0_[7] ),
         .I1(\FSM_sequential_state[3]_i_4_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[8] ),
         .I3(\FSM_sequential_state_reg_n_0_[6] ),
-        .I4(\value[7]_i_22__6_n_0 ),
+        .I4(\value[7]_i_22__7_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[5] ),
-        .O(\value[7]_i_8__7_n_0 ));
+        .O(\value[7]_i_8__8_n_0 ));
   LUT5 #(
     .INIT(32'h4F400000)) 
-    \value[7]_i_8__8 
+    \value[7]_i_8__9 
        (.I0(\FSM_sequential_state_reg_n_0_[8] ),
         .I1(\value[7]_i_20__9_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[6] ),
         .I3(\value_reg[7]_i_21__1_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[7] ),
-        .O(\value[7]_i_8__8_n_0 ));
-  LUT6 #(
-    .INIT(64'h0040000000000000)) 
-    \value[7]_i_8__9 
-       (.I0(\FSM_sequential_state_reg_n_0_[8] ),
-        .I1(out[0]),
-        .I2(\FSM_sequential_state_reg_n_0_[3] ),
-        .I3(out[1]),
-        .I4(\FSM_sequential_state_reg_n_0_[9] ),
-        .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_8__9_n_0 ));
   LUT6 #(
     .INIT(64'hB800FFFFB8000000)) 
     \value[7]_i_9 
-       (.I0(\value[7]_i_26__6_n_0 ),
+       (.I0(\value[7]_i_26__5_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[7] ),
         .I2(M1_L_INST_0_i_39_n_0),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
@@ -51304,10 +51329,10 @@ module z80_0_decoder
     .INIT(64'hAFA0A0A0C000C000)) 
     \value[7]_i_9__0 
        (.I0(\value[7]_i_23_n_0 ),
-        .I1(\value[7]_i_24__9_n_0 ),
+        .I1(\value[7]_i_24__8_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[1] ),
         .I3(\FSM_sequential_state_reg_n_0_[5] ),
-        .I4(\value[7]_i_25__5_n_0 ),
+        .I4(\value[7]_i_25__6_n_0 ),
         .I5(\value[7]_i_19__11_n_0 ),
         .O(\value[7]_i_9__0_n_0 ));
   LUT6 #(
@@ -51321,33 +51346,33 @@ module z80_0_decoder
         .I5(\value[7]_i_19__3_n_0 ),
         .O(\value[7]_i_9__1_n_0 ));
   LUT6 #(
-    .INIT(64'hF3E2C0E200000000)) 
-    \value[7]_i_9__10 
-       (.I0(\value[7]_i_21__5_n_0 ),
-        .I1(\FSM_sequential_state_reg_n_0_[8] ),
-        .I2(\value[7]_i_22__8_n_0 ),
-        .I3(\value[7]_i_23__10_n_0 ),
-        .I4(\value[7]_i_24__2_n_0 ),
-        .I5(\FSM_sequential_state_reg_n_0_[7] ),
-        .O(\value[7]_i_9__10_n_0 ));
-  LUT6 #(
     .INIT(64'h0F008F8F0F008080)) 
-    \value[7]_i_9__11 
+    \value[7]_i_9__10 
        (.I0(\FSM_sequential_state_reg_n_0_[8] ),
         .I1(\value[7]_i_21__6_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[6] ),
         .I3(\value[7]_i_22__10_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[7] ),
         .I5(\value[7]_i_23__3_n_0 ),
-        .O(\value[7]_i_9__11_n_0 ));
+        .O(\value[7]_i_9__10_n_0 ));
   LUT6 #(
     .INIT(64'h00330000B800B800)) 
-    \value[7]_i_9__12 
-       (.I0(\value[7]_i_24__4_n_0 ),
+    \value[7]_i_9__11 
+       (.I0(\value[7]_i_24__3_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
         .I2(\value[7]_i_13__13_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[6] ),
         .I4(M1_L_INST_0_i_28_n_0),
+        .I5(\FSM_sequential_state_reg_n_0_[7] ),
+        .O(\value[7]_i_9__11_n_0 ));
+  LUT6 #(
+    .INIT(64'h0040000000000000)) 
+    \value[7]_i_9__12 
+       (.I0(\FSM_sequential_state_reg_n_0_[8] ),
+        .I1(out[0]),
+        .I2(\FSM_sequential_state_reg_n_0_[3] ),
+        .I3(out[1]),
+        .I4(\FSM_sequential_state_reg_n_0_[9] ),
         .I5(\FSM_sequential_state_reg_n_0_[7] ),
         .O(\value[7]_i_9__12_n_0 ));
   LUT6 #(
@@ -51372,7 +51397,7 @@ module z80_0_decoder
     \value[7]_i_9__2 
        (.I0(\value[7]_i_16__7_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
-        .I2(\value[7]_i_36__3_n_0 ),
+        .I2(\value[7]_i_37__2_n_0 ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
         .I4(\value[7]_i_17__4_n_0 ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
@@ -51381,7 +51406,7 @@ module z80_0_decoder
     .INIT(64'hA000A000C00FC000)) 
     \value[7]_i_9__3 
        (.I0(\value[7]_i_20__11_n_0 ),
-        .I1(\value[7]_i_21_n_0 ),
+        .I1(\value[7]_i_21__0_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[5] ),
         .I3(\FSM_sequential_state_reg_n_0_[7] ),
         .I4(\value[7]_i_22__1_n_0 ),
@@ -51429,18 +51454,18 @@ module z80_0_decoder
   LUT6 #(
     .INIT(64'h8C80000003000808)) 
     \value[7]_i_9__8 
-       (.I0(\value[7]_i_5__5_n_0 ),
+       (.I0(\value[7]_i_5__4_n_0 ),
         .I1(\FSM_sequential_state_reg_n_0_[5] ),
         .I2(\FSM_sequential_state_reg_n_0_[7] ),
-        .I3(\value[7]_i_26__6_n_0 ),
+        .I3(\value[7]_i_26__5_n_0 ),
         .I4(\FSM_sequential_state_reg_n_0_[8] ),
         .I5(\FSM_sequential_state_reg_n_0_[6] ),
         .O(\value[7]_i_9__8_n_0 ));
   LUT6 #(
     .INIT(64'hA00FA00000C000C0)) 
     \value[7]_i_9__9 
-       (.I0(\value[7]_i_11__10_n_0 ),
-        .I1(\value[7]_i_28__7_n_0 ),
+       (.I0(\value[7]_i_11__9_n_0 ),
+        .I1(\value[7]_i_28__6_n_0 ),
         .I2(\FSM_sequential_state_reg_n_0_[6] ),
         .I3(\FSM_sequential_state_reg_n_0_[8] ),
         .I4(\value[7]_i_19__7_n_0 ),
@@ -51520,7 +51545,7 @@ module z80_0_decoder
        (.I0(\value[0]_i_8__4_n_0 ),
         .I1(\value[0]_i_9__2_n_0 ),
         .O(\DP/alu_flag_data [0]),
-        .S(\value[7]_i_18__2_n_0 ));
+        .S(\value[7]_i_18__1_n_0 ));
   MUXF7 \value_reg[0]_i_6 
        (.I0(\value_reg[0]_37 ),
         .I1(\value[0]_i_11__1_n_0 ),
@@ -51794,7 +51819,7 @@ module z80_0_decoder
         .S(\value_reg[5]_4 ));
   MUXF7 \value_reg[7]_i_10 
        (.I0(\value[7]_i_27__2_n_0 ),
-        .I1(\value[7]_i_28__4_n_0 ),
+        .I1(\value[7]_i_28__3_n_0 ),
         .O(\value_reg[7]_i_10_n_0 ),
         .S(\FSM_sequential_state_reg_n_0_[1] ));
   MUXF7 \value_reg[7]_i_10__0 
@@ -51804,7 +51829,7 @@ module z80_0_decoder
         .S(\FSM_sequential_state_reg_n_0_[1] ));
   MUXF7 \value_reg[7]_i_10__1 
        (.I0(\value[7]_i_23__7_n_0 ),
-        .I1(\value[7]_i_24__5_n_0 ),
+        .I1(\value[7]_i_24__4_n_0 ),
         .O(\value_reg[7]_i_10__1_n_0 ),
         .S(\FSM_sequential_state_reg_n_0_[5] ));
   MUXF8 \value_reg[7]_i_11 
@@ -51818,7 +51843,7 @@ module z80_0_decoder
         .O(\value_reg[7]_i_12_n_0 ),
         .S(\FSM_sequential_state_reg_n_0_[5] ));
   MUXF7 \value_reg[7]_i_13 
-       (.I0(\value[7]_i_29__3_n_0 ),
+       (.I0(\value[7]_i_29__4_n_0 ),
         .I1(\value[7]_i_30__3_n_0 ),
         .O(\value_reg[7]_i_13_n_0 ),
         .S(\FSM_sequential_state_reg_n_0_[6] ));
@@ -51863,8 +51888,8 @@ module z80_0_decoder
         .O(\value_reg[7]_i_17_n_0 ),
         .S(\value_reg[7]_18 ));
   MUXF7 \value_reg[7]_i_18 
-       (.I0(\value[7]_i_39__3_n_0 ),
-        .I1(\value[7]_i_40__1_n_0 ),
+       (.I0(\value[7]_i_39__2_n_0 ),
+        .I1(\value[7]_i_40__2_n_0 ),
         .O(\value_reg[7]_i_18_n_0 ),
         .S(\FSM_sequential_state_reg_n_0_[6] ));
   MUXF7 \value_reg[7]_i_19 
@@ -51893,7 +51918,7 @@ module z80_0_decoder
         .O(\value_reg[7]_i_21__0_n_0 ),
         .S(\FSM_sequential_state_reg_n_0_[6] ));
   MUXF7 \value_reg[7]_i_21__1 
-       (.I0(\value[7]_i_40__2_n_0 ),
+       (.I0(\value[7]_i_40__3_n_0 ),
         .I1(\value[7]_i_41__3_n_0 ),
         .O(\value_reg[7]_i_21__1_n_0 ),
         .S(ld_H0));
@@ -51908,12 +51933,12 @@ module z80_0_decoder
         .O(\value_reg[7]_54 [7]),
         .S(switch_context));
   MUXF7 \value_reg[7]_i_2__1 
-       (.I0(\value[7]_i_6__3_n_0 ),
+       (.I0(\value[7]_i_7__0_n_0 ),
         .I1(\value_reg[7]_89 ),
         .O(\value_reg[7]_55 [7]),
         .S(switch_context));
   MUXF7 \value_reg[7]_i_2__2 
-       (.I0(\value[7]_i_5__6_n_0 ),
+       (.I0(\value[7]_i_5__5_n_0 ),
         .I1(\value[7]_i_6__12_n_0 ),
         .O(\value_reg[7]_i_2__2_n_0 ),
         .S(\FSM_sequential_state_reg_n_0_[1] ));
@@ -51948,12 +51973,12 @@ module z80_0_decoder
         .O(\value_reg[7]_i_3__0_n_0 ),
         .S(\FSM_sequential_state_reg_n_0_[1] ));
   MUXF7 \value_reg[7]_i_3__1 
-       (.I0(\value[7]_i_8__3_n_0 ),
+       (.I0(\value[7]_i_8__4_n_0 ),
         .I1(\value[7]_i_9__7_n_0 ),
         .O(\value_reg[7]_i_3__1_n_0 ),
         .S(\FSM_sequential_state_reg_n_0_[1] ));
   MUXF7 \value_reg[7]_i_4 
-       (.I0(\value[7]_i_9__11_n_0 ),
+       (.I0(\value[7]_i_9__10_n_0 ),
         .I1(\value[7]_i_10__0_n_0 ),
         .O(\value_reg[7]_i_4_n_0 ),
         .S(\FSM_sequential_state_reg_n_0_[5] ));
@@ -51962,18 +51987,13 @@ module z80_0_decoder
         .I1(\value[7]_i_73_n_0 ),
         .O(\value_reg[7]_i_40_n_0 ),
         .S(\value[7]_i_71_n_0 ));
-  MUXF7 \value_reg[7]_i_4__0 
-       (.I0(\value[7]_i_12__2_n_0 ),
-        .I1(\value[7]_i_13__5_n_0 ),
-        .O(\value_reg[7]_i_4__0_n_0 ),
-        .S(\FSM_sequential_state_reg_n_0_[5] ));
   MUXF7 \value_reg[7]_i_5 
        (.I0(\value[7]_i_9__1_n_0 ),
         .I1(\value[7]_i_10__1_n_0 ),
         .O(\value_reg[7]_i_5_n_0 ),
         .S(\FSM_sequential_state_reg_n_0_[0] ));
   MUXF7 \value_reg[7]_i_5__0 
-       (.I0(\value[7]_i_12__8_n_0 ),
+       (.I0(\value[7]_i_12__7_n_0 ),
         .I1(\value[7]_i_13__1_n_0 ),
         .O(\value_reg[7]_i_5__0_n_0 ),
         .S(\FSM_sequential_state_reg_n_0_[6] ));
@@ -51988,14 +52008,19 @@ module z80_0_decoder
         .O(\value_reg[7]_i_5__2_n_0 ),
         .S(\FSM_sequential_state_reg_n_0_[1] ));
   MUXF7 \value_reg[7]_i_5__3 
-       (.I0(\value[7]_i_12__13_n_0 ),
-        .I1(\value[7]_i_13__10_n_0 ),
+       (.I0(\value[7]_i_13__4_n_0 ),
+        .I1(\value[7]_i_14__2_n_0 ),
         .O(\value_reg[7]_i_5__3_n_0 ),
         .S(\FSM_sequential_state_reg_n_0_[5] ));
   MUXF7 \value_reg[7]_i_5__4 
+       (.I0(\value[7]_i_12__13_n_0 ),
+        .I1(\value[7]_i_13__10_n_0 ),
+        .O(\value_reg[7]_i_5__4_n_0 ),
+        .S(\FSM_sequential_state_reg_n_0_[5] ));
+  MUXF7 \value_reg[7]_i_5__5 
        (.I0(\value[7]_i_13__12_n_0 ),
         .I1(\value[7]_i_14__8_n_0 ),
-        .O(\value_reg[7]_i_5__4_n_0 ),
+        .O(\value_reg[7]_i_5__5_n_0 ),
         .S(\FSM_sequential_state_reg_n_0_[5] ));
   MUXF7 \value_reg[7]_i_7 
        (.I0(\value[7]_i_12__0_n_0 ),
@@ -52023,8 +52048,8 @@ module z80_0_decoder
         .O(\value_reg[7]_i_80_n_0 ),
         .S(\FSM_sequential_state_reg_n_0_[6] ));
   MUXF7 \value_reg[7]_i_8__0 
-       (.I0(\value[7]_i_17__6_n_0 ),
-        .I1(\value[7]_i_18__3_n_0 ),
+       (.I0(\value[7]_i_17__5_n_0 ),
+        .I1(\value[7]_i_18__2_n_0 ),
         .O(\value_reg[7]_i_8__0_n_0 ),
         .S(\FSM_sequential_state_reg_n_0_[6] ));
   MUXF7 \value_reg[7]_i_8__1 
@@ -52146,13 +52171,15 @@ module z80_0_regfile
     \value_reg[6]_13 ,
     \value_reg[6]_14 ,
     \value_reg[6]_15 ,
+    \value_reg[3]_11 ,
     \value_reg[7]_16 ,
-    \value_reg[6]_16 ,
     \value_reg[7]_17 ,
-    \value_reg[6]_17 ,
+    \value_reg[6]_16 ,
     \value_reg[7]_18 ,
-    \value_reg[6]_18 ,
+    \value_reg[6]_17 ,
     \value_reg[7]_19 ,
+    \value_reg[6]_18 ,
+    \value_reg[7]_20 ,
     swap_reg,
     \FSM_sequential_state_reg[10] ,
     \FSM_sequential_state_reg[0] ,
@@ -52190,21 +52217,22 @@ module z80_0_regfile
     clk,
     \FSM_sequential_state_reg[1] ,
     \FSM_sequential_state_reg[0]_1 ,
-    \value_reg[7]_20 ,
     \value_reg[7]_21 ,
-    \FSM_sequential_state_reg[1]_0 ,
     \value_reg[7]_22 ,
+    \FSM_sequential_state_reg[1]_0 ,
+    \value_reg[7]_23 ,
     \FSM_sequential_state_reg[1]_1 ,
     \FSM_sequential_state_reg[0]_2 ,
-    \value_reg[7]_23 ,
     \value_reg[7]_24 ,
-    \FSM_sequential_state_reg[1]_2 ,
     \value_reg[7]_25 ,
-    \FSM_sequential_state_reg[1]_3 ,
-    \FSM_sequential_state_reg[0]_3 ,
+    \FSM_sequential_state_reg[1]_2 ,
     \value_reg[7]_26 ,
-    \FSM_sequential_state_reg[0]_4 ,
+    \FSM_sequential_state_reg[1]_3 ,
+    rst_L_0,
+    \FSM_sequential_state_reg[0]_3 ,
     \value_reg[7]_27 ,
+    \FSM_sequential_state_reg[0]_4 ,
+    \value_reg[7]_28 ,
     \FSM_sequential_state_reg[1]_4 ,
     \FSM_sequential_state_reg[1]_5 ,
     \FSM_sequential_state_reg[0]_5 ,
@@ -52335,13 +52363,15 @@ module z80_0_regfile
   output \value_reg[6]_13 ;
   output \value_reg[6]_14 ;
   output \value_reg[6]_15 ;
+  output \value_reg[3]_11 ;
   output \value_reg[7]_16 ;
+  output \value_reg[7]_17 ;
   output [1:0]\value_reg[6]_16 ;
-  output [7:0]\value_reg[7]_17 ;
-  output [1:0]\value_reg[6]_17 ;
   output [7:0]\value_reg[7]_18 ;
-  output [1:0]\value_reg[6]_18 ;
+  output [1:0]\value_reg[6]_17 ;
   output [7:0]\value_reg[7]_19 ;
+  output [1:0]\value_reg[6]_18 ;
+  output [7:0]\value_reg[7]_20 ;
   input swap_reg;
   input \FSM_sequential_state_reg[10] ;
   input \FSM_sequential_state_reg[0] ;
@@ -52379,21 +52409,22 @@ module z80_0_regfile
   input clk;
   input [7:0]\FSM_sequential_state_reg[1] ;
   input [0:0]\FSM_sequential_state_reg[0]_1 ;
-  input [7:0]\value_reg[7]_20 ;
   input [7:0]\value_reg[7]_21 ;
-  input [0:0]\FSM_sequential_state_reg[1]_0 ;
   input [7:0]\value_reg[7]_22 ;
+  input [0:0]\FSM_sequential_state_reg[1]_0 ;
+  input [7:0]\value_reg[7]_23 ;
   input [7:0]\FSM_sequential_state_reg[1]_1 ;
   input [0:0]\FSM_sequential_state_reg[0]_2 ;
-  input [7:0]\value_reg[7]_23 ;
   input [7:0]\value_reg[7]_24 ;
-  input [0:0]\FSM_sequential_state_reg[1]_2 ;
   input [7:0]\value_reg[7]_25 ;
-  input [7:0]\FSM_sequential_state_reg[1]_3 ;
-  input [0:0]\FSM_sequential_state_reg[0]_3 ;
+  input [0:0]\FSM_sequential_state_reg[1]_2 ;
   input [7:0]\value_reg[7]_26 ;
-  input [0:0]\FSM_sequential_state_reg[0]_4 ;
+  input [7:0]\FSM_sequential_state_reg[1]_3 ;
+  input rst_L_0;
+  input [0:0]\FSM_sequential_state_reg[0]_3 ;
   input [7:0]\value_reg[7]_27 ;
+  input [0:0]\FSM_sequential_state_reg[0]_4 ;
+  input [7:0]\value_reg[7]_28 ;
   input [0:0]\FSM_sequential_state_reg[1]_4 ;
   input [7:0]\FSM_sequential_state_reg[1]_5 ;
   input [0:0]\FSM_sequential_state_reg[0]_5 ;
@@ -52535,6 +52566,7 @@ module z80_0_regfile
   wire ld_L;
   wire [7:0]reg_data_out;
   wire rst_L;
+  wire rst_L_0;
   wire swap_reg;
   wire \value_reg[0] ;
   wire \value_reg[0]_0 ;
@@ -52580,6 +52612,7 @@ module z80_0_regfile
   wire \value_reg[3]_0 ;
   wire \value_reg[3]_1 ;
   wire \value_reg[3]_10 ;
+  wire \value_reg[3]_11 ;
   wire \value_reg[3]_2 ;
   wire \value_reg[3]_3 ;
   wire \value_reg[3]_4 ;
@@ -52641,7 +52674,7 @@ module z80_0_regfile
   wire \value_reg[7]_14 ;
   wire [7:0]\value_reg[7]_15 ;
   wire \value_reg[7]_16 ;
-  wire [7:0]\value_reg[7]_17 ;
+  wire \value_reg[7]_17 ;
   wire [7:0]\value_reg[7]_18 ;
   wire [7:0]\value_reg[7]_19 ;
   wire [7:0]\value_reg[7]_2 ;
@@ -52653,6 +52686,7 @@ module z80_0_regfile
   wire [7:0]\value_reg[7]_25 ;
   wire [7:0]\value_reg[7]_26 ;
   wire [7:0]\value_reg[7]_27 ;
+  wire [7:0]\value_reg[7]_28 ;
   wire \value_reg[7]_3 ;
   wire \value_reg[7]_4 ;
   wire \value_reg[7]_5 ;
@@ -52674,7 +52708,9 @@ module z80_0_regfile
         .drive_B(drive_B),
         .drive_C(drive_C),
         .reg_data_out(reg_data_out),
-        .rst_L(\value_reg[7]_16 ),
+        .rst_L(\value_reg[7]_17 ),
+        .rst_L_0(\value_reg[7]_16 ),
+        .rst_L_1(\value_reg[3]_11 ),
         .swap_reg(swap_reg),
         .\value_reg[0]_0 (D__0_n_15),
         .\value_reg[1]_0 (\value_reg[1] ),
@@ -52690,13 +52726,15 @@ module z80_0_regfile
         .\value_reg[6]_1 (D__0_n_9),
         .\value_reg[7]_0 (\value_reg[7]_15 ),
         .\value_reg[7]_1 (D__0_n_0),
-        .\value_reg[7]_2 (\value_reg[7]_27 ));
+        .\value_reg[7]_2 (\value_reg[7]_28 ));
   z80_0_register_7 B_not
        (.\FSM_sequential_state_reg[0] (\FSM_sequential_state_reg[0]_3 ),
         .clk(clk),
-        .rst_L(\value_reg[7]_16 ),
-        .\value_reg[7]_0 (\value_reg[7]_19 ),
-        .\value_reg[7]_1 (\value_reg[7]_26 ));
+        .rst_L(\value_reg[7]_17 ),
+        .rst_L_0(\value_reg[7]_16 ),
+        .rst_L_1(\value_reg[3]_11 ),
+        .\value_reg[7]_0 (\value_reg[7]_20 ),
+        .\value_reg[7]_1 (\value_reg[7]_27 ));
   z80_0_register_8 C
        (.\FSM_sequential_state_reg[1] (\FSM_sequential_state_reg[1] ),
         .Q(Q),
@@ -52706,7 +52744,9 @@ module z80_0_regfile
         .ld_E(ld_E),
         .ld_H(ld_H),
         .ld_L(ld_L),
-        .rst_L(\value_reg[7]_16 ),
+        .rst_L(\value_reg[7]_17 ),
+        .rst_L_0(\value_reg[7]_16 ),
+        .rst_L_1(\value_reg[3]_11 ),
         .\value_reg[0]_0 (\value_reg[0]_0 ),
         .\value_reg[0]_1 (\value_reg[0]_4 ),
         .\value_reg[0]_2 (\value_reg[0]_5 ),
@@ -52762,21 +52802,25 @@ module z80_0_regfile
         .E(E),
         .clk(clk),
         .ld_C(ld_C),
-        .rst_L(\value_reg[7]_16 ),
+        .rst_L(rst_L),
+        .rst_L_0(\value_reg[3]_11 ),
         .\value_reg[0]_0 (\value_reg[0] ),
         .\value_reg[1]_0 (\value_reg[1]_0 ),
         .\value_reg[2]_0 (\value_reg[2] ),
         .\value_reg[3]_0 (\value_reg[3] ),
         .\value_reg[5]_0 (\value_reg[5] ),
         .\value_reg[6]_0 (\value_reg[6]_16 ),
-        .\value_reg[7]_0 (\value_reg[7] ));
+        .\value_reg[7]_0 (\value_reg[7] ),
+        .\value_reg[7]_1 (\value_reg[7]_16 ));
   z80_0_register_10 D__0
        (.Q(\value_reg[7]_1 ),
         .clk(clk),
         .drive_D(drive_D),
         .drive_E(drive_E),
         .ld_D(ld_D),
-        .rst_L(\value_reg[7]_16 ),
+        .rst_L(\value_reg[7]_17 ),
+        .rst_L_0(\value_reg[7]_16 ),
+        .rst_L_1(\value_reg[3]_11 ),
         .swap_reg(swap_reg),
         .\value_reg[0]_0 (D__0_n_15),
         .\value_reg[0]_1 (H_n_17),
@@ -52796,13 +52840,15 @@ module z80_0_regfile
         .\value_reg[7]_0 (D__0_n_0),
         .\value_reg[7]_1 (\value_reg[7]_6 ),
         .\value_reg[7]_2 (H_n_10),
-        .\value_reg[7]_3 (\value_reg[7]_21 ));
+        .\value_reg[7]_3 (\value_reg[7]_22 ));
   z80_0_register_11 D_not
        (.\FSM_sequential_state_reg[0] (\FSM_sequential_state_reg[0]_1 ),
         .clk(clk),
-        .rst_L(\value_reg[7]_16 ),
-        .\value_reg[7]_0 (\value_reg[7]_17 ),
-        .\value_reg[7]_1 (\value_reg[7]_20 ));
+        .rst_L(\value_reg[7]_17 ),
+        .rst_L_0(\value_reg[7]_16 ),
+        .rst_L_1(\value_reg[3]_11 ),
+        .\value_reg[7]_0 (\value_reg[7]_18 ),
+        .\value_reg[7]_1 (\value_reg[7]_21 ));
   z80_0_register_12 E__0
        (.Q(Q),
         .clk(clk),
@@ -52810,7 +52856,9 @@ module z80_0_regfile
         .ld_D(ld_D),
         .ld_E(ld_E),
         .ld_L(ld_L),
-        .rst_L(\value_reg[7]_16 ),
+        .rst_L(rst_L),
+        .rst_L_0(\value_reg[7]_16 ),
+        .rst_L_1(\value_reg[3]_11 ),
         .\value_reg[0]_0 (\value_reg[0]_1 ),
         .\value_reg[0]_1 (\value_reg[0]_2 ),
         .\value_reg[0]_2 (\value_reg[0]_3 ),
@@ -52845,16 +52893,19 @@ module z80_0_regfile
         .\value_reg[7]_2 (\value_reg[7]_5 ),
         .\value_reg[7]_3 (\value_reg[7]_6 ),
         .\value_reg[7]_4 (\value_reg[7]_10 ),
-        .\value_reg[7]_5 (\value_reg[7]_2 ),
-        .\value_reg[7]_6 (\value_reg[7]_1 ),
-        .\value_reg[7]_7 (\value_reg[7]_8 ),
-        .\value_reg[7]_8 (\value_reg[7]_24 ));
+        .\value_reg[7]_5 (\value_reg[7]_17 ),
+        .\value_reg[7]_6 (\value_reg[7]_2 ),
+        .\value_reg[7]_7 (\value_reg[7]_1 ),
+        .\value_reg[7]_8 (\value_reg[7]_8 ),
+        .\value_reg[7]_9 (\value_reg[7]_25 ));
   z80_0_register_13 E_not
        (.\FSM_sequential_state_reg[0] (\FSM_sequential_state_reg[0]_2 ),
         .clk(clk),
-        .rst_L(\value_reg[7]_16 ),
-        .\value_reg[7]_0 (\value_reg[7]_18 ),
-        .\value_reg[7]_1 (\value_reg[7]_23 ));
+        .rst_L(\value_reg[7]_17 ),
+        .rst_L_0(\value_reg[7]_16 ),
+        .rst_L_1(\value_reg[3]_11 ),
+        .\value_reg[7]_0 (\value_reg[7]_19 ),
+        .\value_reg[7]_1 (\value_reg[7]_24 ));
   z80_0_register_14 H
        (.\FSM_sequential_state_reg[1] (\FSM_sequential_state_reg[1]_1 ),
         .Q(\value_reg[7]_8 ),
@@ -52863,7 +52914,9 @@ module z80_0_regfile
         .drive_L(drive_L),
         .ld_D(ld_D),
         .ld_H(ld_H),
-        .rst_L(\value_reg[7]_16 ),
+        .rst_L(\value_reg[7]_17 ),
+        .rst_L_0(\value_reg[7]_16 ),
+        .rst_L_1(\value_reg[3]_11 ),
         .swap_reg(swap_reg),
         .\value_reg[0]_0 (H_n_17),
         .\value_reg[0]_1 (IXH_n_15),
@@ -52891,6 +52944,7 @@ module z80_0_regfile
         .clk(clk),
         .ld_H(ld_H),
         .rst_L(\value_reg[7]_16 ),
+        .rst_L_0(\value_reg[3]_11 ),
         .\value_reg[0]_0 (\value_reg[0]_9 ),
         .\value_reg[1]_0 (\value_reg[1]_10 ),
         .\value_reg[2]_0 (\value_reg[2]_9 ),
@@ -52898,14 +52952,16 @@ module z80_0_regfile
         .\value_reg[5]_0 (\value_reg[5]_9 ),
         .\value_reg[6]_0 (\value_reg[6]_17 ),
         .\value_reg[7]_0 (\value_reg[7]_13 ),
-        .\value_reg[7]_1 (\value_reg[7]_22 ));
+        .\value_reg[7]_1 (\value_reg[7]_23 ));
   z80_0_register_16 IXH
        (.\FSM_sequential_state_reg[1] (\FSM_sequential_state_reg[1]_4 ),
         .\FSM_sequential_state_reg[1]_0 (\FSM_sequential_state_reg[1]_5 ),
         .clk(clk),
         .drive_IXH(drive_IXH),
         .drive_IXL(drive_IXL),
-        .rst_L(\value_reg[7]_16 ),
+        .rst_L(\value_reg[7]_17 ),
+        .rst_L_0(\value_reg[7]_16 ),
+        .rst_L_1(\value_reg[3]_11 ),
         .swap_reg(swap_reg),
         .\value_reg[0]_0 (IXH_n_15),
         .\value_reg[0]_1 (IYH_n_15),
@@ -52930,7 +52986,9 @@ module z80_0_regfile
        (.\FSM_sequential_state_reg[0] (\FSM_sequential_state_reg[0]_5 ),
         .\FSM_sequential_state_reg[0]_0 (\FSM_sequential_state_reg[0]_6 ),
         .clk(clk),
-        .rst_L(\value_reg[7]_16 ),
+        .rst_L(\value_reg[7]_17 ),
+        .rst_L_0(\value_reg[7]_16 ),
+        .rst_L_1(\value_reg[3]_11 ),
         .\value_reg[7]_0 (\value_reg[6]_11 [7:0]));
   z80_0_register_18 IYH
        (.\FSM_sequential_state_reg[0] (\FSM_sequential_state_reg[0]_7 ),
@@ -52938,7 +52996,9 @@ module z80_0_regfile
         .clk(clk),
         .drive_IYH(drive_IYH),
         .drive_IYL(drive_IYL),
-        .rst_L(\value_reg[7]_16 ),
+        .rst_L(rst_L),
+        .rst_L_0(\value_reg[7]_17 ),
+        .rst_L_1(\value_reg[7]_16 ),
         .swap_reg(swap_reg),
         .\value_reg[0]_0 (IYH_n_15),
         .\value_reg[0]_1 (SPH_n_16),
@@ -52947,7 +53007,8 @@ module z80_0_regfile
         .\value_reg[2]_0 (IYH_n_13),
         .\value_reg[2]_1 (SPH_n_14),
         .\value_reg[3]_0 (IYH_n_12),
-        .\value_reg[3]_1 (SPH_n_13),
+        .\value_reg[3]_1 (\value_reg[3]_11 ),
+        .\value_reg[3]_2 (SPH_n_13),
         .\value_reg[4]_0 (IYH_n_11),
         .\value_reg[4]_1 (SPH_n_12),
         .\value_reg[5]_0 (IYH_n_10),
@@ -52963,7 +53024,9 @@ module z80_0_regfile
        (.\FSM_sequential_state_reg[0] (\FSM_sequential_state_reg[0]_9 ),
         .\FSM_sequential_state_reg[0]_0 (\FSM_sequential_state_reg[0]_10 ),
         .clk(clk),
-        .rst_L(\value_reg[7]_16 ),
+        .rst_L(\value_reg[7]_17 ),
+        .rst_L_0(\value_reg[7]_16 ),
+        .rst_L_1(\value_reg[3]_11 ),
         .\value_reg[7]_0 (\value_reg[6]_12 [7:0]));
   z80_0_register_20 L
        (.\FSM_sequential_state_reg[1] (\FSM_sequential_state_reg[1]_3 ),
@@ -52971,7 +53034,9 @@ module z80_0_regfile
         .clk(clk),
         .ld_D(ld_D),
         .ld_L(ld_L),
-        .rst_L(\value_reg[7]_16 ),
+        .rst_L(rst_L_0),
+        .rst_L_0(\value_reg[7]_16 ),
+        .rst_L_1(\value_reg[3]_11 ),
         .\value_reg[4]_0 (\value_reg[4]_2 ),
         .\value_reg[4]_1 (\value_reg[7]_1 [4]));
   z80_0_register_21 L_not
@@ -52979,6 +53044,7 @@ module z80_0_regfile
         .clk(clk),
         .ld_L(ld_L),
         .rst_L(\value_reg[7]_16 ),
+        .rst_L_0(\value_reg[3]_11 ),
         .\value_reg[0]_0 (\value_reg[0]_10 ),
         .\value_reg[1]_0 (\value_reg[1]_11 ),
         .\value_reg[2]_0 (\value_reg[2]_10 ),
@@ -52986,7 +53052,7 @@ module z80_0_regfile
         .\value_reg[5]_0 (\value_reg[5]_10 ),
         .\value_reg[6]_0 (\value_reg[6]_18 ),
         .\value_reg[7]_0 (\value_reg[7]_14 ),
-        .\value_reg[7]_1 (\value_reg[7]_25 ));
+        .\value_reg[7]_1 (\value_reg[7]_26 ));
   z80_0_register_22 PCH
        (.\FSM_sequential_state_reg[0] (\FSM_sequential_state_reg[0]_12 ),
         .\FSM_sequential_state_reg[0]_0 (\FSM_sequential_state_reg[0]_13 ),
@@ -52995,6 +53061,7 @@ module z80_0_regfile
         .drive_PCH(drive_PCH),
         .drive_PCL(drive_PCL),
         .rst_L(\value_reg[7]_16 ),
+        .rst_L_0(\value_reg[3]_11 ),
         .\value_reg[0]_0 (PCH_n_15),
         .\value_reg[0]_1 (STRL_n_14),
         .\value_reg[1]_0 (PCH_n_14),
@@ -53017,7 +53084,9 @@ module z80_0_regfile
         .\FSM_sequential_state_reg[10] (\FSM_sequential_state_reg[10]_6 ),
         .clk(clk),
         .data6(data6[7:0]),
-        .rst_L(\value_reg[7]_16 ));
+        .rst_L(\value_reg[7]_17 ),
+        .rst_L_0(\value_reg[7]_16 ),
+        .rst_L_1(\value_reg[3]_11 ));
   z80_0_register_24 SPH
        (.\FSM_sequential_state_reg[10] (\FSM_sequential_state_reg[10]_3 ),
         .\FSM_sequential_state_reg[10]_0 (\FSM_sequential_state_reg[10]_4 ),
@@ -53025,7 +53094,9 @@ module z80_0_regfile
         .data5(data5[15:8]),
         .drive_SPH(drive_SPH),
         .drive_SPL(drive_SPL),
-        .rst_L(\value_reg[7]_16 ),
+        .rst_L(\value_reg[7]_17 ),
+        .rst_L_0(\value_reg[7]_16 ),
+        .rst_L_1(\value_reg[3]_11 ),
         .swap_reg(swap_reg),
         .\value_reg[0]_0 (SPH_n_16),
         .\value_reg[0]_1 (PCH_n_15),
@@ -53050,17 +53121,19 @@ module z80_0_regfile
         .\FSM_sequential_state_reg[10] (\FSM_sequential_state_reg[10]_5 ),
         .clk(clk),
         .data5(data5[7:0]),
-        .rst_L(\value_reg[7]_16 ));
+        .rst_L(\value_reg[7]_17 ),
+        .rst_L_0(\value_reg[7]_16 ),
+        .rst_L_1(\value_reg[3]_11 ));
   z80_0_register_26 STRH
        (.\FSM_sequential_state_reg[0] (\FSM_sequential_state_reg[0]_17 ),
         .\FSM_sequential_state_reg[1] (\FSM_sequential_state_reg[1]_6 ),
         .clk(clk),
         .data7(data7[15:8]),
         .drive_STRL(drive_STRL),
-        .rst_L(rst_L),
+        .rst_L(\value_reg[7]_16 ),
+        .rst_L_0(\value_reg[3]_11 ),
         .\value_reg[7]_0 (STRH_n_0),
-        .\value_reg[7]_1 (\value_reg[7]_16 ),
-        .\value_reg[7]_2 (data7[7]));
+        .\value_reg[7]_1 (data7[7]));
   z80_0_register_27 STRL
        (.\FSM_sequential_state_reg[0] (\FSM_sequential_state_reg[0]_15 ),
         .\FSM_sequential_state_reg[0]_0 (\FSM_sequential_state_reg[0]_16 ),
@@ -53068,6 +53141,7 @@ module z80_0_regfile
         .data7(data7[7:0]),
         .drive_STRL(drive_STRL),
         .rst_L(\value_reg[7]_16 ),
+        .rst_L_0(\value_reg[3]_11 ),
         .\value_reg[0]_0 (STRL_n_14),
         .\value_reg[1]_0 (STRL_n_13),
         .\value_reg[2]_0 (STRL_n_12),
@@ -55158,7 +55232,9 @@ module z80_0_register_10
     ld_D,
     \value_reg[7]_3 ,
     clk,
-    rst_L);
+    rst_L,
+    rst_L_0,
+    rst_L_1);
   output \value_reg[7]_0 ;
   output [7:0]Q;
   output \value_reg[6]_0 ;
@@ -55185,6 +55261,8 @@ module z80_0_register_10
   input [7:0]\value_reg[7]_3 ;
   input clk;
   input rst_L;
+  input rst_L_0;
+  input rst_L_1;
 
   wire [7:0]Q;
   wire clk;
@@ -55192,6 +55270,8 @@ module z80_0_register_10
   wire drive_E;
   wire ld_D;
   wire rst_L;
+  wire rst_L_0;
+  wire rst_L_1;
   wire swap_reg;
   wire \value_reg[0]_0 ;
   wire \value_reg[0]_1 ;
@@ -55294,43 +55374,43 @@ module z80_0_register_10
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(ld_D),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\value_reg[7]_3 [0]),
         .Q(Q[0]));
   FDCE \value_reg[1] 
        (.C(clk),
         .CE(ld_D),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\value_reg[7]_3 [1]),
         .Q(Q[1]));
   FDCE \value_reg[2] 
        (.C(clk),
         .CE(ld_D),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\value_reg[7]_3 [2]),
         .Q(Q[2]));
   FDCE \value_reg[3] 
        (.C(clk),
         .CE(ld_D),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_3 [3]),
         .Q(Q[3]));
   FDCE \value_reg[4] 
        (.C(clk),
         .CE(ld_D),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_3 [4]),
         .Q(Q[4]));
   FDCE \value_reg[5] 
        (.C(clk),
         .CE(ld_D),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_3 [5]),
         .Q(Q[5]));
   FDCE \value_reg[6] 
        (.C(clk),
         .CE(ld_D),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_3 [6]),
         .Q(Q[6]));
   FDCE \value_reg[7] 
@@ -55347,59 +55427,65 @@ module z80_0_register_11
     \FSM_sequential_state_reg[0] ,
     \value_reg[7]_1 ,
     clk,
-    rst_L);
+    rst_L,
+    rst_L_0,
+    rst_L_1);
   output [7:0]\value_reg[7]_0 ;
   input [0:0]\FSM_sequential_state_reg[0] ;
   input [7:0]\value_reg[7]_1 ;
   input clk;
   input rst_L;
+  input rst_L_0;
+  input rst_L_1;
 
   wire [0:0]\FSM_sequential_state_reg[0] ;
   wire clk;
   wire rst_L;
+  wire rst_L_0;
+  wire rst_L_1;
   wire [7:0]\value_reg[7]_0 ;
   wire [7:0]\value_reg[7]_1 ;
 
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\value_reg[7]_1 [0]),
         .Q(\value_reg[7]_0 [0]));
   FDCE \value_reg[1] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\value_reg[7]_1 [1]),
         .Q(\value_reg[7]_0 [1]));
   FDCE \value_reg[2] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\value_reg[7]_1 [2]),
         .Q(\value_reg[7]_0 [2]));
   FDCE \value_reg[3] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_1 [3]),
         .Q(\value_reg[7]_0 [3]));
   FDCE \value_reg[4] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_1 [4]),
         .Q(\value_reg[7]_0 [4]));
   FDCE \value_reg[5] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_1 [5]),
         .Q(\value_reg[7]_0 [5]));
   FDCE \value_reg[6] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_1 [6]),
         .Q(\value_reg[7]_0 [6]));
   FDCE \value_reg[7] 
@@ -55446,17 +55532,20 @@ module z80_0_register_12
     \value_reg[0]_2 ,
     \value_reg[0]_3 ,
     \value_reg[4]_4 ,
+    \value_reg[7]_5 ,
     ld_L,
     Q,
     ld_C,
     ld_E,
-    \value_reg[7]_5 ,
     \value_reg[7]_6 ,
-    ld_D,
     \value_reg[7]_7 ,
+    ld_D,
     \value_reg[7]_8 ,
+    rst_L,
+    \value_reg[7]_9 ,
     clk,
-    rst_L);
+    rst_L_0,
+    rst_L_1);
   output \value_reg[7]_0 ;
   output \value_reg[7]_1 ;
   output \value_reg[7]_2 ;
@@ -55491,17 +55580,20 @@ module z80_0_register_12
   output \value_reg[0]_2 ;
   output \value_reg[0]_3 ;
   output \value_reg[4]_4 ;
+  output \value_reg[7]_5 ;
   input ld_L;
   input [7:0]Q;
   input ld_C;
   input ld_E;
-  input [7:0]\value_reg[7]_5 ;
   input [7:0]\value_reg[7]_6 ;
-  input ld_D;
   input [7:0]\value_reg[7]_7 ;
+  input ld_D;
   input [7:0]\value_reg[7]_8 ;
-  input clk;
   input rst_L;
+  input [7:0]\value_reg[7]_9 ;
+  input clk;
+  input rst_L_0;
+  input rst_L_1;
 
   wire [7:0]Q;
   wire clk;
@@ -55510,6 +55602,8 @@ module z80_0_register_12
   wire ld_E;
   wire ld_L;
   wire rst_L;
+  wire rst_L_0;
+  wire rst_L_1;
   wire \value[0]_i_8__0_n_0 ;
   wire \value[1]_i_8__0_n_0 ;
   wire \value[2]_i_8__0_n_0 ;
@@ -55552,11 +55646,17 @@ module z80_0_register_12
   wire \value_reg[7]_2 ;
   wire [7:0]\value_reg[7]_3 ;
   wire \value_reg[7]_4 ;
-  wire [7:0]\value_reg[7]_5 ;
+  wire \value_reg[7]_5 ;
   wire [7:0]\value_reg[7]_6 ;
   wire [7:0]\value_reg[7]_7 ;
   wire [7:0]\value_reg[7]_8 ;
+  wire [7:0]\value_reg[7]_9 ;
 
+  LUT1 #(
+    .INIT(2'h1)) 
+    \value[0]_i_1__18 
+       (.I0(rst_L),
+        .O(\value_reg[7]_5 ));
   (* SOFT_HLUTNM = "soft_lutpair332" *) 
   LUT5 #(
     .INIT(32'hF0BBF088)) 
@@ -55573,8 +55673,8 @@ module z80_0_register_12
     \value[0]_i_6__1 
        (.I0(\value_reg[7]_3 [0]),
         .I1(ld_E),
-        .I2(\value_reg[7]_7 [0]),
-        .I3(\value_reg[7]_6 [0]),
+        .I2(\value_reg[7]_8 [0]),
+        .I3(\value_reg[7]_7 [0]),
         .I4(ld_D),
         .O(\value_reg[0]_3 ));
   LUT5 #(
@@ -55582,8 +55682,8 @@ module z80_0_register_12
     \value[0]_i_7 
        (.I0(\value_reg[7]_3 [0]),
         .I1(ld_E),
-        .I2(\value_reg[7]_5 [0]),
-        .I3(\value_reg[7]_6 [0]),
+        .I2(\value_reg[7]_6 [0]),
+        .I3(\value_reg[7]_7 [0]),
         .I4(ld_D),
         .O(\value_reg[0]_1 ));
   (* SOFT_HLUTNM = "soft_lutpair332" *) 
@@ -55601,7 +55701,7 @@ module z80_0_register_12
     \value[0]_i_8__0 
        (.I0(\value_reg[7]_3 [0]),
         .I1(ld_E),
-        .I2(\value_reg[7]_6 [0]),
+        .I2(\value_reg[7]_7 [0]),
         .I3(ld_D),
         .O(\value[0]_i_8__0_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair336" *) 
@@ -55620,8 +55720,8 @@ module z80_0_register_12
     \value[1]_i_6__1 
        (.I0(\value_reg[7]_3 [1]),
         .I1(ld_E),
-        .I2(\value_reg[7]_7 [1]),
-        .I3(\value_reg[7]_6 [1]),
+        .I2(\value_reg[7]_8 [1]),
+        .I3(\value_reg[7]_7 [1]),
         .I4(ld_D),
         .O(\value_reg[1]_3 ));
   LUT5 #(
@@ -55629,8 +55729,8 @@ module z80_0_register_12
     \value[1]_i_7 
        (.I0(\value_reg[7]_3 [1]),
         .I1(ld_E),
-        .I2(\value_reg[7]_5 [1]),
-        .I3(\value_reg[7]_6 [1]),
+        .I2(\value_reg[7]_6 [1]),
+        .I3(\value_reg[7]_7 [1]),
         .I4(ld_D),
         .O(\value_reg[1]_1 ));
   (* SOFT_HLUTNM = "soft_lutpair336" *) 
@@ -55648,7 +55748,7 @@ module z80_0_register_12
     \value[1]_i_8__0 
        (.I0(\value_reg[7]_3 [1]),
         .I1(ld_E),
-        .I2(\value_reg[7]_6 [1]),
+        .I2(\value_reg[7]_7 [1]),
         .I3(ld_D),
         .O(\value[1]_i_8__0_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair334" *) 
@@ -55666,8 +55766,8 @@ module z80_0_register_12
     \value[2]_i_6__1 
        (.I0(\value_reg[7]_3 [2]),
         .I1(ld_E),
-        .I2(\value_reg[7]_7 [2]),
-        .I3(\value_reg[7]_6 [2]),
+        .I2(\value_reg[7]_8 [2]),
+        .I3(\value_reg[7]_7 [2]),
         .I4(ld_D),
         .O(\value_reg[2]_3 ));
   (* SOFT_HLUTNM = "soft_lutpair335" *) 
@@ -55676,8 +55776,8 @@ module z80_0_register_12
     \value[2]_i_7 
        (.I0(\value_reg[7]_3 [2]),
         .I1(ld_E),
-        .I2(\value_reg[7]_5 [2]),
-        .I3(\value_reg[7]_6 [2]),
+        .I2(\value_reg[7]_6 [2]),
+        .I3(\value_reg[7]_7 [2]),
         .I4(ld_D),
         .O(\value_reg[2]_1 ));
   (* SOFT_HLUTNM = "soft_lutpair334" *) 
@@ -55695,7 +55795,7 @@ module z80_0_register_12
     \value[2]_i_8__0 
        (.I0(\value_reg[7]_3 [2]),
         .I1(ld_E),
-        .I2(\value_reg[7]_6 [2]),
+        .I2(\value_reg[7]_7 [2]),
         .I3(ld_D),
         .O(\value[2]_i_8__0_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair322" *) 
@@ -55713,8 +55813,8 @@ module z80_0_register_12
     \value[3]_i_6__1 
        (.I0(\value_reg[7]_3 [3]),
         .I1(ld_E),
-        .I2(\value_reg[7]_7 [3]),
-        .I3(\value_reg[7]_6 [3]),
+        .I2(\value_reg[7]_8 [3]),
+        .I3(\value_reg[7]_7 [3]),
         .I4(ld_D),
         .O(\value_reg[3]_3 ));
   (* SOFT_HLUTNM = "soft_lutpair326" *) 
@@ -55723,8 +55823,8 @@ module z80_0_register_12
     \value[3]_i_7 
        (.I0(\value_reg[7]_3 [3]),
         .I1(ld_E),
-        .I2(\value_reg[7]_5 [3]),
-        .I3(\value_reg[7]_6 [3]),
+        .I2(\value_reg[7]_6 [3]),
+        .I3(\value_reg[7]_7 [3]),
         .I4(ld_D),
         .O(\value_reg[3]_1 ));
   (* SOFT_HLUTNM = "soft_lutpair322" *) 
@@ -55742,7 +55842,7 @@ module z80_0_register_12
     \value[3]_i_8__0 
        (.I0(\value_reg[7]_3 [3]),
         .I1(ld_E),
-        .I2(\value_reg[7]_6 [3]),
+        .I2(\value_reg[7]_7 [3]),
         .I3(ld_D),
         .O(\value[3]_i_8__0_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair331" *) 
@@ -55769,8 +55869,8 @@ module z80_0_register_12
     \value[4]_i_7 
        (.I0(\value_reg[7]_3 [4]),
         .I1(ld_E),
-        .I2(\value_reg[7]_7 [4]),
-        .I3(\value_reg[7]_6 [4]),
+        .I2(\value_reg[7]_8 [4]),
+        .I3(\value_reg[7]_7 [4]),
         .I4(ld_D),
         .O(\value_reg[4]_3 ));
   (* SOFT_HLUTNM = "soft_lutpair333" *) 
@@ -55779,8 +55879,8 @@ module z80_0_register_12
     \value[4]_i_8 
        (.I0(\value_reg[7]_3 [4]),
         .I1(ld_E),
-        .I2(\value_reg[7]_5 [4]),
-        .I3(\value_reg[7]_6 [4]),
+        .I2(\value_reg[7]_6 [4]),
+        .I3(\value_reg[7]_7 [4]),
         .I4(ld_D),
         .O(\value_reg[4]_1 ));
   (* SOFT_HLUTNM = "soft_lutpair333" *) 
@@ -55789,7 +55889,7 @@ module z80_0_register_12
     \value[4]_i_9__0 
        (.I0(\value_reg[7]_3 [4]),
         .I1(ld_E),
-        .I2(\value_reg[7]_6 [4]),
+        .I2(\value_reg[7]_7 [4]),
         .I3(ld_D),
         .O(\value[4]_i_9__0_n_0 ));
   LUT4 #(
@@ -55798,7 +55898,7 @@ module z80_0_register_12
        (.I0(\value_reg[7]_3 [4]),
         .I1(ld_E),
         .I2(ld_D),
-        .I3(\value_reg[7]_5 [4]),
+        .I3(\value_reg[7]_6 [4]),
         .O(\value_reg[4]_4 ));
   (* SOFT_HLUTNM = "soft_lutpair328" *) 
   LUT5 #(
@@ -55815,8 +55915,8 @@ module z80_0_register_12
     \value[5]_i_6__1 
        (.I0(\value_reg[7]_3 [5]),
         .I1(ld_E),
-        .I2(\value_reg[7]_7 [5]),
-        .I3(\value_reg[7]_6 [5]),
+        .I2(\value_reg[7]_8 [5]),
+        .I3(\value_reg[7]_7 [5]),
         .I4(ld_D),
         .O(\value_reg[5]_3 ));
   (* SOFT_HLUTNM = "soft_lutpair329" *) 
@@ -55825,8 +55925,8 @@ module z80_0_register_12
     \value[5]_i_7 
        (.I0(\value_reg[7]_3 [5]),
         .I1(ld_E),
-        .I2(\value_reg[7]_5 [5]),
-        .I3(\value_reg[7]_6 [5]),
+        .I2(\value_reg[7]_6 [5]),
+        .I3(\value_reg[7]_7 [5]),
         .I4(ld_D),
         .O(\value_reg[5]_1 ));
   (* SOFT_HLUTNM = "soft_lutpair328" *) 
@@ -55844,7 +55944,7 @@ module z80_0_register_12
     \value[5]_i_8__0 
        (.I0(\value_reg[7]_3 [5]),
         .I1(ld_E),
-        .I2(\value_reg[7]_6 [5]),
+        .I2(\value_reg[7]_7 [5]),
         .I3(ld_D),
         .O(\value[5]_i_8__0_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair325" *) 
@@ -55862,8 +55962,8 @@ module z80_0_register_12
     \value[6]_i_5__1 
        (.I0(\value_reg[7]_3 [6]),
         .I1(ld_E),
-        .I2(\value_reg[7]_7 [6]),
-        .I3(\value_reg[7]_6 [6]),
+        .I2(\value_reg[7]_8 [6]),
+        .I3(\value_reg[7]_7 [6]),
         .I4(ld_D),
         .O(\value_reg[6]_3 ));
   (* SOFT_HLUTNM = "soft_lutpair325" *) 
@@ -55881,8 +55981,8 @@ module z80_0_register_12
     \value[6]_i_7__0 
        (.I0(\value_reg[7]_3 [6]),
         .I1(ld_E),
-        .I2(\value_reg[7]_5 [6]),
-        .I3(\value_reg[7]_6 [6]),
+        .I2(\value_reg[7]_6 [6]),
+        .I3(\value_reg[7]_7 [6]),
         .I4(ld_D),
         .O(\value_reg[6]_1 ));
   (* SOFT_HLUTNM = "soft_lutpair327" *) 
@@ -55891,7 +55991,7 @@ module z80_0_register_12
     \value[6]_i_8 
        (.I0(\value_reg[7]_3 [6]),
         .I1(ld_E),
-        .I2(\value_reg[7]_6 [6]),
+        .I2(\value_reg[7]_7 [6]),
         .I3(ld_D),
         .O(\value[6]_i_8_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair321" *) 
@@ -55910,8 +56010,8 @@ module z80_0_register_12
     \value[7]_i_30 
        (.I0(\value_reg[7]_3 [7]),
         .I1(ld_E),
-        .I2(\value_reg[7]_5 [7]),
-        .I3(\value_reg[7]_6 [7]),
+        .I2(\value_reg[7]_6 [7]),
+        .I3(\value_reg[7]_7 [7]),
         .I4(ld_D),
         .O(\value_reg[7]_1 ));
   (* SOFT_HLUTNM = "soft_lutpair323" *) 
@@ -55920,7 +56020,7 @@ module z80_0_register_12
     \value[7]_i_31 
        (.I0(\value_reg[7]_3 [7]),
         .I1(ld_E),
-        .I2(\value_reg[7]_6 [7]),
+        .I2(\value_reg[7]_7 [7]),
         .I3(ld_D),
         .O(\value[7]_i_31_n_0 ));
   LUT5 #(
@@ -55928,8 +56028,8 @@ module z80_0_register_12
     \value[7]_i_32__0 
        (.I0(\value_reg[7]_3 [7]),
         .I1(ld_E),
-        .I2(\value_reg[7]_7 [7]),
-        .I3(\value_reg[7]_6 [7]),
+        .I2(\value_reg[7]_8 [7]),
+        .I3(\value_reg[7]_7 [7]),
         .I4(ld_D),
         .O(\value_reg[7]_4 ));
   (* SOFT_HLUTNM = "soft_lutpair321" *) 
@@ -55944,50 +56044,50 @@ module z80_0_register_12
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(ld_E),
-        .CLR(rst_L),
-        .D(\value_reg[7]_8 [0]),
+        .CLR(rst_L_1),
+        .D(\value_reg[7]_9 [0]),
         .Q(\value_reg[7]_3 [0]));
   FDCE \value_reg[1] 
        (.C(clk),
         .CE(ld_E),
-        .CLR(rst_L),
-        .D(\value_reg[7]_8 [1]),
+        .CLR(rst_L_1),
+        .D(\value_reg[7]_9 [1]),
         .Q(\value_reg[7]_3 [1]));
   FDCE \value_reg[2] 
        (.C(clk),
         .CE(ld_E),
-        .CLR(rst_L),
-        .D(\value_reg[7]_8 [2]),
+        .CLR(rst_L_1),
+        .D(\value_reg[7]_9 [2]),
         .Q(\value_reg[7]_3 [2]));
   FDCE \value_reg[3] 
        (.C(clk),
         .CE(ld_E),
-        .CLR(rst_L),
-        .D(\value_reg[7]_8 [3]),
+        .CLR(rst_L_0),
+        .D(\value_reg[7]_9 [3]),
         .Q(\value_reg[7]_3 [3]));
   FDCE \value_reg[4] 
        (.C(clk),
         .CE(ld_E),
-        .CLR(rst_L),
-        .D(\value_reg[7]_8 [4]),
+        .CLR(rst_L_0),
+        .D(\value_reg[7]_9 [4]),
         .Q(\value_reg[7]_3 [4]));
   FDCE \value_reg[5] 
        (.C(clk),
         .CE(ld_E),
-        .CLR(rst_L),
-        .D(\value_reg[7]_8 [5]),
+        .CLR(rst_L_0),
+        .D(\value_reg[7]_9 [5]),
         .Q(\value_reg[7]_3 [5]));
   FDCE \value_reg[6] 
        (.C(clk),
         .CE(ld_E),
-        .CLR(rst_L),
-        .D(\value_reg[7]_8 [6]),
+        .CLR(rst_L_0),
+        .D(\value_reg[7]_9 [6]),
         .Q(\value_reg[7]_3 [6]));
   FDCE \value_reg[7] 
        (.C(clk),
         .CE(ld_E),
-        .CLR(rst_L),
-        .D(\value_reg[7]_8 [7]),
+        .CLR(\value_reg[7]_5 ),
+        .D(\value_reg[7]_9 [7]),
         .Q(\value_reg[7]_3 [7]));
 endmodule
 
@@ -55997,59 +56097,65 @@ module z80_0_register_13
     \FSM_sequential_state_reg[0] ,
     \value_reg[7]_1 ,
     clk,
-    rst_L);
+    rst_L,
+    rst_L_0,
+    rst_L_1);
   output [7:0]\value_reg[7]_0 ;
   input [0:0]\FSM_sequential_state_reg[0] ;
   input [7:0]\value_reg[7]_1 ;
   input clk;
   input rst_L;
+  input rst_L_0;
+  input rst_L_1;
 
   wire [0:0]\FSM_sequential_state_reg[0] ;
   wire clk;
   wire rst_L;
+  wire rst_L_0;
+  wire rst_L_1;
   wire [7:0]\value_reg[7]_0 ;
   wire [7:0]\value_reg[7]_1 ;
 
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\value_reg[7]_1 [0]),
         .Q(\value_reg[7]_0 [0]));
   FDCE \value_reg[1] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\value_reg[7]_1 [1]),
         .Q(\value_reg[7]_0 [1]));
   FDCE \value_reg[2] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\value_reg[7]_1 [2]),
         .Q(\value_reg[7]_0 [2]));
   FDCE \value_reg[3] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_1 [3]),
         .Q(\value_reg[7]_0 [3]));
   FDCE \value_reg[4] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_1 [4]),
         .Q(\value_reg[7]_0 [4]));
   FDCE \value_reg[5] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_1 [5]),
         .Q(\value_reg[7]_0 [5]));
   FDCE \value_reg[6] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_1 [6]),
         .Q(\value_reg[7]_0 [6]));
   FDCE \value_reg[7] 
@@ -56091,7 +56197,9 @@ module z80_0_register_14
     ld_H,
     \FSM_sequential_state_reg[1] ,
     clk,
-    rst_L);
+    rst_L,
+    rst_L_0,
+    rst_L_1);
   output \value_reg[4]_0 ;
   output [7:0]Q;
   output \value_reg[4]_1 ;
@@ -56122,6 +56230,8 @@ module z80_0_register_14
   input [7:0]\FSM_sequential_state_reg[1] ;
   input clk;
   input rst_L;
+  input rst_L_0;
+  input rst_L_1;
 
   wire [7:0]\FSM_sequential_state_reg[1] ;
   wire [7:0]Q;
@@ -56131,6 +56241,8 @@ module z80_0_register_14
   wire ld_D;
   wire ld_H;
   wire rst_L;
+  wire rst_L_0;
+  wire rst_L_1;
   wire swap_reg;
   wire \value_reg[0]_0 ;
   wire \value_reg[0]_1 ;
@@ -56251,43 +56363,43 @@ module z80_0_register_14
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(ld_H),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[1] [0]),
         .Q(Q[0]));
   FDCE \value_reg[1] 
        (.C(clk),
         .CE(ld_H),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[1] [1]),
         .Q(Q[1]));
   FDCE \value_reg[2] 
        (.C(clk),
         .CE(ld_H),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[1] [2]),
         .Q(Q[2]));
   FDCE \value_reg[3] 
        (.C(clk),
         .CE(ld_H),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[1] [3]),
         .Q(Q[3]));
   FDCE \value_reg[4] 
        (.C(clk),
         .CE(ld_H),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[1] [4]),
         .Q(Q[4]));
   FDCE \value_reg[5] 
        (.C(clk),
         .CE(ld_H),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[1] [5]),
         .Q(Q[5]));
   FDCE \value_reg[6] 
        (.C(clk),
         .CE(ld_H),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[1] [6]),
         .Q(Q[6]));
   FDCE \value_reg[7] 
@@ -56311,7 +56423,8 @@ module z80_0_register_15
     \FSM_sequential_state_reg[1] ,
     \value_reg[7]_1 ,
     clk,
-    rst_L);
+    rst_L,
+    rst_L_0);
   output \value_reg[7]_0 ;
   output \value_reg[5]_0 ;
   output \value_reg[3]_0 ;
@@ -56324,11 +56437,13 @@ module z80_0_register_15
   input [7:0]\value_reg[7]_1 ;
   input clk;
   input rst_L;
+  input rst_L_0;
 
   wire [0:0]\FSM_sequential_state_reg[1] ;
   wire clk;
   wire ld_H;
   wire rst_L;
+  wire rst_L_0;
   wire \value_reg[0]_0 ;
   wire \value_reg[1]_0 ;
   wire \value_reg[2]_0 ;
@@ -56376,26 +56491,26 @@ module z80_0_register_15
         .O(\value_reg[5]_0 ));
   LUT2 #(
     .INIT(4'h8)) 
-    \value[7]_i_7__0 
+    \value[7]_i_7__1 
        (.I0(\value_reg_n_0_[7] ),
         .I1(ld_H),
         .O(\value_reg[7]_0 ));
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[1] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_1 [0]),
         .Q(\value_reg_n_0_[0] ));
   FDCE \value_reg[1] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[1] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_1 [1]),
         .Q(\value_reg_n_0_[1] ));
   FDCE \value_reg[2] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[1] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_1 [2]),
         .Q(\value_reg_n_0_[2] ));
   FDCE \value_reg[3] 
@@ -56457,7 +56572,9 @@ module z80_0_register_16
     \FSM_sequential_state_reg[1] ,
     \FSM_sequential_state_reg[1]_0 ,
     clk,
-    rst_L);
+    rst_L,
+    rst_L_0,
+    rst_L_1);
   output \value_reg[6]_0 ;
   output \value_reg[7]_0 ;
   output \value_reg[6]_1 ;
@@ -56484,6 +56601,8 @@ module z80_0_register_16
   input [7:0]\FSM_sequential_state_reg[1]_0 ;
   input clk;
   input rst_L;
+  input rst_L_0;
+  input rst_L_1;
 
   wire [0:0]\FSM_sequential_state_reg[1] ;
   wire [7:0]\FSM_sequential_state_reg[1]_0 ;
@@ -56492,6 +56611,8 @@ module z80_0_register_16
   wire drive_IXH;
   wire drive_IXL;
   wire rst_L;
+  wire rst_L_0;
+  wire rst_L_1;
   wire swap_reg;
   wire \value_reg[0]_0 ;
   wire \value_reg[0]_1 ;
@@ -56594,43 +56715,43 @@ module z80_0_register_16
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[1] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[1]_0 [0]),
         .Q(\value_reg[6]_2 [0]));
   FDCE \value_reg[1] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[1] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[1]_0 [1]),
         .Q(\value_reg[6]_2 [1]));
   FDCE \value_reg[2] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[1] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[1]_0 [2]),
         .Q(\value_reg[6]_2 [2]));
   FDCE \value_reg[3] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[1] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[1]_0 [3]),
         .Q(\value_reg[6]_2 [3]));
   FDCE \value_reg[4] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[1] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[1]_0 [4]),
         .Q(\value_reg[6]_2 [4]));
   FDCE \value_reg[5] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[1] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[1]_0 [5]),
         .Q(\value_reg[6]_2 [5]));
   FDCE \value_reg[6] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[1] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[1]_0 [6]),
         .Q(\value_reg[6]_2 [6]));
   FDCE \value_reg[7] 
@@ -56647,59 +56768,65 @@ module z80_0_register_17
     \FSM_sequential_state_reg[0] ,
     \FSM_sequential_state_reg[0]_0 ,
     clk,
-    rst_L);
+    rst_L,
+    rst_L_0,
+    rst_L_1);
   output [7:0]\value_reg[7]_0 ;
   input [0:0]\FSM_sequential_state_reg[0] ;
   input [7:0]\FSM_sequential_state_reg[0]_0 ;
   input clk;
   input rst_L;
+  input rst_L_0;
+  input rst_L_1;
 
   wire [0:0]\FSM_sequential_state_reg[0] ;
   wire [7:0]\FSM_sequential_state_reg[0]_0 ;
   wire clk;
   wire rst_L;
+  wire rst_L_0;
+  wire rst_L_1;
   wire [7:0]\value_reg[7]_0 ;
 
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[0]_0 [0]),
         .Q(\value_reg[7]_0 [0]));
   FDCE \value_reg[1] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[0]_0 [1]),
         .Q(\value_reg[7]_0 [1]));
   FDCE \value_reg[2] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[0]_0 [2]),
         .Q(\value_reg[7]_0 [2]));
   FDCE \value_reg[3] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[0]_0 [3]),
         .Q(\value_reg[7]_0 [3]));
   FDCE \value_reg[4] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[0]_0 [4]),
         .Q(\value_reg[7]_0 [4]));
   FDCE \value_reg[5] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[0]_0 [5]),
         .Q(\value_reg[7]_0 [5]));
   FDCE \value_reg[6] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[0]_0 [6]),
         .Q(\value_reg[7]_0 [6]));
   FDCE \value_reg[7] 
@@ -56722,6 +56849,7 @@ module z80_0_register_18
     \value_reg[2]_0 ,
     \value_reg[1]_0 ,
     \value_reg[0]_0 ,
+    \value_reg[3]_1 ,
     swap_reg,
     drive_IYH,
     \value_reg[7]_1 ,
@@ -56730,14 +56858,16 @@ module z80_0_register_18
     \value_reg[6]_3 ,
     \value_reg[5]_1 ,
     \value_reg[4]_1 ,
-    \value_reg[3]_1 ,
+    \value_reg[3]_2 ,
     \value_reg[2]_1 ,
     \value_reg[1]_1 ,
     \value_reg[0]_1 ,
+    rst_L,
     \FSM_sequential_state_reg[0] ,
     \FSM_sequential_state_reg[0]_0 ,
     clk,
-    rst_L);
+    rst_L_0,
+    rst_L_1);
   output \value_reg[6]_0 ;
   output \value_reg[7]_0 ;
   output \value_reg[6]_1 ;
@@ -56748,6 +56878,7 @@ module z80_0_register_18
   output \value_reg[2]_0 ;
   output \value_reg[1]_0 ;
   output \value_reg[0]_0 ;
+  output \value_reg[3]_1 ;
   input swap_reg;
   input drive_IYH;
   input [7:0]\value_reg[7]_1 ;
@@ -56756,14 +56887,16 @@ module z80_0_register_18
   input \value_reg[6]_3 ;
   input \value_reg[5]_1 ;
   input \value_reg[4]_1 ;
-  input \value_reg[3]_1 ;
+  input \value_reg[3]_2 ;
   input \value_reg[2]_1 ;
   input \value_reg[1]_1 ;
   input \value_reg[0]_1 ;
+  input rst_L;
   input [0:0]\FSM_sequential_state_reg[0] ;
   input [7:0]\FSM_sequential_state_reg[0]_0 ;
   input clk;
-  input rst_L;
+  input rst_L_0;
+  input rst_L_1;
 
   wire [0:0]\FSM_sequential_state_reg[0] ;
   wire [7:0]\FSM_sequential_state_reg[0]_0 ;
@@ -56772,6 +56905,8 @@ module z80_0_register_18
   wire drive_IYH;
   wire drive_IYL;
   wire rst_L;
+  wire rst_L_0;
+  wire rst_L_1;
   wire swap_reg;
   wire \value_reg[0]_0 ;
   wire \value_reg[0]_1 ;
@@ -56781,6 +56916,7 @@ module z80_0_register_18
   wire \value_reg[2]_1 ;
   wire \value_reg[3]_0 ;
   wire \value_reg[3]_1 ;
+  wire \value_reg[3]_2 ;
   wire \value_reg[4]_0 ;
   wire \value_reg[4]_1 ;
   wire \value_reg[5]_0 ;
@@ -56826,6 +56962,11 @@ module z80_0_register_18
         .I3(drive_IYL),
         .I4(\value_reg[2]_1 ),
         .O(\value_reg[2]_0 ));
+  LUT1 #(
+    .INIT(2'h1)) 
+    \value[2]_i_2__5 
+       (.I0(rst_L),
+        .O(\value_reg[3]_1 ));
   LUT5 #(
     .INIT(32'hB8BBB888)) 
     \value[3]_i_23 
@@ -56833,7 +56974,7 @@ module z80_0_register_18
         .I1(drive_IYH),
         .I2(\value_reg[7]_1 [3]),
         .I3(drive_IYL),
-        .I4(\value_reg[3]_1 ),
+        .I4(\value_reg[3]_2 ),
         .O(\value_reg[3]_0 ));
   LUT5 #(
     .INIT(32'hB8BBB888)) 
@@ -56874,49 +57015,49 @@ module z80_0_register_18
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(\value_reg[3]_1 ),
         .D(\FSM_sequential_state_reg[0]_0 [0]),
         .Q(\value_reg[6]_2 [0]));
   FDCE \value_reg[1] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(\value_reg[3]_1 ),
         .D(\FSM_sequential_state_reg[0]_0 [1]),
         .Q(\value_reg[6]_2 [1]));
   FDCE \value_reg[2] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(\value_reg[3]_1 ),
         .D(\FSM_sequential_state_reg[0]_0 [2]),
         .Q(\value_reg[6]_2 [2]));
   FDCE \value_reg[3] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(\value_reg[3]_1 ),
         .D(\FSM_sequential_state_reg[0]_0 [3]),
         .Q(\value_reg[6]_2 [3]));
   FDCE \value_reg[4] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[0]_0 [4]),
         .Q(\value_reg[6]_2 [4]));
   FDCE \value_reg[5] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[0]_0 [5]),
         .Q(\value_reg[6]_2 [5]));
   FDCE \value_reg[6] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[0]_0 [6]),
         .Q(\value_reg[6]_2 [6]));
   FDCE \value_reg[7] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[0]_0 [7]),
         .Q(data4));
 endmodule
@@ -56927,59 +57068,65 @@ module z80_0_register_19
     \FSM_sequential_state_reg[0] ,
     \FSM_sequential_state_reg[0]_0 ,
     clk,
-    rst_L);
+    rst_L,
+    rst_L_0,
+    rst_L_1);
   output [7:0]\value_reg[7]_0 ;
   input [0:0]\FSM_sequential_state_reg[0] ;
   input [7:0]\FSM_sequential_state_reg[0]_0 ;
   input clk;
   input rst_L;
+  input rst_L_0;
+  input rst_L_1;
 
   wire [0:0]\FSM_sequential_state_reg[0] ;
   wire [7:0]\FSM_sequential_state_reg[0]_0 ;
   wire clk;
   wire rst_L;
+  wire rst_L_0;
+  wire rst_L_1;
   wire [7:0]\value_reg[7]_0 ;
 
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[0]_0 [0]),
         .Q(\value_reg[7]_0 [0]));
   FDCE \value_reg[1] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[0]_0 [1]),
         .Q(\value_reg[7]_0 [1]));
   FDCE \value_reg[2] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[0]_0 [2]),
         .Q(\value_reg[7]_0 [2]));
   FDCE \value_reg[3] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[0]_0 [3]),
         .Q(\value_reg[7]_0 [3]));
   FDCE \value_reg[4] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[0]_0 [4]),
         .Q(\value_reg[7]_0 [4]));
   FDCE \value_reg[5] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[0]_0 [5]),
         .Q(\value_reg[7]_0 [5]));
   FDCE \value_reg[6] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[0]_0 [6]),
         .Q(\value_reg[7]_0 [6]));
   FDCE \value_reg[7] 
@@ -56997,18 +57144,21 @@ module z80_0_register_2
     A_not_en,
     D,
     clk,
-    rst_L);
+    rst_L,
+    rst_L_0);
   output \value_reg[0]_0 ;
   output [6:0]\value_reg[7]_0 ;
   input A_not_en;
   input [7:0]D;
   input clk;
   input rst_L;
+  input rst_L_0;
 
   wire A_not_en;
   wire [7:0]D;
   wire clk;
   wire rst_L;
+  wire rst_L_0;
   wire \value_reg[0]_0 ;
   wire [6:0]\value_reg[7]_0 ;
   wire \value_reg_n_0_[0] ;
@@ -57022,7 +57172,7 @@ module z80_0_register_2
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(A_not_en),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(D[0]),
         .Q(\value_reg_n_0_[0] ));
   FDCE \value_reg[1] 
@@ -57078,7 +57228,9 @@ module z80_0_register_20
     ld_L,
     \FSM_sequential_state_reg[1] ,
     clk,
-    rst_L);
+    rst_L,
+    rst_L_0,
+    rst_L_1);
   output \value_reg[4]_0 ;
   output [7:0]Q;
   input [0:0]\value_reg[4]_1 ;
@@ -57087,6 +57239,8 @@ module z80_0_register_20
   input [7:0]\FSM_sequential_state_reg[1] ;
   input clk;
   input rst_L;
+  input rst_L_0;
+  input rst_L_1;
 
   wire [7:0]\FSM_sequential_state_reg[1] ;
   wire [7:0]Q;
@@ -57094,6 +57248,8 @@ module z80_0_register_20
   wire ld_D;
   wire ld_L;
   wire rst_L;
+  wire rst_L_0;
+  wire rst_L_1;
   wire \value_reg[4]_0 ;
   wire [0:0]\value_reg[4]_1 ;
 
@@ -57107,43 +57263,43 @@ module z80_0_register_20
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(ld_L),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[1] [0]),
         .Q(Q[0]));
   FDCE \value_reg[1] 
        (.C(clk),
         .CE(ld_L),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[1] [1]),
         .Q(Q[1]));
   FDCE \value_reg[2] 
        (.C(clk),
         .CE(ld_L),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[1] [2]),
         .Q(Q[2]));
   FDCE \value_reg[3] 
        (.C(clk),
         .CE(ld_L),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[1] [3]),
         .Q(Q[3]));
   FDCE \value_reg[4] 
        (.C(clk),
         .CE(ld_L),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[1] [4]),
         .Q(Q[4]));
   FDCE \value_reg[5] 
        (.C(clk),
         .CE(ld_L),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[1] [5]),
         .Q(Q[5]));
   FDCE \value_reg[6] 
        (.C(clk),
         .CE(ld_L),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[1] [6]),
         .Q(Q[6]));
   FDCE \value_reg[7] 
@@ -57167,7 +57323,8 @@ module z80_0_register_21
     \FSM_sequential_state_reg[1] ,
     \value_reg[7]_1 ,
     clk,
-    rst_L);
+    rst_L,
+    rst_L_0);
   output \value_reg[7]_0 ;
   output \value_reg[5]_0 ;
   output \value_reg[3]_0 ;
@@ -57180,11 +57337,13 @@ module z80_0_register_21
   input [7:0]\value_reg[7]_1 ;
   input clk;
   input rst_L;
+  input rst_L_0;
 
   wire [0:0]\FSM_sequential_state_reg[1] ;
   wire clk;
   wire ld_L;
   wire rst_L;
+  wire rst_L_0;
   wire \value_reg[0]_0 ;
   wire \value_reg[1]_0 ;
   wire \value_reg[2]_0 ;
@@ -57232,26 +57391,26 @@ module z80_0_register_21
         .O(\value_reg[5]_0 ));
   LUT2 #(
     .INIT(4'h8)) 
-    \value[7]_i_7__2 
+    \value[7]_i_8 
        (.I0(\value_reg_n_0_[7] ),
         .I1(ld_L),
         .O(\value_reg[7]_0 ));
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[1] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_1 [0]),
         .Q(\value_reg_n_0_[0] ));
   FDCE \value_reg[1] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[1] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_1 [1]),
         .Q(\value_reg_n_0_[1] ));
   FDCE \value_reg[2] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[1] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_1 [2]),
         .Q(\value_reg_n_0_[2] ));
   FDCE \value_reg[3] 
@@ -57311,7 +57470,8 @@ module z80_0_register_22
     \FSM_sequential_state_reg[0] ,
     \FSM_sequential_state_reg[0]_0 ,
     clk,
-    rst_L);
+    rst_L,
+    rst_L_0);
   output \value_reg[7]_0 ;
   output [7:0]data6;
   output \value_reg[6]_0 ;
@@ -57336,6 +57496,7 @@ module z80_0_register_22
   input [7:0]\FSM_sequential_state_reg[0]_0 ;
   input clk;
   input rst_L;
+  input rst_L_0;
 
   wire [0:0]\FSM_sequential_state_reg[0] ;
   wire [7:0]\FSM_sequential_state_reg[0]_0 ;
@@ -57344,6 +57505,7 @@ module z80_0_register_22
   wire drive_PCH;
   wire drive_PCL;
   wire rst_L;
+  wire rst_L_0;
   wire \value_reg[0]_0 ;
   wire \value_reg[0]_1 ;
   wire \value_reg[1]_0 ;
@@ -57437,25 +57599,25 @@ module z80_0_register_22
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[0]_0 [0]),
         .Q(data6[0]));
   FDCE \value_reg[1] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[0]_0 [1]),
         .Q(data6[1]));
   FDCE \value_reg[2] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[0]_0 [2]),
         .Q(data6[2]));
   FDCE \value_reg[3] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[0]_0 [3]),
         .Q(data6[3]));
   FDCE \value_reg[4] 
@@ -57490,59 +57652,65 @@ module z80_0_register_23
     \FSM_sequential_state_reg[10] ,
     \FSM_sequential_state_reg[0] ,
     clk,
-    rst_L);
+    rst_L,
+    rst_L_0,
+    rst_L_1);
   output [7:0]data6;
   input [0:0]\FSM_sequential_state_reg[10] ;
   input [7:0]\FSM_sequential_state_reg[0] ;
   input clk;
   input rst_L;
+  input rst_L_0;
+  input rst_L_1;
 
   wire [7:0]\FSM_sequential_state_reg[0] ;
   wire [0:0]\FSM_sequential_state_reg[10] ;
   wire clk;
   wire [7:0]data6;
   wire rst_L;
+  wire rst_L_0;
+  wire rst_L_1;
 
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[0] [0]),
         .Q(data6[0]));
   FDCE \value_reg[1] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[0] [1]),
         .Q(data6[1]));
   FDCE \value_reg[2] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[0] [2]),
         .Q(data6[2]));
   FDCE \value_reg[3] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[0] [3]),
         .Q(data6[3]));
   FDCE \value_reg[4] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[0] [4]),
         .Q(data6[4]));
   FDCE \value_reg[5] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[0] [5]),
         .Q(data6[5]));
   FDCE \value_reg[6] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[0] [6]),
         .Q(data6[6]));
   FDCE \value_reg[7] 
@@ -57580,7 +57748,9 @@ module z80_0_register_24
     \FSM_sequential_state_reg[10] ,
     \FSM_sequential_state_reg[10]_0 ,
     clk,
-    rst_L);
+    rst_L,
+    rst_L_0,
+    rst_L_1);
   output \value_reg[6]_0 ;
   output [7:0]data5;
   output \value_reg[7]_0 ;
@@ -57607,6 +57777,8 @@ module z80_0_register_24
   input [7:0]\FSM_sequential_state_reg[10]_0 ;
   input clk;
   input rst_L;
+  input rst_L_0;
+  input rst_L_1;
 
   wire [0:0]\FSM_sequential_state_reg[10] ;
   wire [7:0]\FSM_sequential_state_reg[10]_0 ;
@@ -57615,6 +57787,8 @@ module z80_0_register_24
   wire drive_SPH;
   wire drive_SPL;
   wire rst_L;
+  wire rst_L_0;
+  wire rst_L_1;
   wire swap_reg;
   wire \value_reg[0]_0 ;
   wire \value_reg[0]_1 ;
@@ -57716,43 +57890,43 @@ module z80_0_register_24
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[10]_0 [0]),
         .Q(data5[0]));
   FDCE \value_reg[1] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[10]_0 [1]),
         .Q(data5[1]));
   FDCE \value_reg[2] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[10]_0 [2]),
         .Q(data5[2]));
   FDCE \value_reg[3] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[10]_0 [3]),
         .Q(data5[3]));
   FDCE \value_reg[4] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[10]_0 [4]),
         .Q(data5[4]));
   FDCE \value_reg[5] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[10]_0 [5]),
         .Q(data5[5]));
   FDCE \value_reg[6] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[10]_0 [6]),
         .Q(data5[6]));
   FDCE \value_reg[7] 
@@ -57769,59 +57943,65 @@ module z80_0_register_25
     \FSM_sequential_state_reg[10] ,
     \FSM_sequential_state_reg[0] ,
     clk,
-    rst_L);
+    rst_L,
+    rst_L_0,
+    rst_L_1);
   output [7:0]data5;
   input [0:0]\FSM_sequential_state_reg[10] ;
   input [7:0]\FSM_sequential_state_reg[0] ;
   input clk;
   input rst_L;
+  input rst_L_0;
+  input rst_L_1;
 
   wire [7:0]\FSM_sequential_state_reg[0] ;
   wire [0:0]\FSM_sequential_state_reg[10] ;
   wire clk;
   wire [7:0]data5;
   wire rst_L;
+  wire rst_L_0;
+  wire rst_L_1;
 
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[0] [0]),
         .Q(data5[0]));
   FDCE \value_reg[1] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[0] [1]),
         .Q(data5[1]));
   FDCE \value_reg[2] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[0] [2]),
         .Q(data5[2]));
   FDCE \value_reg[3] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[0] [3]),
         .Q(data5[3]));
   FDCE \value_reg[4] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[0] [4]),
         .Q(data5[4]));
   FDCE \value_reg[5] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[0] [5]),
         .Q(data5[5]));
   FDCE \value_reg[6] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[0] [6]),
         .Q(data5[6]));
   FDCE \value_reg[7] 
@@ -57837,21 +58017,21 @@ module z80_0_register_26
    (\value_reg[7]_0 ,
     data7,
     \value_reg[7]_1 ,
-    \value_reg[7]_2 ,
     drive_STRL,
-    rst_L,
     \FSM_sequential_state_reg[0] ,
     \FSM_sequential_state_reg[1] ,
-    clk);
+    clk,
+    rst_L,
+    rst_L_0);
   output \value_reg[7]_0 ;
   output [7:0]data7;
-  output \value_reg[7]_1 ;
-  input [0:0]\value_reg[7]_2 ;
+  input [0:0]\value_reg[7]_1 ;
   input drive_STRL;
-  input rst_L;
   input [0:0]\FSM_sequential_state_reg[0] ;
   input [7:0]\FSM_sequential_state_reg[1] ;
   input clk;
+  input rst_L;
+  input rst_L_0;
 
   wire [0:0]\FSM_sequential_state_reg[0] ;
   wire [7:0]\FSM_sequential_state_reg[1] ;
@@ -57859,68 +58039,63 @@ module z80_0_register_26
   wire [7:0]data7;
   wire drive_STRL;
   wire rst_L;
+  wire rst_L_0;
   wire \value_reg[7]_0 ;
-  wire \value_reg[7]_1 ;
-  wire [0:0]\value_reg[7]_2 ;
+  wire [0:0]\value_reg[7]_1 ;
 
-  LUT1 #(
-    .INIT(2'h1)) 
-    \value[0]_i_1__18 
-       (.I0(rst_L),
-        .O(\value_reg[7]_1 ));
   LUT3 #(
     .INIT(8'hCA)) 
     \value[7]_i_62 
        (.I0(data7[7]),
-        .I1(\value_reg[7]_2 ),
+        .I1(\value_reg[7]_1 ),
         .I2(drive_STRL),
         .O(\value_reg[7]_0 ));
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(\value_reg[7]_1 ),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[1] [0]),
         .Q(data7[0]));
   FDCE \value_reg[1] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(\value_reg[7]_1 ),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[1] [1]),
         .Q(data7[1]));
   FDCE \value_reg[2] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(\value_reg[7]_1 ),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[1] [2]),
         .Q(data7[2]));
   FDCE \value_reg[3] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(\value_reg[7]_1 ),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[1] [3]),
         .Q(data7[3]));
   FDCE \value_reg[4] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(\value_reg[7]_1 ),
+        .CLR(rst_L),
         .D(\FSM_sequential_state_reg[1] [4]),
         .Q(data7[4]));
   FDCE \value_reg[5] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(\value_reg[7]_1 ),
+        .CLR(rst_L),
         .D(\FSM_sequential_state_reg[1] [5]),
         .Q(data7[5]));
   FDCE \value_reg[6] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(\value_reg[7]_1 ),
+        .CLR(rst_L),
         .D(\FSM_sequential_state_reg[1] [6]),
         .Q(data7[6]));
   FDCE \value_reg[7] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(\value_reg[7]_1 ),
+        .CLR(rst_L),
         .D(\FSM_sequential_state_reg[1] [7]),
         .Q(data7[7]));
 endmodule
@@ -57940,7 +58115,8 @@ module z80_0_register_27
     \FSM_sequential_state_reg[0] ,
     \FSM_sequential_state_reg[0]_0 ,
     clk,
-    rst_L);
+    rst_L,
+    rst_L_0);
   output \value_reg[6]_0 ;
   output [7:0]data7;
   output \value_reg[5]_0 ;
@@ -57955,6 +58131,7 @@ module z80_0_register_27
   input [7:0]\FSM_sequential_state_reg[0]_0 ;
   input clk;
   input rst_L;
+  input rst_L_0;
 
   wire [0:0]\FSM_sequential_state_reg[0] ;
   wire [7:0]\FSM_sequential_state_reg[0]_0 ;
@@ -57962,6 +58139,7 @@ module z80_0_register_27
   wire [7:0]data7;
   wire drive_STRL;
   wire rst_L;
+  wire rst_L_0;
   wire \value_reg[0]_0 ;
   wire \value_reg[1]_0 ;
   wire \value_reg[2]_0 ;
@@ -58029,25 +58207,25 @@ module z80_0_register_27
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[0]_0 [0]),
         .Q(data7[0]));
   FDCE \value_reg[1] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[0]_0 [1]),
         .Q(data7[1]));
   FDCE \value_reg[2] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[0]_0 [2]),
         .Q(data7[2]));
   FDCE \value_reg[3] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[0]_0 [3]),
         .Q(data7[3]));
   FDCE \value_reg[4] 
@@ -59385,7 +59563,9 @@ module z80_0_register_6
     \FSM_sequential_state_reg[0]_1 ,
     \value_reg[7]_2 ,
     clk,
-    rst_L);
+    rst_L,
+    rst_L_0,
+    rst_L_1);
   output [7:0]reg_data_out;
   output [0:0]\value_reg[1]_0 ;
   output [7:0]\value_reg[7]_0 ;
@@ -59415,6 +59595,8 @@ module z80_0_register_6
   input [7:0]\value_reg[7]_2 ;
   input clk;
   input rst_L;
+  input rst_L_0;
+  input rst_L_1;
 
   wire \FSM_sequential_state_reg[0] ;
   wire \FSM_sequential_state_reg[0]_0 ;
@@ -59431,6 +59613,8 @@ module z80_0_register_6
   wire drive_C;
   wire [7:0]reg_data_out;
   wire rst_L;
+  wire rst_L_0;
+  wire rst_L_1;
   wire swap_reg;
   wire \value[0]_i_5__3_n_0 ;
   wire \value[1]_i_7__5_n_0 ;
@@ -59645,43 +59829,43 @@ module z80_0_register_6
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0]_1 ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\value_reg[7]_2 [0]),
         .Q(\value_reg[7]_0 [0]));
   FDCE \value_reg[1] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0]_1 ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\value_reg[7]_2 [1]),
         .Q(\value_reg[7]_0 [1]));
   FDCE \value_reg[2] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0]_1 ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\value_reg[7]_2 [2]),
         .Q(\value_reg[7]_0 [2]));
   FDCE \value_reg[3] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0]_1 ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_2 [3]),
         .Q(\value_reg[7]_0 [3]));
   FDCE \value_reg[4] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0]_1 ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_2 [4]),
         .Q(\value_reg[7]_0 [4]));
   FDCE \value_reg[5] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0]_1 ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_2 [5]),
         .Q(\value_reg[7]_0 [5]));
   FDCE \value_reg[6] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0]_1 ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_2 [6]),
         .Q(\value_reg[7]_0 [6]));
   FDCE \value_reg[7] 
@@ -59698,59 +59882,65 @@ module z80_0_register_7
     \FSM_sequential_state_reg[0] ,
     \value_reg[7]_1 ,
     clk,
-    rst_L);
+    rst_L,
+    rst_L_0,
+    rst_L_1);
   output [7:0]\value_reg[7]_0 ;
   input [0:0]\FSM_sequential_state_reg[0] ;
   input [7:0]\value_reg[7]_1 ;
   input clk;
   input rst_L;
+  input rst_L_0;
+  input rst_L_1;
 
   wire [0:0]\FSM_sequential_state_reg[0] ;
   wire clk;
   wire rst_L;
+  wire rst_L_0;
+  wire rst_L_1;
   wire [7:0]\value_reg[7]_0 ;
   wire [7:0]\value_reg[7]_1 ;
 
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\value_reg[7]_1 [0]),
         .Q(\value_reg[7]_0 [0]));
   FDCE \value_reg[1] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\value_reg[7]_1 [1]),
         .Q(\value_reg[7]_0 [1]));
   FDCE \value_reg[2] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\value_reg[7]_1 [2]),
         .Q(\value_reg[7]_0 [2]));
   FDCE \value_reg[3] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_1 [3]),
         .Q(\value_reg[7]_0 [3]));
   FDCE \value_reg[4] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_1 [4]),
         .Q(\value_reg[7]_0 [4]));
   FDCE \value_reg[5] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_1 [5]),
         .Q(\value_reg[7]_0 [5]));
   FDCE \value_reg[6] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[0] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[7]_1 [6]),
         .Q(\value_reg[7]_0 [6]));
   FDCE \value_reg[7] 
@@ -59821,7 +60011,9 @@ module z80_0_register_8
     \value_reg[0]_5 ,
     \FSM_sequential_state_reg[1] ,
     clk,
-    rst_L);
+    rst_L,
+    rst_L_0,
+    rst_L_1);
   output \value_reg[7]_0 ;
   output [7:0]Q;
   output \value_reg[7]_1 ;
@@ -59881,6 +60073,8 @@ module z80_0_register_8
   input [7:0]\FSM_sequential_state_reg[1] ;
   input clk;
   input rst_L;
+  input rst_L_0;
+  input rst_L_1;
 
   wire [7:0]\FSM_sequential_state_reg[1] ;
   wire [7:0]Q;
@@ -59891,6 +60085,8 @@ module z80_0_register_8
   wire ld_H;
   wire ld_L;
   wire rst_L;
+  wire rst_L_0;
+  wire rst_L_1;
   wire \value[0]_i_6__0_n_0 ;
   wire \value[0]_i_7__4_n_0 ;
   wire \value[1]_i_6__0_n_0 ;
@@ -60414,7 +60610,7 @@ module z80_0_register_8
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(ld_C),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[1] [0]),
         .Q(Q[0]));
   MUXF7 \value_reg[0]_i_4 
@@ -60425,7 +60621,7 @@ module z80_0_register_8
   FDCE \value_reg[1] 
        (.C(clk),
         .CE(ld_C),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[1] [1]),
         .Q(Q[1]));
   MUXF7 \value_reg[1]_i_4 
@@ -60436,7 +60632,7 @@ module z80_0_register_8
   FDCE \value_reg[2] 
        (.C(clk),
         .CE(ld_C),
-        .CLR(rst_L),
+        .CLR(rst_L_1),
         .D(\FSM_sequential_state_reg[1] [2]),
         .Q(Q[2]));
   MUXF7 \value_reg[2]_i_4 
@@ -60447,7 +60643,7 @@ module z80_0_register_8
   FDCE \value_reg[3] 
        (.C(clk),
         .CE(ld_C),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[1] [3]),
         .Q(Q[3]));
   MUXF7 \value_reg[3]_i_4 
@@ -60458,13 +60654,13 @@ module z80_0_register_8
   FDCE \value_reg[4] 
        (.C(clk),
         .CE(ld_C),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[1] [4]),
         .Q(Q[4]));
   FDCE \value_reg[5] 
        (.C(clk),
         .CE(ld_C),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[1] [5]),
         .Q(Q[5]));
   MUXF7 \value_reg[5]_i_4 
@@ -60475,7 +60671,7 @@ module z80_0_register_8
   FDCE \value_reg[6] 
        (.C(clk),
         .CE(ld_C),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\FSM_sequential_state_reg[1] [6]),
         .Q(Q[6]));
   MUXF7 \value_reg[6]_i_4 
@@ -60504,30 +60700,35 @@ module z80_0_register_9
     \value_reg[2]_0 ,
     \value_reg[1]_0 ,
     \value_reg[0]_0 ,
+    \value_reg[7]_1 ,
     \value_reg[6]_0 ,
     ld_C,
+    rst_L,
     E,
     D,
     clk,
-    rst_L);
+    rst_L_0);
   output \value_reg[7]_0 ;
   output \value_reg[5]_0 ;
   output \value_reg[3]_0 ;
   output \value_reg[2]_0 ;
   output \value_reg[1]_0 ;
   output \value_reg[0]_0 ;
+  output \value_reg[7]_1 ;
   output [1:0]\value_reg[6]_0 ;
   input ld_C;
+  input rst_L;
   input [0:0]E;
   input [7:0]D;
   input clk;
-  input rst_L;
+  input rst_L_0;
 
   wire [7:0]D;
   wire [0:0]E;
   wire clk;
   wire ld_C;
   wire rst_L;
+  wire rst_L_0;
   wire \value_reg[0]_0 ;
   wire \value_reg[1]_0 ;
   wire \value_reg[2]_0 ;
@@ -60535,6 +60736,7 @@ module z80_0_register_9
   wire \value_reg[5]_0 ;
   wire [1:0]\value_reg[6]_0 ;
   wire \value_reg[7]_0 ;
+  wire \value_reg[7]_1 ;
   wire \value_reg_n_0_[0] ;
   wire \value_reg_n_0_[1] ;
   wire \value_reg_n_0_[2] ;
@@ -60572,6 +60774,11 @@ module z80_0_register_9
        (.I0(\value_reg_n_0_[5] ),
         .I1(ld_C),
         .O(\value_reg[5]_0 ));
+  LUT1 #(
+    .INIT(2'h1)) 
+    \value[7]_i_3__0 
+       (.I0(rst_L),
+        .O(\value_reg[7]_1 ));
   LUT2 #(
     .INIT(4'h8)) 
     \value[7]_i_7 
@@ -60581,49 +60788,49 @@ module z80_0_register_9
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(E),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(D[0]),
         .Q(\value_reg_n_0_[0] ));
   FDCE \value_reg[1] 
        (.C(clk),
         .CE(E),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(D[1]),
         .Q(\value_reg_n_0_[1] ));
   FDCE \value_reg[2] 
        (.C(clk),
         .CE(E),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(D[2]),
         .Q(\value_reg_n_0_[2] ));
   FDCE \value_reg[3] 
        (.C(clk),
         .CE(E),
-        .CLR(rst_L),
+        .CLR(\value_reg[7]_1 ),
         .D(D[3]),
         .Q(\value_reg_n_0_[3] ));
   FDCE \value_reg[4] 
        (.C(clk),
         .CE(E),
-        .CLR(rst_L),
+        .CLR(\value_reg[7]_1 ),
         .D(D[4]),
         .Q(\value_reg[6]_0 [0]));
   FDCE \value_reg[5] 
        (.C(clk),
         .CE(E),
-        .CLR(rst_L),
+        .CLR(\value_reg[7]_1 ),
         .D(D[5]),
         .Q(\value_reg_n_0_[5] ));
   FDCE \value_reg[6] 
        (.C(clk),
         .CE(E),
-        .CLR(rst_L),
+        .CLR(\value_reg[7]_1 ),
         .D(D[6]),
         .Q(\value_reg[6]_0 [1]));
   FDCE \value_reg[7] 
        (.C(clk),
         .CE(E),
-        .CLR(rst_L),
+        .CLR(\value_reg[7]_1 ),
         .D(D[7]),
         .Q(\value_reg_n_0_[7] ));
 endmodule
@@ -60634,53 +60841,56 @@ module z80_0_register__parameterized0
     \FSM_sequential_state_reg[10] ,
     \value_reg[15]_1 ,
     clk,
-    rst_L);
+    rst_L,
+    rst_L_0);
   output [15:0]\value_reg[15]_0 ;
   input [0:0]\FSM_sequential_state_reg[10] ;
   input [15:0]\value_reg[15]_1 ;
   input clk;
   input rst_L;
+  input rst_L_0;
 
   wire [0:0]\FSM_sequential_state_reg[10] ;
   wire clk;
   wire rst_L;
+  wire rst_L_0;
   wire [15:0]\value_reg[15]_0 ;
   wire [15:0]\value_reg[15]_1 ;
 
   FDCE \value_reg[0] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[15]_1 [0]),
         .Q(\value_reg[15]_0 [0]));
   FDCE \value_reg[10] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[15]_1 [10]),
         .Q(\value_reg[15]_0 [10]));
   FDCE \value_reg[11] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[15]_1 [11]),
         .Q(\value_reg[15]_0 [11]));
   FDCE \value_reg[12] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[15]_1 [12]),
         .Q(\value_reg[15]_0 [12]));
   FDCE \value_reg[13] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[15]_1 [13]),
         .Q(\value_reg[15]_0 [13]));
   FDCE \value_reg[14] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[15]_1 [14]),
         .Q(\value_reg[15]_0 [14]));
   FDCE \value_reg[15] 
@@ -60692,55 +60902,55 @@ module z80_0_register__parameterized0
   FDCE \value_reg[1] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[15]_1 [1]),
         .Q(\value_reg[15]_0 [1]));
   FDCE \value_reg[2] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[15]_1 [2]),
         .Q(\value_reg[15]_0 [2]));
   FDCE \value_reg[3] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[15]_1 [3]),
         .Q(\value_reg[15]_0 [3]));
   FDCE \value_reg[4] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[15]_1 [4]),
         .Q(\value_reg[15]_0 [4]));
   FDCE \value_reg[5] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[15]_1 [5]),
         .Q(\value_reg[15]_0 [5]));
   FDCE \value_reg[6] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[15]_1 [6]),
         .Q(\value_reg[15]_0 [6]));
   FDCE \value_reg[7] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[15]_1 [7]),
         .Q(\value_reg[15]_0 [7]));
   FDCE \value_reg[8] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[15]_1 [8]),
         .Q(\value_reg[15]_0 [8]));
   FDCE \value_reg[9] 
        (.C(clk),
         .CE(\FSM_sequential_state_reg[10] ),
-        .CLR(rst_L),
+        .CLR(rst_L_0),
         .D(\value_reg[15]_1 [9]),
         .Q(\value_reg[15]_0 [9]));
 endmodule
@@ -60918,7 +61128,8 @@ module z80_0_z80
   wire CTRL_n_358;
   wire CTRL_n_359;
   wire CTRL_n_360;
-  wire CTRL_n_381;
+  wire CTRL_n_361;
+  wire CTRL_n_382;
   wire CTRL_n_87;
   wire CTRL_n_88;
   wire CTRL_n_89;
@@ -61372,7 +61583,7 @@ module z80_0_z80
         .alu_b_in(alu_b_in),
         .clk(clk),
         .curr_state(curr_state),
-        .data0({CTRL_n_350,CTRL_n_351,CTRL_n_352,CTRL_n_353,CTRL_n_354,CTRL_n_355,CTRL_n_356,CTRL_n_357,CTRL_n_358}),
+        .data0({CTRL_n_351,CTRL_n_352,CTRL_n_353,CTRL_n_354,CTRL_n_355,CTRL_n_356,CTRL_n_357,CTRL_n_358,CTRL_n_359}),
         .data1(\RFILE/data1 ),
         .data2(\RFILE/data2 ),
         .data2_1(\sixteenBit/data2 ),
@@ -61410,10 +61621,12 @@ module z80_0_z80
         .ld_L(ld_L),
         .\op1_reg[5]_rep (CTRL_n_28),
         .out({CTRL_n_0,CTRL_n_1}),
-        .p_0_in(CTRL_n_330),
+        .p_0_in(CTRL_n_331),
         .p_0_in_0(\DECODE/p_0_in ),
         .reg_data_out(reg_data_out),
-        .rst_L(DP_n_1),
+        .rst_L(rst_L),
+        .rst_L_0(DP_n_1),
+        .\state_reg[0] (CTRL_n_330),
         .swap_reg(swap_reg),
         .\value_reg[0] (alu_op),
         .\value_reg[0]_0 (CTRL_n_21),
@@ -61428,7 +61641,7 @@ module z80_0_z80
         .\value_reg[0]_17 (DP_n_240),
         .\value_reg[0]_18 (DP_n_228),
         .\value_reg[0]_19 (DP_n_284),
-        .\value_reg[0]_2 ({CTRL_n_341,CTRL_n_342,CTRL_n_343,CTRL_n_344,CTRL_n_345,CTRL_n_346,CTRL_n_347,CTRL_n_348,CTRL_n_349}),
+        .\value_reg[0]_2 ({CTRL_n_342,CTRL_n_343,CTRL_n_344,CTRL_n_345,CTRL_n_346,CTRL_n_347,CTRL_n_348,CTRL_n_349,CTRL_n_350}),
         .\value_reg[0]_20 (DP_n_285),
         .\value_reg[0]_21 (DP_n_289),
         .\value_reg[0]_22 (DP_n_287),
@@ -61470,13 +61683,13 @@ module z80_0_z80
         .\value_reg[0]_55 (IFF1_out),
         .\value_reg[0]_56 (DP_n_0),
         .\value_reg[0]_6 (ld_MDR2),
-        .\value_reg[0]_7 (CTRL_n_381),
+        .\value_reg[0]_7 (CTRL_n_382),
         .\value_reg[0]_8 (DP_n_212),
         .\value_reg[0]_9 (DP_n_213),
         .\value_reg[15] ({CTRL_n_132,MAR_in}),
         .\value_reg[15]_0 ({data4,data3}),
         .\value_reg[1] (CTRL_n_128),
-        .\value_reg[1]_0 (CTRL_n_331),
+        .\value_reg[1]_0 (CTRL_n_332),
         .\value_reg[1]_1 (DP_n_203),
         .\value_reg[1]_10 (DP_n_239),
         .\value_reg[1]_11 (DP_n_227),
@@ -61496,8 +61709,8 @@ module z80_0_z80
         .\value_reg[1]_8 (DP_n_210),
         .\value_reg[1]_9 (DP_n_207),
         .\value_reg[2] (CTRL_n_87),
-        .\value_reg[2]_0 (CTRL_n_332),
-        .\value_reg[2]_1 (CTRL_n_360),
+        .\value_reg[2]_0 (CTRL_n_333),
+        .\value_reg[2]_1 (CTRL_n_361),
         .\value_reg[2]_10 (DP_n_198),
         .\value_reg[2]_11 (DP_n_238),
         .\value_reg[2]_12 (DP_n_226),
@@ -61525,7 +61738,7 @@ module z80_0_z80
         .\value_reg[2]_9 (DP_n_201),
         .\value_reg[3] (CTRL_n_17),
         .\value_reg[3]_0 (CTRL_n_127),
-        .\value_reg[3]_1 (CTRL_n_334),
+        .\value_reg[3]_1 (CTRL_n_335),
         .\value_reg[3]_10 (DP_n_193),
         .\value_reg[3]_11 (DP_n_188),
         .\value_reg[3]_12 (DP_n_192),
@@ -61536,15 +61749,15 @@ module z80_0_z80
         .\value_reg[3]_17 (DP_n_297),
         .\value_reg[3]_18 (DP_n_27),
         .\value_reg[3]_19 (DP_n_301),
-        .\value_reg[3]_2 (CTRL_n_335),
+        .\value_reg[3]_2 (CTRL_n_336),
         .\value_reg[3]_20 (DP_n_339),
         .\value_reg[3]_21 (DP_n_340),
         .\value_reg[3]_22 (DP_n_362),
         .\value_reg[3]_23 (DP_n_381),
         .\value_reg[3]_24 (DP_n_373),
         .\value_reg[3]_25 ({DP_n_41,DP_n_42,DP_n_43,DP_n_44}),
-        .\value_reg[3]_3 (CTRL_n_336),
-        .\value_reg[3]_4 ({CTRL_n_337,CTRL_n_338,CTRL_n_339,CTRL_n_340}),
+        .\value_reg[3]_3 (CTRL_n_337),
+        .\value_reg[3]_4 ({CTRL_n_338,CTRL_n_339,CTRL_n_340,CTRL_n_341}),
         .\value_reg[3]_5 (DP_n_185),
         .\value_reg[3]_6 (DP_n_186),
         .\value_reg[3]_7 (DP_n_191),
@@ -61622,9 +61835,9 @@ module z80_0_z80
         .\value_reg[6]_27 (DP_n_376),
         .\value_reg[6]_28 (DP_n_379),
         .\value_reg[6]_29 (DP_n_389),
-        .\value_reg[6]_3 (CTRL_n_333),
+        .\value_reg[6]_3 (CTRL_n_334),
         .\value_reg[6]_30 (DP_n_392),
-        .\value_reg[6]_4 (CTRL_n_359),
+        .\value_reg[6]_4 (CTRL_n_360),
         .\value_reg[6]_5 ({drive_value_data[6:5],drive_value_data[3],drive_value_data[1]}),
         .\value_reg[6]_6 ({DP_n_413,DP_n_414}),
         .\value_reg[6]_7 (DP_n_159),
@@ -61732,7 +61945,7 @@ module z80_0_z80
         .D(\RFILE/C_not_in ),
         .E(\RFILE/C_not_en ),
         .\FSM_sequential_state_reg[0] (DP_n_95),
-        .\FSM_sequential_state_reg[0]_0 (CTRL_n_381),
+        .\FSM_sequential_state_reg[0]_0 (CTRL_n_382),
         .\FSM_sequential_state_reg[0]_1 (CTRL_n_17),
         .\FSM_sequential_state_reg[0]_10 (\RFILE/IYH_en ),
         .\FSM_sequential_state_reg[0]_11 (\RFILE/IYH_in ),
@@ -61773,8 +61986,8 @@ module z80_0_z80
         .\FSM_sequential_state_reg[10]_5 (CTRL_n_21),
         .\FSM_sequential_state_reg[10]_6 (CTRL_n_87),
         .\FSM_sequential_state_reg[10]_7 (alu_op),
-        .\FSM_sequential_state_reg[10]_8 (CTRL_n_336),
-        .\FSM_sequential_state_reg[10]_9 (CTRL_n_332),
+        .\FSM_sequential_state_reg[10]_8 (CTRL_n_337),
+        .\FSM_sequential_state_reg[10]_9 (CTRL_n_333),
         .\FSM_sequential_state_reg[1] (CTRL_n_10),
         .\FSM_sequential_state_reg[1]_0 (CTRL_n_11),
         .\FSM_sequential_state_reg[1]_1 (CTRL_n_20),
@@ -61782,7 +61995,7 @@ module z80_0_z80
         .\FSM_sequential_state_reg[1]_11 (ld_A),
         .\FSM_sequential_state_reg[1]_12 (F_en),
         .\FSM_sequential_state_reg[1]_13 (ld_MDR2),
-        .\FSM_sequential_state_reg[1]_2 (CTRL_n_335),
+        .\FSM_sequential_state_reg[1]_2 (CTRL_n_336),
         .\FSM_sequential_state_reg[1]_3 (\RFILE/C_in0_out ),
         .\FSM_sequential_state_reg[1]_4 (\RFILE/H_not_en ),
         .\FSM_sequential_state_reg[1]_5 (\RFILE/H_in0_out ),
@@ -61798,7 +62011,7 @@ module z80_0_z80
         .S({CTRL_n_88,CTRL_n_89,CTRL_n_90,CTRL_n_91}),
         .alu_b_in(alu_b_in),
         .clk(clk),
-        .data0({CTRL_n_350,CTRL_n_351,CTRL_n_352,CTRL_n_353,CTRL_n_354,CTRL_n_355,CTRL_n_356,CTRL_n_357,CTRL_n_358}),
+        .data0({CTRL_n_351,CTRL_n_352,CTRL_n_353,CTRL_n_354,CTRL_n_355,CTRL_n_356,CTRL_n_357,CTRL_n_358,CTRL_n_359}),
         .data1(\RFILE/data1 ),
         .data2(\RFILE/data2 ),
         .data2_0(\sixteenBit/data2 ),
@@ -61832,10 +62045,11 @@ module z80_0_z80
         .\op0_reg[4]_rep (CTRL_n_29),
         .\op0_reg[5]_rep__0 (CTRL_n_28),
         .out({CTRL_n_0,CTRL_n_1}),
-        .p_0_in(CTRL_n_330),
+        .p_0_in(CTRL_n_331),
         .p_0_in_1(\DECODE/p_0_in ),
         .reg_data_out(reg_data_out),
         .rst_L(rst_L),
+        .rst_L_0(CTRL_n_330),
         .swap_reg(swap_reg),
         .\value_reg[0] (DP_n_0),
         .\value_reg[0]_0 ({DP_n_29,DP_n_30,DP_n_31,DP_n_32}),
@@ -61883,7 +62097,7 @@ module z80_0_z80
         .\value_reg[1]_18 (DP_n_360),
         .\value_reg[1]_19 (DP_n_399),
         .\value_reg[1]_2 (DP_n_204),
-        .\value_reg[1]_20 (CTRL_n_331),
+        .\value_reg[1]_20 (CTRL_n_332),
         .\value_reg[1]_21 (CTRL_n_128),
         .\value_reg[1]_3 (DP_n_205),
         .\value_reg[1]_4 (DP_n_206),
@@ -61941,9 +62155,9 @@ module z80_0_z80
         .\value_reg[3]_18 (DP_n_373),
         .\value_reg[3]_19 (DP_n_381),
         .\value_reg[3]_2 (DP_n_187),
-        .\value_reg[3]_20 (CTRL_n_334),
-        .\value_reg[3]_21 ({CTRL_n_337,CTRL_n_338,CTRL_n_339,CTRL_n_340}),
-        .\value_reg[3]_22 (CTRL_n_359),
+        .\value_reg[3]_20 (CTRL_n_335),
+        .\value_reg[3]_21 ({CTRL_n_338,CTRL_n_339,CTRL_n_340,CTRL_n_341}),
+        .\value_reg[3]_22 (CTRL_n_360),
         .\value_reg[3]_23 (CTRL_n_127),
         .\value_reg[3]_3 (DP_n_188),
         .\value_reg[3]_4 (DP_n_189),
@@ -62040,7 +62254,7 @@ module z80_0_z80
         .\value_reg[6]_42 ({DP_n_423,DP_n_424}),
         .\value_reg[6]_43 ({DP_n_433,DP_n_434}),
         .\value_reg[6]_44 (CTRL_n_253),
-        .\value_reg[6]_45 (CTRL_n_333),
+        .\value_reg[6]_45 (CTRL_n_334),
         .\value_reg[6]_46 (CTRL_n_130),
         .\value_reg[6]_5 (\RFILE/data4 ),
         .\value_reg[6]_6 (DP_n_77),
@@ -62085,8 +62299,8 @@ module z80_0_z80
         .\value_reg[7]_4 (DP_n_110),
         .\value_reg[7]_40 ({CTRL_n_105,CTRL_n_106,CTRL_n_107,CTRL_n_108}),
         .\value_reg[7]_41 ({CTRL_n_101,CTRL_n_102,CTRL_n_103,CTRL_n_104}),
-        .\value_reg[7]_42 ({CTRL_n_341,CTRL_n_342,CTRL_n_343,CTRL_n_344,CTRL_n_345,CTRL_n_346,CTRL_n_347,CTRL_n_348,CTRL_n_349}),
-        .\value_reg[7]_43 (CTRL_n_360),
+        .\value_reg[7]_42 ({CTRL_n_342,CTRL_n_343,CTRL_n_344,CTRL_n_345,CTRL_n_346,CTRL_n_347,CTRL_n_348,CTRL_n_349,CTRL_n_350}),
+        .\value_reg[7]_43 (CTRL_n_361),
         .\value_reg[7]_44 (\RFILE/D_not_in ),
         .\value_reg[7]_45 (\RFILE/D_in0_out ),
         .\value_reg[7]_46 (\RFILE/H_not_in ),

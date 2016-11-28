@@ -47,7 +47,7 @@ module project_top(
     
     logic M1_L,INT_L,NMI_L,WAIT_L,RFSH_L,BUSACK_L,BUSREQ_L,HALT_L;
     
-    logic [31:0] interrupt_count,clk_8_count;
+    logic [31:0] interrupt_count,clk_8_count,rst_count;
       
     logic clk_4;
     logic clk_8;
@@ -55,6 +55,7 @@ module project_top(
     logic clk_100;
     logic rst_L;
     logic reset;
+    logic reset_delayed;
     logic locked;
     logic BUSY;
     
@@ -78,8 +79,8 @@ module project_top(
     assign BUSREQ_L = 1;
     
     assign clk_100 = GCLK;
-    assign reset = BTNL;
-    assign rst_L = ~BTNL;
+    assign reset = reset_delayed;
+    assign rst_L = ~reset;
     assign AC_SDA = SDA;
     assign AC_SCK = SCL;
     assign AC_MCLK = MCLK;
@@ -89,6 +90,14 @@ module project_top(
     assign AC_ADR0 = 1;
     assign AC_ADR1 = 1;
     assign WAIT_L = ~BUSY;
+    assign reset_delayed = (rst_count < 32'd1000);
+    
+    always_ff @(posedge clk_100, posedge BTNL) begin
+        if(BTNL)
+            rst_count <= 0;
+        else if(rst_count < 32'd1000)
+            rst_count <= rst_count + 1;
+    end
     
     //assign data_in = (~IORQ_L) ? vdp_data_out : mem_data_out;
     assign data_in = (~IORQ_L) ? 8'h80 : mem_data_out;
@@ -134,8 +143,8 @@ module project_top(
       end
     end  
     
-    always_ff @(posedge clk_8,posedge reset) begin
-        if(reset) begin
+    always_ff @(posedge clk_8, negedge rst_L) begin
+        if(~rst_L) begin
             clk_4 <= 0;
             clk_8_count <= 0;
         end
@@ -148,13 +157,13 @@ module project_top(
     end
     
     //interrupt generation timer
-    always_ff @(posedge clk_100,posedge reset) begin
+    /*always_ff @(posedge clk_100,posedge reset) begin
         if(reset)
             interrupt_count <= 1;
         else if(!IORQ_L && !WR_L && (addr_bus[7:0] == 8'h7f) && (data_out[7:4] == 4'h8)) 
             interrupt_count <= 0;
         else 
             interrupt_count <= interrupt_count + 1;
-    end
+    end*/
     
 endmodule

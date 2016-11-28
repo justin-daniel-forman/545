@@ -176,10 +176,9 @@ module vdp_top (
     .data_in(rf_data_in),
     .addr(rf_addr),
     .en(rf_en),
-    .data_out(rf_data_out)
+    .data_out()
   );
  
-  /*
   always_comb begin
     rf_data_out[0] = 8'h36;
     rf_data_out[1] = 8'hA0;
@@ -193,7 +192,6 @@ module vdp_top (
     rf_data_out[9] = 8'd0;            
     rf_data_out[10] = 8'hFF;
   end
-  */
  
   /******** VRAM & CRAM ********/  
 
@@ -209,7 +207,9 @@ module vdp_top (
     .web(1'b0),
     .addrb(CRAM_VGA_addr),
     .dinb(8'bz),
-    .doutb(CRAM_VGA_data_out)
+    .doutb(CRAM_VGA_data_out),
+    .rsta(1'b0),
+    .rstb(1'b0)
   );
 
   vram VRAM( 

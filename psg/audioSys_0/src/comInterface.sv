@@ -40,6 +40,7 @@ module comInterface(
     logic activated;
     logic needs_double;
     logic decode_enable;
+    logic [4:0] delay_count;
     logic [7:0] received_byte;
     
     assign activated = (addr[7:0] == 8'h7f) && !MREQ_N && !WR_N;
@@ -54,6 +55,15 @@ module comInterface(
             cs <= ns;
     end
     
+    always_ff @(posedge clk, posedge reset) begin
+        if(reset)
+            delay_count <= 0;
+        else if(!activated && (cs == latch))
+            delay_count <= delay_count + 1;
+        else
+            delay_count <= 0;
+    end
+    
     always_comb begin
         decode_enable = 0;
         case(cs)
@@ -61,7 +71,7 @@ module comInterface(
                 ns = activated ? latch : idle;
             end
             latch: begin
-                ns = !activated ? instr : latch;
+                ns = (!activated && delay_count >= 5'd10) ? instr : latch;
             end
             instr: begin
                 ns = activated ? latch : idle;

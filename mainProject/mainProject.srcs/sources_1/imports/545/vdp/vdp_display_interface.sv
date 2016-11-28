@@ -143,25 +143,25 @@ module vdp_disp_interface(
     if (horizFlip) begin
       CRAM_addr_BG = {
         paletteSel,
-        colorLatch_out[0][colorLatchIndex[3:1]], 
-        colorLatch_out[1][colorLatchIndex[3:1]],
-        colorLatch_out[2][colorLatchIndex[3:1]],
-        colorLatch_out[3][colorLatchIndex[3:1]]
+        colorLatch_out[SW[7] ? 3 : 0][colorLatchIndex[3:1]], 
+        colorLatch_out[SW[7] ? 2 : 1][colorLatchIndex[3:1]],
+        colorLatch_out[SW[7] ? 1 : 2][colorLatchIndex[3:1]],
+        colorLatch_out[SW[7] ? 0 : 3][colorLatchIndex[3:1]]
       };
     end
     else begin
       CRAM_addr_BG = {
         paletteSel,
-        colorLatch_out[0][3'd7-colorLatchIndex[3:1]], 
-        colorLatch_out[1][3'd7-colorLatchIndex[3:1]],
-        colorLatch_out[2][3'd7-colorLatchIndex[3:1]],
-        colorLatch_out[3][3'd7-colorLatchIndex[3:1]]
+        colorLatch_out[SW[7] ? 3 : 0][3'd7-colorLatchIndex[3:1]], 
+        colorLatch_out[SW[7] ? 2 : 1][3'd7-colorLatchIndex[3:1]],
+        colorLatch_out[SW[7] ? 1 : 2][3'd7-colorLatchIndex[3:1]],
+        colorLatch_out[SW[7] ? 0 : 3][3'd7-colorLatchIndex[3:1]]
       };
     end
   end
 
   /******* RGB Generation *******/
-  assign colorToDisplay = (blank || !(regFile[1][6])) ? 6'd0 : CRAM_VGA_data_out;
+  assign colorToDisplay = (blank) /*|| (~regFile[1][6]))*/ ? 6'd0 : CRAM_VGA_data_out;
   //assign colorToDisplay = (blank | regFile[1][6]) ? 6'd0 : CRAM_VGA_data_out;
   colorGen c1(colorToDisplay[1:0], VGA_R);
   colorGen c2(colorToDisplay[3:2], VGA_G); 
@@ -230,7 +230,7 @@ module vdp_disp_interface(
           .D(VRAM_VGA_data_out[5:2]),
           .Q(B),
           .en((sprPatRow == j) & (sprCnt_4[2:0] == i)),
-          .clr(pixelRow > 9'd383)
+          .clr((pixelRow > 9'd383) | ((col == 10'd576) & SW[6]))
         ); // Probably need something more here... 
       end
       // Iterates over the bits in a 4-byte row to generate the palettes
@@ -256,10 +256,10 @@ module vdp_disp_interface(
 
   assign CRAM_addr_SPR = {
     1'b1,
-    currSprRow[0][sprColorIndex[currSprIndex][3:1]],
-    currSprRow[1][sprColorIndex[currSprIndex][3:1]],
-    currSprRow[2][sprColorIndex[currSprIndex][3:1]],
-    currSprRow[3][sprColorIndex[currSprIndex][3:1]]
+    currSprRow[SW[7] ? 3 : 0][3'd7 - sprColorIndex[currSprIndex][3:1]],
+    currSprRow[SW[7] ? 2 : 1][3'd7 - sprColorIndex[currSprIndex][3:1]],
+    currSprRow[SW[7] ? 1 : 2][3'd7 - sprColorIndex[currSprIndex][3:1]],
+    currSprRow[SW[7] ? 0 : 3][3'd7 - sprColorIndex[currSprIndex][3:1]]
   }; 
    
   always_comb begin

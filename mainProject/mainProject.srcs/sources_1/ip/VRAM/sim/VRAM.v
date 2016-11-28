@@ -55,11 +55,13 @@
 (* DowngradeIPIdentifiedWarnings = "yes" *)
 module VRAM (
   clka,
+  rsta,
   wea,
   addra,
   dina,
   douta,
   clkb,
+  rstb,
   web,
   addrb,
   dinb,
@@ -68,6 +70,8 @@ module VRAM (
 
 (* X_INTERFACE_INFO = "xilinx.com:interface:bram:1.0 BRAM_PORTA CLK" *)
 input wire clka;
+(* X_INTERFACE_INFO = "xilinx.com:interface:bram:1.0 BRAM_PORTA RST" *)
+input wire rsta;
 (* X_INTERFACE_INFO = "xilinx.com:interface:bram:1.0 BRAM_PORTA WE" *)
 input wire [0 : 0] wea;
 (* X_INTERFACE_INFO = "xilinx.com:interface:bram:1.0 BRAM_PORTA ADDR" *)
@@ -78,6 +82,8 @@ input wire [7 : 0] dina;
 output wire [7 : 0] douta;
 (* X_INTERFACE_INFO = "xilinx.com:interface:bram:1.0 BRAM_PORTB CLK" *)
 input wire clkb;
+(* X_INTERFACE_INFO = "xilinx.com:interface:bram:1.0 BRAM_PORTB RST" *)
+input wire rstb;
 (* X_INTERFACE_INFO = "xilinx.com:interface:bram:1.0 BRAM_PORTB WE" *)
 input wire [0 : 0] web;
 (* X_INTERFACE_INFO = "xilinx.com:interface:bram:1.0 BRAM_PORTB ADDR" *)
@@ -108,7 +114,7 @@ output wire [7 : 0] doutb;
     .C_INIT_FILE("VRAM.mem"),
     .C_USE_DEFAULT_DATA(1),
     .C_DEFAULT_DATA("0"),
-    .C_HAS_RSTA(0),
+    .C_HAS_RSTA(1),
     .C_RST_PRIORITY_A("CE"),
     .C_RSTRAM_A(0),
     .C_INITA_VAL("0"),
@@ -122,7 +128,7 @@ output wire [7 : 0] doutb;
     .C_WRITE_DEPTH_A(16384),
     .C_READ_DEPTH_A(16384),
     .C_ADDRA_WIDTH(14),
-    .C_HAS_RSTB(0),
+    .C_HAS_RSTB(1),
     .C_RST_PRIORITY_B("CE"),
     .C_RSTRAM_B(0),
     .C_INITB_VAL("0"),
@@ -162,7 +168,7 @@ output wire [7 : 0] doutb;
     .C_EST_POWER_SUMMARY("Estimated Power for IP     :     5.071399 mW")
   ) inst (
     .clka(clka),
-    .rsta(1'D0),
+    .rsta(rsta),
     .ena(1'D0),
     .regcea(1'D0),
     .wea(wea),
@@ -170,7 +176,7 @@ output wire [7 : 0] doutb;
     .dina(dina),
     .douta(douta),
     .clkb(clkb),
-    .rstb(1'D0),
+    .rstb(rstb),
     .enb(1'D0),
     .regceb(1'D0),
     .web(web),
