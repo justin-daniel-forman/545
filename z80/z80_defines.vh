@@ -138,6 +138,7 @@
 `define CALL_cc_nn  8'b11???100
 `define RET			    8'hC9
 `define RET_cc		  8'b11???000
+`define RETN        8'h45
 `define RST_p		    8'b11???111
 `define IN_A_n      8'hDB
 `define IN_r_C      8'b01???000

@@ -18,8 +18,8 @@ module tb ();
   logic BUSACK_L;
   logic BUSREQ_L;
   logic HALT_L;
+  logic [31:0]  curr_state;
   logic interrupt_mask;
-  logic [31:0] curr_state;
 
   z80 DUT(.*);
   memory m_DUT(.*);
@@ -38,9 +38,9 @@ module tb ();
   initial begin
 
     if($test$plusargs("DEBUG")) begin
-    $monitor($stime,, "addr bus: %h, data bus: %h, state: %s, A: %h, F: %h, DE: %h, HL: %h, BC: %h, IX: %h, IY: %h, SP: %h, m_data:%h, z80_data: %h, MEM_VAL: %h, foo: %h",
+    $monitor($stime,, "addr bus: %h, data bus: %h, state: %s, A: %h, F: %h, DE: %h, HL: %h, BC: %h, IX: %h, IY: %h, SP: %h, PC: %h, m_data:%h, z80_data: %h, state: %h, IFF1_out",
       addr_bus,
-      data_out,
+      m_DUT.out_value,
       DUT.CTRL.DECODE.state.name,
       DUT.DP.A_out,
       DUT.DP.F_out,
@@ -50,14 +50,16 @@ module tb ();
       {DUT.DP.RFILE.IXH_out, DUT.DP.RFILE.IXL_out},
       {DUT.DP.RFILE.IYH_out, DUT.DP.RFILE.IYL_out},
       {DUT.DP.RFILE.SPH_out, DUT.DP.RFILE.SPL_out},
+      {DUT.DP.RFILE.PCH_out, DUT.DP.RFILE.PCL_out},
       m_DUT.out_value,
       DUT.DP.data_out,
-      m_DUT.Qs[97],
-      DUT.CTRL.IN_start
+      INT_L,
+      interrupt_mask 
     );
     end
 
     rst_L = 0;
+    INT_L = 1;
     @(posedge clk);
     @(posedge clk);
     @(posedge clk);
@@ -67,8 +69,23 @@ module tb ();
     @(posedge clk);
 
     //currently our range for assembly programs is $51
+    i = 0;
     while( {DUT.DP.RFILE.PCH_out, DUT.DP.RFILE.PCL_out} <= 16'h0050 ) begin
       @(posedge clk);
+
+      /*if(i % 100 == 0) begin
+        INT_L <= 0;
+      end
+
+      else if((INT_L == 0) && (i % 10 == 0)) begin
+        INT_L <= 1;
+      end
+
+      if(i == 32'd100000) begin
+        $finish;
+      end*/
+
+      i++;
     end
 
     $display("\n\n\n");

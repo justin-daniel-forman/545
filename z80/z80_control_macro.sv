@@ -885,6 +885,8 @@ module decoder (
 
     MACRO_DEFINE_STATES RET_cc 7
 
+    MACRO_DEFINE_STATES RETN 6
+
     MACRO_DEFINE_STATES RST_p 7
 
     MACRO_DEFINE_STATES IN_A_n 7
@@ -1227,6 +1229,7 @@ module decoder (
           `OTIR:        next_state = OTIR_0;
           `OUTD:        next_state = OUTD_0;
           `OTDR:        next_state = OTDR_0;
+          `RETN:        next_state = RETN_0;
            default:     next_state = FETCH_0;
         endcase
       end
@@ -1670,6 +1673,8 @@ module decoder (
 
       MACRO_ENUM_STATES RET 6
 
+      MACRO_ENUM_STATES RETN 6
+
       RET_cc_0: begin
         unique case(op0[5:3])
           3'b000: next_state = !flags[6] ? RET_cc_1 : FETCH_0;
@@ -1692,7 +1697,7 @@ module decoder (
 
       //Dont increment the PC after going to a RST
       MACRO_ENUM_STATES_NR RST_p 7
-      RST_p_6: next_state = FETCH_0;
+      RST_p_6: next_state = START;
 
       //-----------------------------------------------------------------------
       //END Call and Return group
@@ -5456,14 +5461,86 @@ module decoder (
 
       JP_cc_nn_5: begin
         unique case(op0[5:3])
-          3'b000: ld_PCH = !flags[6];
-          3'b001: ld_PCH = flags[6];
-          3'b010: ld_PCH = !flags[0];
-          3'b011: ld_PCH = flags[0];
-          3'b100: ld_PCH = !flags[2];
-          3'b101: ld_PCH = flags[2];
-          3'b110: ld_PCH = !flags[7];
-          3'b111: ld_PCH = flags[7];
+          3'b000: begin
+            if(!flags[6]) begin
+              ld_PCH    = 1;
+            end else begin
+              //otherwise, update the PC with the incremented (but not jumped) val
+              drive_MAR = 1;
+              ld_PCH    = 1;
+              ld_PCL    = 1;
+            end
+          end
+          3'b001: begin
+            if(flags[6]) begin
+              ld_PCH = 1;
+            end
+            else begin
+              ld_PCH = 1;
+              drive_MAR = 1;
+              ld_PCL = 1;
+            end
+          end
+          3'b010: begin
+            if(!flags[0]) begin
+              ld_PCH = 1;
+            end
+            else begin
+              ld_PCH = 1;
+              drive_MAR = 1;
+              ld_PCL = 1;
+            end
+          end
+          3'b011: begin
+            if(flags[0]) begin
+              ld_PCH = 1;
+            end
+            else begin
+              ld_PCH = 1;
+              drive_MAR = 1;
+              ld_PCL = 1;
+            end
+          end
+          3'b100: begin
+            if(!flags[2]) begin
+              ld_PCH = 1;
+            end
+            else begin
+              ld_PCH = 1;
+              drive_MAR = 1;
+              ld_PCL = 1;
+            end
+          end
+          3'b101: begin
+            if(flags[2]) begin
+              ld_PCH = 1;
+            end
+            else begin
+              ld_PCH = 1;
+              drive_MAR = 1;
+              ld_PCL = 1;
+            end
+          end
+          3'b110: begin
+            if(!flags[7]) begin
+              ld_PCH = 1;
+            end
+            else begin
+              ld_PCH = 1;
+              drive_MAR = 1;
+              ld_PCL = 1;
+            end
+          end
+          3'b111: begin
+            if(flags[7]) begin
+              ld_PCH = 1;
+            end
+            else begin
+              ld_PCH = 1;
+              drive_MAR = 1;
+              ld_PCL = 1;
+            end
+          end
         endcase
       end
 
@@ -5719,33 +5796,38 @@ module decoder (
       end
 
       //RET
-      RET_0: begin
+      RET_0, RETN_0: begin
         MACRO_READ_0
         MACRO_16_DRIVE SP
       end
 
-      RET_1: begin
+      RET_1, RETN_1: begin
         MACRO_READ_1
         MACRO_16_DRIVE SP
       end
 
-      RET_2: begin
+      RET_2, RETN_2: begin
         ld_PCL = 1;
       end
 
-      RET_3: begin
+      RET_3, RETN_3: begin
         MACRO_READ_0
         MACRO_16_INC SP
       end
 
-      RET_4: begin
+      RET_4, RETN_4: begin
         MACRO_READ_1
         MACRO_16_DRIVE SP
       end
 
-      RET_5: begin
+      RET_5, RETN_5: begin
         ld_PCH = 1;
         MACRO_16_INC SP
+        if(state == RETN_5) begin
+          pop_interrupts = 1;
+        end else begin
+          pop_interrupts = 0;
+        end
       end
 
       //RET_cc
@@ -5858,14 +5940,21 @@ module decoder (
         MACRO_16_DRIVE STR
       end
 
-      IN_A_n_4, IN_A_n_5: begin
+      //We need to grab the value the cycle after we request it
+      IN_A_n_4: begin
+        MACRO_IN_1
+        MACRO_16_DRIVE STR
+        ld_A = 1;
+      end
+
+      /*IN_A_n_4, IN_A_n_5: begin
         MACRO_IN_1
         MACRO_16_DRIVE STR
       end
 
       IN_A_n_6: begin
         ld_A = 1;
-      end
+      end*/
 
       OUT_n_A_3: begin
         MACRO_OUT_0
