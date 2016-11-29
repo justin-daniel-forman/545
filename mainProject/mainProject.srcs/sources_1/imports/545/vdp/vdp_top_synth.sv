@@ -83,6 +83,7 @@ module vdp_top (
   // Stuff
   logic screenBusy, scanline_en, sprCollision, sprOverflow;
   logic [7:0] addr_latched;
+  logic [10:0][7:0] rf_data;
 
   assign BUSY = screenBusy && (pixel_row > 48 && pixel_row <= 575);
 
@@ -176,19 +177,20 @@ module vdp_top (
     .data_in(rf_data_in),
     .addr(rf_addr),
     .en(rf_en),
-    .data_out()
+    .data_out(rf_data)
   );
  
   always_comb begin
     rf_data_out[0] = 8'h36;
-    rf_data_out[1] = 8'hA0;
+    //rf_data_out[1] = 8'hE0;
+    rf_data_out[1] = rf_data[1];
     rf_data_out[2] = 8'hFF;
     rf_data_out[3] = 8'hFF;
     rf_data_out[4] = 8'hFF;
     rf_data_out[5] = 8'hFF;    
     rf_data_out[6] = 8'hFB;
     rf_data_out[7] = 8'd0;
-    rf_data_out[8] = 8'd0;
+    rf_data_out[8] = rf_data[8];
     rf_data_out[9] = 8'd0;            
     rf_data_out[10] = 8'hFF;
   end
@@ -208,8 +210,8 @@ module vdp_top (
     .addrb(CRAM_VGA_addr),
     .dinb(8'bz),
     .doutb(CRAM_VGA_data_out),
-    .rsta(1'b0),
-    .rstb(1'b0)
+    .rsta(~rst_L),
+    .rstb(~rst_L)
   );
 
   vram VRAM( 

@@ -28,6 +28,14 @@ module project_top(
     output AC_GPIO3,
     output AC_MCLK,
     output AC_SCK,
+    input A_UP,
+    input A_DOWN,
+    input A_LEFT,
+    input A_RIGHT,
+    input A_TR,
+    input A_TL,
+    input A_RESET,
+    input A_TH,
     inout AC_SDA,
     input GCLK,
     input BTNL,
@@ -41,6 +49,7 @@ module project_top(
     wire [15:0] addr_bus;
     wire MREQ_L,RD_L,WR_L,IORQ_L;
     wire rom_corrupted;
+    wire [7:0] controller_interface_data;
     
     wire SDA;
     logic SCL,MCLK,BCLK,LRCLK,SDATA;
@@ -100,10 +109,14 @@ module project_top(
     end
     
     //assign data_in = (~IORQ_L) ? vdp_data_out : mem_data_out;
-    assign data_in = (~IORQ_L) ? 8'h80 : mem_data_out;
+    //assign data_in = (~IORQ_L) ? 8'h80 : mem_data_out;
+    logic active_dc,active_dd;
+    assign data_in = (~IORQ_L) ? ((active_dc||active_dd) ? controller_interface_data : 8'h80) : mem_data_out;
 
     logic [31:0] curr_state;
     logic        interrupt_mask;
+    
+    ControllerInterface PortA(.*,.data_controller(controller_interface_data));
 
     vdp_top VDP(.*, .data_bus_in(data_out), .data_bus_out(vdp_data_out), .addr_bus_in(addr_bus[7:0]), .BUSY(BUSY));    
     audio_top psg(.*);

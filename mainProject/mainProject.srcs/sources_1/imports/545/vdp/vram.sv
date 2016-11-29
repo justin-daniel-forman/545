@@ -103,8 +103,8 @@ module vram(
     .addrb(addr_b),
     .dinb(8'bz),
     .doutb(data_out_b),
-    .rsta(1'b0),
-    .rstb(1'b0)
+    .rsta(~rst_L),
+    .rstb(~rst_L)
   );
   
   always_ff @(posedge clk_100, negedge rst_L) begin
