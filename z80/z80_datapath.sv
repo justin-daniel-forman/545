@@ -860,27 +860,81 @@ module alu #(parameter w = 8)(
         C = ~A;
       end
 
+      //This is a convoluted instruction with a strange truth table.
+      //This spaghetti code decodes a hex byte into a BCD number
+      //through black magic that the ISA manual doesn't really want to explain,
+      //and as a result, neither do I.
       `ALU_DAA: begin
-        T = A;
 
-        //if the bottom 4 bits contain a non-bcd digit
-        if( F_in[`H_flag] || (T[3:0] > 4'h9)) begin
-          {lower_carry_out, C[3:0]} = T[3:0] + 4'h6;
-          F_out[`H_flag] = 1;
-        end else begin
-          C[3:0] = T[3:0];
-          lower_carry_out = 0;
-          F_out[`H_flag] = 0;
-        end
+        case({F_out[`C_flag], F_out[`H_flag]})
 
-        //if the top 4 bits contain a non-bcd digit
-        if(F_in[`C_flag] || T[7:4] > 9) begin
-          C[7:4] = T[7:4] + 8'h60 + lower_carry_out;
-          F_out[`C_flag] = 1;
-        end else begin
-          C[7:4] = T[7:4] + lower_carry_out;
-          F_out[`C_flag] = 0;
-        end
+          2'b00: begin
+
+            if( (A[3:0] <= 4'h9) && (A[7:4] <= 4'h9) ) begin
+              C = A;
+              F_out[`C_flag] = 0;
+            end else if( (A[3:0] <= 4'h9) && (A[7:4] >= 4'hA) ) begin
+              C = A + 8'h60;
+              F_out[`C_flag] = 1;
+            end else if( (A[3:0] >= 4'hA) && (A[7:4] <= 4'h8) ) begin
+              C = A + 8'h06;
+              F_out[`C_flag] = 0;
+            end else begin
+              C = A;
+            end
+
+          end
+
+          2'b01: begin
+
+            if( (A[3:0] <= 4'h3) && (A[7:4] <= 4'h9) ) begin
+              C = A + 8'h06;
+              F_out[`C_flag] = 0;
+            end else if( (A[3:0] <= 4'h3) && (A[7:4] >= 4'hA) ) begin
+              C = A + 8'h66;
+              F_out[`C_flag] = 1;
+            end else if( (A[3:0] >= 4'h6) && (A[7:4] <= 4'h8) ) begin
+              C = A + 8'hFA;
+              F_out[`C_flag] = 0;
+            end else begin
+              C = A;
+            end
+
+          end
+
+          2'b10: begin
+
+            if( (A[3:0] <= 4'h9) && (A[7:4] <= 4'h2) ) begin
+              C = A + 8'h60;
+              F_out[`C_flag] = 1;
+            end else if( (A[3:0] >= 4'hA) && (A[7:4] <= 4'h2) ) begin
+              C = A + 8'h66;
+              F_out[`C_flag] = 1;
+            end else if( (A[3:0] <= 4'h9) && (A[7:4] >= 4'h7) ) begin
+              C = A + 8'hA0;
+              F_out[`C_flag] = 1;
+            end else begin
+              C = A;
+            end
+
+          end
+
+          2'b11: begin
+
+            if( (A[3:0] <= 4'h3) && (A[7:4] <= 4'h3) ) begin
+              C = A + 8'h66;
+              F_out[`C_flag] = 1;
+            end else if( (A[3:0] >= 4'h6) && (A[7:4] >= 4'h6) ) begin
+              C = A + 8'h9A;
+              F_out[`C_flag] = 1;
+            end else begin
+              C = A;
+            end
+
+          end
+
+          default: begin C = 0; end
+        endcase
 
         //set s flag for negative
         F_out[`S_flag] = C[w-1];

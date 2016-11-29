@@ -6,8 +6,9 @@ range data $0051 $0100
 
 section code
 
-  ld a, $15
-  add $27
+  ld a, $46
+  ld h, $34
+  add  h
   daa
 
 section data
