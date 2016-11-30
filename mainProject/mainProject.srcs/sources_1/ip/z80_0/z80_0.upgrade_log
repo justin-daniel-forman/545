@@ -1,6 +1,27 @@
 Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2015.2 (lin64) Build 1266856 Fri Jun 26 16:35:25 MDT 2015
+| Date         : Tue Nov 29 15:38:12 2016
+| Host         : mittlefrueh.andrew.cmu.edu running 64-bit Red Hat Enterprise Linux Server release 7.2 (Maipo)
+| Command      : upgrade_ip
+| Device       : xc7z020clg484-1
+---------------------------------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'z80_0'
+
+1. Summary
+----------
+
+SUCCESS in the update of z80_0 (user.org:user:z80:1.0 (Rev. 2)) to current project options.
+
+
+
+
+
+
+Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2015.2 (lin64) Build 1266856 Fri Jun 26 16:35:25 MDT 2015
 | Date         : Mon Nov 28 13:19:11 2016
 | Host         : mittlefrueh.andrew.cmu.edu running 64-bit Red Hat Enterprise Linux Server release 7.2 (Maipo)
 | Command      : upgrade_ip

@@ -38,7 +38,11 @@ module project_top(
     input A_TH,
     inout AC_SDA,
     input GCLK,
+    input BTNC,
     input BTNL,
+    input BTNR,
+    input BTND,
+    input BTNU,
     input [7:0] SW,
     output [3:0] VGA_R, VGA_G, VGA_B,
     output       VGA_HS, VGA_VS
@@ -82,6 +86,8 @@ module project_top(
     logic      [7:0]  VRAM_io_data_in;
     logic      [4:0]  CRAM_io_addr;
     logic      [7:0]  CRAM_io_data_in;
+    logic      [9:0]  pixel_col;
+    logic      [8:0]  pixel_row;
     
     assign NMI_L = 1;
     //assign WAIT_L = 1;
@@ -101,8 +107,8 @@ module project_top(
     assign WAIT_L = ~BUSY;
     assign reset_delayed = (rst_count < 32'd1000);
     
-    always_ff @(posedge clk_100, posedge BTNL) begin
-        if(BTNL)
+    always_ff @(posedge clk_100, posedge BTNC) begin
+        if(BTNC)
             rst_count <= 0;
         else if(rst_count < 32'd1000)
             rst_count <= rst_count + 1;
@@ -116,7 +122,7 @@ module project_top(
     logic [31:0] curr_state;
     logic        interrupt_mask;
     
-    ControllerInterface PortA(.*,.data_controller(controller_interface_data));
+    ControllerInterface PortA(.*,.data_controller(controller_interface_data),.UP(~BTNU),.DOWN(~BTND),.LEFT(~BTNL),.RIGHT(~BTNR));
 
     vdp_top VDP(.*, .data_bus_in(data_out), .data_bus_out(vdp_data_out), .addr_bus_in(addr_bus[7:0]), .BUSY(BUSY));    
     audio_top psg(.*);
@@ -139,7 +145,11 @@ module project_top(
         .probe11(1'b0),
         .probe12(VRAM_VGA_addr),
         .probe13(VRAM_VGA_data_out),
-        .probe14(rf_data_out)
+        .probe14(rf_data_out),
+        .probe15(pixel_col),
+        .probe16(pixel_row),
+        .probe17(VRAM_io_addr),
+        .probe18(VRAM_io_data_in)
     );
      
     logic clkDiv_25;

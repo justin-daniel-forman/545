@@ -263,9 +263,9 @@ module vdp_disp_interface(
   }; 
    
   always_comb begin
-    if (regFile[0][5] & (col + 1 < 16)) CRAM_VGA_addr = {1'b0, regFile[7][3:0]};
+    if (regFile[0][5] & (col + 1 < 16)) CRAM_VGA_addr = {1'b0, regFile[7][3:0]}; // Blanking first pattern column
     else if (|validSprite) begin
-      if ((CRAM_addr_SPR == 5'd0) || patInBg) begin
+      if ((CRAM_addr_SPR[3:0] == 4'd0) || patInBg || SW[7]) begin
         CRAM_VGA_addr = CRAM_addr_BG;
       end
       else CRAM_VGA_addr = CRAM_addr_SPR;

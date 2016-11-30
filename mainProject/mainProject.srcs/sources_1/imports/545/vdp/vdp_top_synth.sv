@@ -46,7 +46,9 @@ module vdp_top (
   output logic      [4:0]  CRAM_io_addr,
   output logic      [7:0]  CRAM_io_data_in,
   output logic [10:0][7:0] rf_data_out,
-  input  logic      [7:0]  SW
+  input  logic      [7:0]  SW,
+  output logic      [9:0]  pixel_col,
+  output logic      [8:0]  pixel_row
 );
 
   // Decoder logic
@@ -74,8 +76,8 @@ module vdp_top (
   logic            rf_en; // Set in FSM
    
   // VGA logic
-  logic [9:0] pixel_col;
-  logic [8:0] pixel_row;
+  //logic [9:0] pixel_col;
+  //logic [8:0] pixel_row;
 
   // V_counter logic
   logic [8:0] V_counter;
@@ -187,7 +189,7 @@ module vdp_top (
     rf_data_out[2] = 8'hFF;
     rf_data_out[3] = 8'hFF;
     rf_data_out[4] = 8'hFF;
-    rf_data_out[5] = 8'hFF;    
+    rf_data_out[5] = rf_data[5];   
     rf_data_out[6] = 8'hFB;
     rf_data_out[7] = 8'd0;
     rf_data_out[8] = rf_data[8];
@@ -462,28 +464,28 @@ module vdp_port_decoder(
         MODE  = (addr_in == 8'hBF); //Command port -> 1, data port -> 0
         CSR_L = 0;
         CSW_L = 1;
-        vdp_go = 1;
+        vdp_go = (addr_in == 8'hBE);
         addr_latch_en = 1;
       end
       RD1: begin
         MODE  = (addr_in == 8'hBF); //Command port -> 1, data port -> 0
         CSR_L = 0;
         CSW_L = 1;
-        vdp_go = 1;
+        vdp_go = (addr_in == 8'hBE);
         int_ack = (addr_in == 8'hBF); // Reading from $BF means we acknowledged interrupts
       end
       WR0: begin
         MODE  = (addr_in == 8'hBF); //Command port -> 1, data port -> 0
         CSR_L = 1;
         CSW_L = 0; 
-	      vdp_go = 1; 
+	    vdp_go = 1; 
         addr_latch_en = 1;
       end
       WR1: begin
         MODE  = (addr_in == 8'hBF); //Command port -> 1, data port -> 0
         CSR_L = 1;
         CSW_L = 0; 
-	      vdp_go = 1; 
+	    vdp_go = 1; 
       end
       default: begin
         vdp_go = 0;
