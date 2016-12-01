@@ -32,10 +32,6 @@ module project_top(
     input A_DOWN,
     input A_LEFT,
     input A_RIGHT,
-    input A_TR,
-    input A_TL,
-    input A_RESET,
-    input A_TH,
     inout AC_SDA,
     input GCLK,
     input BTNC,
@@ -95,7 +91,7 @@ module project_top(
     
     assign clk_100 = GCLK;
     assign reset = reset_delayed;
-    assign rst_L = ~reset;
+    assign rst_L = ~reset_delayed;
     assign AC_SDA = SDA;
     assign AC_SCK = SCL;
     assign AC_MCLK = MCLK;
@@ -122,7 +118,7 @@ module project_top(
     logic [31:0] curr_state;
     logic        interrupt_mask;
     
-    ControllerInterface PortA(.*,.data_controller(controller_interface_data),.UP(~BTNU),.DOWN(~BTND),.LEFT(~BTNL),.RIGHT(~BTNR));
+    ControllerInterface PortA(.*,.data_controller(controller_interface_data),.UP(A_UP),.DOWN(A_DOWN),.LEFT(A_LEFT),.RIGHT(A_RIGHT));
 
     vdp_top VDP(.*, .data_bus_in(data_out), .data_bus_out(vdp_data_out), .addr_bus_in(addr_bus[7:0]), .BUSY(BUSY));    
     audio_top psg(.*);

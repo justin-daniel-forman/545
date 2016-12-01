@@ -65,19 +65,23 @@ module comInterface(
     end
     
     always_comb begin
-        decode_enable = 0;
         case(cs)
             idle: begin
                 ns = activated ? latch : idle;
+                decode_enable = 0;
             end
             latch: begin
                 ns = (!activated && delay_count >= 5'd10) ? instr : latch;
+                decode_enable = 0;
             end
             instr: begin
                 ns = activated ? latch : idle;
                 decode_enable = 1;
             end
-            default: ns = idle;
+            default: begin
+                ns = idle;
+                decode_enable = 0;
+            end
         endcase
     end
     
