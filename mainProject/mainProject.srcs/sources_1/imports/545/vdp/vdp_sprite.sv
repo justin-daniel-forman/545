@@ -3,7 +3,7 @@ module vdp_sprite_interface(
   input  logic [8:0]       row,
   input  logic [9:0]       col,
   input  logic             screenBusy,
-  input  logic [10:0][7:0]  regFile,
+  input  logic [10:0][7:0] regFile,
   input  logic [5:0][7:0]  VRAM_sprite_data,
   output logic             VRAM_go,
   output logic [7:0]       sprPat, // Feeds into VRAM addr 2-5
@@ -227,7 +227,7 @@ module vdp_sprite_fsm(
   always_comb begin
     ns = WaitInit;
     case(cs)
-      WaitInit: ns = ((row >= 9'd48 && row < 9'd432) && col < 64) ? SetVPOS : WaitInit;
+      WaitInit: ns = ((row >= 9'd48 && row < 9'd432) && (col <= 57)) ? SetVPOS : WaitInit;
       SetVPOS:  ns = WaitVPOS;
       WaitVPOS: ns = LoadVPOS;
       LoadVPOS: begin

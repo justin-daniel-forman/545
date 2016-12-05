@@ -46,7 +46,9 @@ module vdp_top (
   output logic      [4:0]  CRAM_io_addr,
   output logic      [7:0]  CRAM_io_data_in,
   output logic [10:0][7:0] rf_data_out,
-  input  logic      [7:0]  SW
+  input  logic      [7:0]  SW,
+  output logic      [9:0]  pixel_col,
+  output logic      [8:0]  pixel_row
 );
 
   // Decoder logic
@@ -74,8 +76,8 @@ module vdp_top (
   logic            rf_en; // Set in FSM
    
   // VGA logic
-  logic [9:0] pixel_col;
-  logic [8:0] pixel_row;
+  //logic [9:0] pixel_col;
+  //logic [8:0] pixel_row;
 
   // V_counter logic
   logic [8:0] V_counter;
@@ -83,6 +85,7 @@ module vdp_top (
   // Stuff
   logic screenBusy, scanline_en, sprCollision, sprOverflow;
   logic [7:0] addr_latched;
+  logic [10:0][7:0] rf_data;
 
   assign BUSY = screenBusy && (pixel_row > 48 && pixel_row <= 575);
 
@@ -176,24 +179,23 @@ module vdp_top (
     .data_in(rf_data_in),
     .addr(rf_addr),
     .en(rf_en),
-    .data_out(rf_data_out)
+    .data_out(rf_data)
   );
  
-  /*
   always_comb begin
     rf_data_out[0] = 8'h36;
-    rf_data_out[1] = 8'hA0;
+    //rf_data_out[1] = 8'hE0;
+    rf_data_out[1] = rf_data[1];
     rf_data_out[2] = 8'hFF;
     rf_data_out[3] = 8'hFF;
     rf_data_out[4] = 8'hFF;
-    rf_data_out[5] = 8'hFF;    
+    rf_data_out[5] = rf_data[5];   
     rf_data_out[6] = 8'hFB;
     rf_data_out[7] = 8'd0;
-    rf_data_out[8] = 8'd0;
+    rf_data_out[8] = rf_data[8];
     rf_data_out[9] = 8'd0;            
     rf_data_out[10] = 8'hFF;
   end
-  */
  
   /******** VRAM & CRAM ********/  
 
@@ -209,7 +211,9 @@ module vdp_top (
     .web(1'b0),
     .addrb(CRAM_VGA_addr),
     .dinb(8'bz),
-    .doutb(CRAM_VGA_data_out)
+    .doutb(CRAM_VGA_data_out),
+    .rsta(~rst_L),
+    .rstb(~rst_L)
   );
 
   vram VRAM( 
@@ -460,28 +464,28 @@ module vdp_port_decoder(
         MODE  = (addr_in == 8'hBF); //Command port -> 1, data port -> 0
         CSR_L = 0;
         CSW_L = 1;
-        vdp_go = 1;
+        vdp_go = (addr_in == 8'hBE);
         addr_latch_en = 1;
       end
       RD1: begin
         MODE  = (addr_in == 8'hBF); //Command port -> 1, data port -> 0
         CSR_L = 0;
         CSW_L = 1;
-        vdp_go = 1;
+        vdp_go = (addr_in == 8'hBE);
         int_ack = (addr_in == 8'hBF); // Reading from $BF means we acknowledged interrupts
       end
       WR0: begin
         MODE  = (addr_in == 8'hBF); //Command port -> 1, data port -> 0
         CSR_L = 1;
         CSW_L = 0; 
-	      vdp_go = 1; 
+	    vdp_go = 1; 
         addr_latch_en = 1;
       end
       WR1: begin
         MODE  = (addr_in == 8'hBF); //Command port -> 1, data port -> 0
         CSR_L = 1;
         CSW_L = 0; 
-	      vdp_go = 1; 
+	    vdp_go = 1; 
       end
       default: begin
         vdp_go = 0;

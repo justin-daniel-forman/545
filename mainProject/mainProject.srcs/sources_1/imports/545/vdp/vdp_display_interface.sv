@@ -114,8 +114,8 @@ module vdp_disp_interface(
     .en(patSelLatch_en)
   );
 
-  assign patSelLatch1_in = SW[0] ? VRAM_VGA_data_out[1] : VRAM_VGA_data_out[0];
-  assign patSelLatch2_in = SW[0] ? VRAM_VGA_data_out[0] : VRAM_VGA_data_out[1]; // Little Endian, MSB goes in first
+  assign patSelLatch1_in = VRAM_VGA_data_out[1];
+  assign patSelLatch2_in = VRAM_VGA_data_out[0]; // Little Endian, MSB goes in first
 
   /******** patSel Parsing ********/
   
@@ -143,26 +143,26 @@ module vdp_disp_interface(
     if (horizFlip) begin
       CRAM_addr_BG = {
         paletteSel,
-        colorLatch_out[0][colorLatchIndex[3:1]], 
-        colorLatch_out[1][colorLatchIndex[3:1]],
+        colorLatch_out[3][colorLatchIndex[3:1]], 
         colorLatch_out[2][colorLatchIndex[3:1]],
-        colorLatch_out[3][colorLatchIndex[3:1]]
+        colorLatch_out[1][colorLatchIndex[3:1]],
+        colorLatch_out[0][colorLatchIndex[3:1]]
       };
     end
     else begin
       CRAM_addr_BG = {
         paletteSel,
-        colorLatch_out[0][3'd7-colorLatchIndex[3:1]], 
-        colorLatch_out[1][3'd7-colorLatchIndex[3:1]],
+        colorLatch_out[3][3'd7-colorLatchIndex[3:1]], 
         colorLatch_out[2][3'd7-colorLatchIndex[3:1]],
-        colorLatch_out[3][3'd7-colorLatchIndex[3:1]]
+        colorLatch_out[1][3'd7-colorLatchIndex[3:1]],
+        colorLatch_out[0][3'd7-colorLatchIndex[3:1]]
       };
     end
   end
 
   /******* RGB Generation *******/
-
-  assign colorToDisplay = (blank | regFile[1][6]) ? 6'd0 : CRAM_VGA_data_out;
+  assign colorToDisplay = ( blank || (~regFile[1][6])) ? 6'd0 : CRAM_VGA_data_out;
+  //assign colorToDisplay = (blank | regFile[1][6]) ? 6'd0 : CRAM_VGA_data_out;
   colorGen c1(colorToDisplay[1:0], VGA_R);
   colorGen c2(colorToDisplay[3:2], VGA_G); 
   colorGen c3(colorToDisplay[5:4], VGA_B);
@@ -230,7 +230,7 @@ module vdp_disp_interface(
           .D(VRAM_VGA_data_out[5:2]),
           .Q(B),
           .en((sprPatRow == j) & (sprCnt_4[2:0] == i)),
-          .clr(pixelRow > 9'd383)
+          .clr((pixelRow > 9'd383) | (col == 10'd576))
         ); // Probably need something more here... 
       end
       // Iterates over the bits in a 4-byte row to generate the palettes
@@ -256,16 +256,16 @@ module vdp_disp_interface(
 
   assign CRAM_addr_SPR = {
     1'b1,
-    currSprRow[0][sprColorIndex[currSprIndex][3:1]],
-    currSprRow[1][sprColorIndex[currSprIndex][3:1]],
-    currSprRow[2][sprColorIndex[currSprIndex][3:1]],
-    currSprRow[3][sprColorIndex[currSprIndex][3:1]]
+    currSprRow[3][3'd7 - sprColorIndex[currSprIndex][3:1]],
+    currSprRow[2][3'd7 - sprColorIndex[currSprIndex][3:1]],
+    currSprRow[1][3'd7 - sprColorIndex[currSprIndex][3:1]],
+    currSprRow[0][3'd7 - sprColorIndex[currSprIndex][3:1]]
   }; 
    
   always_comb begin
-    if (regFile[0][5] & (col + 1 < 16)) CRAM_VGA_addr = {1'b0, regFile[7][3:0]};
+    if (regFile[0][5] & (col + 1 < 16)) CRAM_VGA_addr = {1'b0, regFile[7][3:0]}; // Blanking first pattern column
     else if (|validSprite) begin
-      if (CRAM_addr_SPR == 5'd0) begin
+      if ((CRAM_addr_SPR[3:0] == 4'd0) || patInBg || SW[7]) begin
         CRAM_VGA_addr = CRAM_addr_BG;
       end
       else CRAM_VGA_addr = CRAM_addr_SPR;

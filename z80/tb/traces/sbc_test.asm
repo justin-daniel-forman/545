@@ -45,20 +45,26 @@ section code
   ld hl, [$57]
 
   #part 3 0c - 0e = fffc and sets half borrow
-  stc
-  cmc
-  ld bc, $000e
-  ld a, [$55]   #a = 0c
-  sbc c         #0c - 0e = fc with borrow
-  ld c, $57     #bc <= 0057
-  ld [bc], a    #[0057] <= fc
+# stc
+#  cmc
+#  ld bc, $000e
+#  ld a, [$55]   #a = 0c
+#  sbc c         #0c - 0e = fc with borrow
+#  ld c, $57     #bc <= 0057
+#  ld [bc], a    #[0057] <= fc
 
-  ld a, [$56]   #a <= 0
-  ld c, $58     #bc <= 58
-  sbc b         #00 - 00 - 1 = ff
-  ld [bc], a    #[58] <= ff
+#  ld a, [$56]   #a <= 0
+#  ld c, $58     #bc <= 58
+#  sbc b         #00 - 00 - 1 = ff
+#  ld [bc], a    #[58] <= ff
  
-  ld bc, [$57] 
+#  ld bc, [$57]
+
+
+  or a #clear all of the flags
+  ld hl, $0028
+  ld bc, $0001
+  sbc hl, de 
 
 
 section data

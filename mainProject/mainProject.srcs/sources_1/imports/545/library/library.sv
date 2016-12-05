@@ -65,7 +65,7 @@ module register_def #(parameter w = 8) (
 
   assign Q = value;
 
-  always @(posedge clk) begin
+  always @(posedge clk, negedge rst_L) begin
     if(~rst_L) begin
       value <= def;
     end
