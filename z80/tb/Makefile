@@ -12,11 +12,11 @@ control:
 
 top:
 	perl macros.pl
-	vcs -sverilog ../z80_control.sv ../z80_datapath.sv ../z80_top.sv ../../library/library.sv ../z80_memory.sv ../z80_ports.sv top_tb.sv
+	vcs -sverilog ../z80_control.sv ../z80_datapath.sv ../z80_top.sv ../../library/library.sv z80_memory.sv z80_ports.sv top_tb.sv
 
 game:
 	perl macros.pl
-	vcs -sverilog ../z80_control.sv ../z80_datapath.sv ../z80_top.sv ../../library/library.sv ../z80_memory.sv ../z80_ports.sv game_tb.sv
+	vcs -sverilog ../z80_control.sv ../z80_datapath.sv ../z80_top.sv ../../library/library.sv z80_memory.sv z80_ports.sv game_tb.sv
 
 regfile:
 	vcs -sverilog -debug ../z80_datapath.sv ../../library/library.sv regfile_tb.sv
@@ -27,6 +27,7 @@ datapath:
 clean:
 	rm -rf simv
 	rm -rf simv.daidir
+	rm -rf csrc
 
 verify-all:
 	perl testbench.pl NULL NULL VERIFY

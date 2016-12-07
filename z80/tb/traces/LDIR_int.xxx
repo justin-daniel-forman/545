@@ -1,0 +1,45 @@
+#Dont run this test unless interrupts are enabled in top_tb.sv
+#So currently this file is given an .asmx extension
+
+range rom $0000 $0100
+
+range code $0000 $0037
+range isr  $0038 $0045
+range pt2  $0046 $0050
+range data $0051 $0100
+range ram  $c000 $c100
+
+
+section code
+  ld sp, $0100
+  di
+  ld hl, $0
+  ld de, $0
+  ld bc, $0
+  ldir
+  
+  ld bc, [$51]
+  ld de, [$52]
+  ld hl, [$53]
+  ld sp, [$c000]
+
+  jp bar
+
+section isr
+  inc st
+  ei
+  ret
+
+section pt2
+  bar: nop
+  nop
+  nop
+
+section ram 
+  addr1: data !f000
+
+
+section data
+  addr0: data !DEAD !BEEF !AAAA !BBBB !CCCC !BBBB
+
+output LDIR_int.rom $0000 $ffff

@@ -63,6 +63,9 @@ foreach my $fileroot (@asm_files) {
 
   #if we are verifying, do not print verbose output
   if(defined $verify_arg and $verify_arg eq "VERIFY") {
+
+    print "Running $fileroot: ";
+
     my $dump = `./simv`;
 
     my ($A, $F, $BC, $DE, $HL, $IX, $IY, $SP, $PC);
@@ -105,13 +108,13 @@ foreach my $fileroot (@asm_files) {
         or ($SP ne $SP_d)
         or ($PC ne $PC_d)
     ) {
-      print "There was an error in test: $fileroot\n";
+      print "Error\n";
       print "Got:\nA: $A\nF: $F\nBC: $BC\nDE: $DE\nHL: $HL\nIX: $IX\nIY: $IY\nSP: $SP\nPC: $PC\n";
       print "Expected:\nA: $A_d\nF: $F_d\nBC: $BC_d\nDE: $DE_d\nHL: $HL_d\nIX: $IX_d\nIY: $IY_d\nSP: $SP_d\nPC: $PC_d\n";
     }
 
     else {
-      print "Passed: $fileroot\n";
+      print "Passed\n";
     }
   }
 
