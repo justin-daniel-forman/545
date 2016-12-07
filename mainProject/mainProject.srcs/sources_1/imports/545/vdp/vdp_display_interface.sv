@@ -24,7 +24,7 @@ module vdp_disp_interface(
 
   // Determines where the screen should be blank, since 256x192 doesn't divide 640x480 evenly
   logic       blank;
-  assign blank = ((col < 10'd64) || (col > 10'd575)) || ((row < 10'd48) || (row > 10'd431));
+  assign blank = ((col <= 10'd64) || (col > 10'd575)) || ((row < 10'd48) || (row > 10'd431));
 
   // Screen Map Pattern Parsing
   logic [13:0] charPatternAddr;
@@ -263,7 +263,9 @@ module vdp_disp_interface(
   }; 
    
   always_comb begin
-    if (regFile[0][5] & (col + 1 < 16)) CRAM_VGA_addr = {1'b0, regFile[7][3:0]}; // Blanking first pattern column
+    if (regFile[0][5] & (pixelCol < 10'd16)) 
+      CRAM_VGA_addr = (SW[6]) ? CRAM_addr_BG : {1'b0, regFile[7][3:0]}; 
+      // Blanking first pattern column
     else if (|validSprite) begin
       if ((CRAM_addr_SPR[3:0] == 4'd0) || patInBg || SW[7]) begin
         CRAM_VGA_addr = CRAM_addr_BG;
