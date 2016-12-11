@@ -2,7 +2,7 @@
 
 #Authors:
     Justin Forman (justin.daniel.forman@gmail.com)
-    Chris Chao    (christoh@andrew.cmu.edu)
+    Chris Chao    (ghastall@gmail.com)
     Suyash Bhatt  (suyashb@andrew.cmu.edu)
 
 #Overview:
@@ -20,3 +20,5 @@
   1) Zilog Z80 Processor (z80)
   2) Video Display Processor (VDP)
   3) Programmable Sound Generator (PSG)
+
+See individual README's for additional information.
