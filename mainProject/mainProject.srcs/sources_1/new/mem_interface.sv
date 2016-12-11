@@ -50,6 +50,6 @@ module mem_interface(
     assign ena = (!MREQ_L && (wea || !RD_L));
     assign addra = addr_bus;
     
-    blk_mem_gen_0 progMem(.*);
+    blk_mem_gen_0 ramMem(.*);
     
 endmodule

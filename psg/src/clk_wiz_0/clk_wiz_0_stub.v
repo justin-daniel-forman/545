@@ -1,7 +1,7 @@
 // Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2015.2 (lin64) Build 1266856 Fri Jun 26 16:35:25 MDT 2015
-// Date        : Wed Oct 19 12:08:27 2016
+// Date        : Tue Dec  6 19:49:00 2016
 // Host        : mittlefrueh.andrew.cmu.edu running 64-bit Red Hat Enterprise Linux Server release 7.2 (Maipo)
 // Command     : write_verilog -force -mode synth_stub
 //               /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/src/clk_wiz_0/clk_wiz_0_stub.v

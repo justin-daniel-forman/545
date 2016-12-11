@@ -84,14 +84,14 @@ set_property PACKAGE_PIN Y9 [get_ports {GCLK}];  # "GCLK"
 # ----------------------------------------------------------------------------
 # JA Pmod - Bank 13
 # ---------------------------------------------------------------------------- 
-set_property PACKAGE_PIN Y11  [get_ports {JA1}];  # "JA1"
+set_property PACKAGE_PIN Y11  [get_ports {A_UP}];  # "JA1"
 set_property PACKAGE_PIN AA8  [get_ports {JA10}];  # "JA10"
-set_property PACKAGE_PIN AA11 [get_ports {JA2}];  # "JA2"
-set_property PACKAGE_PIN Y10  [get_ports {JA3}];  # "JA3"
-set_property PACKAGE_PIN AA9  [get_ports {JA4}];  # "JA4"
-set_property PACKAGE_PIN AB11 [get_ports {JA7}];  # "JA7"
-set_property PACKAGE_PIN AB10 [get_ports {JA8}];  # "JA8"
-set_property PACKAGE_PIN AB9  [get_ports {JA9}];  # "JA9"
+set_property PACKAGE_PIN AA11 [get_ports {A_DOWN}];  # "JA2"
+set_property PACKAGE_PIN Y10  [get_ports {A_LEFT}];  # "JA3"
+set_property PACKAGE_PIN AA9  [get_ports {A_RIGHT}];  # "JA4"
+set_property PACKAGE_PIN AB11 [get_ports {A_TL}];  # "JA7"
+set_property PACKAGE_PIN AB10 [get_ports {A_RESET}];  # "JA8"
+set_property PACKAGE_PIN AB9  [get_ports {A_TH}];  # "JA9"
 
 
 # ----------------------------------------------------------------------------
@@ -234,14 +234,14 @@ set_property PACKAGE_PIN G17 [get_ports {OTG_RESETN}];  # "OTG-RESETN"
 # ----------------------------------------------------------------------------
 # User DIP Switches - Bank 35
 # ---------------------------------------------------------------------------- 
-set_property PACKAGE_PIN F22 [get_ports {SW0}];  # "SW0"
-set_property PACKAGE_PIN G22 [get_ports {SW1}];  # "SW1"
-set_property PACKAGE_PIN H22 [get_ports {SW2}];  # "SW2"
-set_property PACKAGE_PIN F21 [get_ports {SW3}];  # "SW3"
-set_property PACKAGE_PIN H19 [get_ports {SW4}];  # "SW4"
-set_property PACKAGE_PIN H18 [get_ports {SW5}];  # "SW5"
-set_property PACKAGE_PIN H17 [get_ports {SW6}];  # "SW6"
-set_property PACKAGE_PIN M15 [get_ports {SW7}];  # "SW7"
+set_property PACKAGE_PIN F22 [get_ports {SW[0]}];  # "SW0"
+set_property PACKAGE_PIN G22 [get_ports {SW[1]}];  # "SW1"
+set_property PACKAGE_PIN H22 [get_ports {SW[2]}];  # "SW2"
+set_property PACKAGE_PIN F21 [get_ports {SW[3]}];  # "SW3"
+set_property PACKAGE_PIN H19 [get_ports {SW[4]}];  # "SW4"
+set_property PACKAGE_PIN H18 [get_ports {SW[5]}];  # "SW5"
+set_property PACKAGE_PIN H17 [get_ports {SW[6]}];  # "SW6"
+set_property PACKAGE_PIN M15 [get_ports {SW[7]}];  # "SW7"
 
 # ----------------------------------------------------------------------------
 # XADC AD Channels - Bank 35

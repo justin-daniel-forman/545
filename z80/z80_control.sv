@@ -1662,6 +1662,13 @@ module decoder (
     RET_cc_5,
     RET_cc_6,
 
+    RETN_0,
+    RETN_1,
+    RETN_2,
+    RETN_3,
+    RETN_4,
+    RETN_5,
+
     RST_p_0,
     RST_p_1,
     RST_p_2,
@@ -2104,6 +2111,7 @@ module decoder (
           `OTIR:        next_state = OTIR_0;
           `OUTD:        next_state = OUTD_0;
           `OTDR:        next_state = OTDR_0;
+          `RETN:        next_state = RETN_0;
            default:     next_state = FETCH_0;
         endcase
       end
@@ -3400,6 +3408,14 @@ module decoder (
       RET_4: next_state = RET_5;
       RET_5: next_state = FETCH_0;
 
+      //RETN
+      RETN_0: next_state = RETN_1;
+      RETN_1: next_state = RETN_2;
+      RETN_2: next_state = RETN_3;
+      RETN_3: next_state = RETN_4;
+      RETN_4: next_state = RETN_5;
+      RETN_5: next_state = FETCH_0;
+
       RET_cc_0: begin
         unique case(op0[5:3])
           3'b000: next_state = !flags[6] ? RET_cc_1 : FETCH_0;
@@ -3428,7 +3444,7 @@ module decoder (
       RST_p_3: next_state = RST_p_4;
       RST_p_4: next_state = RST_p_5;
       RST_p_5: next_state = RST_p_6;
-      RST_p_6: next_state = FETCH_0;
+      RST_p_6: next_state = START;
 
       //-----------------------------------------------------------------------
       //END Call and Return group
@@ -7748,7 +7764,7 @@ module decoder (
 
         //add the upper bytes together and set the carry flags
         ld_F_data      = 1;
-        alu_op         = `SBC;
+        alu_op         = `SBC_16;
         drive_alu_data = 1;
         set_N = 2'b11;
 
@@ -8481,14 +8497,86 @@ module decoder (
 
       JP_cc_nn_5: begin
         unique case(op0[5:3])
-          3'b000: ld_PCH = !flags[6];
-          3'b001: ld_PCH = flags[6];
-          3'b010: ld_PCH = !flags[0];
-          3'b011: ld_PCH = flags[0];
-          3'b100: ld_PCH = !flags[2];
-          3'b101: ld_PCH = flags[2];
-          3'b110: ld_PCH = !flags[7];
-          3'b111: ld_PCH = flags[7];
+          3'b000: begin
+            if(!flags[6]) begin
+              ld_PCH    = 1;
+            end else begin
+              //otherwise, update the PC with the incremented (but not jumped) val
+              drive_MAR = 1;
+              ld_PCH    = 1;
+              ld_PCL    = 1;
+            end
+          end
+          3'b001: begin
+            if(flags[6]) begin
+              ld_PCH = 1;
+            end
+            else begin
+              ld_PCH = 1;
+              drive_MAR = 1;
+              ld_PCL = 1;
+            end
+          end
+          3'b010: begin
+            if(!flags[0]) begin
+              ld_PCH = 1;
+            end
+            else begin
+              ld_PCH = 1;
+              drive_MAR = 1;
+              ld_PCL = 1;
+            end
+          end
+          3'b011: begin
+            if(flags[0]) begin
+              ld_PCH = 1;
+            end
+            else begin
+              ld_PCH = 1;
+              drive_MAR = 1;
+              ld_PCL = 1;
+            end
+          end
+          3'b100: begin
+            if(!flags[2]) begin
+              ld_PCH = 1;
+            end
+            else begin
+              ld_PCH = 1;
+              drive_MAR = 1;
+              ld_PCL = 1;
+            end
+          end
+          3'b101: begin
+            if(flags[2]) begin
+              ld_PCH = 1;
+            end
+            else begin
+              ld_PCH = 1;
+              drive_MAR = 1;
+              ld_PCL = 1;
+            end
+          end
+          3'b110: begin
+            if(!flags[7]) begin
+              ld_PCH = 1;
+            end
+            else begin
+              ld_PCH = 1;
+              drive_MAR = 1;
+              ld_PCL = 1;
+            end
+          end
+          3'b111: begin
+            if(flags[7]) begin
+              ld_PCH = 1;
+            end
+            else begin
+              ld_PCH = 1;
+              drive_MAR = 1;
+              ld_PCL = 1;
+            end
+          end
         endcase
       end
 
@@ -8848,7 +8936,7 @@ module decoder (
       end
 
       //RET
-      RET_0: begin
+      RET_0, RETN_0: begin
         MRD_start = 1;
         MRD_bus   = 1;
         drive_alu_addr = 1;
@@ -8858,7 +8946,7 @@ module decoder (
         drive_SPH = 1;
       end
 
-      RET_1: begin
+      RET_1, RETN_1: begin
         MRD_bus = 1;
         drive_alu_addr = 1;
         alu_op = `ALU_NOP;
@@ -8867,11 +8955,11 @@ module decoder (
         drive_SPH = 1;
       end
 
-      RET_2: begin
+      RET_2, RETN_2: begin
         ld_PCL = 1;
       end
 
-      RET_3: begin
+      RET_3, RETN_3: begin
         MRD_start = 1;
         MRD_bus   = 1;
         drive_alu_addr = 1;
@@ -8883,7 +8971,7 @@ module decoder (
         ld_SPL    = 1;
       end
 
-      RET_4: begin
+      RET_4, RETN_4: begin
         MRD_bus = 1;
         drive_alu_addr = 1;
         alu_op = `ALU_NOP;
@@ -8892,7 +8980,7 @@ module decoder (
         drive_SPH = 1;
       end
 
-      RET_5: begin
+      RET_5, RETN_5: begin
         ld_PCH = 1;
         drive_alu_addr = 1;
         alu_op         = `INCR_A_16;
@@ -8901,6 +8989,11 @@ module decoder (
         drive_SPH = 1;
         ld_SPH    = 1;
         ld_SPL    = 1;
+        if(state == RETN_5) begin
+          pop_interrupts = 1;
+        end else begin
+          pop_interrupts = 0;
+        end
       end
 
       //RET_cc
@@ -9076,7 +9169,18 @@ module decoder (
         drive_STRL = 1;
       end
 
-      IN_A_n_4, IN_A_n_5: begin
+      //We need to grab the value the cycle after we request it
+      IN_A_n_4: begin
+        IN_bus = 1;
+        drive_alu_addr = 1;
+        alu_op = `ALU_NOP;
+        drive_reg_addr = 1;
+        drive_STRH = 1;
+        drive_STRL = 1;
+        ld_A = 1;
+      end
+
+      /*IN_A_n_4, IN_A_n_5: begin
         IN_bus = 1;
         drive_alu_addr = 1;
         alu_op = `ALU_NOP;
@@ -9087,7 +9191,7 @@ module decoder (
 
       IN_A_n_6: begin
         ld_A = 1;
-      end
+      end*/
 
       OUT_n_A_3: begin
         OUT_start = 1;

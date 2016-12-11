@@ -1,0 +1,5 @@
+This directory contains the vivado project that instantiates the z80 processor
+in this git repo. This is separate from the main project so that we can create
+an IP block for the processor to cut down on synthesis times in Vivado. The
+files for the IP block generated from this project are stored in
+../z80_IP_Block.

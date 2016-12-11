@@ -1,7 +1,7 @@
 // Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2015.2 (lin64) Build 1266856 Fri Jun 26 16:35:25 MDT 2015
-// Date        : Wed Oct 19 12:08:27 2016
+// Date        : Tue Dec  6 19:49:00 2016
 // Host        : mittlefrueh.andrew.cmu.edu running 64-bit Red Hat Enterprise Linux Server release 7.2 (Maipo)
 // Command     : write_verilog -force -mode funcsim
 //               /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/src/clk_wiz_0/clk_wiz_0_funcsim.v
@@ -51,10 +51,12 @@ module clk_wiz_0_clk_wiz_0_clk_wiz
   wire clk_main_clk_wiz_0;
   wire clk_out1;
   wire clk_out1_clk_wiz_0;
+  wire clk_out1_clk_wiz_0_en_clk;
   wire clkfbout_buf_clk_wiz_0;
   wire clkfbout_clk_wiz_0;
   wire locked;
   wire reset;
+  (* RTL_KEEP = "true" *) (* async_reg = "true" *) wire [7:0]seq_reg1;
   wire NLW_mmcm_adv_inst_CLKFBOUTB_UNCONNECTED;
   wire NLW_mmcm_adv_inst_CLKFBSTOPPED_UNCONNECTED;
   wire NLW_mmcm_adv_inst_CLKINSTOPPED_UNCONNECTED;
@@ -86,9 +88,26 @@ module clk_wiz_0_clk_wiz_0_clk_wiz
        (.I(clk_main),
         .O(clk_main_clk_wiz_0));
   (* BOX_TYPE = "PRIMITIVE" *) 
-  BUFG clkout1_buf
+  (* XILINX_LEGACY_PRIM = "BUFGCE" *) 
+  (* XILINX_TRANSFORM_PINMAP = "CE:CE0 I:I0" *) 
+  BUFGCTRL #(
+    .INIT_OUT(0),
+    .PRESELECT_I0("TRUE"),
+    .PRESELECT_I1("FALSE")) 
+    clkout1_buf
+       (.CE0(seq_reg1[7]),
+        .CE1(1'b0),
+        .I0(clk_out1_clk_wiz_0),
+        .I1(1'b1),
+        .IGNORE0(1'b0),
+        .IGNORE1(1'b1),
+        .O(clk_out1),
+        .S0(1'b1),
+        .S1(1'b0));
+  (* BOX_TYPE = "PRIMITIVE" *) 
+  BUFH clkout1_buf_en
        (.I(clk_out1_clk_wiz_0),
-        .O(clk_out1));
+        .O(clk_out1_clk_wiz_0_en_clk));
   (* BOX_TYPE = "PRIMITIVE" *) 
   MMCME2_ADV #(
     .BANDWIDTH("OPTIMIZED"),
@@ -173,6 +192,78 @@ module clk_wiz_0_clk_wiz_0_clk_wiz
         .PSINCDEC(1'b0),
         .PWRDWN(1'b0),
         .RST(reset));
+  (* ASYNC_REG *) 
+  FDRE #(
+    .INIT(1'b0)) 
+    \seq_reg1_reg[0] 
+       (.C(clk_out1_clk_wiz_0_en_clk),
+        .CE(1'b1),
+        .D(locked),
+        .Q(seq_reg1[0]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  FDRE #(
+    .INIT(1'b0)) 
+    \seq_reg1_reg[1] 
+       (.C(clk_out1_clk_wiz_0_en_clk),
+        .CE(1'b1),
+        .D(seq_reg1[0]),
+        .Q(seq_reg1[1]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  FDRE #(
+    .INIT(1'b0)) 
+    \seq_reg1_reg[2] 
+       (.C(clk_out1_clk_wiz_0_en_clk),
+        .CE(1'b1),
+        .D(seq_reg1[1]),
+        .Q(seq_reg1[2]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  FDRE #(
+    .INIT(1'b0)) 
+    \seq_reg1_reg[3] 
+       (.C(clk_out1_clk_wiz_0_en_clk),
+        .CE(1'b1),
+        .D(seq_reg1[2]),
+        .Q(seq_reg1[3]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  FDRE #(
+    .INIT(1'b0)) 
+    \seq_reg1_reg[4] 
+       (.C(clk_out1_clk_wiz_0_en_clk),
+        .CE(1'b1),
+        .D(seq_reg1[3]),
+        .Q(seq_reg1[4]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  FDRE #(
+    .INIT(1'b0)) 
+    \seq_reg1_reg[5] 
+       (.C(clk_out1_clk_wiz_0_en_clk),
+        .CE(1'b1),
+        .D(seq_reg1[4]),
+        .Q(seq_reg1[5]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  FDRE #(
+    .INIT(1'b0)) 
+    \seq_reg1_reg[6] 
+       (.C(clk_out1_clk_wiz_0_en_clk),
+        .CE(1'b1),
+        .D(seq_reg1[5]),
+        .Q(seq_reg1[6]),
+        .R(1'b0));
+  (* ASYNC_REG *) 
+  FDRE #(
+    .INIT(1'b0)) 
+    \seq_reg1_reg[7] 
+       (.C(clk_out1_clk_wiz_0_en_clk),
+        .CE(1'b1),
+        .D(seq_reg1[6]),
+        .Q(seq_reg1[7]),
+        .R(1'b0));
 endmodule
 `ifndef GLBL
 `define GLBL

@@ -18,6 +18,8 @@ module tb ();
   logic BUSACK_L;
   logic BUSREQ_L;
   logic HALT_L;
+  logic interrupt_mask;
+  logic [31:0]  curr_state;
 
   z80 DUT(.*);
   memory #(65535) m_DUT(.*);
@@ -74,7 +76,10 @@ module tb ();
 
     //perform 100 steps after hitting an address
     while(1) begin
-      if ({DUT.DP.RFILE.PCH_out, DUT.DP.RFILE.PCL_out} != 16'h0105) begin
+
+
+      //if ({DUT.DP.RFILE.PCH_out, DUT.DP.RFILE.PCL_out} != 16'h0105) begin
+      if (!(~WR_L && addr_bus == 16'hCF00)) begin
         @(posedge clk);
       end else begin
         for(i = 0; i < 1000; i++) begin

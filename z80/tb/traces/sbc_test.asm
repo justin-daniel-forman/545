@@ -58,8 +58,7 @@ section code
   sbc b         #00 - 00 - 1 = ff
   ld [bc], a    #[58] <= ff
  
-  ld bc, [$57] 
-
+  ld bc, [$57]
 
 section data
   addr0: data !ba98 !bb98 !0c00 !0c00 !3800 !7000
