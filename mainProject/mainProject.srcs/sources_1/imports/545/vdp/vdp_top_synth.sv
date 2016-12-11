@@ -136,7 +136,8 @@ module vdp_top (
     .rf_en,
     .VRAM_io_addr,
     .CRAM_io_addr,
-    .VRAM_go(VRAM_go_io)
+    .VRAM_go(VRAM_go_io),
+    .SW
   );
 
   /******* VGA Interface *******/

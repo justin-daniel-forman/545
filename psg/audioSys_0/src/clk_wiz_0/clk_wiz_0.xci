@@ -95,13 +95,13 @@
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.USE_MAX_I_JITTER">false</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.USE_MIN_O_JITTER">false</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.PRIM_SOURCE">Single_ended_clock_capable_pin</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.CLKOUT1_DRIVES">BUFG</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.CLKOUT2_DRIVES">BUFG</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.CLKOUT3_DRIVES">BUFG</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.CLKOUT4_DRIVES">BUFG</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.CLKOUT5_DRIVES">BUFG</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.CLKOUT6_DRIVES">BUFG</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.CLKOUT7_DRIVES">BUFG</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.CLKOUT1_DRIVES">BUFGCE</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.CLKOUT2_DRIVES">BUFGCE</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.CLKOUT3_DRIVES">BUFGCE</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.CLKOUT4_DRIVES">BUFGCE</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.CLKOUT5_DRIVES">BUFGCE</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.CLKOUT6_DRIVES">BUFGCE</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.CLKOUT7_DRIVES">BUFGCE</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.FEEDBACK_SOURCE">FDBK_AUTO</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.CLKFB_IN_SIGNALING">SINGLE</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.CLKFB_IN_PORT">clkfb_in</spirit:configurableElementValue>
@@ -204,7 +204,7 @@
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.PLL_CLKOUT5_DUTY_CYCLE">0.500</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.PLL_CLKOUT5_PHASE">0.000</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.RESET_TYPE">ACTIVE_HIGH</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.USE_SAFE_CLOCK_STARTUP">false</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.USE_SAFE_CLOCK_STARTUP">true</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.USE_CLOCK_SEQUENCING">false</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.CLKOUT1_SEQUENCE_NUMBER">1</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.CLKOUT2_SEQUENCE_NUMBER">1</spirit:configurableElementValue>
@@ -286,13 +286,13 @@
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_USE_STATUS">0</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_USE_FREEZE">0</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_NUM_OUT_CLKS">1</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_CLKOUT1_DRIVES">BUFG</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_CLKOUT2_DRIVES">BUFG</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_CLKOUT3_DRIVES">BUFG</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_CLKOUT4_DRIVES">BUFG</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_CLKOUT5_DRIVES">BUFG</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_CLKOUT6_DRIVES">BUFG</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_CLKOUT7_DRIVES">BUFG</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_CLKOUT1_DRIVES">BUFGCE</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_CLKOUT2_DRIVES">BUFGCE</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_CLKOUT3_DRIVES">BUFGCE</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_CLKOUT4_DRIVES">BUFGCE</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_CLKOUT5_DRIVES">BUFGCE</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_CLKOUT6_DRIVES">BUFGCE</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_CLKOUT7_DRIVES">BUFGCE</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_INCLK_SUM_ROW0">Input Clock   Freq (MHz)    Input Jitter (UI)</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_INCLK_SUM_ROW1">__primary_____________100____________0.010</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_INCLK_SUM_ROW2">no_secondary_input_clock </spirit:configurableElementValue>
@@ -347,7 +347,7 @@
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_CLKOUT5_DUTY_CYCLE">50.000</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_CLKOUT6_DUTY_CYCLE">50.000</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_CLKOUT7_DUTY_CYCLE">50.000</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_USE_SAFE_CLOCK_STARTUP">0</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_USE_SAFE_CLOCK_STARTUP">1</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_USE_CLOCK_SEQUENCING">0</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_CLKOUT1_SEQUENCE_NUMBER">1</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_CLKOUT2_SEQUENCE_NUMBER">1</spirit:configurableElementValue>
@@ -502,10 +502,19 @@
             <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.PRIM_IN_FREQ" xilinx:valueSource="user"/>
             <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.PRIMARY_PORT" xilinx:valueSource="user"/>
             <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.CLKOUT1_REQUESTED_OUT_FREQ" xilinx:valueSource="user"/>
+            <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.CLKOUT1_DRIVES" xilinx:valueSource="user"/>
+            <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.CLKOUT2_DRIVES" xilinx:valueSource="user"/>
+            <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.CLKOUT3_DRIVES" xilinx:valueSource="user"/>
+            <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.CLKOUT4_DRIVES" xilinx:valueSource="user"/>
+            <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.CLKOUT5_DRIVES" xilinx:valueSource="user"/>
+            <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.CLKOUT6_DRIVES" xilinx:valueSource="user"/>
+            <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.CLKOUT7_DRIVES" xilinx:valueSource="user"/>
+            <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.FEEDBACK_SOURCE" xilinx:valueSource="user"/>
             <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.MMCM_DIVCLK_DIVIDE" xilinx:valueSource="user"/>
             <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.MMCM_CLKFBOUT_MULT_F" xilinx:valueSource="user"/>
             <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.MMCM_CLKIN1_PERIOD" xilinx:valueSource="user"/>
             <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.MMCM_CLKOUT0_DIVIDE_F" xilinx:valueSource="user"/>
+            <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.USE_SAFE_CLOCK_STARTUP" xilinx:valueSource="user"/>
             <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.CLK_IN1_BOARD_INTERFACE" xilinx:valueSource="user"/>
             <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.CLKOUT1_JITTER" xilinx:valueSource="user"/>
             <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.CLKOUT1_PHASE_ERROR" xilinx:valueSource="user"/>

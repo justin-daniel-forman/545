@@ -43,7 +43,7 @@ module comInterface(
     logic [4:0] delay_count;
     logic [7:0] received_byte;
     
-    assign activated = (addr[7:0] == 8'h7f) && !MREQ_N && !WR_N;
+    assign activated = (addr[7:0] == 8'h7f) && !MREQ_N && !WR_N && !reset;
         
     regReceiver received_stored (.*);
     commandDecoder command_stored (.*);

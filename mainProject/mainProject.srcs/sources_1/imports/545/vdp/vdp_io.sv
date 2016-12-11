@@ -21,7 +21,8 @@ module vdp_io(
   output  logic [4:0] CRAM_io_addr,
   output  logic [7:0] rf_data_in,
   output  logic [3:0] rf_addr,
-  output  logic       VRAM_go
+  output  logic       VRAM_go,
+  input   logic [7:0] SW
 );
 
   logic [7:0] cmd_port_in_1, cmd_port_out_1, cmd_port_in_2, cmd_port_out_2;
@@ -68,7 +69,8 @@ module vdp_io(
     .CRAM_re(CRAM_io_re),
     .CRAM_we(CRAM_io_we),
     .VRAM_go(VRAM_go),
-    .screenBusy
+    .screenBusy,
+    .SW
   );
 
   /******** Data Bus Interfacing ********/ 
@@ -124,7 +126,8 @@ module vdp_io_fsm(
   output logic       wr_addr_sel, wr_addr_en,
   output logic       data_in_sel, VRAM_re, VRAM_we, 
   output logic       CRAM_re, CRAM_we,
-  output logic       VRAM_go
+  output logic       VRAM_go,
+  input  logic [7:0] SW
 );
 
   enum logic [4:0] {Load_addr_1,
@@ -146,13 +149,29 @@ module vdp_io_fsm(
                     CRAM_write_data
                    } cs, ns;
 
+  logic [9:0] expire_count;
+  logic       expire_en, expire_clr, expire_cancel;
+
+  counter #(10) EXPIRE_COUNT(
+    .clk, .rst_L,
+    .clear(expire_clr),
+    .en(expire_en && SW[5]),
+    .count(expire_count)
+  );
+  
+  assign expire_clr = (expire_count == 10'h3FF) || expire_cancel;
+
   // NS logic
   always_comb begin
     ns = Load_addr_1;
     case(cs) 
       Load_addr_1: ns = (go) ? Load_addr_1_wait : Load_addr_1;
       Load_addr_1_wait: ns = (~go) ? Load_addr_2 : Load_addr_1_wait;
-      Load_addr_2: ns = (go) ? Load_addr_2_wait : Load_addr_2;
+      Load_addr_2: begin
+        ns = /*(expire_count == 10'h3FF) ? 
+              Load_addr_1 : */
+              (go) ? Load_addr_2_wait : Load_addr_2;
+      end
       Load_addr_2_wait: ns = (~go) ? Decode : Load_addr_2_wait;
       Decode:
         case (op) 
@@ -202,6 +221,8 @@ module vdp_io_fsm(
     CRAM_re = 0;
     CRAM_we = 0;
     VRAM_go = 0;
+    expire_en = 0;
+    expire_cancel = 0;
     case(cs) 
       Load_addr_1: begin
         wr_cmd_1 = 1;
@@ -209,8 +230,11 @@ module vdp_io_fsm(
       Load_addr_1_wait: begin end
       Load_addr_2: begin
         wr_cmd_2 = 1;
+        expire_en = 1;
       end
-      Load_addr_2_wait: begin end
+      Load_addr_2_wait: begin
+        expire_cancel = 1;
+      end
       Decode: begin end
       VRAM_read_addr: begin
         wr_addr_sel = 1;
@@ -270,6 +294,8 @@ module vdp_io_fsm(
         CRAM_re = 0;
         CRAM_we = 0;
         VRAM_go = 0;
+        expire_en = 0;
+        expire_cancel = 0;
       end
     endcase
   end
