@@ -1,0 +1,1844 @@
+/*
+
+Vivado v2015.2 (64-bit)
+SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+Process ID: 436
+
+Current time: 	11/16/16 4:44:18 PM EST
+Time zone: 	Eastern Standard Time (America/New_York)
+
+OS: Red Hat Enterprise Linux Server release 7.2 (Maipo)
+Version: 3.10.0-327.36.3.el7.x86_64
+Architecture: amd64
+Available processors (cores): 8
+
+DISPLAY: :0
+Screen size: 1600x1200
+Screen resolution (DPI): 96
+Available screens: 1
+Default font: family=Dialog,name=Dialog,style=plain,size=12
+
+Java version: 	1.8.0_25 64-bit
+Java home: 	/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/tps/lnx64/jre
+
+User name: 	suyashb
+User directory: /afs/ece.cmu.edu/usr/suyashb/Private/545/z80_IP_Project/z80_IP_Project.srcs/sources_1
+User country: 	US
+User language: 	en
+User locale: 	en_US
+
+Vivado preferences path: /afs/ece.cmu.edu/usr/suyashb/.Xilinx/Vivado/2015.2/vivado.ini
+Vivado layouts directory: /afs/ece.cmu.edu/usr/suyashb/.Xilinx/Vivado/2015.2/layouts/application
+
+GUI allocated memory:	140 MB
+GUI max memory:		3,052 MB
+Engine allocated memory: 4,842 MB
+
+*/
+
+// TclEventType: START_GUI
+// Tcl Message: start_gui 
+// [GUI Memory]: 37 MB (+36543kb) [00:00:05]
+// [Engine Memory]: 4,842 MB (+4925561kb) [00:00:05]
+// HMemoryUtils.trashcanNow. Engine heap size: 4,852 MB. GUI used memory: 21 MB. Current time: 11/16/16 4:44:20 PM EST
+selectList(PAResourceEtoH.GettingStartedView_RECENT_PROJECTS, "/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.xpr", 0); // t:v (JViewport:JComponent, cl:JFrame)
+// Opening Vivado Project: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.xpr. Version: Vivado v2015.2 
+// cp:P (cl:JFrame):  Open Project : addNotify
+// TclEventType: DEBUG_PROBE_SET_CHANGE
+// Tcl Message: open_project /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.xpr 
+// TclEventType: MSGMGR_MOVEMSG
+// TclEventType: FILESET_TARGET_UCF_CHANGE
+// TclEventType: FILE_SET_NEW
+// TclEventType: RUN_COMPLETED
+// TclEventType: FILESET_TARGET_UCF_CHANGE
+// TclEventType: RUN_COMPLETED
+// TclEventType: FILESET_TARGET_UCF_CHANGE
+// TclEventType: RUN_CURRENT
+// [GUI Memory]: 42 MB (+2769kb) [00:00:20]
+// HMemoryUtils.trashcanNow. Engine heap size: 4,881 MB. GUI used memory: 21 MB. Current time: 11/16/16 4:44:35 PM EST
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: PROJECT_NEW
+// [GUI Memory]: 46 MB (+1846kb) [00:00:27]
+// [GUI Memory]: 92 MB (+46221kb) [00:00:29]
+// [GUI Memory]: 98 MB (+1875kb) [00:00:29]
+// [GUI Memory]: 103 MB (+26kb) [00:00:29]
+// TclEventType: FILE_SET_OPTIONS_CHANGE
+// Tcl Message: open_project /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.xpr 
+// Tcl Message: Scanning sources... Finished scanning sources 
+// Tcl Message: INFO: [IP_Flow 19-234] Refreshing IP repositories INFO: [IP_Flow 19-1700] Loaded user IP repository '/afs/ece.cmu.edu/usr/suyashb/Private/545'. 
+// Tcl Message: INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/data/ip'. 
+// TclEventType: FILE_SET_OPTIONS_CHANGE
+// [GUI Memory]: 113 MB (+4150kb) [00:00:33]
+// TclEventType: FILE_SET_OPTIONS_CHANGE
+// TclEventType: FILE_SET_CHANGE
+// Project name: mainProject; location: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject; part: xc7z020clg484-1
+// Tcl Message: open_project: Time (s): cpu = 00:00:25 ; elapsed = 00:00:15 . Memory (MB): peak = 6009.055 ; gain = 157.582 ; free physical = 2348 ; free virtual = 16792 
+// Elapsed time: 15 seconds
+dismissDialog("Open Project"); // cp:P (cl:JFrame)
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: FILE_SET_CHANGE
+// a:a (cl:JFrame): Critical Messages: addNotify
+// [GUI Memory]: 120 MB (+1830kb) [00:00:41]
+// Elapsed time: 16 seconds
+selectButton(PAResourceAtoD.CmdMsgDialog_OK, "OK"); // i:a (JPanel:JComponent, a:a)
+dismissDialog("Critical Messages"); // a:a (cl:JFrame)
+selectTab((HResource) null, (HResource) null, "Messages", 1); // FrameContainer:JideTabbedPane (ContainerContainer:JideSplitPane, cl:JFrame)
+selectCheckBox(PAResourceItoN.MsgView_INFORMATION_MESSAGES, (String) null, false); // h:JCheckBox (JPanel:JComponent, cl:JFrame): FALSE
+// [Engine Memory]: 5,088 MB (+4178kb) [00:00:59]
+selectCheckBox(PAResourceItoN.MsgView_WARNING_MESSAGES, (String) null, false); // h:JCheckBox (JPanel:JComponent, cl:JFrame): FALSE
+// [GUI Memory]: 128 MB (+2176kb) [00:00:59]
+collapseTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Vivado Commands, open_project /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.xpr. ]", 1); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, synth_1, [IP_Flow 19-1663] Duplicate IP found for 'user.org:user:z80:1.0'. The one found in IP location '/afs/ece.cmu.edu/usr/suyashb/Private/545/z80_IP_Project/z80_IP_Project.srcs/sources_1/imports' will take precedence over the same IP in locations: .    /afs/ece.cmu.edu/usr/suyashb/Private/545/z80_IP_Block.    /afs/ece.cmu.edu/usr/suyashb/Private/545/imports. ]", 4, false); // ae:k (JViewport:JComponent, cl:JFrame)
+// HMemoryUtils.trashcanNow. Engine heap size: 5,107 MB. GUI used memory: 58 MB. Current time: 11/16/16 4:45:15 PM EST
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, synth_1, [IP_Flow 19-1663] Duplicate IP found for 'user.org:user:z80:1.0'. The one found in IP location '/afs/ece.cmu.edu/usr/suyashb/Private/545/z80_IP_Project/z80_IP_Project.srcs/sources_1/imports' will take precedence over the same IP in locations: .    /afs/ece.cmu.edu/usr/suyashb/Private/545/z80_IP_Block.    /afs/ece.cmu.edu/usr/suyashb/Private/545/imports. ]", 4, false, false, false, false, true, false); // ae:k (JViewport:JComponent, cl:JFrame) - Popup Trigger
+// TclEventType: MSGMGR_REFRESH_MSG
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 3, true, false, false, false, true, false); // ae:k (JViewport:JComponent, cl:JFrame) - Popup Trigger - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 3, true, false, false, false, true, false); // ae:k (JViewport:JComponent, cl:JFrame) - Popup Trigger - Node
+selectMenu(PAResourceItoN.MsgTreePanel_MESSAGE_SEVERITY, "Message Severity"); // X:JMenu (M:JPopupMenu, Popup:JWindow)
+selectMenuItem(PAResourceItoN.MsgTreePanel_DISCARD_OLD_MESSAGES, "Discard Old Messages"); // ab:JMenuItem (M:JPopupMenu, Popup:JWindow)
+collapseTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs]", 1); // ae:k (JViewport:JComponent, cl:JFrame)
+collapseTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Implementation, Design Initialization]", 3); // ae:k (JViewport:JComponent, cl:JFrame)
+collapseTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Implementation]", 2); // ae:k (JViewport:JComponent, cl:JFrame)
+expandTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs]", 1); // ae:k (JViewport:JComponent, cl:JFrame)
+expandTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Implementation]", 4); // ae:k (JViewport:JComponent, cl:JFrame)
+expandTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Implementation, Design Initialization]", 5); // ae:k (JViewport:JComponent, cl:JFrame)
+collapseTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Implementation]", 4); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 3, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. , [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 4, false, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 3, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs]", 1, true, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 3, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. , [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 4, false, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 3, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs]", 1, true, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click - Node
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv)]", 2); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, false); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, false, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click
+// Run Command: PAResourceCommand.PACommandNames_RECUSTOMIZE_CORE
+// TclEventType: LOAD_FEATURE
+// T:cp (cl:JFrame):  Re-customize IP : addNotify
+// t:P (cl:JFrame): Re-customize IP: addNotify
+dismissDialog("Re-customize IP"); // T:cp (cl:JFrame)
+selectButton(RDIResource.BaseDialog_OK, "OK"); // a:JButton (JPanel:JComponent, t:P)
+dismissDialog("Re-customize IP"); // t:P (cl:JFrame)
+collapseTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs]", 1); // ae:k (JViewport:JComponent, cl:JFrame)
+collapseTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis]", 0); // ae:k (JViewport:JComponent, cl:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), blkMem - mem_interface (mem_interface.sv)]", 5); // A:k (H:JPanel, cl:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv)]", 4); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci)]", 5, false); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci)]", 5, false, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click
+// Run Command: PAResourceCommand.PACommandNames_RECUSTOMIZE_CORE
+// t:P (cl:JFrame): Re-customize IP: addNotify
+selectButton(PAResourceAtoD.CustomizeCoreDialog_IP_LOCATION, "IP Location"); // w:JideButton (CommandBar:DockableBar, t:P)
+// IP Location: show
+selectButton(RDIResource.HPopupTitle_CLOSE, (String) null); // l:JideButton (JPanel:JComponent, ResizableWindow:JWindow)
+// IP Location: hide
+selectButton(RDIResource.BaseDialog_CANCEL, "Cancel"); // a:JButton (JPanel:JComponent, t:P)
+dismissDialog("Re-customize IP"); // t:P (cl:JFrame)
+expandTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis]", 0); // ae:k (JViewport:JComponent, cl:JFrame)
+collapseTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs]", 1); // ae:k (JViewport:JComponent, cl:JFrame)
+expandTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Implementation]", 2); // ae:k (JViewport:JComponent, cl:JFrame)
+expandTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Implementation, Design Initialization, [Vivado 12-1387] No valid object(s) found for create_clock constraint with option '-objects [get_ports clk_in1]'. [/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xdc:55]. ]", 4); // ae:k (JViewport:JComponent, cl:JFrame)
+collapseTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Implementation, Design Initialization]", 3); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTab((HResource) null, (HResource) null, "Design Runs", 4); // FrameContainer:JideTabbedPane (ContainerContainer:JideSplitPane, cl:JFrame)
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug, Generate Bitstream]", 25, false); // w:Y (v:H, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_RUN_BITGEN
+// cp:P (cl:JFrame):  Resetting Runs : addNotify
+// TclEventType: RUN_MODIFY
+// TclEventType: RUN_RESET
+// TclEventType: RUN_MODIFY
+// Tcl Message: reset_run synth_1 
+dismissDialog("Resetting Runs"); // cp:P (cl:JFrame)
+// TclEventType: FILESET_TARGET_UCF_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: FILESET_TARGET_UCF_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: RUN_MODIFY
+// cp:P (cl:JFrame):  Generate Bitstream : addNotify
+// Tcl Message: launch_runs impl_1 -to_step write_bitstream -jobs 4 
+// Tcl Message: [Wed Nov 16 16:46:25 2016] Launched synth_1... Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/synth_1/runme.log [Wed Nov 16 16:46:25 2016] Launched impl_1... Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/runme.log 
+dismissDialog("Generate Bitstream"); // cp:P (cl:JFrame)
+// HMemoryUtils.trashcanNow. Engine heap size: 5,135 MB. GUI used memory: 54 MB. Current time: 11/16/16 4:46:25 PM EST
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_STEP_COMPLETED
+// ak:a (cl:JFrame): Launch Run Critical Messages: addNotify
+// Elapsed time: 208 seconds
+selectButton(PAResourceAtoD.CmdMsgDialog_OK, "OK"); // i:a (JPanel:JComponent, ak:a)
+dismissDialog("Launch Run Critical Messages"); // ak:a (cl:JFrame)
+// TclEventType: RUN_COMPLETED
+// Elapsed time: 193 seconds
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci)]", 5); // A:k (H:JPanel, cl:JFrame)
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci), audioSys_0 (audioSys_0.v)]", 6, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci), audioSys_0 (audioSys_0.v)]", 6, true, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click - Node
+selectCodeEditor("audioSys_0.v", 8, 316); // H:bj (JPanel:JComponent, cl:JFrame)
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug, Open Hardware Manager]", 26, true); // w:Y (v:H, cl:JFrame) - Node
+// Run Command: PAResourceCommand.PACommandNames_OPEN_HARDWARE_MANAGER
+// TclEventType: LOAD_FEATURE
+// TclEventType: HW_SESSION_OPEN
+// Tcl Message: open_hw 
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Project Manager]", 0, true); // w:Y (v:H, cl:JFrame) - Node
+// Run Command: PAResourceCommand.PACommandNames_GOTO_PROJECT_MANAGER
+// Elapsed time: 10 seconds
+collapseTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv)]", 2); // A:k (H:JPanel, cl:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv)]", 2); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv)]", 2, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv)]", 2, true, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click - Node
+selectCodeEditor("project_top.sv", 227, 296); // bj:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("project_top.sv", 404, 165); // bj:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("project_top.sv", 470, 141); // bj:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("project_top.sv", 217, 142); // bj:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("project_top.sv", 217, 142, false, false, false, false, true); // bj:J (JPanel:JComponent, cl:JFrame) - Double Click
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// Elapsed time: 28 seconds
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv)]", 2); // A:k (H:JPanel, cl:JFrame)
+collapseTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv)]", 2); // A:k (H:JPanel, cl:JFrame)
+selectCodeEditor("project_top.sv", 524, 544); // bj:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("project_top.sv", 524, 544, false, false, false, false, true); // bj:J (JPanel:JComponent, cl:JFrame) - Double Click
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug, Generate Bitstream]", 25, false); // w:Y (v:H, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_RUN_BITGEN
+// cp:P (cl:JFrame):  Resetting Runs : addNotify
+// TclEventType: RUN_MODIFY
+// TclEventType: RUN_RESET
+// TclEventType: RUN_MODIFY
+// Tcl Message: reset_run synth_1 
+dismissDialog("Resetting Runs"); // cp:P (cl:JFrame)
+// TclEventType: FILESET_TARGET_UCF_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: FILESET_TARGET_UCF_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: RUN_MODIFY
+// cp:P (cl:JFrame):  Generate Bitstream : addNotify
+// Tcl Message: launch_runs impl_1 -to_step write_bitstream -jobs 4 
+// Tcl Message: [Wed Nov 16 16:54:39 2016] Launched synth_1... Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/synth_1/runme.log [Wed Nov 16 16:54:39 2016] Launched impl_1... Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/runme.log 
+dismissDialog("Generate Bitstream"); // cp:P (cl:JFrame)
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_STEP_COMPLETED
+// ak:a (cl:JFrame): Launch Run Critical Messages: addNotify
+// Elapsed time: 207 seconds
+selectButton(PAResourceAtoD.CmdMsgDialog_OK, "OK"); // i:a (JPanel:JComponent, ak:a)
+dismissDialog("Launch Run Critical Messages"); // ak:a (cl:JFrame)
+// TclEventType: RUN_COMPLETED
+// Elapsed time: 219 seconds
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug, Generate Bitstream]", 25, false); // w:Y (v:H, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_RUN_BITGEN
+// TclEventType: RUN_MODIFY
+// TclEventType: RUN_RESET
+// TclEventType: RUN_MODIFY
+// Tcl Message: reset_run impl_1 -prev_step  
+// TclEventType: RUN_LAUNCH
+// TclEventType: RUN_MODIFY
+// cp:P (cl:JFrame):  Generate Bitstream : addNotify
+// Tcl Message: launch_runs impl_1 -to_step write_bitstream -jobs 4 
+// Tcl Message: [Wed Nov 16 17:01:47 2016] Launched impl_1... Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/runme.log 
+dismissDialog("Generate Bitstream"); // cp:P (cl:JFrame)
+selectButton(PAResourceQtoS.StateMonitor_CANCEL, "Cancel"); // a:JButton (r:JPanel, cl:JFrame)
+// cp:P (cl:JFrame):  Reset to Previous Step : addNotify
+// TclEventType: RUN_MODIFY
+// TclEventType: RUN_RESET
+// Tcl Message: reset_run impl_1 -prev_step  
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_RESET
+// TclEventType: RUN_MODIFY
+dismissDialog("Reset to Previous Step"); // cp:P (cl:JFrame)
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug, Generate Bitstream]", 25, false); // w:Y (v:H, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_RUN_BITGEN
+// TclEventType: RUN_LAUNCH
+// TclEventType: RUN_MODIFY
+// Tcl Message: launch_runs impl_1 -to_step write_bitstream -jobs 4 
+// Tcl Message: [Wed Nov 16 17:02:04 2016] Launched impl_1... Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/runme.log 
+// TclEventType: RUN_FAILED
+// PAPropertyPanels.initPanels (impl_1) elapsed time: 0.2s
+// Elapsed time: 15 seconds
+selectTreeTable(PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE, "impl_1 ; constrs_1 ; write_bitstream ERROR ; 80 ;  ;  ;  ;  ;  ; 0 ;  ;  ;  ;  ;  ;  ;  ;  ; Wed Nov 16 16:57:28 EST 2016 ; 00:03:22 ; Vivado Implementation Defaults (Vivado Implementation 2015) ; xc7z020clg484-1 ; mittlefrueh.andrew.cmu.edu ; Vivado Implementation Defaults", 1, "impl_1", 0, false); // W:av (JViewport:JComponent, cl:JFrame)
+// Elapsed time: 11 seconds
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug, Generate Bitstream]", 25, false); // w:Y (v:H, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_RUN_BITGEN
+// TclEventType: RUN_MODIFY
+// TclEventType: RUN_RESET
+// TclEventType: RUN_MODIFY
+// Tcl Message: reset_run impl_1 -prev_step  
+// cp:P (cl:JFrame):  Generate Bitstream : addNotify
+// TclEventType: RUN_LAUNCH
+// TclEventType: RUN_MODIFY
+// Tcl Message: launch_runs impl_1 -to_step write_bitstream -jobs 4 
+// Tcl Message: [Wed Nov 16 17:02:31 2016] Launched impl_1... Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/runme.log 
+dismissDialog("Generate Bitstream"); // cp:P (cl:JFrame)
+// HMemoryUtils.trashcanNow. Engine heap size: 5,162 MB. GUI used memory: 66 MB. Current time: 11/16/16 5:02:46 PM EST
+// TclEventType: RUN_COMPLETED
+// Elapsed time: 58 seconds
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug, Hardware Manager, Open Target]", 27, false); // w:Y (v:H, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_OPEN_HW_TARGET
+selectMenuItem((HResource) null, "localhost:3121,xilinx_tcf/Xilinx/00001024278301,PARAM.FREQUENCY:6000000"); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// cp:P (cl:JFrame):  Open Hardware Target : addNotify
+// TclEventType: HW_SERVER_UPDATE
+// Tcl Message: connect_hw_server -url localhost:3121 
+// Tcl Message: INFO: [Labtools 27-2285] Connecting to hw_server url TCP:localhost:3121 INFO: [Labtools 27-2222] Launching hw_server... INFO: [Labtools 27-2221] Launch Output:  ****** Xilinx hw_server v2015.2   **** Build date : Jun 26 2015-16:42:45     ** Copyright 1986-1999, 2001-2015 Xilinx, Inc. All Rights Reserved.   
+// Tcl Message: current_hw_target [get_hw_targets */xilinx_tcf/Xilinx/00001024278301] 
+// TclEventType: HW_TARGET_CHANGE
+// Tcl Message: set_property PARAM.FREQUENCY 6000000 [get_hw_targets */xilinx_tcf/Xilinx/00001024278301] 
+// TclEventType: HW_TARGET_CHANGE
+// TclEventType: HW_DEVICE_CHANGE
+// TclEventType: HW_SYSMON_ADD
+// TclEventType: HW_TARGET_UPDATE
+// Tcl Message: open_hw_target 
+// Tcl Message: INFO: [Labtoolstcl 44-466] Opening hw_target localhost:3121/xilinx_tcf/Xilinx/00001024278301 
+// TclEventType: HW_DEVICE_CHANGE
+// Tcl Message: set_property PROGRAM.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/project_top.bit} [lindex [get_hw_devices] 1] 
+// TclEventType: HW_DEVICE_CHANGE
+// Tcl Message: set_property PROBES.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/debug_nets.ltx} [lindex [get_hw_devices] 1] 
+// Tcl Message: current_hw_device [lindex [get_hw_devices] 1] 
+// TclEventType: HW_DEVICE_CHANGE
+// TclEventType: HW_SYSMON_CHANGE
+// TclEventType: HW_ILA_CHANGE
+// TclEventType: HW_DEVICE_UPDATE
+// TclEventType: HW_ILA_CHANGE
+// TclEventType: HW_DEVICE_CHANGE
+// Tcl Message: refresh_hw_device [lindex [get_hw_devices] 1] 
+// Tcl Message: INFO: [Labtools 27-2302] Device xc7z020 (JTAG device index = 1) is programmed with a design that has 1 ILA core(s). 
+// TclEventType: HW_DEVICE_CHANGE
+// TclEventType: HW_DEVICE_PROBES_CHANGE
+// TclEventType: DEBUG_PROBE_SET_CHANGE
+// TclEventType: DEBUG_PROBE_CHANGE
+// TclEventType: HW_DEVICE_PROBES_CHANGE
+// TclEventType: HW_ILA_CHANGE
+// TclEventType: WAVEFORM_UPDATE_TITLE
+// TclEventType: WAVEFORM_OPEN_WCFG
+// Tcl Message: display_hw_ila_data [ get_hw_ila_data hw_ila_data_1] 
+dismissDialog("Open Hardware Target"); // cp:P (cl:JFrame)
+// HMemoryUtils.trashcanNow. Engine heap size: 5,198 MB. GUI used memory: 75 MB. Current time: 11/16/16 5:03:35 PM EST
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug, Hardware Manager, Program Device]", 28, false); // w:Y (v:H, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_PROGRAM_FPGA
+selectMenuItem((HResource) null, "xc7z020_1"); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_OPEN_HARDWARE_MANAGER
+// Run Command: PAResourceCommand.PACommandNames_PROGRAM_FPGA
+// aC:ag (cl:JFrame): Program Device: addNotify
+selectButton(PAResourceOtoP.ProgramFpgaDialog_PROGRAM, "Program"); // a:JButton (JPanel:JComponent, aC:ag)
+// cp:P (cl:JFrame):  Program Device : addNotify
+dismissDialog("Program Device"); // aC:ag (cl:JFrame)
+// TclEventType: HW_DEVICE_CHANGE
+// Tcl Message: set_property PROBES.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/debug_nets.ltx} [lindex [get_hw_devices] 1] 
+// TclEventType: HW_DEVICE_CHANGE
+// Tcl Message: set_property PROGRAM.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/project_top.bit} [lindex [get_hw_devices] 1] 
+// TclEventType: HW_DEVICE_UPDATE
+// Tcl Message: program_hw_devices [lindex [get_hw_devices] 1] 
+// TclEventType: HW_DEVICE_CHANGE
+// Tcl Message: INFO: [Labtools 27-3164] End of startup status: HIGH 
+// Tcl Message: program_hw_devices: Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 6148.352 ; gain = 0.000 ; free physical = 2495 ; free virtual = 16710 
+// TclEventType: HW_DEVICE_CHANGE
+// TclEventType: HW_SYSMON_CHANGE
+// TclEventType: HW_ILA_CHANGE
+// TclEventType: HW_DEVICE_UPDATE
+// TclEventType: HW_DEVICE_CHANGE
+// TclEventType: HW_ILA_CHANGE
+// TclEventType: HW_DEVICE_CHANGE
+// TclEventType: HW_DEVICE_PROBES_CHANGE
+// TclEventType: HW_ILA_CHANGE
+// TclEventType: HW_DEVICE_PROBES_CHANGE
+// TclEventType: HW_ILA_CHANGE
+// Tcl Message: refresh_hw_device [lindex [get_hw_devices] 1] 
+// Tcl Message: INFO: [Labtools 27-2302] Device xc7z020 (JTAG device index = 1) is programmed with a design that has 1 ILA core(s). 
+// 'x' command handler elapsed time: 10 seconds
+dismissDialog("Program Device"); // cp:P (cl:JFrame)
+selectTab("PlanAheadTabBaseWorkspace_JideTabbedPane", (HResource) null, "hw_ila_1", 1); // TdiGroup:JideTabbedPane (CodeEditorDocumentPane:DocumentPane, cl:JFrame)
+selectComboBox(PAResourceAtoD.CompareValuePanel_SCALAR_VALUES, "X (don't care)", 2); // f:JComboBox (JPanel:JComponent, ResizableWindow:JWindow)
+// TclEventType: DEBUG_PROBE_CHANGE
+// Tcl Message: set_property TRIGGER_COMPARE_VALUE eq1'bX [get_hw_probes MREQ_L -of_objects [get_hw_ilas hw_ila_1]] 
+selectComboBox(PAResourceAtoD.CompareValuePanel_OPERATOR, "==  (equal)", 0); // n:f (JPanel:JComponent, ResizableWindow:JWindow)
+setText("Value:", "XXXX", true); // o:F (JPanel:JComponent, ResizableWindow:JWindow)
+// TclEventType: DEBUG_PROBE_CHANGE
+// Tcl Message: set_property TRIGGER_COMPARE_VALUE eq16'hXXXX [get_hw_probes addr_bus -of_objects [get_hw_ilas hw_ila_1]] 
+selectComboBox(PAResourceAtoD.CompareValuePanel_SCALAR_VALUES, "R (0-to-1 transition)", 3); // f:JComboBox (JPanel:JComponent, ResizableWindow:JWindow)
+// TclEventType: DEBUG_PROBE_CHANGE
+// Tcl Message: set_property TRIGGER_COMPARE_VALUE eq1'bR [get_hw_probes clk_4 -of_objects [get_hw_ilas hw_ila_1]] 
+selectButton(PAResourceTtoZ.TriggerStatusPanel_RUN_TRIGGER_FOR_THIS_ILA_CORE, "ILA_run_trigger"); // w:JideButton (CommandBar:DockableBar, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_RUN_TRIGGER
+// Tcl Message: run_hw_ila hw_ila_1 
+// Tcl Message: INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2016-Nov-16 17:04:19 
+// TclEventType: HW_ILA_CHANGE
+// Tcl Message: wait_on_hw_ila hw_ila_1 
+// Tcl Message: display_hw_ila_data [upload_hw_ila_data hw_ila_1] 
+// Tcl Message: INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2016-Nov-16 17:04:19 
+// TclEventType: HW_ILA_CHANGE
+selectButton(PAResourceTtoZ.TriggerStatusPanel_STOP_TRIGGER_FOR_THIS_ILA_CORE, "ILA_stop_trigger"); // w:JideButton (CommandBar:DockableBar, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_STOP_TRIGGER
+// HOptionPane Warning: 'There are no armed ILAs. (Stop Trigger)'
+selectButton("PAResourceQtoS.StopTrigger_THERE_NO_ARMED_ILAS_OK", "OK"); // JButton:AbstractButton (JPanel:JComponent, T:JDialog)
+selectButton(PAResourceTtoZ.TriggerStatusPanel_RUN_TRIGGER_FOR_THIS_ILA_CORE, "ILA_run_trigger"); // w:JideButton (CommandBar:DockableBar, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_RUN_TRIGGER
+// Tcl Message: run_hw_ila hw_ila_1 
+// Tcl Message: INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2016-Nov-16 17:04:31 
+// TclEventType: HW_ILA_CHANGE
+// Tcl Message: wait_on_hw_ila hw_ila_1 
+// Tcl Message: display_hw_ila_data [upload_hw_ila_data hw_ila_1] 
+// Tcl Message: INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2016-Nov-16 17:04:31 
+// TclEventType: HW_ILA_CHANGE
+// Elapsed time: 28 seconds
+maximizeFrame(RDIResource.WorkspaceDockingHolder_DOCKABLE_FRAME, "Status - hw_ila_1"); // Z:ap (FrameContainer:JideTabbedPane, cl:JFrame)
+unMaximizeFrame(RDIResource.WorkspaceDockingHolder_DOCKABLE_FRAME, "Status - hw_ila_1"); // Z:ap (FrameContainer:JideTabbedPane, cl:JFrame)
+minimizeFrame(RDIResource.WorkspaceDockingHolder_DOCKABLE_FRAME, "Waveform - hw_ila_1"); // Z:ap (FrameContainer:JideTabbedPane, cl:JFrame)
+selectMenu(PAResourceItoN.MainMenuMgr_WINDOW, "Window"); // R:JideMenu (CommandMenuBar:CommandBar, cl:JFrame)
+selectMenuItem(PAResourceCommand.PACommandNames_PROBES_WINDOW, "Debug Probes"); // ab:JMenuItem (JPopupMenu:JComponent, cl:JFrame)
+dismissMenu(PAResourceItoN.MainMenuMgr_WINDOW, "Window"); // R:JideMenu (CommandMenuBar:CommandBar, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_PROBES_WINDOW
+closeFrame(PAResourceOtoP.PAViews_DEBUG_PROBES, "Debug Probes"); // ap:DockableFrame (FrameContainer:JideTabbedPane, cl:JFrame)
+selectMenu(PAResourceItoN.MainMenuMgr_WINDOW, "Window"); // R:JideMenu (CommandMenuBar:CommandBar, cl:JFrame)
+selectMenuItem(PAResourceCommand.PACommandNames_HARDWARE_WINDOW, "Hardware"); // ab:JMenuItem (JPopupMenu:JComponent, cl:JFrame)
+dismissMenu(PAResourceItoN.MainMenuMgr_WINDOW, "Window"); // R:JideMenu (CommandMenuBar:CommandBar, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_HARDWARE_WINDOW
+selectTab("PlanAheadTabBaseWorkspace_JideTabbedPane", (HResource) null, "audioSys_0.v", 0); // TdiGroup:JideTabbedPane (CodeEditorDocumentPane:DocumentPane, cl:JFrame)
+selectTab("PlanAheadTabBaseWorkspace_JideTabbedPane", (HResource) null, "hw_ila_1", 1); // TdiGroup:JideTabbedPane (CodeEditorDocumentPane:DocumentPane, cl:JFrame)
+closeView(PAResourceOtoP.PAViews_DASHBOARD, "hw_ila_1"); // i:aK
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Project Manager]", 0, true); // w:Y (v:H, cl:JFrame) - Node
+// Run Command: PAResourceCommand.PACommandNames_GOTO_PROJECT_MANAGER
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug]", 23, true); // w:Y (v:H, cl:JFrame) - Node
+// Run Command: PAResourceCommand.PACommandNames_GOTO_PROGRAM_DEBUG
+selectButton(PAResourceCommand.PACommandNames_RUN_BITGEN, "run_bitstream"); // w:JideButton (CommandBar:DockableBar, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_RUN_BITGEN
+// TclEventType: RUN_MODIFY
+// TclEventType: RUN_RESET
+// TclEventType: RUN_MODIFY
+// Tcl Message: reset_run impl_1 -prev_step  
+// cp:P (cl:JFrame):  Generate Bitstream : addNotify
+// TclEventType: RUN_LAUNCH
+// TclEventType: RUN_MODIFY
+// Tcl Message: launch_runs impl_1 -to_step write_bitstream -jobs 4 
+// Tcl Message: [Wed Nov 16 17:05:34 2016] Launched impl_1... Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/runme.log 
+dismissDialog("Generate Bitstream"); // cp:P (cl:JFrame)
+selectMenu(PAResourceItoN.MainMenuMgr_WINDOW, "Window"); // R:JideMenu (CommandMenuBar:CommandBar, cl:JFrame)
+dismissMenu(PAResourceItoN.MainMenuMgr_WINDOW, "Window"); // R:JideMenu (CommandMenuBar:CommandBar, cl:JFrame)
+selectMenu(PAResourceItoN.MainMenuMgr_VIEW, "View"); // R:JideMenu (CommandMenuBar:CommandBar, cl:JFrame)
+dismissMenu(PAResourceItoN.MainMenuMgr_VIEW, "View"); // R:JideMenu (CommandMenuBar:CommandBar, cl:JFrame)
+selectMenu(RDIResource.MainWinMenuMgr_LAYOUT, "Layout"); // R:JideMenu (CommandMenuBar:CommandBar, cl:JFrame)
+dismissMenu(RDIResource.MainWinMenuMgr_LAYOUT, "Layout"); // R:JideMenu (CommandMenuBar:CommandBar, cl:JFrame)
+selectMenu(PAResourceItoN.MainMenuMgr_WINDOW, "Window"); // R:JideMenu (CommandMenuBar:CommandBar, cl:JFrame)
+selectMenuItem(PAResourceCommand.PACommandNames_PROBES_WINDOW, "Debug Probes"); // ab:JMenuItem (JPopupMenu:JComponent, cl:JFrame)
+dismissMenu(PAResourceItoN.MainMenuMgr_WINDOW, "Window"); // R:JideMenu (CommandMenuBar:CommandBar, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_PROBES_WINDOW
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, CRAM_VGA_data_out[7:0]]", 10, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, CRAM_VGA_data_out[7:0]]", 10, false, false, false, false, true, false); // w:k (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenu(PAResourceCommand.PACommandNames_CREATE_HARDWARE_DASHBOARDS, "Dashboard"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenuItem(PAResourceCommand.PACommandNames_NEW_HARDWARE_DASHBOARD, "New Dashboard..."); // ab:JMenuItem (JPopupMenu:JComponent, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_NEW_HARDWARE_DASHBOARD
+// a:ag (cl:JFrame): New Dashboard: addNotify
+selectTree(PAResourceEtoH.HardwareDashboardOptionsPanel_LAYER_TREE, "[Windows, xc7z020_1, hw_ila_1]", 1, true); // h:n (JViewport:JComponent, a:ag) - Node
+selectButton(RDIResource.BaseDialog_OK, "OK"); // a:JButton (JPanel:JComponent, a:ag)
+// 'C' command handler elapsed time: 4 seconds
+dismissDialog("New Dashboard"); // a:ag (cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, data_out[7:0]]", 13, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, data_out[7:0]]", 13, false, false, false, false, true, false); // w:k (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectMenu(PAResourceCommand.PACommandNames_CREATE_HARDWARE_DASHBOARDS, "Dashboard"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenuItem(PAResourceCommand.PACommandNames_ADD_PROBES_TO_WAVEFORM, "Add Probes to Waveform"); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_ADD_PROBES_TO_WAVEFORM
+// TclEventType: WAVEFORM_UPDATE_TITLE
+// Tcl Message: add_wave -into {hw_ila_data_1.wcfg} -radix bin [get_hw_probes {data_out}] 
+selectButton(PAResourceTtoZ.TriggerStatusPanel_RUN_TRIGGER_FOR_THIS_ILA_CORE, "ILA_run_trigger"); // w:JideButton (CommandBar:DockableBar, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_RUN_TRIGGER
+// Tcl Message: run_hw_ila hw_ila_1 
+// Tcl Message: INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2016-Nov-16 17:06:12 
+// TclEventType: HW_ILA_CHANGE
+// Tcl Message: wait_on_hw_ila hw_ila_1 
+// Tcl Message: display_hw_ila_data [upload_hw_ila_data hw_ila_1] 
+// Tcl Message: INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2016-Nov-16 17:06:12 
+// TclEventType: HW_ILA_CHANGE
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, interrupt_mask]", 14, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, interrupt_mask]", 14, false, false, false, false, true, false); // w:k (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenuItem(PAResourceCommand.PACommandNames_ADD_PROBES_TO_WAVEFORM, "Add Probes to Waveform"); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_ADD_PROBES_TO_WAVEFORM
+// TclEventType: WAVEFORM_UPDATE_TITLE
+// Tcl Message: add_wave -into {hw_ila_data_1.wcfg} -radix bin [get_hw_probes {interrupt_mask}] 
+// Elapsed time: 15 seconds
+selectButton(PAResourceItoN.IlaProbeTablePanel_ADD_PROBE, "IlaProbeTablePanel_new"); // w:JideButton (CommandBar:DockableBar, cl:JFrame)
+selectButton(PAResourceItoN.IlaProbeTablePanel_ADD_PROBE, "IlaProbeTablePanel_new"); // w:JideButton (CommandBar:DockableBar, cl:JFrame)
+selectButton(PAResourceItoN.IlaProbeTablePanel_ADD_PROBE, "IlaProbeTablePanel_new"); // w:JideButton (CommandBar:DockableBar, cl:JFrame)
+selectButton(PAResourceItoN.IlaProbeTablePanel_ADD_PROBE, "IlaProbeTablePanel_new"); // w:JideButton (CommandBar:DockableBar, cl:JFrame)
+selectButton(PAResourceItoN.IlaProbeTablePanel_ADD_PROBE, "IlaProbeTablePanel_new"); // w:JideButton (CommandBar:DockableBar, cl:JFrame)
+selectButton(PAResourceItoN.IlaProbeTablePanel_ADD_PROBE, "IlaProbeTablePanel_new"); // w:JideButton (CommandBar:DockableBar, cl:JFrame)
+// TclEventType: RUN_COMPLETED
+selectButton(PAResourceItoN.IlaProbeTablePanel_SET_TRIGGER_CONDITION_TO_GLOBAL, "IlaProbeTablePanel_OPERATOR"); // w:JideButton (CommandBar:DockableBar, cl:JFrame)
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Project Manager]", 0, true); // w:Y (v:H, cl:JFrame) - Node
+// Run Command: PAResourceCommand.PACommandNames_GOTO_PROJECT_MANAGER
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv)]", 2); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, false); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, false, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click
+// Run Command: PAResourceCommand.PACommandNames_RECUSTOMIZE_CORE
+// T:cp (cl:JFrame):  Re-customize IP : addNotify
+// t:P (cl:JFrame): Re-customize IP: addNotify
+dismissDialog("Re-customize IP"); // T:cp (cl:JFrame)
+// HMemoryUtils.trashcanNow. Engine heap size: 5,221 MB. GUI used memory: 89 MB. Current time: 11/16/16 5:07:00 PM EST
+selectButton(RDIResource.BaseDialog_CANCEL, "Cancel"); // a:JButton (JPanel:JComponent, t:P)
+dismissDialog("Re-customize IP"); // t:P (cl:JFrame)
+selectCodeEditor("project_top.sv", 320, 221); // bj:J (JPanel:JComponent, cl:JFrame)
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug]", 23, true); // w:Y (v:H, cl:JFrame) - Node
+// Run Command: PAResourceCommand.PACommandNames_GOTO_PROGRAM_DEBUG
+// Elapsed time: 16 seconds
+selectButton(PAResourceTtoZ.TriggerStatusPanel_STOP_TRIGGER_FOR_THIS_ILA_CORE, "ILA_stop_trigger"); // w:JideButton (CommandBar:DockableBar, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_STOP_TRIGGER
+// HOptionPane Warning: 'There are no armed ILAs. (Stop Trigger)'
+selectButton("PAResourceQtoS.StopTrigger_THERE_NO_ARMED_ILAS_OK", "OK"); // JButton:AbstractButton (JPanel:JComponent, T:JDialog)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, clk_4]", 6, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, clk_4]", 6, false, false, false, false, true, false); // w:k (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectMenuItem(PAResourceCommand.PACommandNames_RUN_TRIGGER, "Run Trigger"); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_RUN_TRIGGER
+// TclEventType: HW_ILA_CHANGE
+// Tcl Message: run_hw_ila hw_ila_1 
+// Tcl Message: INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2016-Nov-16 17:07:28 
+// Tcl Message: wait_on_hw_ila hw_ila_1 
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, clk_4]", 6, false, false, false, false, true, false); // w:k (JViewport:JComponent, cl:JFrame) - Popup Trigger
+// Tcl Message: display_hw_ila_data [upload_hw_ila_data hw_ila_1] 
+// Tcl Message: INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2016-Nov-16 17:07:29 
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+// TclEventType: HW_ILA_CHANGE
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenuItem(PAResourceCommand.PACommandNames_STOP_TRIGGER, "Stop Trigger"); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_STOP_TRIGGER
+// HOptionPane Warning: 'There are no armed ILAs. (Stop Trigger)'
+selectButton("PAResourceQtoS.StopTrigger_THERE_NO_ARMED_ILAS_OK", "OK"); // JButton:AbstractButton (JPanel:JComponent, T:JDialog)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, clk_4]", 6, false, false, false, false, true, false); // w:k (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenuItem(PAResourceCommand.PACommandNames_ADD_PROBES_TO_WAVEFORM, "Add Probes to Waveform"); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_ADD_PROBES_TO_WAVEFORM
+// TclEventType: WAVEFORM_UPDATE_TITLE
+// Tcl Message: add_wave -into {hw_ila_data_1.wcfg} -radix bin [get_hw_probes {clk_4}] 
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, clk_4]", 6, false, false, false, false, true, false); // w:k (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenuItem(PAResourceCommand.PACommandNames_ADD_PROBES_TO_BASIC_TRIGGER_SETUP, "Add Probes to Basic Trigger Setup"); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_ADD_PROBES_TO_BASIC_TRIGGER_SETUP
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, clk_4]", 6, false, false, false, false, true, false); // w:k (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenuItem(PAResourceCommand.PACommandNames_ADD_PROBES_TO_WAVEFORM, "Add Probes to Waveform"); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_ADD_PROBES_TO_WAVEFORM
+// TclEventType: WAVEFORM_UPDATE_TITLE
+// Tcl Message: add_wave -into {hw_ila_data_1.wcfg} -radix bin [get_hw_probes {clk_4}] 
+selectCodeEditor(RDIResource.TclConsoleView_TCL_CONSOLE_CODE_EDITOR, 2, 112); // dQ:J (JPanel:JComponent, cl:JFrame)
+typeControlKey(RDIResource.TclConsoleView_TCL_CONSOLE_CODE_EDITOR, "RDIResource.TclConsoleView_TCL_CONSOLE_CODE_EDITOR", 'c'); // dQ:J (JPanel:JComponent, cl:JFrame)
+setText(RDIResource.CommandsInput_TYPE_TCL_COMMAND_HERE, "add_wave -into {hw_ila_data_1.wcfg} -radix bin [get_hw_probes {clk_4}]", true); // W:ao (F:R, cl:JFrame)
+// Tcl Command: 'add_wave -into {hw_ila_data_1.wcfg} -radix bin [get_hw_probes {clk_4}]'
+// TclEventType: WAVEFORM_UPDATE_TITLE
+// Tcl Message: add_wave -into {hw_ila_data_1.wcfg} -radix bin [get_hw_probes {clk_4}] 
+// Tcl Message: clk_4 
+// Elapsed time: 30 seconds
+setText(RDIResource.CommandsInput_TYPE_TCL_COMMAND_HERE, "add_wave -into {hw_ila_data_1.wcfg} -radix bin [get_hw_probes {M1_L}]", true); // W:ao (F:R, cl:JFrame)
+// Tcl Command: 'add_wave -into {hw_ila_data_1.wcfg} -radix bin [get_hw_probes {M1_L}]'
+// TclEventType: WAVEFORM_UPDATE_TITLE
+// Tcl Message: add_wave -into {hw_ila_data_1.wcfg} -radix bin [get_hw_probes {M1_L}] 
+// Tcl Message: M1_L 
+// Elapsed time: 28 seconds
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Project Manager]", 0, true); // w:Y (v:H, cl:JFrame) - Node
+// Run Command: PAResourceCommand.PACommandNames_GOTO_PROJECT_MANAGER
+// [GUI Memory]: 137 MB (+2271kb) [00:24:46]
+selectCodeEditor("project_top.sv", 275, 455); // bj:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("project_top.sv", 482, 397); // bj:J (JPanel:JComponent, cl:JFrame)
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// Elapsed time: 28 seconds
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug, Generate Bitstream]", 25, false); // w:Y (v:H, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_RUN_BITGEN
+// cp:P (cl:JFrame):  Resetting Runs : addNotify
+// TclEventType: RUN_MODIFY
+// TclEventType: RUN_RESET
+// TclEventType: RUN_MODIFY
+// Tcl Message: reset_run synth_1 
+dismissDialog("Resetting Runs"); // cp:P (cl:JFrame)
+// TclEventType: FILESET_TARGET_UCF_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: FILESET_TARGET_UCF_CHANGE
+// cp:P (cl:JFrame):  Generate Bitstream : addNotify
+// TclEventType: RUN_LAUNCH
+// TclEventType: RUN_MODIFY
+// Tcl Message: launch_runs impl_1 -to_step write_bitstream -jobs 4 
+// Tcl Message: [Wed Nov 16 17:09:35 2016] Launched synth_1... Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/synth_1/runme.log [Wed Nov 16 17:09:35 2016] Launched impl_1... Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/runme.log 
+dismissDialog("Generate Bitstream"); // cp:P (cl:JFrame)
+// [GUI Memory]: 145 MB (+1096kb) [00:26:01]
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_STEP_COMPLETED
+// ak:a (cl:JFrame): Launch Run Critical Messages: addNotify
+// TclEventType: RUN_FAILED
+// Elapsed time: 198 seconds
+selectButton(PAResourceAtoD.CmdMsgDialog_OK, "OK"); // i:a (JPanel:JComponent, ak:a)
+dismissDialog("Launch Run Critical Messages"); // ak:a (cl:JFrame)
+// Q:ap (cl:JFrame): Implementation Failed: addNotify
+selectButton(RDIResource.BaseDialog_OK, "OK"); // a:JButton (JPanel:JComponent, Q:ap)
+// Run Command: PAResourceCommand.PACommandNames_MESSAGE_WINDOW
+dismissDialog("Implementation Failed"); // Q:ap (cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Implementation, Opt Design, [Chipscope 16-213] The debug port 'debug/probe12' has 112 unconnected channels (bits). This will cause errors during implementation.. ]", 11, false); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Implementation, Opt Design, [Chipscope 16-213] The debug port 'debug/probe12' has 112 unconnected channels (bits). This will cause errors during implementation.. ]", 11, false, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click
+// Elapsed time: 22 seconds
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, false); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, false, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click
+// Run Command: PAResourceCommand.PACommandNames_RECUSTOMIZE_CORE
+// T:cp (cl:JFrame):  Re-customize IP : addNotify
+// t:P (cl:JFrame): Re-customize IP: addNotify
+dismissDialog("Re-customize IP"); // T:cp (cl:JFrame)
+// Elapsed time: 13 seconds
+selectTab(PAResourceEtoH.HACGCTabbedPane_TABBED_PANE, (HResource) null, "Probe_Ports(16..19)", 3); // aM:g (G:JPanel, t:P)
+selectTab(PAResourceEtoH.HACGCTabbedPane_TABBED_PANE, (HResource) null, "General Options", 0); // aM:g (G:JPanel, t:P)
+// Elapsed time: 12 seconds
+setText("Number of Probes", "12"); // O:ao (aN:N, t:P)
+selectTab(PAResourceEtoH.HACGCTabbedPane_TABBED_PANE, (HResource) null, "Probe_Ports(0..7)", 1); // aM:g (G:JPanel, t:P)
+selectTab(PAResourceEtoH.HACGCTabbedPane_TABBED_PANE, (HResource) null, "Probe_Ports(8..15)", 2); // aM:g (G:JPanel, t:P)
+selectTab(PAResourceEtoH.HACGCTabbedPane_TABBED_PANE, (HResource) null, "General Options", 0); // aM:g (G:JPanel, t:P)
+selectTab(PAResourceEtoH.HACGCTabbedPane_TABBED_PANE, (HResource) null, "Probe_Ports(8..15)", 2); // aM:g (G:JPanel, t:P)
+selectTab(PAResourceEtoH.HACGCTabbedPane_TABBED_PANE, (HResource) null, "General Options", 0); // aM:g (G:JPanel, t:P)
+selectButton(RDIResource.BaseDialog_OK, "OK"); // a:JButton (JPanel:JComponent, t:P)
+selectButton(RDIResource.BaseDialog_OK, "OK"); // a:JButton (JPanel:JComponent, t:P)
+dismissDialog("Re-customize IP"); // t:P (cl:JFrame)
+// t:P (cl:JFrame): Re-customize IP: addNotify
+// cp:P (t:P):  Re-customize IP : addNotify
+// Tcl Message: set_property -dict [list CONFIG.C_NUM_OF_PROBES {12} CONFIG.C_PROBE19_WIDTH {1} CONFIG.C_PROBE18_WIDTH {1} CONFIG.C_PROBE17_WIDTH {1} CONFIG.C_PROBE16_WIDTH {1} CONFIG.C_PROBE15_WIDTH {1} CONFIG.C_PROBE14_WIDTH {1} CONFIG.C_PROBE13_WIDTH {1} CONFIG.C_PROBE12_WIDTH {1}] [get_ips ila_0] 
+// TclEventType: FILESET_UPDATE_IP
+// aB:ag (cl:JFrame): Generate Output Products: addNotify
+dismissDialog("Re-customize IP"); // cp:P (t:P)
+selectButton(PAResourceQtoS.SimpleOutputProductDialog_GENERATE_OUTPUT_PRODUCTS_IMMEDIATELY, "Generate"); // a:JButton (JPanel:JComponent, aB:ag)
+// cp:P (cl:JFrame):  Managing Output Products : addNotify
+// Tcl Message: generate_target all [get_files  /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/ila_0/ila_0.xci] 
+// Tcl Message: INFO: [IP_Flow 19-1686] Generating 'Instantiation Template' target for IP 'ila_0'... INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'ila_0'... 
+// Tcl Message: INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'ila_0'... INFO: [IP_Flow 19-1686] Generating 'Change Log' target for IP 'ila_0'... 
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_MODIFY
+// TclEventType: RUN_RESET
+// TclEventType: RUN_MODIFY
+// Tcl Message: reset_run ila_0_synth_1 
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: launch_run -jobs 4 ila_0_synth_1 
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: RUN_MODIFY
+// Tcl Message: [Wed Nov 16 17:14:12 2016] Launched ila_0_synth_1... Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/ila_0_synth_1/runme.log 
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: FILE_SET_CHANGE
+selectButton("PAResourceQtoS.SimpleOutputProductDialog_OUT_OF_CONTEXT_MODULE_RUNS_WERE_LAUNCHED_OK", "OK"); // JButton:AbstractButton (JPanel:JComponent, T:JDialog)
+selectCodeEditor("project_top.sv", 126, 379); // bj:J (JPanel:JComponent, cl:JFrame)
+// Elapsed time: 16 seconds
+selectCodeEditor("project_top.sv", 95, 353); // bj:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("project_top.sv", 687, 371); // bj:J (JPanel:JComponent, cl:JFrame)
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// Elapsed time: 16 seconds
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv)]", 4); // A:k (H:JPanel, cl:JFrame)
+collapseTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv)]", 4); // A:k (H:JPanel, cl:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), blkMem - mem_interface (mem_interface.sv)]", 5); // A:k (H:JPanel, cl:JFrame)
+collapseTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), blkMem - mem_interface (mem_interface.sv)]", 5); // A:k (H:JPanel, cl:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), proc_top - z80_block (z80_project.sv)]", 6); // A:k (H:JPanel, cl:JFrame)
+collapseTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), proc_top - z80_block (z80_project.sv)]", 6); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, false); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, false, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click
+// Run Command: PAResourceCommand.PACommandNames_RECUSTOMIZE_CORE
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, false, false, false, false, true, false); // A:k (H:JPanel, cl:JFrame) - Popup Trigger
+// T:cp (cl:JFrame):  Re-customize IP : addNotify
+// t:P (cl:JFrame): Re-customize IP: addNotify
+dismissDialog("Re-customize IP"); // T:cp (cl:JFrame)
+selectButton(RDIResource.BaseDialog_CANCEL, "Cancel"); // a:JButton (JPanel:JComponent, t:P)
+dismissDialog("Re-customize IP"); // t:P (cl:JFrame)
+selectCodeEditor("project_top.sv", 528, 331); // bj:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("project_top.sv", 294, 370); // bj:J (JPanel:JComponent, cl:JFrame)
+// TclEventType: RUN_COMPLETED
+// TclEventType: FILE_SET_CHANGE
+// HMemoryUtils.trashcanNow. Engine heap size: 5,253 MB. GUI used memory: 98 MB. Current time: 11/16/16 5:16:20 PM EST
+// Elapsed time: 83 seconds
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs]", 3, true, false, false, false, true, false); // ae:k (JViewport:JComponent, cl:JFrame) - Popup Trigger - Node
+selectMenu(PAResourceItoN.MsgTreePanel_MESSAGE_SEVERITY, "Message Severity"); // X:JMenu (M:JPopupMenu, Popup:JWindow)
+selectMenuItem(PAResourceItoN.MsgTreePanel_DISCARD_OLD_MESSAGES, "Discard Old Messages"); // ab:JMenuItem (M:JPopupMenu, Popup:JWindow)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Implementation, Opt Design, [Chipscope 16-213] The debug port 'debug/probe12' has 112 unconnected channels (bits). This will cause errors during implementation.. ]", 11, false); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE, "impl_1 ; constrs_1 ; Implementation Out-of-date ; 25 ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ; Wed Nov 16 17:12:23 EST 2016 ; 00:00:27 ; Vivado Implementation Defaults (Vivado Implementation 2015) ; xc7z020clg484-1 ; mittlefrueh.andrew.cmu.edu ; Vivado Implementation Defaults", 1, "Implementation Out-of-date", 2, false); // W:av (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Implementation, Opt Design, [Chipscope 16-213] The debug port 'debug/probe12' has 112 unconnected channels (bits). This will cause errors during implementation.. ]", 11, false); // ae:k (JViewport:JComponent, cl:JFrame)
+selectCodeEditor("project_top.sv", 203, 405); // bj:J (JPanel:JComponent, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, false); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, false, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click
+// Run Command: PAResourceCommand.PACommandNames_RECUSTOMIZE_CORE
+// T:cp (cl:JFrame):  Re-customize IP : addNotify
+// t:P (cl:JFrame): Re-customize IP: addNotify
+dismissDialog("Re-customize IP"); // T:cp (cl:JFrame)
+selectButton(RDIResource.BaseDialog_OK, "OK"); // a:JButton (JPanel:JComponent, t:P)
+dismissDialog("Re-customize IP"); // t:P (cl:JFrame)
+// aB:ag (cl:JFrame): Generate Output Products: addNotify
+selectButton(PAResourceQtoS.SimpleOutputProductDialog_GENERATE_OUTPUT_PRODUCTS_IMMEDIATELY, "Generate"); // a:JButton (JPanel:JComponent, aB:ag)
+// cp:P (cl:JFrame):  Managing Output Products : addNotify
+// TclEventType: RUN_MODIFY
+// TclEventType: RUN_RESET
+// TclEventType: RUN_MODIFY
+// Tcl Message: INFO: [Vivado 12-3702] IP 'ila_0.xci' is already generated and up-to-date, this IP will not be regenerated 
+// Tcl Message: reset_run ila_0_synth_1 
+// Tcl Message: launch_run -jobs 4 ila_0_synth_1 
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: RUN_MODIFY
+// Tcl Message: [Wed Nov 16 17:16:56 2016] Launched ila_0_synth_1... Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/ila_0_synth_1/runme.log 
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+selectButton("PAResourceQtoS.SimpleOutputProductDialog_OUT_OF_CONTEXT_MODULE_RUNS_WERE_LAUNCHED_OK", "OK"); // JButton:AbstractButton (JPanel:JComponent, T:JDialog)
+// TclEventType: FILE_SET_CHANGE
+// Elapsed time: 18 seconds
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 5, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 5, true, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 5, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 5, true, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click - Node
+selectCodeEditor("project_top.sv", 315, 333); // bj:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("project_top.sv", 306, 248); // bj:J (JPanel:JComponent, cl:JFrame)
+// TclEventType: RUN_COMPLETED
+// TclEventType: FILE_SET_CHANGE
+// Elapsed time: 193 seconds
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Implementation, Opt Design, [Chipscope 16-213] The debug port 'debug/probe12' has 112 unconnected channels (bits). This will cause errors during implementation.. ]", 11, false); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 5, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 5, true, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. , [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 6, false); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. , [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 6, false, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. , [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 6, false); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. , [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 6, false, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 5, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 5, true, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, synth_1, [Synth 8-4442] BlackBox module debug has unconnected pin probe12[111]. ]", 2, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, synth_1, [Synth 8-4442] BlackBox module debug has unconnected pin probe12[111]. , [Synth 8-4442] BlackBox module debug has unconnected pin probe12[109]. ]", 4, false, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, synth_1, [Synth 8-4442] BlackBox module debug has unconnected pin probe12[111]. , [Synth 8-4442] BlackBox module debug has unconnected pin probe12[44]. ]", 69, false); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, synth_1, [Synth 8-4442] BlackBox module debug has unconnected pin probe12[111]. , [Synth 8-4442] BlackBox module debug has unconnected pin probe12[14]. ]", 99, false); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs]", 102, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs]", 102, true, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs]", 102, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs]", 102, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 104, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 104, true, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. , [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 105, false); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. , [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 105, false, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. , [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 105, false); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. , [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 105, false); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. , [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 105, false); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. , [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 105, false); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. , [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 105, false); // ae:k (JViewport:JComponent, cl:JFrame)
+selectCodeEditor("project_top.sv", 277, 251); // bj:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("project_top.sv", 206, 157); // bj:J (JPanel:JComponent, cl:JFrame)
+// Elapsed time: 10 seconds
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 104, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 104, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 104, true, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 104, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 104, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), blkMem - mem_interface (mem_interface.sv)]", 5, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, false); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, false, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click
+// Run Command: PAResourceCommand.PACommandNames_RECUSTOMIZE_CORE
+// T:cp (cl:JFrame):  Re-customize IP : addNotify
+// t:P (cl:JFrame): Re-customize IP: addNotify
+dismissDialog("Re-customize IP"); // T:cp (cl:JFrame)
+selectTab(PAResourceEtoH.HACGCTabbedPane_TABBED_PANE, (HResource) null, "Probe_Ports(0..8)", 1); // aM:g (G:JPanel, t:P)
+selectTab(PAResourceEtoH.HACGCTabbedPane_TABBED_PANE, (HResource) null, "General Options", 0); // aM:g (G:JPanel, t:P)
+selectTab(PAResourceEtoH.HACGCTabbedPane_TABBED_PANE, (HResource) null, "Probe_Ports(0..8)", 1); // aM:g (G:JPanel, t:P)
+selectTab(PAResourceEtoH.HACGCTabbedPane_TABBED_PANE, (HResource) null, "Probe_Ports(8..11)", 2); // aM:g (G:JPanel, t:P)
+selectButton(RDIResource.BaseDialog_CANCEL, "Cancel"); // a:JButton (JPanel:JComponent, t:P)
+dismissDialog("Re-customize IP"); // t:P (cl:JFrame)
+selectCodeEditor("project_top.sv", 261, 280); // bj:J (JPanel:JComponent, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, false, false, false, false, true, false); // A:k (H:JPanel, cl:JFrame) - Popup Trigger
+selectMenu(PAResourceQtoS.SrcMenu_IP_DOCUMENTATION, "IP Documentation"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenu(PAResourceQtoS.SrcMenu_IP_HIERARCHY, "IP Hierarchy"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenu(PAResourceQtoS.SrcMenu_IP_HIERARCHY, "IP Hierarchy"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenu(PAResourceCommand.PACommandNames_AUTO_UPDATE_HIER, "Hierarchy Update"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectCodeEditor("project_top.sv", 268, 347); // bj:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("project_top.sv", 21, 352); // bj:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("project_top.sv", 689, 322); // bj:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("project_top.sv", 435, 295); // bj:J (JPanel:JComponent, cl:JFrame)
+// [GUI Memory]: 152 MB (+49kb) [00:37:43]
+selectCodeEditor("project_top.sv", 687, 343); // bj:J (JPanel:JComponent, cl:JFrame)
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// Elapsed time: 15 seconds
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, ila_0 (ila_0.xci)]", 10, false); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, ila_0 (ila_0.xci)]", 10, false, false, false, false, true, false); // A:k (H:JPanel, cl:JFrame) - Popup Trigger
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, z80 (z80_top.sv)]", 8, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, ila_0 (ila_0.xci)]", 10, false); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, ila_0 (ila_0.xci)]", 10, false, false, false, false, true, false); // A:k (H:JPanel, cl:JFrame) - Popup Trigger
+selectMenu(PAResourceQtoS.SrcMenu_IP_DOCUMENTATION, "IP Documentation"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenu(PAResourceCommand.PACommandNames_AUTO_UPDATE_HIER, "Hierarchy Update"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenuItem(RDIResourceCommand.RDICommands_DELETE, "Remove File from Project..."); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: RDIResourceCommand.RDICommands_DELETE
+// az:P (cl:JFrame): Remove Sources: addNotify
+selectCheckBox(PAResourceQtoS.RemoveSourcesDialog_ALSO_DELETE, "Also delete the project local file/directory from disk", true); // h:JCheckBox (JPanel:JComponent, az:P): TRUE
+selectButton(RDIResource.BaseDialog_OK, "OK"); // a:JButton (JPanel:JComponent, az:P)
+// 'c' command handler elapsed time: 4 seconds
+dismissDialog("Remove Sources"); // az:P (cl:JFrame)
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: remove_files -fileset ila_0 /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/ila_0/ila_0.xci 
+// TclEventType: RUN_DELETE
+// [GUI Memory]: 163 MB (+4237kb) [00:38:10]
+// TclEventType: RUN_DELETE
+// TclEventType: DG_GRAPH_STALE
+// az:P (cl:JFrame): Remove Sources: addNotify
+// cp:P (az:P):  Remove Sources : addNotify
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_DELETE
+// Tcl Message: delete_fileset ila_0 
+// Tcl Message: file delete -force /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/ila_0 
+dismissDialog("Remove Sources"); // cp:P (az:P)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, NMI_fsm (z80_control.sv)]", 9, false); // A:k (H:JPanel, cl:JFrame)
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, NMI_fsm (z80_control.sv)]", 9, false); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv)]", 2, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, IP Integrator]", 5, true); // w:Y (v:H, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Project Manager, IP Catalog]", 4, false); // w:Y (v:H, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_CORE_GEN
+// cp:P (cl:JFrame):  IP Catalog : addNotify
+dismissDialog("IP Catalog"); // cp:P (cl:JFrame)
+selectTreeTable(PAResourceAtoD.CoreTreeTablePanel_CORE_TREE_TABLE, "Debug & Verification ;  ;  ;  ; ", 9, "Debug & Verification", 0, true); // O:av (JViewport:JComponent, cl:JFrame) - Node
+expandTreeTable(PAResourceAtoD.CoreTreeTablePanel_CORE_TREE_TABLE, "Debug & Verification ;  ;  ;  ; ", 9); // O:av (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceAtoD.CoreTreeTablePanel_CORE_TREE_TABLE, "Debug & Verification ;  ;  ;  ; ", 9, "Debug & Verification", 0, true, false, false, false, false, true); // O:av (JViewport:JComponent, cl:JFrame) - Double Click - Node
+selectTreeTable(PAResourceAtoD.CoreTreeTablePanel_CORE_TREE_TABLE, "Debug ;  ;  ;  ; ", 10, "Debug", 0, true); // O:av (JViewport:JComponent, cl:JFrame) - Node
+expandTreeTable(PAResourceAtoD.CoreTreeTablePanel_CORE_TREE_TABLE, "Debug ;  ;  ;  ; ", 10); // O:av (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceAtoD.CoreTreeTablePanel_CORE_TREE_TABLE, "Debug ;  ;  ;  ; ", 10, "Debug", 0, false, false, false, false, false, true); // O:av (JViewport:JComponent, cl:JFrame) - Double Click
+selectTreeTable(PAResourceAtoD.CoreTreeTablePanel_CORE_TREE_TABLE, "ILA (Integrated Logic Analyzer) ; AXI4, AXI4-Stream ; Production ; Included ; xilinx.com:ip:ila:5.1", 11, "ILA (Integrated Logic Analyzer)", 0, false); // O:av (JViewport:JComponent, cl:JFrame)
+expandTreeTable(PAResourceAtoD.CoreTreeTablePanel_CORE_TREE_TABLE, "ILA (Integrated Logic Analyzer) ; AXI4, AXI4-Stream ; Production ; Included ; xilinx.com:ip:ila:5.1", 11); // O:av (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceAtoD.CoreTreeTablePanel_CORE_TREE_TABLE, "ILA (Integrated Logic Analyzer) ; AXI4, AXI4-Stream ; Production ; Included ; xilinx.com:ip:ila:5.1", 11, "ILA (Integrated Logic Analyzer)", 0, false, false, false, false, false, true); // O:av (JViewport:JComponent, cl:JFrame) - Double Click
+// Run Command: PAResourceCommand.PACommandNames_CUSTOMIZE_CORE
+// l:cp (cl:JFrame):  Customize IP : addNotify
+// t:P (cl:JFrame): Customize IP: addNotify
+dismissDialog("Customize IP"); // l:cp (cl:JFrame)
+selectComboBox("Sample Data Depth (C_DATA_DEPTH)", "8192", 3); // x:f (G:JPanel, t:P)
+selectTab(PAResourceEtoH.HACGCTabbedPane_TABBED_PANE, (HResource) null, "Probe_Ports(0..0)", 1); // aM:g (G:JPanel, t:P)
+selectTab(PAResourceEtoH.HACGCTabbedPane_TABBED_PANE, (HResource) null, "General Options", 0); // aM:g (G:JPanel, t:P)
+setText("Number of Probes", "12"); // O:ao (aN:N, t:P)
+selectTab(PAResourceEtoH.HACGCTabbedPane_TABBED_PANE, (HResource) null, "Probe_Ports(0..7)", 1); // aM:g (G:JPanel, t:P)
+// Elapsed time: 11 seconds
+selectTab(PAResourceEtoH.HACGCTabbedPane_TABBED_PANE, (HResource) null, "Probe_Ports(8..15)", 2); // aM:g (G:JPanel, t:P)
+setText("Probe8 Width", "32"); // O:ao (aN:N)
+setText("Probe9 Width", "16"); // O:ao (aN:N)
+setText("Probe10 Width", "8"); // O:ao (aN:N)
+setText("Probe11 Width", "1"); // O:ao (aN:N, t:P)
+selectButton(RDIResource.BaseDialog_OK, "OK"); // a:JButton (JPanel:JComponent, t:P)
+dismissDialog("Customize IP"); // t:P (cl:JFrame)
+// TclEventType: CREATE_IP_CORE
+// cp:P (cl:JFrame):  Customize IP : addNotify
+// Tcl Message: create_ip -name ila -vendor xilinx.com -library ip -version 5.1 -module_name ila_0 
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: set_property -dict [list CONFIG.C_PROBE10_WIDTH {8} CONFIG.C_PROBE9_WIDTH {16} CONFIG.C_PROBE8_WIDTH {32} CONFIG.C_DATA_DEPTH {8192} CONFIG.C_NUM_OF_PROBES {12}] [get_ips ila_0] 
+// TclEventType: FILESET_UPDATE_IP
+// Tcl Message: generate_target {instantiation_template} [get_files /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/ila_0/ila_0.xci] 
+// Tcl Message: INFO: [IP_Flow 19-1686] Generating 'Instantiation Template' target for IP 'ila_0'... 
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// aB:ag (cl:JFrame): Generate Output Products: addNotify
+dismissDialog("Customize IP"); // cp:P (cl:JFrame)
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+selectButton(PAResourceQtoS.SimpleOutputProductDialog_GENERATE_OUTPUT_PRODUCTS_IMMEDIATELY, "Generate"); // a:JButton (JPanel:JComponent, aB:ag)
+// cp:P (cl:JFrame):  Managing Output Products : addNotify
+// Tcl Message: generate_target all [get_files  /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/ila_0/ila_0.xci] 
+// Tcl Message: INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'ila_0'... 
+// Tcl Message: INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'ila_0'... INFO: [IP_Flow 19-1686] Generating 'Change Log' target for IP 'ila_0'... 
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_NEW
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: RUN_ADD
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: FILE_SET_OPTIONS_CHANGE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: create_ip_run [get_files -of_objects [get_fileset sources_1] /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/ila_0/ila_0.xci] 
+// Tcl Message: launch_run -jobs 4 ila_0_synth_1 
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: RUN_MODIFY
+// Tcl Message: [Wed Nov 16 17:23:47 2016] Launched ila_0_synth_1... Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/ila_0_synth_1/runme.log 
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+selectButton("PAResourceQtoS.SimpleOutputProductDialog_OUT_OF_CONTEXT_MODULE_RUNS_WERE_LAUNCHED_OK", "OK"); // JButton:AbstractButton (JPanel:JComponent, T:JDialog)
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_COMPLETED
+// TclEventType: FILE_SET_CHANGE
+// Elapsed time: 162 seconds
+selectTreeTable(PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE, "impl_1 ; constrs_1 ; Implementation Out-of-date ; 25 ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ; Wed Nov 16 17:12:23 EST 2016 ; 00:00:27 ; Vivado Implementation Defaults (Vivado Implementation 2015) ; xc7z020clg484-1 ; mittlefrueh.andrew.cmu.edu ; Vivado Implementation Defaults", 1, "Implementation Out-of-date", 2, false); // W:av (JViewport:JComponent, cl:JFrame)
+// [GUI Memory]: 173 MB (+1048kb) [00:42:20]
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Implementation, Opt Design, [Chipscope 16-213] The debug port 'debug/probe12' has 112 unconnected channels (bits). This will cause errors during implementation.. ]", 111, false); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTab("PlanAheadTabBaseWorkspace_JideTabbedPane", (HResource) null, "audioSys_0.v", 1); // TdiGroup:JideTabbedPane (CodeEditorDocumentPane:DocumentPane, cl:JFrame)
+// [GUI Memory]: 182 MB (+723kb) [00:42:28]
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv)]", 2, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv)]", 2, true, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click - Node
+selectCodeEditor("project_top.sv", 51, 379); // bj:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("project_top.sv", 68, 410); // bj:J (JPanel:JComponent, cl:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, ila_0 (ila_0.xci)]", 5); // A:k (H:JPanel, cl:JFrame)
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, ila_0 (ila_0.xci), ila_0 (ila_0.v)]", 5, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, ila_0 (ila_0.xci), ila_0 (ila_0.v)]", 5, true, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click - Node
+// HMemoryUtils.trashcanNow. Engine heap size: 5,274 MB. GUI used memory: 105 MB. Current time: 11/16/16 5:27:00 PM EST
+selectTab("PlanAheadTabBaseWorkspace_JideTabbedPane", (HResource) null, "project_top.sv", 2); // TdiGroup:JideTabbedPane (CodeEditorDocumentPane:DocumentPane, cl:JFrame)
+selectCodeEditor("project_top.sv", 69, 401); // bj:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("project_top.sv", 65, 418); // bj:J (JPanel:JComponent, cl:JFrame)
+// Elapsed time: 10 seconds
+selectTab("PlanAheadTabBaseWorkspace_JideTabbedPane", (HResource) null, "project_top.sv", 4); // TdiGroup:JideTabbedPane (CodeEditorDocumentPane:DocumentPane, cl:JFrame)
+selectCodeEditor("ila_0.v", 42, 415); // H:bj (JPanel:JComponent, cl:JFrame)
+selectTab("PlanAheadTabBaseWorkspace_JideTabbedPane", (HResource) null, "ila_0.v", 3); // TdiGroup:JideTabbedPane (CodeEditorDocumentPane:DocumentPane, cl:JFrame)
+selectCodeEditor("project_top.sv", 204, 384); // bj:J (JPanel:JComponent, cl:JFrame)
+// Elapsed time: 10 seconds
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, ila_0 (ila_0.xci), ila_0 (ila_0.v), inst - ila_v5_1_ila]", 6, false); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, ila_0 (ila_0.xci), ila_0 (ila_0.v), inst - ila_v5_1_ila]", 6, false, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, ila_0 (ila_0.xci), ila_0 (ila_0.v)]", 5, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, ila_0 (ila_0.xci), ila_0 (ila_0.v)]", 5, true, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, ila_0 (ila_0.xci), ila_0 (ila_0.v)]", 5, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, ila_0 (ila_0.xci), ila_0 (ila_0.v)]", 5, true, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, ila_0 (ila_0.xci), ila_0 (ila_0.dcp)]", 7, false); // A:k (H:JPanel, cl:JFrame)
+selectTab("PlanAheadTabBaseWorkspace_JideTabbedPane", (HResource) null, "ila_0.v", 3); // TdiGroup:JideTabbedPane (CodeEditorDocumentPane:DocumentPane, cl:JFrame)
+// Elapsed time: 17 seconds
+maximizeView(PAResourceOtoP.PAViews_BASE_WORKSPACE, "BaseWorkspace"); // P:a (Workspace:JPanel, cl:JFrame)
+selectCodeEditor("project_top.sv", 295, 408); // bj:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("project_top.sv", 194, 398); // bj:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("project_top.sv", 194, 401); // bj:J (JPanel:JComponent, cl:JFrame)
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// Elapsed time: 103 seconds
+selectTab("PlanAheadTabBaseWorkspace_JideTabbedPane", (HResource) null, "project_top.sv", 4); // TdiGroup:JideTabbedPane (CodeEditorDocumentPane:DocumentPane, cl:JFrame)
+selectCodeEditor("ila_0.v", 60, 427); // H:bj (JPanel:JComponent, cl:JFrame)
+selectTab("PlanAheadTabBaseWorkspace_JideTabbedPane", (HResource) null, "ila_0.v", 3); // TdiGroup:JideTabbedPane (CodeEditorDocumentPane:DocumentPane, cl:JFrame)
+unmaximizeView(PAResourceOtoP.PAViews_BASE_WORKSPACE, "BaseWorkspace"); // P:a (Workspace:JPanel, cl:JFrame)
+selectTab("PlanAheadTabBaseWorkspace_JideTabbedPane", (HResource) null, "project_top.sv", 4); // TdiGroup:JideTabbedPane (CodeEditorDocumentPane:DocumentPane, cl:JFrame)
+selectTab("PlanAheadTabBaseWorkspace_JideTabbedPane", (HResource) null, "ila_0.v", 3); // TdiGroup:JideTabbedPane (CodeEditorDocumentPane:DocumentPane, cl:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv)]", 2); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), ClkMHzGen - clk_wiz_0 (clk_wiz_0.xci)]", 7, false); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, true, false, false, false, true, false); // A:k (H:JPanel, cl:JFrame) - Popup Trigger - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, true, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click - Node
+// Run Command: PAResourceCommand.PACommandNames_RECUSTOMIZE_CORE
+// T:cp (cl:JFrame):  Re-customize IP : addNotify
+// t:P (cl:JFrame): Re-customize IP: addNotify
+dismissDialog("Re-customize IP"); // T:cp (cl:JFrame)
+selectTab(PAResourceEtoH.HACGCTabbedPane_TABBED_PANE, (HResource) null, "Probe_Ports(0..8)", 1); // aM:g (G:JPanel, t:P)
+setText("Probe0 Width", "32"); // O:ao (aN:N)
+setText("Probe1 Width", "16"); // O:ao (aN:N)
+setText("Probe2 Width", "8"); // O:ao (aN:N)
+setText("Probe3 Width", "8"); // O:ao (aN:N, t:P)
+selectButton(RDIResource.BaseDialog_OK, "OK"); // a:JButton (JPanel:JComponent, t:P)
+dismissDialog("Re-customize IP"); // t:P (cl:JFrame)
+// Tcl Message: set_property -dict [list CONFIG.C_PROBE3_WIDTH {8} CONFIG.C_PROBE2_WIDTH {8} CONFIG.C_PROBE1_WIDTH {16} CONFIG.C_PROBE0_WIDTH {32}] [get_ips ila_0] 
+// t:P (cl:JFrame): Re-customize IP: addNotify
+// cp:P (t:P):  Re-customize IP : addNotify
+// TclEventType: FILESET_UPDATE_IP
+// aB:ag (cl:JFrame): Generate Output Products: addNotify
+dismissDialog("Re-customize IP"); // cp:P (t:P)
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+selectButton(PAResourceQtoS.SimpleOutputProductDialog_GENERATE_OUTPUT_PRODUCTS_IMMEDIATELY, "Generate"); // a:JButton (JPanel:JComponent, aB:ag)
+// TclEventType: DG_UPDATE_GRAPH
+// cp:P (cl:JFrame):  Managing Output Products : addNotify
+// Tcl Message: generate_target all [get_files  /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/ila_0/ila_0.xci] 
+// Tcl Message: INFO: [IP_Flow 19-1686] Generating 'Instantiation Template' target for IP 'ila_0'... INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'ila_0'... 
+// Tcl Message: INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'ila_0'... INFO: [IP_Flow 19-1686] Generating 'Change Log' target for IP 'ila_0'... 
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_MODIFY
+// TclEventType: RUN_RESET
+// TclEventType: RUN_MODIFY
+// Tcl Message: reset_run ila_0_synth_1 
+// Tcl Message: launch_run -jobs 4 ila_0_synth_1 
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: RUN_MODIFY
+// Tcl Message: [Wed Nov 16 17:30:52 2016] Launched ila_0_synth_1... Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/ila_0_synth_1/runme.log 
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+selectButton("PAResourceQtoS.SimpleOutputProductDialog_OUT_OF_CONTEXT_MODULE_RUNS_WERE_LAUNCHED_OK", "OK"); // JButton:AbstractButton (JPanel:JComponent, T:JDialog)
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_COMPLETED
+// TclEventType: FILE_SET_CHANGE
+// HMemoryUtils.trashcanNow. Engine heap size: 5,294 MB. GUI used memory: 112 MB. Current time: 11/16/16 5:33:21 PM EST
+// Elapsed time: 194 seconds
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug, Generate Bitstream]", 22, false); // w:Y (v:H, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_RUN_BITGEN
+// cp:P (cl:JFrame):  Resetting Runs : addNotify
+// TclEventType: RUN_MODIFY
+// TclEventType: RUN_RESET
+// TclEventType: RUN_MODIFY
+// Tcl Message: reset_run synth_1 
+dismissDialog("Resetting Runs"); // cp:P (cl:JFrame)
+// TclEventType: FILESET_TARGET_UCF_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: FILESET_TARGET_UCF_CHANGE
+// TclEventType: RUN_LAUNCH
+// cp:P (cl:JFrame):  Generate Bitstream : addNotify
+// TclEventType: RUN_MODIFY
+// Tcl Message: launch_runs impl_1 -to_step write_bitstream -jobs 4 
+// Tcl Message: [Wed Nov 16 17:34:09 2016] Launched synth_1... Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/synth_1/runme.log [Wed Nov 16 17:34:09 2016] Launched impl_1... Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/runme.log 
+dismissDialog("Generate Bitstream"); // cp:P (cl:JFrame)
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_FAILED
+// TclEventType: RUN_STEP_COMPLETED
+// ak:a (cl:JFrame): Launch Run Critical Messages: addNotify
+// Elapsed time: 202 seconds
+selectButton(PAResourceAtoD.CmdMsgDialog_OK, "OK"); // i:a (JPanel:JComponent, ak:a)
+dismissDialog("Launch Run Critical Messages"); // ak:a (cl:JFrame)
+// Q:ap (cl:JFrame): Implementation Failed: addNotify
+selectButton(RDIResource.BaseDialog_OK, "OK"); // a:JButton (JPanel:JComponent, Q:ap)
+// Run Command: PAResourceCommand.PACommandNames_MESSAGE_WINDOW
+dismissDialog("Implementation Failed"); // Q:ap (cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Implementation, Opt Design, [Chipscope 16-213] The debug port 'debug/probe10' has 1 unconnected channels (bits). This will cause errors during implementation.. ]", 12, false); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Implementation, Opt Design, [Chipscope 16-213] The debug port 'debug/probe10' has 1 unconnected channels (bits). This will cause errors during implementation.. ]", 12, false, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click
+selectCodeEditor("project_top.sv", 97, 582); // bj:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("project_top.sv", 203, 579); // bj:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("project_top.sv", 138, 579); // bj:J (JPanel:JComponent, cl:JFrame)
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug, Generate Bitstream]", 22, false); // w:Y (v:H, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_RUN_BITGEN
+// cp:P (cl:JFrame):  Resetting Runs : addNotify
+// TclEventType: RUN_MODIFY
+// TclEventType: RUN_RESET
+// TclEventType: RUN_MODIFY
+// Tcl Message: reset_run synth_1 
+dismissDialog("Resetting Runs"); // cp:P (cl:JFrame)
+// TclEventType: FILESET_TARGET_UCF_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: FILESET_TARGET_UCF_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: RUN_MODIFY
+// cp:P (cl:JFrame):  Generate Bitstream : addNotify
+// Tcl Message: launch_runs impl_1 -to_step write_bitstream -jobs 4 
+// Tcl Message: [Wed Nov 16 17:37:53 2016] Launched synth_1... Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/synth_1/runme.log [Wed Nov 16 17:37:53 2016] Launched impl_1... Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/runme.log 
+dismissDialog("Generate Bitstream"); // cp:P (cl:JFrame)
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_STEP_COMPLETED
+// ak:a (cl:JFrame): Launch Run Critical Messages: addNotify
+// Elapsed time: 200 seconds
+selectButton(PAResourceAtoD.CmdMsgDialog_OK, "OK"); // i:a (JPanel:JComponent, ak:a)
+dismissDialog("Launch Run Critical Messages"); // ak:a (cl:JFrame)
+// TclEventType: RUN_COMPLETED
+// Elapsed time: 172 seconds
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug, Hardware Manager, Program Device]", 25, false); // w:Y (v:H, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_PROGRAM_FPGA
+selectMenuItem((HResource) null, "xc7z020_1"); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_OPEN_HARDWARE_MANAGER
+// Run Command: PAResourceCommand.PACommandNames_PROGRAM_FPGA
+// aC:ag (cl:JFrame): Program Device: addNotify
+selectButton(PAResourceOtoP.ProgramFpgaDialog_PROGRAM, "Program"); // a:JButton (JPanel:JComponent, aC:ag)
+// cp:P (cl:JFrame):  Program Device : addNotify
+dismissDialog("Program Device"); // aC:ag (cl:JFrame)
+// TclEventType: HW_DEVICE_CHANGE
+// Tcl Message: set_property PROBES.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/debug_nets.ltx} [lindex [get_hw_devices] 1] 
+// TclEventType: HW_DEVICE_CHANGE
+// Tcl Message: set_property PROGRAM.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/project_top.bit} [lindex [get_hw_devices] 1] 
+// TclEventType: HW_DEVICE_UPDATE
+// Tcl Message: program_hw_devices [lindex [get_hw_devices] 1] 
+// TclEventType: HW_DEVICE_CHANGE
+// Tcl Message: INFO: [Labtools 27-3164] End of startup status: HIGH 
+// Tcl Message: program_hw_devices: Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 6244.816 ; gain = 0.000 ; free physical = 2302 ; free virtual = 16511 
+// TclEventType: HW_DEVICE_CHANGE
+// TclEventType: HW_SYSMON_CHANGE
+// TclEventType: HW_ILA_CHANGE
+// TclEventType: HW_DEVICE_UPDATE
+// TclEventType: HW_DEVICE_CHANGE
+// TclEventType: HW_ILA_CHANGE
+// TclEventType: HW_DEVICE_CHANGE
+// TclEventType: HW_DEVICE_PROBES_CHANGE
+// TclEventType: HW_ILA_CHANGE
+// TclEventType: HW_DEVICE_PROBES_CHANGE
+// TclEventType: DEBUG_PROBE_CHANGE
+// TclEventType: HW_DEVICE_PROBES_CHANGE
+// TclEventType: HW_ILA_CHANGE
+// Tcl Message: refresh_hw_device [lindex [get_hw_devices] 1] 
+// Tcl Message: INFO: [Labtools 27-2302] Device xc7z020 (JTAG device index = 1) is programmed with a design that has 1 ILA core(s). 
+// 'x' command handler elapsed time: 10 seconds
+dismissDialog("Program Device"); // cp:P (cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, clk_4]", 56, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, clk_4]", 56, false, false, false, false, true, false); // w:k (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenuItem(PAResourceCommand.PACommandNames_ADD_PROBES_TO_WAVEFORM, "Add Probes to Waveform"); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_ADD_PROBES_TO_WAVEFORM
+// TclEventType: WAVEFORM_UPDATE_TITLE
+// Tcl Message: add_wave -into {hw_ila_data_1.wcfg} -radix bin [get_hw_probes {clk_4}] 
+selectButton(PAResourceTtoZ.TriggerStatusPanel_RUN_TRIGGER_FOR_THIS_ILA_CORE, "ILA_run_trigger"); // w:JideButton (CommandBar:DockableBar, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_RUN_TRIGGER
+// Tcl Message: run_hw_ila hw_ila_1 
+// Tcl Message: INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2016-Nov-16 17:44:32 
+// TclEventType: HW_ILA_CHANGE
+// Tcl Message: wait_on_hw_ila hw_ila_1 
+// Tcl Message: display_hw_ila_data [upload_hw_ila_data hw_ila_1] 
+// Tcl Message: INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2016-Nov-16 17:44:32 
+// TclEventType: HW_ILA_CHANGE
+// Elapsed time: 13 seconds
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false); // f:av (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false, false, false, false, true, false); // f:av (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectMenu(PAResourceCommand.PACommandNames_CREATE_HARDWARE_DASHBOARDS, "Dashboard"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenuItem(RDIResourceCommand.RDICommands_PROPERTIES, "ILA Core Properties..."); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: RDIResourceCommand.RDICommands_PROPERTIES
+selectTab(RDIResource.PropertiesView_TABBED_PANE, (HResource) null, "Properties", 1); // g:JideTabbedPane (JPanel:JComponent, cl:JFrame)
+// Elapsed time: 11 seconds
+maximizeFrame(RDIResource.WorkspaceDockingHolder_DOCKABLE_FRAME, "Settings - hw_ila_1"); // Z:ap (FrameContainer:JideTabbedPane, cl:JFrame)
+selectButton((HResource) null, "Trigger mode:"); // D:d (JPanel:JComponent, cl:JFrame)
+selectTab("PlanAheadTabBaseWorkspace_JideTabbedPane", (HResource) null, "ila_0.v", 3); // TdiGroup:JideTabbedPane (CodeEditorDocumentPane:DocumentPane, cl:JFrame)
+// Elapsed time: 11 seconds
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Project Manager]", 0, true); // w:Y (v:H, cl:JFrame) - Node
+// Run Command: PAResourceCommand.PACommandNames_GOTO_PROJECT_MANAGER
+collapseTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8); // A:k (H:JPanel, cl:JFrame)
+selectTab("PlanAheadTabBaseWorkspace_JideTabbedPane", (HResource) null, "ila_0.v", 4); // TdiGroup:JideTabbedPane (CodeEditorDocumentPane:DocumentPane, cl:JFrame)
+closeView(PAResourceOtoP.PAViews_CODE, "Code"); // F:b
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, true, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click - Node
+// Run Command: PAResourceCommand.PACommandNames_RECUSTOMIZE_CORE
+// T:cp (cl:JFrame):  Re-customize IP : addNotify
+// t:P (cl:JFrame): Re-customize IP: addNotify
+dismissDialog("Re-customize IP"); // T:cp (cl:JFrame)
+selectButton(RDIResource.BaseDialog_CANCEL, "Cancel"); // a:JButton (JPanel:JComponent, t:P)
+dismissDialog("Re-customize IP"); // t:P (cl:JFrame)
+selectCodeEditor("project_top.sv", 375, 323); // bj:J (JPanel:JComponent, cl:JFrame)
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug]", 20, true); // w:Y (v:H, cl:JFrame) - Node
+// Run Command: PAResourceCommand.PACommandNames_GOTO_PROGRAM_DEBUG
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false); // f:av (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false, false, false, false, true, false); // f:av (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false); // f:av (JViewport:JComponent, cl:JFrame)
+selectTab(RDIResource.PropertiesView_TABBED_PANE, (HResource) null, "General", 0); // g:JideTabbedPane (JPanel:JComponent, cl:JFrame)
+selectTab(RDIResource.PropertiesView_TABBED_PANE, (HResource) null, "Properties", 1); // g:JideTabbedPane (JPanel:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false); // f:av (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false, false, false, false, false, true); // f:av (JViewport:JComponent, cl:JFrame) - Double Click
+// Run Command: PAResourceCommand.PACommandNames_OPEN_HARDWARE_DASHBOARD
+selectTab("PlanAheadTabBaseWorkspace_JideTabbedPane", (HResource) null, "project_top.sv", 1); // TdiGroup:JideTabbedPane (CodeEditorDocumentPane:DocumentPane, cl:JFrame)
+selectTab("PlanAheadTabBaseWorkspace_JideTabbedPane", (HResource) null, "dashboard_1", 2); // TdiGroup:JideTabbedPane (CodeEditorDocumentPane:DocumentPane, cl:JFrame)
+closeFrame(RDIResource.WorkspaceDockingHolder_DOCKABLE_FRAME, "Settings - hw_ila_1"); // Z:ap (FrameContainer:JideTabbedPane, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, data_out[7:0]]", 59, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, interrupt_mask]", 60, false, false, false, false, true, false); // w:k (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenuItem(PAResourceCommand.PACommandNames_ADD_PROBES_TO_WAVEFORM, "Add Probes to Waveform"); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_ADD_PROBES_TO_WAVEFORM
+// TclEventType: WAVEFORM_UPDATE_TITLE
+// Tcl Message: add_wave -into {hw_ila_data_1.wcfg} -radix bin [get_hw_probes {interrupt_mask}] 
+// Elapsed time: 11 seconds
+closeView(PAResourceOtoP.PAViews_DASHBOARD, "dashboard_1"); // i:aK
+// Elapsed time: 11 seconds
+selectCodeEditor("project_top.sv", 60, 253); // bj:J (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("project_top.sv", 62, 263); // bj:J (JPanel:JComponent, cl:JFrame)
+// Elapsed time: 11 seconds
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Project Manager]", 0, true); // w:Y (v:H, cl:JFrame) - Node
+// Run Command: PAResourceCommand.PACommandNames_GOTO_PROJECT_MANAGER
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci), ila_0 (ila_0.dcp)]", 10, false); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci), ila_0 (ila_0.v)]", 9, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, true, false, false, false, true, false); // A:k (H:JPanel, cl:JFrame) - Popup Trigger - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci), ila_0 (ila_0.dcp)]", 10, false); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug]", 20, true); // w:Y (v:H, cl:JFrame) - Node
+// Run Command: PAResourceCommand.PACommandNames_GOTO_PROGRAM_DEBUG
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false); // f:av (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false, false, false, false, true, false); // f:av (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "xc7z020_1 (2) ; Programmed", 3, "xc7z020_1 (2)", 0, true); // f:av (JViewport:JComponent, cl:JFrame) - Node
+selectButton(PAResourceEtoH.HardwareDevicePropPanels_SPECIFY_PROBES_FILE, (String) null); // r:a (I:aS, cl:JFrame)
+// Elapsed time: 10 seconds
+dismissFileChooser();
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug, Hardware Manager, Program Device]", 25, false); // w:Y (v:H, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_PROGRAM_FPGA
+selectMenuItem((HResource) null, "xc7z020_1"); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_OPEN_HARDWARE_MANAGER
+// Run Command: PAResourceCommand.PACommandNames_PROGRAM_FPGA
+// aC:ag (cl:JFrame): Program Device: addNotify
+selectButton(PAResourceOtoP.ProgramFpgaDialog_SPECIFY_BITSTREAM_FILE, (String) null); // r:a (aS:JPanel, aC:ag)
+dismissFileChooser();
+selectButton(PAResourceOtoP.ProgramFpgaDialog_SPECIFY_DEBUG_PROBES_FILE, (String) null); // r:a (aS:JPanel, aC:ag)
+dismissFileChooser();
+selectButton(RDIResource.BaseDialog_CANCEL, "Cancel"); // a:JButton (JPanel:JComponent, aC:ag)
+// 'x' command handler elapsed time: 18 seconds
+dismissDialog("Program Device"); // aC:ag (cl:JFrame)
+selectCodeEditor("project_top.sv", 310, 319); // bj:J (JPanel:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false); // f:av (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false); // f:av (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false, false, false, false, false, true); // f:av (JViewport:JComponent, cl:JFrame) - Double Click
+// Run Command: PAResourceCommand.PACommandNames_NEW_HARDWARE_DASHBOARD
+// a:ag (cl:JFrame): New Dashboard: addNotify
+selectButton(RDIResource.BaseDialog_CANCEL, "Cancel"); // a:JButton (JPanel:JComponent, a:ag)
+// 'C' command handler elapsed time: 7 seconds
+dismissDialog("New Dashboard"); // a:ag (cl:JFrame)
+selectCodeEditor("project_top.sv", 341, 281); // bj:J (JPanel:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "XADC ;   ", 4, "XADC", 0, false); // f:av (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false); // f:av (JViewport:JComponent, cl:JFrame)
+selectTab(RDIResource.PropertiesView_TABBED_PANE, (HResource) null, "General", 0); // g:JideTabbedPane (JPanel:JComponent, cl:JFrame)
+selectTab(RDIResource.PropertiesView_TABBED_PANE, (HResource) null, "Properties", 1); // g:JideTabbedPane (JPanel:JComponent, cl:JFrame)
+selectTab(RDIResource.PropertiesView_TABBED_PANE, (HResource) null, "General", 0); // g:JideTabbedPane (JPanel:JComponent, cl:JFrame)
+selectTab(RDIResource.PropertiesView_TABBED_PANE, (HResource) null, "Properties", 1); // g:JideTabbedPane (JPanel:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false, false, false, false, true, false); // f:av (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectMenuItem(RDIResourceCommand.RDICommands_PROPERTIES, "ILA Core Properties..."); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: RDIResourceCommand.RDICommands_PROPERTIES
+// Elapsed time: 10 seconds
+selectButton(RDIResource.PropertiesView_PREVIOUS_OBJECT, "Properties_backward"); // w:JideButton (CommandBar:DockableBar, cl:JFrame)
+selectButton(RDIResource.PropertiesView_NEXT_OBJECT, "Properties_forward"); // w:JideButton (CommandBar:DockableBar, cl:JFrame)
+selectTab(RDIResource.PropertiesView_TABBED_PANE, (HResource) null, "General", 0); // g:JideTabbedPane (JPanel:JComponent, cl:JFrame)
+selectLabel((HResource) null, "xc7z020_1"); // k:b (h:JPanel, cl:JFrame)
+selectLabel((HResource) null, "xc7z020_1"); // k:b (h:JPanel, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "XADC ;   ", 4, "XADC", 0, false); // f:av (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "xc7z020_1 (2) ; Programmed", 3, "xc7z020_1 (2)", 0, true); // f:av (JViewport:JComponent, cl:JFrame) - Node
+selectButton(PAResourceEtoH.HardwareDevicePropPanels_SPECIFY_PROBES_FILE, (String) null); // r:a (I:aS, cl:JFrame)
+dismissFileChooser();
+setText(PAResourceEtoH.HardwareDevicePropPanels_SPECIFY_PROBES_FILE, "/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/debug_nets.ltx"); // ao:JTextField (I:aS, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "XADC ;   ", 4, "XADC", 0, false); // f:av (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false); // f:av (JViewport:JComponent, cl:JFrame)
+// Elapsed time: 27 seconds
+selectTab(RDIResource.PropertiesView_TABBED_PANE, (HResource) null, "Properties", 1); // g:JideTabbedPane (JPanel:JComponent, cl:JFrame)
+selectTab(RDIResource.PropertiesView_TABBED_PANE, (HResource) null, "General", 0); // g:JideTabbedPane (JPanel:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false); // f:av (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false); // f:av (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false, false, false, false, false, true); // f:av (JViewport:JComponent, cl:JFrame) - Double Click
+// Run Command: PAResourceCommand.PACommandNames_NEW_HARDWARE_DASHBOARD
+// a:ag (cl:JFrame): New Dashboard: addNotify
+selectButton(RDIResource.BaseDialog_CANCEL, "Cancel"); // a:JButton (JPanel:JComponent, a:ag)
+dismissDialog("New Dashboard"); // a:ag (cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false); // f:av (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false, false, false, false, false, true); // f:av (JViewport:JComponent, cl:JFrame) - Double Click
+// Run Command: PAResourceCommand.PACommandNames_NEW_HARDWARE_DASHBOARD
+// a:ag (cl:JFrame): New Dashboard: addNotify
+selectButton(RDIResource.BaseDialog_CANCEL, "Cancel"); // a:JButton (JPanel:JComponent, a:ag)
+// 'C' command handler elapsed time: 6 seconds
+dismissDialog("New Dashboard"); // a:ag (cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_3]", 4, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_3]", 4, false, false, false, false, false, true); // w:k (JViewport:JComponent, cl:JFrame) - Double Click
+selectTab(RDIResource.PropertiesView_TABBED_PANE, (HResource) null, "Properties", 1); // g:JideTabbedPane (JPanel:JComponent, cl:JFrame)
+selectTab(RDIResource.PropertiesView_TABBED_PANE, (HResource) null, "General", 0); // g:JideTabbedPane (JPanel:JComponent, cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. , [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 4, false); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs]", 1, true, false, false, false, true, false); // ae:k (JViewport:JComponent, cl:JFrame) - Popup Trigger - Node
+selectMenu(PAResourceItoN.MsgTreePanel_MESSAGE_SEVERITY, "Message Severity"); // X:JMenu (M:JPopupMenu, Popup:JWindow)
+selectMenuItem(PAResourceItoN.MsgTreePanel_DISCARD_OLD_MESSAGES, "Discard Old Messages"); // ab:JMenuItem (M:JPopupMenu, Popup:JWindow)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 3, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 3, true, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 3, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 3, true, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 3, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 3, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. , [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 4, false); // ae:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1, [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. , [Designutils 20-1281] Could not find module 'ila_0'. The XDC file /afs/ece.cmu.edu/usr/suyashb/Private/545/psg/audioSys_0/src/ila_0/ila_v5_1/constraints/ila.xdc will not be read for this module.. ]", 4, false, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1]", 2, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1]", 2, true, false, false, false, false, true); // ae:k (JViewport:JComponent, cl:JFrame) - Double Click - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1]", 2, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceItoN.MsgTreePanel_MESSAGE_VIEW_TREE, "[, Synthesis, Out-of-Context Module Runs, audioSys_0_synth_1]", 2, true); // ae:k (JViewport:JComponent, cl:JFrame) - Node
+selectTab("PlanAheadTabBaseWorkspace_JideTabbedPane", (HResource) null, "audioSys_0.v", 0); // TdiGroup:JideTabbedPane (CodeEditorDocumentPane:DocumentPane, cl:JFrame)
+selectCodeEditor("audioSys_0.v", 122, 182); // H:bj (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("audioSys_0.v", 101, 423); // H:bj (JPanel:JComponent, cl:JFrame)
+selectCodeEditor("audioSys_0.v", 43, 346); // H:bj (JPanel:JComponent, cl:JFrame)
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Project Manager]", 0, true); // w:Y (v:H, cl:JFrame) - Node
+// Run Command: PAResourceCommand.PACommandNames_GOTO_PROJECT_MANAGER
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv)]", 4); // A:k (H:JPanel, cl:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci)]", 5); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci), ila_0 (ila_0.xci)]", 9, false); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci), ila_0 (ila_0.xci)]", 9, false, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click
+// Run Command: PAResourceCommand.PACommandNames_RECUSTOMIZE_CORE
+// T:cp (cl:JFrame):  Re-customize IP : addNotify
+// t:P (cl:JFrame): Re-customize IP: addNotify
+dismissDialog("Re-customize IP"); // T:cp (cl:JFrame)
+selectButton(RDIResource.BaseDialog_CANCEL, "Cancel"); // a:JButton (JPanel:JComponent, t:P)
+dismissDialog("Re-customize IP"); // t:P (cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci), audioSys_0 (audioSys_0.v)]", 6, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci), audioSys_0 (audioSys_0.v)]", 6, true, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci), audioSys_0 (audioSys_0.v), inst - audioSys (audio.sv)]", 7, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci), audioSys_0 (audioSys_0.v), inst - audioSys (audio.sv)]", 7, true, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci), ila_0 (ila_0.xci)]", 14, false); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci), ila_0 (ila_0.xci)]", 14, false, false, false, false, true, false); // A:k (H:JPanel, cl:JFrame) - Popup Trigger
+selectMenu(PAResourceCommand.PACommandNames_AUTO_UPDATE_HIER, "Hierarchy Update"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenu(PAResourceQtoS.SrcMenu_IP_HIERARCHY, "IP Hierarchy"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenu(PAResourceQtoS.SrcMenu_IP_HIERARCHY, "IP Hierarchy"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenu(PAResourceCommand.PACommandNames_AUTO_UPDATE_HIER, "Hierarchy Update"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci), audioSys_0 (audioSys_0.v), inst - audioSys (audio.sv), atten - freqAttenuatorSingle (freqAttenuator.sv)]", 10, true); // A:k (H:JPanel, cl:JFrame) - Node
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci), audioSys_0 (audioSys_0.v), inst - audioSys (audio.sv), cpuInterface - comInterface (comInterface.sv)]", 8); // A:k (H:JPanel, cl:JFrame)
+collapseTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci), audioSys_0 (audioSys_0.v), inst - audioSys (audio.sv), cpuInterface - comInterface (comInterface.sv)]", 8); // A:k (H:JPanel, cl:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci), audioSys_0 (audioSys_0.v), inst - audioSys (audio.sv), tone - freqSynth (freqSynth.sv)]", 9); // A:k (H:JPanel, cl:JFrame)
+collapseTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci), audioSys_0 (audioSys_0.v), inst - audioSys (audio.sv), tone - freqSynth (freqSynth.sv)]", 9); // A:k (H:JPanel, cl:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci), audioSys_0 (audioSys_0.v), inst - audioSys (audio.sv), atten - freqAttenuatorSingle (freqAttenuator.sv)]", 10); // A:k (H:JPanel, cl:JFrame)
+collapseTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci), audioSys_0 (audioSys_0.v), inst - audioSys (audio.sv), atten - freqAttenuatorSingle (freqAttenuator.sv)]", 10); // A:k (H:JPanel, cl:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci), audioSys_0 (audioSys_0.v), inst - audioSys (audio.sv), interfaceTest - dacInterface (dacInterface.sv)]", 11); // A:k (H:JPanel, cl:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci), audioSys_0 (audioSys_0.v), inst - audioSys (audio.sv), atten - freqAttenuatorSingle (freqAttenuator.sv)]", 10); // A:k (H:JPanel, cl:JFrame)
+collapseTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci), audioSys_0 (audioSys_0.v), inst - audioSys (audio.sv), atten - freqAttenuatorSingle (freqAttenuator.sv)]", 10); // A:k (H:JPanel, cl:JFrame)
+collapseTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv), toneGenerator - audioSys_0 (audioSys_0.xci), audioSys_0 (audioSys_0.v), inst - audioSys (audio.sv), interfaceTest - dacInterface (dacInterface.sv)]", 11); // A:k (H:JPanel, cl:JFrame)
+collapseTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), psg - audio_top (audio_top.sv)]", 4); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci), ila_0 (ila_0.v)]", 9, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, true, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click - Node
+// Run Command: PAResourceCommand.PACommandNames_RECUSTOMIZE_CORE
+// T:cp (cl:JFrame):  Re-customize IP : addNotify
+// t:P (cl:JFrame): Re-customize IP: addNotify
+dismissDialog("Re-customize IP"); // T:cp (cl:JFrame)
+// Elapsed time: 13 seconds
+selectCheckBox(PAResourceEtoH.HACGCIPSymbol_SHOW_DISABLED_PORTS, "Show disabled ports", true); // h:JCheckBox (ai:G, t:P): TRUE
+selectCheckBox(PAResourceEtoH.HACGCIPSymbol_SHOW_DISABLED_PORTS, "Show disabled ports", false); // h:JCheckBox (ai:G, t:P): FALSE
+selectButton(PAResourceAtoD.CustomizeCoreDialog_IP_LOCATION, "IP Location"); // w:JideButton (CommandBar:DockableBar, t:P)
+// IP Location: show
+selectButton(RDIResource.HPopupTitle_CLOSE, (String) null); // l:JideButton (JPanel:JComponent, ResizableWindow:JWindow)
+// IP Location: hide
+selectButton(PAResourceAtoD.CustomizeCoreDialog_DOCUMENTATION, "Documentation"); // w:JideButton (CommandBar:DockableBar, t:P)
+selectButton(PAResourceAtoD.CustomizeCoreDialog_DOCUMENTATION, "Documentation"); // w:JideButton (CommandBar:DockableBar, t:P)
+selectButton(RDIResource.BaseDialog_CANCEL, "Cancel"); // a:JButton (JPanel:JComponent, t:P)
+dismissDialog("Re-customize IP"); // t:P (cl:JFrame)
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci), ila_0 (ila_0.v)]", 9, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci), ila_0 (ila_0.dcp)]", 10, false); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci), ila_0 (ila_0.dcp)]", 10, false, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click
+// ab:ah (cl:JFrame): Unable to Open File: addNotify
+selectButton(PAResourceOtoP.OpenFileAction_CANCEL, "Cancel"); // a:JButton (JPanel:JComponent, ab:ah)
+dismissDialog("Unable to Open File"); // ab:ah (cl:JFrame)
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug]", 20, true); // w:Y (v:H, cl:JFrame) - Node
+// Run Command: PAResourceCommand.PACommandNames_GOTO_PROGRAM_DEBUG
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug, Hardware Manager, Program Device]", 25, false); // w:Y (v:H, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_PROGRAM_FPGA
+selectMenuItem((HResource) null, "xc7z020_1"); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_OPEN_HARDWARE_MANAGER
+// Run Command: PAResourceCommand.PACommandNames_PROGRAM_FPGA
+// aC:ag (cl:JFrame): Program Device: addNotify
+selectButton(PAResourceOtoP.ProgramFpgaDialog_PROGRAM, "Program"); // a:JButton (JPanel:JComponent, aC:ag)
+// cp:P (cl:JFrame):  Program Device : addNotify
+dismissDialog("Program Device"); // aC:ag (cl:JFrame)
+// TclEventType: HW_DEVICE_CHANGE
+// Tcl Message: set_property PROBES.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/debug_nets.ltx} [lindex [get_hw_devices] 1] 
+// TclEventType: HW_DEVICE_CHANGE
+// Tcl Message: set_property PROGRAM.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/project_top.bit} [lindex [get_hw_devices] 1] 
+// TclEventType: HW_DEVICE_UPDATE
+// Tcl Message: program_hw_devices [lindex [get_hw_devices] 1] 
+// TclEventType: HW_DEVICE_CHANGE
+// Tcl Message: INFO: [Labtools 27-3164] End of startup status: HIGH 
+// Tcl Message: program_hw_devices: Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 6246.168 ; gain = 0.000 ; free physical = 2291 ; free virtual = 16497 
+// TclEventType: HW_DEVICE_CHANGE
+// TclEventType: HW_SYSMON_CHANGE
+// TclEventType: HW_ILA_CHANGE
+// TclEventType: HW_DEVICE_UPDATE
+// TclEventType: HW_ILA_CHANGE
+// TclEventType: HW_DEVICE_CHANGE
+// TclEventType: HW_ILA_CHANGE
+// Tcl Message: refresh_hw_device [lindex [get_hw_devices] 1] 
+// Tcl Message: INFO: [Labtools 27-2302] Device xc7z020 (JTAG device index = 1) is programmed with a design that has 1 ILA core(s). 
+// TclEventType: HW_DEVICE_CHANGE
+// TclEventType: HW_DEVICE_PROBES_CHANGE
+// TclEventType: DEBUG_PROBE_CHANGE
+// TclEventType: HW_DEVICE_PROBES_CHANGE
+// TclEventType: HW_ILA_CHANGE
+// 'x' command handler elapsed time: 12 seconds
+// Elapsed time: 10 seconds
+dismissDialog("Program Device"); // cp:P (cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false); // f:av (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false, false, false, false, false, true); // f:av (JViewport:JComponent, cl:JFrame) - Double Click
+// Run Command: PAResourceCommand.PACommandNames_OPEN_HARDWARE_DASHBOARD
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false); // f:av (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false, false, false, false, false, true); // f:av (JViewport:JComponent, cl:JFrame) - Double Click
+// Run Command: PAResourceCommand.PACommandNames_OPEN_HARDWARE_DASHBOARD
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false, false, false, false, true, false); // f:av (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectMenuItem(RDIResourceCommand.RDICommands_PROPERTIES, "ILA Core Properties..."); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: RDIResourceCommand.RDICommands_PROPERTIES
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_52]", 53, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_53]", 54, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_28]", 29, false, true, false, false, false, false); // w:k (JViewport:JComponent, cl:JFrame) - Shift Key
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_38]", 39, false, false, false, false, true, false); // w:k (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenu(PAResourceCommand.PACommandNames_CREATE_HARDWARE_DASHBOARDS, "Dashboard"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_31]", 32, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_33]", 34, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_1]", 2, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, clk_4]", 56, false); // w:k (JViewport:JComponent, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_OPEN_HARDWARE_DASHBOARD
+// Run Command: PAResourceCommand.PACommandNames_OPEN_HARDWARE_DASHBOARD
+// Run Command: PAResourceCommand.PACommandNames_OPEN_HARDWARE_DASHBOARD
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, clk_4]", 56, false, false, false, false, false, true); // w:k (JViewport:JComponent, cl:JFrame) - Double Click
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, clk_4]", 56, false); // w:k (JViewport:JComponent, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_OPEN_HARDWARE_DASHBOARD
+// Run Command: PAResourceCommand.PACommandNames_OPEN_HARDWARE_DASHBOARD
+// Run Command: PAResourceCommand.PACommandNames_OPEN_HARDWARE_DASHBOARD
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, clk_4]", 56, false, false, false, false, false, true); // w:k (JViewport:JComponent, cl:JFrame) - Double Click
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, clk_4]", 56, false, false, false, false, true, false); // w:k (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectMenuItem(RDIResourceCommand.RDICommands_PROPERTIES, "Debug Probe Properties..."); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: RDIResourceCommand.RDICommands_PROPERTIES
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, clk_4]", 56, false, false, false, false, true, false); // w:k (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectTab(RDIResource.PropertiesView_TABBED_PANE, (HResource) null, "Properties", 1); // g:JideTabbedPane (JPanel:JComponent, cl:JFrame)
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Project Manager]", 0, true); // w:Y (v:H, cl:JFrame) - Node
+// Run Command: PAResourceCommand.PACommandNames_GOTO_PROJECT_MANAGER
+selectTab("PlanAheadTabBaseWorkspace_JideTabbedPane", (HResource) null, "project_top.sv", 3); // TdiGroup:JideTabbedPane (CodeEditorDocumentPane:DocumentPane, cl:JFrame)
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug]", 20, true); // w:Y (v:H, cl:JFrame) - Node
+// Run Command: PAResourceCommand.PACommandNames_GOTO_PROGRAM_DEBUG
+selectButton(PAResourceTtoZ.TriggerStatusPanel_STOP_TRIGGER_FOR_THIS_ILA_CORE, "ILA_stop_trigger"); // w:JideButton (CommandBar:DockableBar, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_STOP_TRIGGER
+// HOptionPane Warning: 'There are no armed ILAs. (Stop Trigger)'
+selectButton("PAResourceQtoS.StopTrigger_THERE_NO_ARMED_ILAS_OK", "OK"); // JButton:AbstractButton (JPanel:JComponent, T:JDialog)
+selectButton(PAResourceTtoZ.TriggerStatusPanel_TOGGLE_AUTO_RE_TRIGGER_MODE, "ILA_auto_retrigger"); // s:JideToggleButton (CommandBar:DockableBar, cl:JFrame): TRUE
+// [GUI Memory]: 193 MB (+1711kb) [01:08:50]
+selectButton(PAResourceTtoZ.TriggerStatusPanel_RUN_TRIGGER_FOR_THIS_ILA_CORE, "ILA_run_trigger"); // w:JideButton (CommandBar:DockableBar, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_RUN_TRIGGER
+// Tcl Message: run_hw_ila hw_ila_1 
+// Tcl Message: INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2016-Nov-16 17:53:05 
+// TclEventType: HW_ILA_CHANGE
+// Tcl Message: wait_on_hw_ila hw_ila_1 
+// Tcl Message: display_hw_ila_data [upload_hw_ila_data hw_ila_1] 
+// Tcl Message: INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2016-Nov-16 17:53:05 
+selectButton(PAResourceTtoZ.TriggerStatusPanel_RUN_TRIGGER_FOR_THIS_ILA_CORE, "ILA_run_trigger"); // w:JideButton (CommandBar:DockableBar, cl:JFrame)
+// TclEventType: HW_ILA_CHANGE
+selectButton(PAResourceTtoZ.TriggerStatusPanel_STOP_TRIGGER_FOR_THIS_ILA_CORE, "ILA_stop_trigger"); // w:JideButton (CommandBar:DockableBar, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_STOP_TRIGGER
+// Tcl Message: run_hw_ila hw_ila_1 
+// Tcl Message: INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2016-Nov-16 17:53:08 
+// TclEventType: HW_ILA_CHANGE
+selectButton(PAResourceTtoZ.TriggerStatusPanel_STOP_TRIGGER_FOR_THIS_ILA_CORE, "ILA_stop_trigger"); // w:JideButton (CommandBar:DockableBar, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_STOP_TRIGGER
+// Tcl Message: wait_on_hw_ila -timeout 0 hw_ila_1 
+// Tcl Message: display_hw_ila_data [upload_hw_ila_data hw_ila_1] 
+// Tcl Message: INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2016-Nov-16 17:53:08 
+// TclEventType: HW_ILA_CHANGE
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_16]", 17, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_16]", 17, false, false, false, false, true, false); // w:k (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenuItem(PAResourceCommand.PACommandNames_ADD_PROBES_TO_WAVEFORM, "Add Probes to Waveform"); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_ADD_PROBES_TO_WAVEFORM
+// TclEventType: WAVEFORM_UPDATE_TITLE
+// Tcl Message: add_wave -into {hw_ila_data_1.wcfg} -radix bin [get_hw_probes {<const0>_16}] 
+// Elapsed time: 56 seconds
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "xc7z020_1 (2) ; Programmed", 3, "xc7z020_1 (2)", 0, true); // f:av (JViewport:JComponent, cl:JFrame) - Node
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "xc7z020_1 (2) ; Programmed", 3, "xc7z020_1 (2)", 0, true, false, false, false, true, false); // f:av (JViewport:JComponent, cl:JFrame) - Popup Trigger - Node
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "xc7z020_1 (2) ; Programmed", 3, "xc7z020_1 (2)", 0, true, false, false, false, true, false); // f:av (JViewport:JComponent, cl:JFrame) - Popup Trigger - Node
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "xc7z020_1 (2) ; Programmed", 3, "xc7z020_1 (2)", 0, true); // f:av (JViewport:JComponent, cl:JFrame) - Node
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "xc7z020_1 (2) ; Programmed", 3, "xc7z020_1 (2)", 0, true, false, false, false, false, true); // f:av (JViewport:JComponent, cl:JFrame) - Double Click - Node
+// Run Command: PAResourceCommand.PACommandNames_NEW_HARDWARE_DASHBOARD
+// a:ag (cl:JFrame): New Dashboard: addNotify
+selectButton(RDIResource.BaseDialog_CANCEL, "Cancel"); // a:JButton (JPanel:JComponent, a:ag)
+dismissDialog("New Dashboard"); // a:ag (cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "XADC ;   ", 4, "XADC", 0, false); // f:av (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false); // f:av (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false, false, false, false, false, true); // f:av (JViewport:JComponent, cl:JFrame) - Double Click
+// Run Command: PAResourceCommand.PACommandNames_OPEN_HARDWARE_DASHBOARD
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "xc7z020_1 (2) ; Programmed", 3, "xc7z020_1 (2)", 0, true); // f:av (JViewport:JComponent, cl:JFrame) - Node
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "xc7z020_1 (2) ; Programmed", 3, "xc7z020_1 (2)", 0, true, false, false, false, false, true); // f:av (JViewport:JComponent, cl:JFrame) - Double Click - Node
+// Run Command: PAResourceCommand.PACommandNames_NEW_HARDWARE_DASHBOARD
+// a:ag (cl:JFrame): New Dashboard: addNotify
+selectButton(RDIResource.BaseDialog_CANCEL, "Cancel"); // a:JButton (JPanel:JComponent, a:ag)
+// 'C' command handler elapsed time: 3 seconds
+dismissDialog("New Dashboard"); // a:ag (cl:JFrame)
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug, Hardware Manager, Program Device]", 25, false); // w:Y (v:H, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_PROGRAM_FPGA
+collapseTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "xc7z020_1 (2) ; Programmed", 3); // f:av (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "xc7z020_1 (2) ; Programmed", 3, "xc7z020_1 (2)", 0, true, false, false, false, false, true); // f:av (JViewport:JComponent, cl:JFrame) - Double Click - Node
+// Run Command: PAResourceCommand.PACommandNames_NEW_HARDWARE_DASHBOARD
+// a:ag (cl:JFrame): New Dashboard: addNotify
+selectButton(RDIResource.BaseDialog_CANCEL, "Cancel"); // a:JButton (JPanel:JComponent, a:ag)
+dismissDialog("New Dashboard"); // a:ag (cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "xc7z020_1 (2) ; Programmed", 3, "xc7z020_1 (2)", 0, true); // f:av (JViewport:JComponent, cl:JFrame) - Node
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "xc7z020_1 (2) ; Programmed", 3, "xc7z020_1 (2)", 0, true, false, false, false, false, true); // f:av (JViewport:JComponent, cl:JFrame) - Double Click - Node
+// Run Command: PAResourceCommand.PACommandNames_NEW_HARDWARE_DASHBOARD
+// a:ag (cl:JFrame): New Dashboard: addNotify
+selectTree(PAResourceEtoH.HardwareDashboardOptionsPanel_LAYER_TREE, "[Windows, xc7z020_1, hw_ila_1]", 1, true); // h:n (JViewport:JComponent, a:ag) - Node
+selectButton(RDIResource.BaseDialog_CANCEL, "Cancel"); // a:JButton (JPanel:JComponent, a:ag)
+// 'C' command handler elapsed time: 3 seconds
+dismissDialog("New Dashboard"); // a:ag (cl:JFrame)
+expandTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "xc7z020_1 (2) ; Programmed", 3); // f:av (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "XADC ;   ", 4, "XADC", 0, false); // f:av (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false); // f:av (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false, false, false, false, false, true); // f:av (JViewport:JComponent, cl:JFrame) - Double Click
+// Run Command: PAResourceCommand.PACommandNames_OPEN_HARDWARE_DASHBOARD
+selectTreeTable(PAResourceEtoH.HardwareTreePanel_HARDWARE_TREE_TABLE, "hw_ila_1 ; Idle", 5, "hw_ila_1", 0, false, false, false, false, true, false); // f:av (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectMenu(PAResourceCommand.PACommandNames_CREATE_HARDWARE_DASHBOARDS, "Dashboard"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenu(PAResourceCommand.PACommandNames_CREATE_HARDWARE_DASHBOARDS, "Dashboard"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenuItem(RDIResourceCommand.RDICommands_PROPERTIES, "ILA Core Properties..."); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: RDIResourceCommand.RDICommands_PROPERTIES
+selectButton((HResource) null, "Trigger mode:"); // D:d (JPanel:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_19]", 20, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, addr_bus[15:0]]", 55, false, false, true, false, false, false); // w:k (JViewport:JComponent, cl:JFrame) - Control Key
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, clk_4]", 56, false, false, true, false, false, false); // w:k (JViewport:JComponent, cl:JFrame) - Control Key
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, curr_state[31:0]]", 57, false, false, true, false, false, false); // w:k (JViewport:JComponent, cl:JFrame) - Control Key
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, data_in[7:0]]", 58, false, false, true, false, false, false); // w:k (JViewport:JComponent, cl:JFrame) - Control Key
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, data_out[7:0]]", 59, false, false, true, false, false, false); // w:k (JViewport:JComponent, cl:JFrame) - Control Key
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, interrupt_mask]", 60, false, false, true, false, false, false); // w:k (JViewport:JComponent, cl:JFrame) - Control Key
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, IORQ_L]", 61, false, false, true, false, false, false); // w:k (JViewport:JComponent, cl:JFrame) - Control Key
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, M1_L]", 62, false, false, true, false, false, false); // w:k (JViewport:JComponent, cl:JFrame) - Control Key
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, MREQ_L]", 63, false, false, true, false, false, false); // w:k (JViewport:JComponent, cl:JFrame) - Control Key
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, RD_L]", 64, false, false, true, false, false, false); // w:k (JViewport:JComponent, cl:JFrame) - Control Key
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, WR_L]", 65, false, false, true, false, false, false); // w:k (JViewport:JComponent, cl:JFrame) - Control Key
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_11]", 12, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_9]", 10, false, false, false, false, true, false); // w:k (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenu(PAResourceCommand.PACommandNames_CREATE_HARDWARE_DASHBOARDS, "Dashboard"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenu(PAResourceCommand.PACommandNames_CREATE_HARDWARE_DASHBOARDS, "Dashboard"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_34]", 35, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, M1_L]", 62, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, M1_L]", 62, false, false, false, false, true, false); // w:k (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenu(PAResourceCommand.PACommandNames_CREATE_HARDWARE_DASHBOARDS, "Dashboard"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenuItem((HResource) null, "hw_ila_1"); // ab:JMenuItem (JPopupMenu:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, interrupt_mask]", 60, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, interrupt_mask]", 60, false, false, false, false, true, false); // w:k (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenu(PAResourceCommand.PACommandNames_CREATE_HARDWARE_DASHBOARDS, "Dashboard"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenuItem((HResource) null, "hw_ila_1"); // ab:JMenuItem (JPopupMenu:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_52]", 53, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_52]", 53, false, false, false, false, true, false); // w:k (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, interrupt_mask]", 60, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, data_out[7:0]]", 59, false, false, false, false, true, false); // w:k (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenu(PAResourceCommand.PACommandNames_CREATE_HARDWARE_DASHBOARDS, "Dashboard"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenuItem(PAResourceCommand.PACommandNames_ADD_PROBES_TO_BASIC_TRIGGER_SETUP, "Add Probes to Basic Trigger Setup"); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_ADD_PROBES_TO_BASIC_TRIGGER_SETUP
+selectButton(PAResourceItoN.IlaProbeTablePanel_ADD_PROBE, "IlaProbeTablePanel_new"); // w:JideButton (CommandBar:DockableBar, cl:JFrame)
+// Add Probes: show
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, M1_L]", 4, false); // w:k (JViewport:JComponent, ResizableWindow:JWindow)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, M1_L]", 4, false, false, false, false, false, true); // w:k (JViewport:JComponent, ResizableWindow:JWindow) - Double Click
+selectButton(PAResourceAtoD.AddIlaProbesPopup_OK, "OK"); // a:JButton (JPanel:JComponent, ResizableWindow:JWindow)
+// Add Probes: hide
+// [GUI Memory]: 204 MB (+1543kb) [01:11:23]
+// Elapsed time: 10 seconds
+selectComboBox(PAResourceAtoD.CompareValuePanel_SCALAR_VALUES, "X (don't care)", 2); // f:JComboBox (JPanel:JComponent, ResizableWindow:JWindow)
+// TclEventType: DEBUG_PROBE_CHANGE
+// Tcl Message: set_property TRIGGER_COMPARE_VALUE eq1'bX [get_hw_probes clk_4 -of_objects [get_hw_ilas hw_ila_1]] 
+selectButton(PAResourceTtoZ.TriggerStatusPanel_RUN_TRIGGER_FOR_THIS_ILA_CORE, "ILA_run_trigger"); // w:JideButton (CommandBar:DockableBar, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_RUN_TRIGGER
+// TclEventType: HW_ILA_CHANGE
+// Tcl Message: run_hw_ila hw_ila_1 
+// Tcl Message: INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2016-Nov-16 17:55:41 
+// Tcl Message: wait_on_hw_ila hw_ila_1 
+// Tcl Message: display_hw_ila_data [upload_hw_ila_data hw_ila_1] 
+// Tcl Message: INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2016-Nov-16 17:55:41 
+// TclEventType: HW_ILA_CHANGE
+selectButton(PAResourceTtoZ.TriggerStatusPanel_TOGGLE_AUTO_RE_TRIGGER_MODE, "ILA_auto_retrigger"); // s:JideToggleButton (CommandBar:DockableBar, cl:JFrame): FALSE
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenu(PAResourceItoN.LabtoolsMenu_NAME, "Name"); // X:JMenu (ai:JPopupMenu, cl:JFrame)
+selectMenuItem(PAResourceCommand.PACommandNames_ENABLE_AUTO_RETRIGGER, "Enable Auto Re-trigger"); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_ENABLE_AUTO_RETRIGGER
+selectButton(PAResourceTtoZ.TriggerStatusPanel_TOGGLE_AUTO_RE_TRIGGER_MODE, "ILA_auto_retrigger"); // s:JideToggleButton (CommandBar:DockableBar, cl:JFrame): FALSE
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_26]", 27, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_23]", 24, false, false, false, false, true, false); // w:k (JViewport:JComponent, cl:JFrame) - Popup Trigger
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_10]", 11, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_30]", 31, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_22]", 23, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_13]", 14, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_7]", 8, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_31]", 32, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_37]", 38, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_39]", 40, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_26]", 27, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_21]", 22, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_15]", 16, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTreeTable(PAResourceTtoZ.TclObjectTreeTable_TREETABLE, "PROBE_PORT ; 8", 5, "8", 1, false); // j:av (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_40]", 41, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_51]", 52, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_34]", 35, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_11]", 12, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_37]", 38, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_49]", 50, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_53]", 54, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, data_in[7:0]]", 58, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, MREQ_L]", 63, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, IORQ_L]", 61, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, addr_bus[15:0]]", 55, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, clk_4]", 56, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, curr_state[31:0]]", 57, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, data_in[7:0]]", 58, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, data_out[7:0]]", 59, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, interrupt_mask]", 60, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, IORQ_L]", 61, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, M1_L]", 62, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, MREQ_L]", 63, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, RD_L]", 64, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, WR_L]", 65, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, WR_L]", 65, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, WR_L]", 65, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, WR_L]", 65, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, WR_L]", 65, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, RD_L]", 64, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, MREQ_L]", 63, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, M1_L]", 62, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, IORQ_L]", 61, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, interrupt_mask]", 60, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, data_out[7:0]]", 59, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, curr_state[31:0]]", 57, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, clk_4]", 56, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, addr_bus[15:0]]", 55, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_53]", 54, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_52]", 53, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_51]", 52, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_50]", 51, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_49]", 50, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_48]", 49, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_47]", 48, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_46]", 47, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_46]", 47, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_44]", 45, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_43]", 44, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_42]", 43, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_41]", 42, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_40]", 41, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_39]", 40, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_38]", 39, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_37]", 38, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_36]", 37, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_35]", 36, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_34]", 35, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_33]", 34, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_33]", 34, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_31]", 32, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_30]", 31, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_29]", 30, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_29]", 30, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_27]", 28, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_26]", 27, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_25]", 26, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_23]", 24, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_23]", 24, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_22]", 23, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_21]", 22, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_20]", 21, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_19]", 20, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_18]", 19, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_17]", 18, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_16]", 17, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_15]", 16, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_14]", 15, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_14]", 15, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_12]", 13, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_11]", 12, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_10]", 11, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_9]", 10, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_8]", 9, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_7]", 8, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_6]", 7, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_6]", 7, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_4]", 5, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_3]", 4, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_2]", 3, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_1]", 2, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>]", 1, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1]", 0, true); // w:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1]", 0, true); // w:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1]", 0, true); // w:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1]", 0, true); // w:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1]", 0, true); // w:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1]", 0, true); // w:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1]", 0, true); // w:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1]", 0, true); // w:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1]", 0, true); // w:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1]", 0, true); // w:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1]", 0, true); // w:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1]", 0, true); // w:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1]", 0, true); // w:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1]", 0, true); // w:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1]", 0, true); // w:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1]", 0, true); // w:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1]", 0, true); // w:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1]", 0, true); // w:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1]", 0, true); // w:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1]", 0, true); // w:k (JViewport:JComponent, cl:JFrame) - Node
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>]", 1, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_1]", 2, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_2]", 3, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_3]", 4, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceOtoP.ProbesView_PROBES_TREE, "[root, hw_ila_1, <const0>_4]", 5, false); // w:k (JViewport:JComponent, cl:JFrame)
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Project Manager]", 0, true); // w:Y (v:H, cl:JFrame) - Node
+// Run Command: PAResourceCommand.PACommandNames_GOTO_PROJECT_MANAGER
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci), ila_0 (ila_0.v)]", 9, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci), ila_0 (ila_0.v)]", 9, true, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click - Node
+selectCodeEditor("ila_0.v", 64, 414); // H:bj (JPanel:JComponent, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci), ila_0 (ila_0.v)]", 9, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci), ila_0 (ila_0.v)]", 9, true, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, z80 (z80_top.sv)]", 11, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci), ila_0 (ila_0.dcp)]", 10, false); // A:k (H:JPanel, cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci), ila_0 (ila_0.dcp)]", 10, false, false, false, false, false, true); // A:k (H:JPanel, cl:JFrame) - Double Click
+// ab:ah (cl:JFrame): Unable to Open File: addNotify
+selectButton(PAResourceOtoP.OpenFileAction_CANCEL, "Cancel"); // a:JButton (JPanel:JComponent, ab:ah)
+dismissDialog("Unable to Open File"); // ab:ah (cl:JFrame)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, true); // A:k (H:JPanel, cl:JFrame) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, project_top (project_top.sv), debug - ila_0 (ila_0.xci)]", 8, true, false, false, false, true, false); // A:k (H:JPanel, cl:JFrame) - Popup Trigger - Node
+selectMenuItem(PAResourceCommand.PACommandNames_RECUSTOMIZE_CORE, "Re-customize IP..."); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_RECUSTOMIZE_CORE
+// T:cp (cl:JFrame):  Re-customize IP : addNotify
+// t:P (cl:JFrame): Re-customize IP: addNotify
+dismissDialog("Re-customize IP"); // T:cp (cl:JFrame)
+selectTab(PAResourceEtoH.HACGCTabbedPane_TABBED_PANE, (HResource) null, "Probe_Ports(0..8)", 1); // aM:g (G:JPanel, t:P)
+selectTab(PAResourceEtoH.HACGCTabbedPane_TABBED_PANE, (HResource) null, "Probe_Ports(8..11)", 2); // aM:g (G:JPanel, t:P)
+setText("Probe8 Width", "1"); // O:ao (aN:N)
+setText("Probe9 Width", "1"); // O:ao (aN:N)
+setText("Probe10 Width", "1", true); // O:ao (aN:N, t:P)
+selectButton(RDIResource.BaseDialog_OK, "OK"); // a:JButton (JPanel:JComponent, t:P)
+dismissDialog("Re-customize IP"); // t:P (cl:JFrame)
+// t:P (cl:JFrame): Re-customize IP: addNotify
+// cp:P (t:P):  Re-customize IP : addNotify
+// Tcl Message: set_property -dict [list CONFIG.C_PROBE10_WIDTH {1} CONFIG.C_PROBE9_WIDTH {1} CONFIG.C_PROBE8_WIDTH {1}] [get_ips ila_0] 
+// TclEventType: FILESET_UPDATE_IP
+// aB:ag (cl:JFrame): Generate Output Products: addNotify
+dismissDialog("Re-customize IP"); // cp:P (t:P)
+selectTree(PAResourceQtoS.SimpleOutputProductDialog_OUTPUT_PRODUCT_TREE, "[root, ila_0.xci]", 0, true); // aO:k (JViewport:JComponent, aB:ag) - Node
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+selectButton(PAResourceQtoS.SimpleOutputProductDialog_GENERATE_OUTPUT_PRODUCTS_IMMEDIATELY, "Generate"); // a:JButton (JPanel:JComponent, aB:ag)
+// cp:P (cl:JFrame):  Managing Output Products : addNotify
+// Tcl Message: generate_target all [get_files  /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/ila_0/ila_0.xci] 
+// Tcl Message: INFO: [IP_Flow 19-1686] Generating 'Instantiation Template' target for IP 'ila_0'... INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'ila_0'... 
+// Tcl Message: INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'ila_0'... INFO: [IP_Flow 19-1686] Generating 'Change Log' target for IP 'ila_0'... 
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_MODIFY
+// TclEventType: RUN_RESET
+// TclEventType: RUN_MODIFY
+// Tcl Message: reset_run ila_0_synth_1 
+// Tcl Message: launch_run -jobs 4 ila_0_synth_1 
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: RUN_MODIFY
+// Tcl Message: [Wed Nov 16 17:57:13 2016] Launched ila_0_synth_1... Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/ila_0_synth_1/runme.log 
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+// TclEventType: DG_ANALYSIS_MSG_RESET
+// TclEventType: DG_UPDATE_GRAPH
+selectButton("PAResourceQtoS.SimpleOutputProductDialog_OUT_OF_CONTEXT_MODULE_RUNS_WERE_LAUNCHED_OK", "OK"); // JButton:AbstractButton (JPanel:JComponent, T:JDialog)
+// TclEventType: FILE_SET_CHANGE
+closeView(PAResourceOtoP.PAViews_CODE, "Code"); // F:b
+// Elapsed time: 64 seconds
+selectTab("PlanAheadTabBaseWorkspace_JideTabbedPane", (HResource) null, "audio.sv", 3); // TdiGroup:JideTabbedPane (CodeEditorDocumentPane:DocumentPane, cl:JFrame)
+// Elapsed time: 20 seconds
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug, Generate Bitstream]", 22, false); // w:Y (v:H, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_RUN_BITGEN
+// cp:P (cl:JFrame):  Resetting Runs : addNotify
+// TclEventType: RUN_MODIFY
+// TclEventType: RUN_RESET
+// TclEventType: RUN_MODIFY
+// Tcl Message: reset_run synth_1 
+dismissDialog("Resetting Runs"); // cp:P (cl:JFrame)
+// TclEventType: FILESET_TARGET_UCF_CHANGE
+// TclEventType: RUN_LAUNCH
+// TclEventType: FILESET_TARGET_UCF_CHANGE
+// TclEventType: RUN_LAUNCH
+// cp:P (cl:JFrame):  Generate Bitstream : addNotify
+// TclEventType: RUN_MODIFY
+// Tcl Message: launch_runs impl_1 -to_step write_bitstream -jobs 4 
+// Tcl Message: [Wed Nov 16 17:58:45 2016] Launched ila_0_synth_1, synth_1... Run output will be captured here: ila_0_synth_1: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/ila_0_synth_1/runme.log synth_1: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/synth_1/runme.log [Wed Nov 16 17:58:45 2016] Launched impl_1... Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/runme.log 
+dismissDialog("Generate Bitstream"); // cp:P (cl:JFrame)
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_COMPLETED
+// TclEventType: RUN_STEP_COMPLETED
+// ak:a (cl:JFrame): Launch Run Critical Messages: addNotify
+// Elapsed time: 222 seconds
+selectButton(PAResourceAtoD.CmdMsgDialog_OK, "OK"); // i:a (JPanel:JComponent, ak:a)
+dismissDialog("Launch Run Critical Messages"); // ak:a (cl:JFrame)
+// HMemoryUtils.trashcanNow. Engine heap size: 5,303 MB. GUI used memory: 141 MB. Current time: 11/16/16 6:03:21 PM EST
+// TclEventType: RUN_COMPLETED
+// Elapsed time: 199 seconds
+selectTree(PAResourceEtoH.FlowNavigatorTreePanel_FLOW_NAVIGATOR_TREE, "[, Program and Debug, Hardware Manager, Program Device]", 25, false); // w:Y (v:H, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_PROGRAM_FPGA
+selectMenuItem((HResource) null, "xc7z020_1"); // ab:JMenuItem (ai:JPopupMenu, cl:JFrame)
+// Run Command: PAResourceCommand.PACommandNames_OPEN_HARDWARE_MANAGER
+// Run Command: PAResourceCommand.PACommandNames_PROGRAM_FPGA
+// aC:ag (cl:JFrame): Program Device: addNotify
+selectButton(PAResourceOtoP.ProgramFpgaDialog_PROGRAM, "Program"); // a:JButton (JPanel:JComponent, aC:ag)
+// cp:P (cl:JFrame):  Program Device : addNotify
+dismissDialog("Program Device"); // aC:ag (cl:JFrame)
+// TclEventType: HW_DEVICE_CHANGE
+// Tcl Message: set_property PROBES.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/debug_nets.ltx} [lindex [get_hw_devices] 1] 
+// TclEventType: HW_DEVICE_CHANGE
+// Tcl Message: set_property PROGRAM.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/project_top.bit} [lindex [get_hw_devices] 1] 
+// TclEventType: HW_DEVICE_UPDATE
+// Tcl Message: program_hw_devices [lindex [get_hw_devices] 1] 
+// TclEventType: HW_DEVICE_CHANGE
+// Tcl Message: INFO: [Labtools 27-3164] End of startup status: HIGH 
+// Tcl Message: program_hw_devices: Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 6254.605 ; gain = 0.000 ; free physical = 2182 ; free virtual = 16459 
+// TclEventType: HW_DEVICE_CHANGE
+// TclEventType: HW_SYSMON_CHANGE
+// TclEventType: HW_ILA_CHANGE
+// TclEventType: HW_DEVICE_UPDATE
+// TclEventType: HW_ILA_CHANGE
+// TclEventType: HW_DEVICE_CHANGE
+// TclEventType: HW_ILA_CHANGE
+// TclEventType: HW_DEVICE_CHANGE
+// TclEventType: HW_DEVICE_PROBES_CHANGE
+// TclEventType: DEBUG_PROBE_CHANGE
+// TclEventType: HW_DEVICE_PROBES_CHANGE
+// TclEventType: HW_ILA_CHANGE

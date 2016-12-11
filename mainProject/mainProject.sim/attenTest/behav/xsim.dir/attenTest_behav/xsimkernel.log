@@ -1,0 +1,7 @@
+Running: xsim.dir/attenTest_behav/xsimk -simmode gui -wdb attenTest_behav.wdb -simrunnum 0 -socket 49194
+Design successfully loaded
+Design Loading Memory Usage: 226252 KB (Peak: 226364 KB)
+Design Loading CPU Usage: 20 ms
+Simulation completed
+Simulation Memory Usage: 369764 KB (Peak: 435300 KB)
+Simulation CPU Usage: 120 ms

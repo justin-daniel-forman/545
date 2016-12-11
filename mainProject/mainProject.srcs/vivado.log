@@ -1,0 +1,251 @@
+#-----------------------------------------------------------
+# Vivado v2015.2 (64-bit)
+# SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+# IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+# Start of session at: Wed Oct 19 10:22:41 2016
+# Process ID: 16721
+# Log file: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/vivado.log
+# Journal file: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.xpr
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/afs/ece.cmu.edu/usr/suyashb/Private/545'.
+WARNING: [IP_Flow 19-3656] If you move the project, the path for repository '/afs/ece.cmu.edu/usr/suyashb/Private/545' may become invalid. A better location for the repostory would be in a path adjacent to the project. (Current project location is '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject'.)
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/afs/ece.cmu.edu/support/xilinx/xilinx.release/Vivado-2015.2/Vivado/2015.2/data/ip'.
+open_project: Time (s): cpu = 00:00:24 ; elapsed = 00:00:12 . Memory (MB): peak = 5966.914 ; gain = 118.090 ; free physical = 6514 ; free virtual = 21624
+open_hw
+connect_hw_server
+INFO: [Labtools 27-2285] Connecting to hw_server url TCP:localhost:3121
+INFO: [Labtools 27-2222] Launching hw_server...
+INFO: [Labtools 27-2221] Launch Output:
+
+****** Xilinx hw_server v2015.2
+  **** Build date : Jun 26 2015-16:42:45
+    ** Copyright 1986-1999, 2001-2015 Xilinx, Inc. All Rights Reserved.
+
+
+open_hw_target [lindex [get_hw_targets -of_objects [get_hw_servers localhost]] 0]
+INFO: [Labtoolstcl 44-466] Opening hw_target localhost:3121/xilinx_tcf/Xilinx/000013c9c41501
+ERROR: [Labtools 27-2269] No devices detected on target localhost/xilinx_tcf/Xilinx/000013c9c41501.
+Check cable connectivity and that the target board is powered up then
+use the disconnect_hw_server and connect_hw_server to re-register this hardware target.
+ERROR: [Common 17-39] 'open_hw_target' failed due to earlier errors.
+disconnect_hw_server localhost
+connect_hw_server -url localhost:3121
+INFO: [Labtools 27-2285] Connecting to hw_server url TCP:localhost:3121
+current_hw_target [get_hw_targets */xilinx_tcf/Xilinx/00001024278301]
+ERROR: [Labtoolstcl 44-199] No matching targets found on connected servers: localhost
+Resolution: If needed connect the desired target to a server and use command refresh_hw_server. Then rerun the get_hw_targets command.
+ERROR: [Common 17-39] 'get_hw_targets' failed due to earlier errors.
+ERROR: [Labtools 27-2269] No devices detected on target localhost:3121/xilinx_tcf/Xilinx/000013c9c41501.
+Check cable connectivity and that the target board is powered up then
+use the disconnect_hw_server and connect_hw_server to re-register this hardware target.
+disconnect_hw_server localhost:3121
+connect_hw_server -url localhost:3121
+INFO: [Labtools 27-2285] Connecting to hw_server url TCP:localhost:3121
+current_hw_target [get_hw_targets */xilinx_tcf/Xilinx/00001024278301]
+ERROR: [Labtoolstcl 44-199] No matching targets found on connected servers: localhost
+Resolution: If needed connect the desired target to a server and use command refresh_hw_server. Then rerun the get_hw_targets command.
+ERROR: [Common 17-39] 'get_hw_targets' failed due to earlier errors.
+disconnect_hw_server localhost:3121
+connect_hw_server -url localhost:3121
+INFO: [Labtools 27-2285] Connecting to hw_server url TCP:localhost:3121
+current_hw_target [get_hw_targets */xilinx_tcf/Xilinx/00001024278301]
+ERROR: [Labtoolstcl 44-199] No matching targets found on connected servers: localhost
+Resolution: If needed connect the desired target to a server and use command refresh_hw_server. Then rerun the get_hw_targets command.
+ERROR: [Common 17-39] 'get_hw_targets' failed due to earlier errors.
+disconnect_hw_server localhost:3121
+connect_hw_server -url localhost:3121
+INFO: [Labtools 27-2285] Connecting to hw_server url TCP:localhost:3121
+current_hw_target [get_hw_targets */xilinx_tcf/Xilinx/000010ef936801]
+ERROR: [Labtoolstcl 44-199] No matching targets found on connected servers: localhost
+Resolution: If needed connect the desired target to a server and use command refresh_hw_server. Then rerun the get_hw_targets command.
+ERROR: [Common 17-39] 'get_hw_targets' failed due to earlier errors.
+reset_run impl_1 -prev_step 
+launch_runs impl_1 -to_step write_bitstream -jobs 4
+[Wed Oct 19 10:23:59 2016] Launched impl_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/runme.log
+ERROR: [Labtools 27-3175] Target jsn-DLC10-000013c9c41501 is no longer available.
+Please use disconnect_hw_server to close the current server connection. Check cable connectivity and that the target board is powered up.
+Restart the hw_server application running on host localhost, port 3121 and then use connect_hw_server to re-establish connection to target.
+close_hw_target
+INFO: [Labtoolstcl 44-464] Closing hw_target localhost:3121/xilinx_tcf/Xilinx/000013c9c41501
+INFO: [Labtoolstcl 44-468] Target hw_target localhost:3121/xilinx_tcf/Xilinx/000013c9c41501 is already closed
+ERROR: [Labtools 27-3175] Target jsn-DLC10-000013c9c41501 is no longer available.
+Please use disconnect_hw_server to close the current server connection. Check cable connectivity and that the target board is powered up.
+Restart the hw_server application running on host localhost, port 3121 and then use connect_hw_server to re-establish connection to target.
+close_hw_target
+INFO: [Labtoolstcl 44-464] Closing hw_target localhost:3121/xilinx_tcf/Xilinx/000013c9c41501
+INFO: [Labtoolstcl 44-468] Target hw_target localhost:3121/xilinx_tcf/Xilinx/000013c9c41501 is already closed
+set_property PROBES.FILE {} [lindex [get_hw_devices] 1]
+set_property PROGRAM.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/toneGen.bit} [lindex [get_hw_devices] 1]
+program_hw_devices [lindex [get_hw_devices] 1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+program_hw_devices: Time (s): cpu = 00:00:12 ; elapsed = 00:00:11 . Memory (MB): peak = 6012.902 ; gain = 0.000 ; free physical = 6473 ; free virtual = 21583
+refresh_hw_device [lindex [get_hw_devices] 1]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+WARNING: [Labtools 27-3123] The debug hub core was not detected at User Scan Chain 1 or 3.
+Resolution: 
+1. Make sure the clock connected to the debug hub (dbg_hub) core is a free running clock and is active OR
+2. Manually launch hw_server with -e "set xsdb-user-bscan <C_USER_SCAN_CHAIN scan_chain_number>" to detect the debug hub at User Scan Chain of 2 or 4. To determine the user scan chain setting, open the implemented design and use: get_property C_USER_SCAN_CHAIN [get_debug_cores dbg_hub].
+ERROR: [Labtools 27-3175] Target jsn-DLC10-000013c9c41501 is no longer available.
+Please use disconnect_hw_server to close the current server connection. Check cable connectivity and that the target board is powered up.
+Restart the hw_server application running on host localhost, port 3121 and then use connect_hw_server to re-establish connection to target.
+close_hw_target
+INFO: [Labtoolstcl 44-464] Closing hw_target localhost:3121/xilinx_tcf/Xilinx/000013c9c41501
+report_ip_status -name ip_status 
+WARNING: [IP_Flow 19-3899] Cannot get the environment domain name variable for the component vendor name. Setting the vendor name to 'user.org'.
+ipx::package_project -root_dir /afs/ece.cmu.edu/usr/suyashb/Private/545 -vendor user.org -library user -taxonomy /UserIP -generated_files -force
+WARNING: [IP_Flow 19-1834] The constraints file "zedboard_master_XDC_RevC_D_v3.xdc" is added to the synthesis file group only, but will be used for both synthesis and implementation in the IP generation.
+WARNING: [IP_Flow 19-3833] Not packaging sources file marked as disabled: '/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/new/audio.sv'.
+ERROR: [IP_Flow 19-262] [HDL Parser] Failed to parse top module entity.  This can result from an empty entity or module declaration (i.e. no ports or parameters/generics).  Check that design unit "toneGen" of HDL file "/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.srcs/sources_1/ip/blk_mem_gen_0/synth/blk_mem_gen_0.vhd" is not empty.
+ERROR: [IP_Flow 19-258] [HDL Parser] Error parsing HDL file 'mainProject/mainProject.srcs/sources_1/ip/blk_mem_gen_0/synth/blk_mem_gen_0.vhd'.
+WARNING: [IP_Flow 19-965] There are no component ports to infer bus interfaces.
+CRITICAL WARNING: [IP_Flow 19-379] There are no ports found from top-level file blk_mem_gen_0.vhd. Please re-order source files if necessary.
+ERROR: [Common 17-39] 'ipx::package_project' failed due to earlier errors.
+ipx::unload_core /afs/ece.cmu.edu/usr/suyashb/Private/545/component.xml
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 4
+[Wed Oct 19 11:11:07 2016] Launched synth_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/synth_1/runme.log
+[Wed Oct 19 11:11:07 2016] Launched impl_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/runme.log
+set_property PROBES.FILE {} [lindex [get_hw_devices] 1]
+set_property PROGRAM.FILE {/afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/impl_1/toneGen.bit} [lindex [get_hw_devices] 1]
+program_hw_devices [lindex [get_hw_devices] 1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+program_hw_devices: Time (s): cpu = 00:00:11 ; elapsed = 00:00:11 . Memory (MB): peak = 6034.367 ; gain = 0.000 ; free physical = 5952 ; free virtual = 21174
+refresh_hw_device [lindex [get_hw_devices] 1]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+WARNING: [Labtools 27-3123] The debug hub core was not detected at User Scan Chain 1 or 3.
+Resolution: 
+1. Make sure the clock connected to the debug hub (dbg_hub) core is a free running clock and is active OR
+2. Manually launch hw_server with -e "set xsdb-user-bscan <C_USER_SCAN_CHAIN scan_chain_number>" to detect the debug hub at User Scan Chain of 2 or 4. To determine the user scan chain setting, open the implemented design and use: get_property C_USER_SCAN_CHAIN [get_debug_cores dbg_hub].
+ERROR: [Labtools 27-3175] Target jsn-DLC10-000013c9c41501 is no longer available.
+Please use disconnect_hw_server to close the current server connection. Check cable connectivity and that the target board is powered up.
+Restart the hw_server application running on host localhost, port 3121 and then use connect_hw_server to re-establish connection to target.
+close_hw_target
+INFO: [Labtoolstcl 44-464] Closing hw_target localhost:3121/xilinx_tcf/Xilinx/000013c9c41501
+set_property top audio [current_fileset]
+synth_design -rtl -name rtl_1
+Command: synth_design -rtl -name rtl_1
+Starting synth_design
+Using part: xc7z020clg484-1
+Top: audio
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:03:46 ; elapsed = 01:14:59 . Memory (MB): peak = 6057.371 ; gain = 5148.066 ; free physical = 5931 ; free virtual = 21155
+---------------------------------------------------------------------------------
+ERROR: [Synth 8-439] module 'audio' not found
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:03:46 ; elapsed = 01:15:00 . Memory (MB): peak = 6083.621 ; gain = 5174.316 ; free physical = 5905 ; free virtual = 21129
+---------------------------------------------------------------------------------
+RTL Elaboration failed
+0 Infos, 0 Warnings, 0 Critical Warnings and 2 Errors encountered.
+synth_design failed
+ERROR: [Vivado_Tcl 4-5] Elaboration failed - please see the console for details
+synth_design -rtl -name rtl_1
+Command: synth_design -rtl -name rtl_1
+Starting synth_design
+Using part: xc7z020clg484-1
+Top: audio
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:03:53 ; elapsed = 01:16:00 . Memory (MB): peak = 6096.785 ; gain = 5187.480 ; free physical = 5900 ; free virtual = 21124
+---------------------------------------------------------------------------------
+ERROR: [Synth 8-439] module 'audio' not found
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:03:53 ; elapsed = 01:16:01 . Memory (MB): peak = 6096.789 ; gain = 5187.484 ; free physical = 5900 ; free virtual = 21124
+---------------------------------------------------------------------------------
+RTL Elaboration failed
+0 Infos, 0 Warnings, 0 Critical Warnings and 2 Errors encountered.
+synth_design failed
+ERROR: [Vivado_Tcl 4-5] Elaboration failed - please see the console for details
+synth_design -rtl -name rtl_1
+Command: synth_design -rtl -name rtl_1
+Starting synth_design
+Using part: xc7z020clg484-1
+Top: audio
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:04:00 ; elapsed = 01:17:35 . Memory (MB): peak = 6096.789 ; gain = 5187.484 ; free physical = 5896 ; free virtual = 21120
+---------------------------------------------------------------------------------
+ERROR: [Synth 8-439] module 'audio' not found
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:04:00 ; elapsed = 01:17:36 . Memory (MB): peak = 6096.789 ; gain = 5187.484 ; free physical = 5896 ; free virtual = 21120
+---------------------------------------------------------------------------------
+RTL Elaboration failed
+0 Infos, 0 Warnings, 0 Critical Warnings and 2 Errors encountered.
+synth_design failed
+ERROR: [Vivado_Tcl 4-5] Elaboration failed - please see the console for details
+synth_design -rtl -name rtl_1
+Command: synth_design -rtl -name rtl_1
+Starting synth_design
+Using part: xc7z020clg484-1
+Top: audio
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:04:06 ; elapsed = 01:17:54 . Memory (MB): peak = 6096.789 ; gain = 5187.484 ; free physical = 5893 ; free virtual = 21118
+---------------------------------------------------------------------------------
+ERROR: [Synth 8-439] module 'audio' not found
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:04:06 ; elapsed = 01:17:54 . Memory (MB): peak = 6096.789 ; gain = 5187.484 ; free physical = 5893 ; free virtual = 21118
+---------------------------------------------------------------------------------
+RTL Elaboration failed
+0 Infos, 0 Warnings, 0 Critical Warnings and 2 Errors encountered.
+synth_design failed
+ERROR: [Vivado_Tcl 4-5] Elaboration failed - please see the console for details
+set_property top audioSys [current_fileset]
+synth_design -rtl -name rtl_1
+Command: synth_design -rtl -name rtl_1
+Starting synth_design
+Using part: xc7z020clg484-1
+Top: audioSys
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:04:12 ; elapsed = 01:18:22 . Memory (MB): peak = 6096.789 ; gain = 5187.484 ; free physical = 5887 ; free virtual = 21112
+---------------------------------------------------------------------------------
+ERROR: [Synth 8-439] module 'audioSys' not found
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:04:13 ; elapsed = 01:18:23 . Memory (MB): peak = 6096.789 ; gain = 5187.484 ; free physical = 5887 ; free virtual = 21112
+---------------------------------------------------------------------------------
+RTL Elaboration failed
+0 Infos, 0 Warnings, 0 Critical Warnings and 2 Errors encountered.
+synth_design failed
+ERROR: [Vivado_Tcl 4-5] Elaboration failed - please see the console for details
+synth_design -rtl -name rtl_1
+Command: synth_design -rtl -name rtl_1
+Starting synth_design
+Using part: xc7z020clg484-1
+Top: audioSys
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:04:17 ; elapsed = 01:18:37 . Memory (MB): peak = 6100.785 ; gain = 5191.480 ; free physical = 5891 ; free virtual = 21116
+---------------------------------------------------------------------------------
+ERROR: [Synth 8-439] module 'audioSys' not found
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:04:17 ; elapsed = 01:18:38 . Memory (MB): peak = 6100.789 ; gain = 5191.484 ; free physical = 5890 ; free virtual = 21115
+---------------------------------------------------------------------------------
+RTL Elaboration failed
+0 Infos, 0 Warnings, 0 Critical Warnings and 2 Errors encountered.
+synth_design failed
+ERROR: [Vivado_Tcl 4-5] Elaboration failed - please see the console for details
+synth_design -rtl -name rtl_1
+Command: synth_design -rtl -name rtl_1
+Starting synth_design
+Using part: xc7z020clg484-1
+Top: audioSys
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:04:22 ; elapsed = 01:20:15 . Memory (MB): peak = 6100.789 ; gain = 5191.484 ; free physical = 5887 ; free virtual = 21112
+---------------------------------------------------------------------------------
+ERROR: [Synth 8-439] module 'audioSys' not found
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:04:22 ; elapsed = 01:20:16 . Memory (MB): peak = 6100.789 ; gain = 5191.484 ; free physical = 5887 ; free virtual = 21112
+---------------------------------------------------------------------------------
+RTL Elaboration failed
+0 Infos, 0 Warnings, 0 Critical Warnings and 2 Errors encountered.
+synth_design failed
+ERROR: [Vivado_Tcl 4-5] Elaboration failed - please see the console for details
+reset_run synth_1
+launch_runs synth_1 -jobs 4
+[Wed Oct 19 11:43:03 2016] Launched synth_1...
+Run output will be captured here: /afs/ece.cmu.edu/usr/suyashb/Private/545/mainProject/mainProject.runs/synth_1/runme.log
+exit
+INFO: [Common 17-206] Exiting Vivado at Wed Oct 19 11:43:33 2016...
